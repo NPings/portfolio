@@ -111,14 +111,18 @@
 
   /* ---------- tool-evolution chain ---------- */
   .chain{
-    display:flex;flex-wrap:wrap;align-items:stretch;
-    margin-top:16px;border:1px solid var(--rule);
+    display:flex;flex-wrap:wrap;align-items:stretch;gap:0;
+    margin-top:16px;
   }
   .chain-stop{
-    flex:1 1 170px;padding:13px 15px;min-width:0;
+    flex:1 1 0;min-width:150px;padding:14px 15px;
+    border:1px solid var(--rule);
     background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
   }
-  .chain-stop + .chain-stop{border-left:1px solid var(--rule);}
+  .chain-arrow{
+    flex:none;width:30px;display:flex;align-items:center;justify-content:center;
+    color:var(--moss);font-size:1.05em;
+  }
   .chain-name{
     display:flex;align-items:center;gap:7px;
     font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:.98em;color:var(--ink);
@@ -129,7 +133,8 @@
   .chain-note{display:block;margin-top:5px;font-size:.82em;font-style:italic;color:var(--muted);line-height:1.4;}
   @media(max-width:640px){
     .chain{flex-direction:column;}
-    .chain-stop + .chain-stop{border-left:0;border-top:1px solid var(--rule);}
+    .chain-stop{flex:0 0 auto;min-width:0;}
+    .chain-arrow{width:auto;height:26px;transform:rotate(90deg);}
   }
 
   /* ---------- footer ---------- */
@@ -159,7 +164,7 @@
     <header class="case-head">
       <p class="eyebrow label rise d2">Research operations &middot; Experian &middot; Ongoing</p>
       <h1 class="title rise d2">Research Self-Service</h1>
-      <p class="dek rise d3">Findings only protect the people we study if they reach whoever's deciding about them. "Users don't read" turned out to apply to stakeholders too &mdash; so the fix wasn't a better report. It was rebuilding how research reaches people at all.</p>
+      <p class="dek rise d3">We have a saying on the team: users don't read. We usually mean the people we study &mdash; but stakeholders turned out to be users too, and the findings we delivered kept going unreferenced past the readout. So we set out to change how research actually reaches people.</p>
 
       <div class="meta rise d3">
         <div><span class="label">Role</span><span>Research ops lead</span></div>
@@ -175,7 +180,7 @@
         <span class="section-num">01</span>
         <div>
           <h2>The question</h2>
-          <p>For years, research findings sat in readouts, and stakeholders rarely followed up on them afterward. The team has a saying for this: users don't read. It turned out to apply just as much to the stakeholders we served as it did to the people we studied. The goal became making findings accessible and searchable enough that a stakeholder could ask a question in their own words and get a thorough, representative answer back &mdash; without waiting on us.</p>
+          <p>Could research findings be made accessible and searchable enough that a stakeholder could ask a question in their own words &mdash; the way they'd ask a colleague &mdash; and get a thorough, representative answer back, without waiting on a readout that might never get referenced again?</p>
         </div>
       </div>
 
@@ -189,10 +194,12 @@
               <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>ChatGPT agents</span>
               <span class="chain-note">Pre-MCP era &middot; fast to stand up, too slow and manual to keep up with demand</span>
             </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
             <div class="chain-stop">
               <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Condens + Slack</span>
               <span class="chain-note">Answered in-channel &middot; boxed in by Slack and by what lived in the repository</span>
             </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
             <div class="chain-stop current">
               <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Independent research agent</span>
               <span class="chain-note">In progress &middot; internally hosted, built to field requests and tailor output to the task at hand</span>

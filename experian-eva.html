@@ -130,6 +130,12 @@
   }
 
   /* ---------- pull quote ---------- */
+  /* ---------- distinct findings (not a connected narrative) ---------- */
+  .findings{display:flex;flex-direction:column;}
+  .finding{padding:14px 0;border-top:1px dashed var(--rule);}
+  .finding:first-child{border-top:0;padding-top:0;}
+  .finding > p:first-child{margin-top:0;}
+
   .pull{
     margin:16px 0 0;padding:4px 0 4px 16px;
     border-left:2px solid var(--moss);
@@ -199,10 +205,18 @@
         <span class="section-num">03</span>
         <div>
           <h2>What we learned</h2>
-          <p>A clear Dunning-Kruger pattern showed up across sessions: the more confident someone was in their own credit knowledge, the more likely they were to get frustrated or lost looking for answers.</p>
-          <div class="pull"><p>Users expect education in proximity to the component that confused them in the first place.</p></div>
-          <p>That conclusion isn't just a session-by-session pattern &mdash; it follows from Gestalt psychology's law of proximity: people perceive elements placed near each other as related. Help placed away from the point of confusion reads as unrelated to it, however good the content is.</p>
-          <p>It held up under pressure, too. Several participants said upfront they'd never use an AI chatbot for something like this &mdash; then changed their mind mid-session, once they saw what EVA could actually do.</p>
+          <div class="findings">
+            <div class="finding">
+              <p>A clear Dunning-Kruger pattern showed up across sessions: the more confident someone was in their own credit knowledge, the more likely they were to get frustrated or lost looking for answers.</p>
+            </div>
+            <div class="finding">
+              <div class="pull"><p>Users expect education in proximity to the component that confused them in the first place.</p></div>
+              <p>That conclusion isn't just a session-by-session pattern &mdash; it follows from Gestalt psychology's law of proximity: people perceive elements placed near each other as related. Help placed away from the point of confusion reads as unrelated to it, however good the content is.</p>
+            </div>
+            <div class="finding">
+              <p>Several participants said upfront they'd never use an AI chatbot for something like this &mdash; then changed their mind mid-session, once they saw what EVA could actually do.</p>
+            </div>
+          </div>
         </div>
       </div>
 
