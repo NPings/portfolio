@@ -104,7 +104,7 @@
   /* ---------- stimulus placeholders ---------- */
   .stimulus{margin-top:16px;}
   .stimulus-grid{
-    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start;
   }
   @media(max-width:520px){.stimulus-grid{grid-template-columns:1fr;}}
   .stimulus-slot{
@@ -114,6 +114,19 @@
   }
   .stimulus-slot span{
     font-size:.8em;font-style:italic;color:var(--muted);line-height:1.4;max-width:22ch;
+  }
+  .stimulus-slot.filled{
+    aspect-ratio:auto;display:block;padding:0;margin:0;
+    border:1px solid var(--rule);overflow:hidden;
+    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
+  }
+  .stimulus-slot.filled img{
+    display:block;width:100%;height:auto;max-height:440px;object-fit:contain;
+    background-color:var(--card);
+  }
+  .stimulus-slot.filled figcaption{
+    padding:10px 12px;font-size:.8em;font-style:italic;color:var(--muted);
+    line-height:1.4;border-top:1px solid var(--rule);
   }
 
   /* ---------- pull quote ---------- */
@@ -179,13 +192,6 @@
           <h2>What I did</h2>
           <p>Research ran in two phases across many rounds. It started generative: open-ended work exploring how people might use AI to inform themselves about credit. From there it moved evaluative &mdash; a long series of usability studies across live builds, competitor products, and prototypes exploring EVA in different roles, including as the product's central experience.</p>
           <p>Participants were everyday Experian users, screened by how knowledgeable they believed themselves to be about credit.</p>
-          <!-- Swap each slot below for an <img> once screenshots are available -->
-          <div class="stimulus">
-            <div class="stimulus-grid">
-              <div class="stimulus-slot"><span>Screenshot: early prototype exploring EVA as the central experience</span></div>
-              <div class="stimulus-slot"><span>Screenshot: live build under test</span></div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -205,11 +211,17 @@
         <div>
           <h2>What changed</h2>
           <p>EVA moved from something users had to go find to something placed directly at the moment of confusion: an evergreen floating CTA available throughout the product, plus contextual CTAs seeded next to known points of friction &mdash; so getting help stopped requiring people to first figure out where to ask.</p>
-          <!-- Swap each slot below for an <img> once screenshots are available -->
+          <!-- Real stimulus in place. Prototype/build shots in "What we built" above are still pending. -->
           <div class="stimulus">
             <div class="stimulus-grid">
-              <div class="stimulus-slot"><span>Screenshot: contextual CTA at a confusion hotspot</span></div>
-              <div class="stimulus-slot"><span>Screenshot: evergreen floating CTA, in context</span></div>
+              <figure class="stimulus-slot filled">
+                <img src="eva-contextual-cta.png" alt="EVA contextual CTA surfaced next to a specific credit factor" loading="lazy">
+                <figcaption>Contextual CTA: EVA responds right inside the credit-factor breakdown, at the exact point of confusion.</figcaption>
+              </figure>
+              <figure class="stimulus-slot filled">
+                <img src="eva-evergreen-cta.jpeg" alt="Evergreen floating Ask EVA CTA on the main dashboard" loading="lazy">
+                <figcaption>Evergreen CTA: "Ask EVA" persists on the dashboard, available regardless of what the user is looking at.</figcaption>
+              </figure>
             </div>
           </div>
         </div>
