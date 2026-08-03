@@ -111,6 +111,22 @@
 
   /* ================= roles ================= */
   .roles{border-top:1px solid var(--rule);margin-bottom:clamp(30px,5vw,64px);}
+
+  /* ================= case studies ================= */
+  .cases{border-top:1px solid var(--rule);margin-bottom:clamp(30px,5vw,64px);}
+  .case-card{
+    display:block;text-decoration:none;color:inherit;
+    padding:clamp(20px,2.8vw,28px) 0;border-bottom:1px solid var(--rule);
+  }
+  .case-card-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px;}
+  .case-card h3{
+    font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:0;line-height:1.15;
+  }
+  .case-arrow{flex:none;color:var(--moss);font-size:1.1em;transition:transform .25s ease;}
+  .case-card:hover .case-arrow{transform:translateX(4px);color:var(--pine);}
+  .case-card p{margin:8px 0 0;color:var(--ink-soft);line-height:1.5;max-width:56ch;}
+  .case-tag{display:block;margin-top:10px;color:var(--muted);}
   details.role{border-bottom:1px solid var(--rule);}
   details.role summary{
     list-style:none;cursor:pointer;display:grid;
@@ -454,9 +470,41 @@
   </div>
 </section>
 
+<section class="band" id="case-studies" data-obs="Case Studies">
+  <div class="wrap">
+    <div class="sec-head"><p class="label">Case Studies</p><span class="sec-code mono">S-04</span></div>
+    <div class="cases">
+      <a class="case-card" href="case-studies/experian-eva.html">
+        <div class="case-card-top">
+          <h3>Experian Virtual Assistant</h3>
+          <span class="case-arrow" aria-hidden="true">&rarr;</span>
+        </div>
+        <p>Multi-round research, generative through evaluative, landed on one finding that reshaped where help shows up in the product: people don't go looking for it. It has to find them.</p>
+        <span class="label case-tag">Generative &amp; evaluative &middot; Experian &middot; Multi-phase</span>
+      </a>
+      <a class="case-card" href="case-studies/research-self-service.html">
+        <div class="case-card-top">
+          <h3>Research Self-Service</h3>
+          <span class="case-arrow" aria-hidden="true">&rarr;</span>
+        </div>
+        <p>Stakeholders don't chase down findings any more than users read instructions. Rebuilding how research reaches people, across three systems and counting.</p>
+        <span class="label case-tag">Research operations &middot; Experian &middot; Ongoing</span>
+      </a>
+      <a class="case-card" href="case-studies/hp-wolf-security.html">
+        <div class="case-card-top">
+          <h3>HP Wolf Security</h3>
+          <span class="case-arrow" aria-hidden="true">&rarr;</span>
+        </div>
+        <p>A diary study on an unreleased build found self-managed security asked too much of the average user &mdash; and reshaped the product around built-in IT support.</p>
+        <span class="label case-tag">Diary study &middot; HP Inc. &middot; 2021</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="sort" id="methods" data-obs="Methods">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Methods</p><span class="sec-code mono">S-04</span></div>
+    <div class="sec-head"><p class="label">Methods</p><span class="sec-code mono">S-05</span></div>
 
     <div class="board" id="board">
 
@@ -506,7 +554,7 @@
 </section>
 
 <section class="band tools" id="tools" data-obs="Tools">
-  <div class="wrap"><div class="sec-head"><p class="label">Tools</p><span class="sec-code mono">S-05</span></div></div>
+  <div class="wrap"><div class="sec-head"><p class="label">Tools</p><span class="sec-code mono">S-06</span></div></div>
   <div class="marquee">
     <div class="track">
       <span class="tool">Condens</span><span class="tool">Figma</span><span class="tool">Great Question</span>
@@ -522,7 +570,7 @@
 
 <section class="band debrief" id="debrief" data-obs="Debrief">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Your session</p><span class="sec-code mono">S-06</span></div>
+    <div class="sec-head"><p class="label">Your session</p><span class="sec-code mono">S-07</span></div>
     <div class="debrief-grid">
       <div class="d-cell"><span class="d-num" id="dTime">0:00</span><span class="label">Time on page</span></div>
       <div class="d-cell"><span class="d-num" id="dDepth">0%</span><span class="label">Furthest scroll</span></div>
@@ -655,6 +703,7 @@
             'Philosophy':'Participant reaches Philosophy. Reading pattern: unknown, assumed F-shaped.',
             'Impact':'Impact section in view. Numbers noticed, presumably.',
             'Work':'Participant arrives at Work. The disclosure rows await a first click.',
+            'Case Studies':'Participant reaches the case studies. One so far. More pending patience.',
             'Methods':'Methods board in view. Cards sort themselves; participant did not have to.',
             'Tools':'Tools marquee observed. It never stops. Neither does research.',
             'Debrief':'Participant reaches the debrief. Full scroll achieved — a completion rate of 100%.'
