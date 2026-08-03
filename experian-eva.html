@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Experian Virtual Assistant — Case Study — Nicholas Pings Rodriguez</title>
+<meta name="description" content="Multi-round research on integrating generative AI into Experian's consumer experience, from open-ended discovery through hands-on usability testing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Fraunces:opsz,wght@9..144,300..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: only light;
+    --paper:#EAEEE4;
+    --card:#F8FAF4;
+    --ink:#16241C;
+    --ink-soft:#3B5245;
+    --muted:#6E8270;
+    --rule:#C8D3BE;
+    --pine:#2F5B44;
+    --moss:#7E9C60;
+    --leaf:#CFE2A6;
+    --pad:clamp(22px,6vw,72px);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden;}
+  html{background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));}
+  body{
+    background-color:transparent;color:var(--ink);
+    font-family:"EB Garamond",Garamond,Georgia,serif;
+    font-size:clamp(17px,1.05vw,19px);line-height:1.6;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+  }
+  .page{background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));}
+  a{color:inherit;}
+  h1,h2{overflow-wrap:break-word;}
+
+  .label{font-weight:600;font-size:.72em;letter-spacing:.18em;text-transform:uppercase;line-height:1.4;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 var(--pad);}
+
+  .rise{opacity:0;transform:translateY(12px);}
+  .loaded .rise{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.22,.7,.2,1);}
+  .loaded .d1{transition-delay:.04s;}
+  .loaded .d2{transition-delay:.12s;}
+  .loaded .d3{transition-delay:.22s;}
+  .loaded .d4{transition-delay:.32s;}
+
+  /* ---------- back link ---------- */
+  .back{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:clamp(22px,4vw,34px) 0 0;color:var(--muted);text-decoration:none;
+  }
+  .back:hover{color:var(--pine);}
+  .back .arrow{transition:transform .2s ease;}
+  .back:hover .arrow{transform:translateX(-3px);}
+
+  /* ---------- header ---------- */
+  .case-head{padding:clamp(20px,4vw,32px) 0 clamp(28px,4vw,40px);}
+  .eyebrow{color:var(--pine);margin:0 0 clamp(12px,2vw,18px);}
+  h1.title{
+    font-family:"Fraunces",Georgia,serif;font-weight:700;
+    font-size:clamp(32px,7vw,56px);line-height:1.06;letter-spacing:-.018em;margin:0;
+  }
+  .dek{
+    font-style:italic;color:var(--ink-soft);
+    font-size:clamp(18px,2.6vw,23px);line-height:1.45;
+    margin:clamp(16px,2.4vw,22px) 0 0;max-width:42ch;
+  }
+
+  /* ---------- meta strip ---------- */
+  .meta{
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+    background-color:var(--rule);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    margin-top:clamp(24px,4vw,36px);
+  }
+  .meta div{
+    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
+    padding:12px 14px;min-width:0;
+  }
+  .meta .label{color:var(--muted);display:block;margin-bottom:5px;}
+  .meta span:not(.label){font-size:.92em;color:var(--ink);}
+  @media(max-width:600px){.meta{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
+  /* ---------- body sections ---------- */
+  .sections{border-top:1px solid var(--rule);margin-top:clamp(32px,5vw,48px);}
+  .section{
+    display:grid;grid-template-columns:2.4em minmax(0,1fr);gap:clamp(10px,2vw,18px);
+    padding:clamp(24px,3.4vw,34px) 0;border-bottom:1px solid var(--rule);
+  }
+  .section-num{
+    font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:clamp(15px,1.8vw,18px);color:var(--moss);line-height:1.5;
+  }
+  .section h2{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;
+    font-size:clamp(18px,2.2vw,22px);letter-spacing:-.01em;margin:0 0 8px;line-height:1.25;
+  }
+  .section p{margin:0;color:var(--ink-soft);line-height:1.55;}
+  .section p + p{margin-top:12px;}
+
+  /* ---------- stimulus placeholders ---------- */
+  .stimulus{margin-top:16px;}
+  .stimulus-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+  }
+  @media(max-width:520px){.stimulus-grid{grid-template-columns:1fr;}}
+  .stimulus-slot{
+    aspect-ratio:4/3;border:1px dashed var(--rule);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    padding:14px;
+  }
+  .stimulus-slot span{
+    font-size:.8em;font-style:italic;color:var(--muted);line-height:1.4;max-width:22ch;
+  }
+
+  /* ---------- pull quote ---------- */
+  .pull{
+    margin:16px 0 0;padding:4px 0 4px 16px;
+    border-left:2px solid var(--moss);
+  }
+  .pull p{
+    font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:500;
+    font-size:clamp(19px,2.6vw,25px);line-height:1.35;color:var(--ink);
+    margin:0;letter-spacing:-.008em;
+  }
+
+  /* ---------- footer ---------- */
+  .case-foot{padding:clamp(32px,5vw,52px) 0 clamp(40px,6vw,64px);}
+  .case-foot a{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--pine);text-decoration:none;font-weight:600;font-size:.9em;
+  }
+  .case-foot a:hover{text-decoration:underline;}
+  .colophon{margin-top:clamp(20px,3vw,28px);color:var(--muted);font-size:.84em;font-style:italic;}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms !important;}
+    .rise{opacity:1;transform:none;}
+  }
+  a:focus-visible{outline:2px solid var(--pine);outline-offset:3px;}
+</style>
+<noscript><style>.rise{opacity:1;transform:none;}</style></noscript>
+</head>
+<body>
+<div class="page">
+  <div class="wrap">
+
+    <a class="back label rise d1" href="../index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
+
+    <header class="case-head">
+      <p class="eyebrow label rise d2">Generative &amp; evaluative research &middot; Experian &middot; Multi-phase</p>
+      <h1 class="title rise d2">Experian Virtual Assistant</h1>
+      <p class="dek rise d3">Research ran from open-ended discovery through round after round of usability testing, landing on one finding that changed where help shows up in the product: people don't go looking for it. It has to find them.</p>
+
+      <div class="meta rise d3">
+        <div><span class="label">Role</span><span>Lead researcher</span></div>
+        <div><span class="label">Approach</span><span>Generative &rarr; evaluative</span></div>
+        <div><span class="label">Participants</span><span>Everyday Experian users</span></div>
+        <div><span class="label">Company</span><span>Experian</span></div>
+      </div>
+    </header>
+
+    <div class="sections">
+
+      <div class="section">
+        <span class="section-num">01</span>
+        <div>
+          <h2>The question</h2>
+          <p>Could generative AI actually help everyday people understand credit &mdash; and if so, where and how should that help show up inside the product?</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">02</span>
+        <div>
+          <h2>What I did</h2>
+          <p>Research ran in two phases across many rounds. It started generative: open-ended work exploring how people might use AI to inform themselves about credit. From there it moved evaluative &mdash; a long series of usability studies across live builds, competitor products, and prototypes exploring EVA in different roles, including as the product's central experience.</p>
+          <p>Participants were everyday Experian users, screened by how knowledgeable they believed themselves to be about credit.</p>
+          <!-- Swap each slot below for an <img> once screenshots are available -->
+          <div class="stimulus">
+            <div class="stimulus-grid">
+              <div class="stimulus-slot"><span>Screenshot: early prototype exploring EVA as the central experience</span></div>
+              <div class="stimulus-slot"><span>Screenshot: live build under test</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">03</span>
+        <div>
+          <h2>What we learned</h2>
+          <p>A clear Dunning-Kruger pattern showed up across sessions: the more confident someone was in their own credit knowledge, the more likely they were to get frustrated or lost looking for answers.</p>
+          <div class="pull"><p>Users expect education in proximity to the component that confused them in the first place.</p></div>
+          <p>That conclusion isn't just a session-by-session pattern &mdash; it follows from Gestalt psychology's law of proximity: people perceive elements placed near each other as related. Help placed away from the point of confusion reads as unrelated to it, however good the content is.</p>
+          <p>It held up under pressure, too. Several participants said upfront they'd never use an AI chatbot for something like this &mdash; then changed their mind mid-session, once they saw what EVA could actually do.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">04</span>
+        <div>
+          <h2>What changed</h2>
+          <p>EVA moved from something users had to go find to something placed directly at the moment of confusion: an evergreen floating CTA available throughout the product, plus contextual CTAs seeded next to known points of friction &mdash; so getting help stopped requiring people to first figure out where to ask.</p>
+          <!-- Swap each slot below for an <img> once screenshots are available -->
+          <div class="stimulus">
+            <div class="stimulus-grid">
+              <div class="stimulus-slot"><span>Screenshot: contextual CTA at a confusion hotspot</span></div>
+              <div class="stimulus-slot"><span>Screenshot: evergreen floating CTA, in context</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="case-foot">
+      <a href="../index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
+      <p class="colophon">Nicholas Pings Rodriguez &middot; UX Research</p>
+    </footer>
+
+  </div>
+</div>
+<script>
+  document.body.classList.add('loaded');
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>HP Wolf Security — Case Study — Nicholas Pings Rodriguez</title>
+<meta name="description" content="Diary study research that reshaped an unreleased HP device protection product around built-in IT support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Fraunces:opsz,wght@9..144,300..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: only light;
+    --paper:#EAEEE4;
+    --card:#F8FAF4;
+    --ink:#16241C;
+    --ink-soft:#3B5245;
+    --muted:#6E8270;
+    --rule:#C8D3BE;
+    --pine:#2F5B44;
+    --moss:#7E9C60;
+    --leaf:#CFE2A6;
+    --pad:clamp(22px,6vw,72px);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden;}
+  html{background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));}
+  body{
+    background-color:transparent;color:var(--ink);
+    font-family:"EB Garamond",Garamond,Georgia,serif;
+    font-size:clamp(17px,1.05vw,19px);line-height:1.6;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+  }
+  .page{background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));}
+  a{color:inherit;}
+  h1,h2{overflow-wrap:break-word;}
+
+  .label{font-weight:600;font-size:.72em;letter-spacing:.18em;text-transform:uppercase;line-height:1.4;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 var(--pad);}
+
+  .rise{opacity:0;transform:translateY(12px);}
+  .loaded .rise{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.22,.7,.2,1);}
+  .loaded .d1{transition-delay:.04s;}
+  .loaded .d2{transition-delay:.12s;}
+  .loaded .d3{transition-delay:.22s;}
+  .loaded .d4{transition-delay:.32s;}
+
+  /* ---------- back link ---------- */
+  .back{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:clamp(22px,4vw,34px) 0 0;color:var(--muted);text-decoration:none;
+  }
+  .back:hover{color:var(--pine);}
+  .back .arrow{transition:transform .2s ease;}
+  .back:hover .arrow{transform:translateX(-3px);}
+
+  /* ---------- header ---------- */
+  .case-head{padding:clamp(20px,4vw,32px) 0 clamp(28px,4vw,40px);}
+  .eyebrow{color:var(--pine);margin:0 0 clamp(12px,2vw,18px);}
+  h1.title{
+    font-family:"Fraunces",Georgia,serif;font-weight:700;
+    font-size:clamp(34px,7.5vw,62px);line-height:1.04;letter-spacing:-.018em;margin:0;
+  }
+  .dek{
+    font-style:italic;color:var(--ink-soft);
+    font-size:clamp(18px,2.6vw,23px);line-height:1.45;
+    margin:clamp(16px,2.4vw,22px) 0 0;max-width:38ch;
+  }
+
+  /* ---------- meta strip ---------- */
+  .meta{
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+    background-color:var(--rule);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    margin-top:clamp(24px,4vw,36px);
+  }
+  .meta div{
+    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
+    padding:12px 14px;min-width:0;
+  }
+  .meta .label{color:var(--muted);display:block;margin-bottom:5px;}
+  .meta span:not(.label){font-size:.92em;color:var(--ink);}
+  @media(max-width:600px){.meta{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
+  /* ---------- confidentiality note ---------- */
+  .note{
+    margin:clamp(24px,4vw,36px) 0 0;padding:14px 16px;
+    border:1px dashed var(--rule);
+    font-size:.88em;line-height:1.5;font-style:italic;color:var(--muted);
+  }
+
+  /* ---------- body sections ---------- */
+  .sections{border-top:1px solid var(--rule);margin-top:clamp(32px,5vw,48px);}
+  .section{
+    display:grid;grid-template-columns:2.4em minmax(0,1fr);gap:clamp(10px,2vw,18px);
+    padding:clamp(24px,3.4vw,34px) 0;border-bottom:1px solid var(--rule);
+  }
+  .section-num{
+    font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:clamp(15px,1.8vw,18px);color:var(--moss);line-height:1.5;
+  }
+  .section h2{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;
+    font-size:clamp(18px,2.2vw,22px);letter-spacing:-.01em;margin:0 0 8px;line-height:1.25;
+  }
+  .section p{margin:0;color:var(--ink-soft);line-height:1.55;}
+
+  /* ---------- footer ---------- */
+  .case-foot{padding:clamp(32px,5vw,52px) 0 clamp(40px,6vw,64px);}
+  .case-foot a{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--pine);text-decoration:none;font-weight:600;font-size:.9em;
+  }
+  .case-foot a:hover{text-decoration:underline;}
+  .colophon{margin-top:clamp(20px,3vw,28px);color:var(--muted);font-size:.84em;font-style:italic;}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms !important;}
+    .rise{opacity:1;transform:none;}
+  }
+  a:focus-visible{outline:2px solid var(--pine);outline-offset:3px;}
+</style>
+<noscript><style>.rise{opacity:1;transform:none;}</style></noscript>
+</head>
+<body>
+<div class="page">
+  <div class="wrap">
+
+    <a class="back label rise d1" href="../index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
+
+    <header class="case-head">
+      <p class="eyebrow label rise d2">Generative &amp; evaluative research &middot; HP Inc. &middot; 2021</p>
+      <h1 class="title rise d2">HP Wolf Security</h1>
+      <p class="dek rise d3">A diary study on an unreleased device protection build found that self-managed security asked too much of the average user &mdash; and reshaped the product around built-in IT support instead.</p>
+
+      <div class="meta rise d3">
+        <div><span class="label">Role</span><span>Lead researcher</span></div>
+        <div><span class="label">Method</span><span>Diary study</span></div>
+        <div><span class="label">Duration</span><span>Longitudinal</span></div>
+        <div><span class="label">Company</span><span>HP Inc.</span></div>
+      </div>
+
+      <p class="note rise d4">The build tested in this study predates HP Wolf Security's public release and was never publicly available. No screenshots exist for this case study at this time.</p>
+    </header>
+
+    <div class="sections">
+
+      <div class="section">
+        <span class="section-num">01</span>
+        <div>
+          <h2>The question</h2>
+          <p>HP was building a new device protection suite &mdash; antivirus and VPN functionality &mdash; before any of it was public. The open question: could an everyday user actually manage their own device security, or did the product need to assume less from them?</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">02</span>
+        <div>
+          <h2>What I did</h2>
+          <p>Ran a longitudinal diary study with participants using an unreleased build on provided laptops. Assigned structured tasks that exercised real product functionality over time, then held regular debriefs with each participant to surface friction as it happened &mdash; not just recall it after the fact.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">03</span>
+        <div>
+          <h2>What we learned</h2>
+          <p>Self-management was too involved for the average user. The friction wasn't about interface polish &mdash; it was a mismatch between what the product asked of people and what people actually wanted to be responsible for.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">04</span>
+        <div>
+          <h2>What changed</h2>
+          <p>The product was reshaped around built-in IT support rather than pure self-service &mdash; a structural shift, not a UI tweak, and one that traced directly back to this study.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="case-foot">
+      <a href="../index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
+      <p class="colophon">Nicholas Pings Rodriguez &middot; UX Research</p>
+    </footer>
+
+  </div>
+</div>
+<script>
+  document.body.classList.add('loaded');
+</script>
+</body>
+</html>

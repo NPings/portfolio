@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Research Self-Service — Case Study — Nicholas Pings Rodriguez</title>
+<meta name="description" content="Rebuilding how research findings reach stakeholders at Experian, across three systems and counting.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Fraunces:opsz,wght@9..144,300..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: only light;
+    --paper:#EAEEE4;
+    --card:#F8FAF4;
+    --ink:#16241C;
+    --ink-soft:#3B5245;
+    --muted:#6E8270;
+    --rule:#C8D3BE;
+    --pine:#2F5B44;
+    --moss:#7E9C60;
+    --leaf:#CFE2A6;
+    --pad:clamp(22px,6vw,72px);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden;}
+  html{background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));}
+  body{
+    background-color:transparent;color:var(--ink);
+    font-family:"EB Garamond",Garamond,Georgia,serif;
+    font-size:clamp(17px,1.05vw,19px);line-height:1.6;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+  }
+  .page{background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));}
+  a{color:inherit;}
+  h1,h2{overflow-wrap:break-word;}
+
+  .label{font-weight:600;font-size:.72em;letter-spacing:.18em;text-transform:uppercase;line-height:1.4;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 var(--pad);}
+
+  .rise{opacity:0;transform:translateY(12px);}
+  .loaded .rise{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.22,.7,.2,1);}
+  .loaded .d1{transition-delay:.04s;}
+  .loaded .d2{transition-delay:.12s;}
+  .loaded .d3{transition-delay:.22s;}
+  .loaded .d4{transition-delay:.32s;}
+
+  /* ---------- back link ---------- */
+  .back{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:clamp(22px,4vw,34px) 0 0;color:var(--muted);text-decoration:none;
+  }
+  .back:hover{color:var(--pine);}
+  .back .arrow{transition:transform .2s ease;}
+  .back:hover .arrow{transform:translateX(-3px);}
+
+  /* ---------- header ---------- */
+  .case-head{padding:clamp(20px,4vw,32px) 0 clamp(28px,4vw,40px);}
+  .eyebrow{color:var(--pine);margin:0 0 clamp(12px,2vw,18px);}
+  h1.title{
+    font-family:"Fraunces",Georgia,serif;font-weight:700;
+    font-size:clamp(32px,7vw,54px);line-height:1.08;letter-spacing:-.018em;margin:0;
+  }
+  .dek{
+    font-style:italic;color:var(--ink-soft);
+    font-size:clamp(18px,2.6vw,23px);line-height:1.45;
+    margin:clamp(16px,2.4vw,22px) 0 0;max-width:42ch;
+  }
+
+  /* ---------- meta strip ---------- */
+  .meta{
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+    background-color:var(--rule);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    margin-top:clamp(24px,4vw,36px);
+  }
+  .meta div{
+    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
+    padding:12px 14px;min-width:0;
+  }
+  .meta .label{color:var(--muted);display:block;margin-bottom:5px;}
+  .meta span:not(.label){font-size:.92em;color:var(--ink);}
+  @media(max-width:600px){.meta{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
+  /* ---------- body sections ---------- */
+  .sections{border-top:1px solid var(--rule);margin-top:clamp(32px,5vw,48px);}
+  .section{
+    display:grid;grid-template-columns:2.4em minmax(0,1fr);gap:clamp(10px,2vw,18px);
+    padding:clamp(24px,3.4vw,34px) 0;border-bottom:1px solid var(--rule);
+  }
+  .section-num{
+    font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:clamp(15px,1.8vw,18px);color:var(--moss);line-height:1.5;
+  }
+  .section h2{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;
+    font-size:clamp(18px,2.2vw,22px);letter-spacing:-.01em;margin:0 0 8px;line-height:1.25;
+  }
+  .section p{margin:0;color:var(--ink-soft);line-height:1.55;}
+  .section p + p{margin-top:12px;}
+
+  /* ---------- pull quote ---------- */
+  .pull{margin:16px 0;padding:4px 0 4px 16px;border-left:2px solid var(--moss);}
+  .pull p{
+    font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:500;
+    font-size:clamp(19px,2.6vw,25px);line-height:1.35;color:var(--ink);
+    margin:0;letter-spacing:-.008em;
+  }
+
+  /* ---------- tool-evolution chain ---------- */
+  .chain{
+    display:flex;flex-wrap:wrap;align-items:stretch;
+    margin-top:16px;border:1px solid var(--rule);
+  }
+  .chain-stop{
+    flex:1 1 170px;padding:13px 15px;min-width:0;
+    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
+  }
+  .chain-stop + .chain-stop{border-left:1px solid var(--rule);}
+  .chain-name{
+    display:flex;align-items:center;gap:7px;
+    font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:.98em;color:var(--ink);
+  }
+  .chain-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex:none;}
+  .chain-stop.current .chain-dot{background:var(--pine);animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .chain-note{display:block;margin-top:5px;font-size:.82em;font-style:italic;color:var(--muted);line-height:1.4;}
+  @media(max-width:640px){
+    .chain{flex-direction:column;}
+    .chain-stop + .chain-stop{border-left:0;border-top:1px solid var(--rule);}
+  }
+
+  /* ---------- footer ---------- */
+  .case-foot{padding:clamp(32px,5vw,52px) 0 clamp(40px,6vw,64px);}
+  .case-foot a{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--pine);text-decoration:none;font-weight:600;font-size:.9em;
+  }
+  .case-foot a:hover{text-decoration:underline;}
+  .colophon{margin-top:clamp(20px,3vw,28px);color:var(--muted);font-size:.84em;font-style:italic;}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms !important;}
+    .rise{opacity:1;transform:none;}
+    .chain-stop.current .chain-dot{animation:none;}
+  }
+  a:focus-visible{outline:2px solid var(--pine);outline-offset:3px;}
+</style>
+<noscript><style>.rise{opacity:1;transform:none;}</style></noscript>
+</head>
+<body>
+<div class="page">
+  <div class="wrap">
+
+    <a class="back label rise d1" href="../index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
+
+    <header class="case-head">
+      <p class="eyebrow label rise d2">Research operations &middot; Experian &middot; Ongoing</p>
+      <h1 class="title rise d2">Research Self-Service</h1>
+      <p class="dek rise d3">Findings only protect the people we study if they reach whoever's deciding about them. "Users don't read" turned out to apply to stakeholders too &mdash; so the fix wasn't a better report. It was rebuilding how research reaches people at all.</p>
+
+      <div class="meta rise d3">
+        <div><span class="label">Role</span><span>Research ops lead</span></div>
+        <div><span class="label">Approach</span><span>Iterative systems building</span></div>
+        <div><span class="label">Status</span><span>Ongoing</span></div>
+        <div><span class="label">Company</span><span>Experian</span></div>
+      </div>
+    </header>
+
+    <div class="sections">
+
+      <div class="section">
+        <span class="section-num">01</span>
+        <div>
+          <h2>The question</h2>
+          <p>For years, research findings sat in readouts, and stakeholders rarely followed up on them afterward. The team has a saying for this: users don't read. It turned out to apply just as much to the stakeholders we served as it did to the people we studied. The goal became making findings accessible and searchable enough that a stakeholder could ask a question in their own words and get a thorough, representative answer back &mdash; without waiting on us.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">02</span>
+        <div>
+          <h2>What we built</h2>
+          <p>The approach evolved through three systems, each solving what the last one couldn't.</p>
+          <div class="chain">
+            <div class="chain-stop">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>ChatGPT agents</span>
+              <span class="chain-note">Pre-MCP era &middot; fast to stand up, too slow and manual to keep up with demand</span>
+            </div>
+            <div class="chain-stop">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Condens + Slack</span>
+              <span class="chain-note">Answered in-channel &middot; boxed in by Slack and by what lived in the repository</span>
+            </div>
+            <div class="chain-stop current">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Independent research agent</span>
+              <span class="chain-note">In progress &middot; internally hosted, built to field requests and tailor output to the task at hand</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">03</span>
+        <div>
+          <h2>What we learned</h2>
+          <p>The friction itself was the real cost. When accessing research took too much effort, most stakeholders didn't push through it &mdash; they simply moved forward and made the decision without an answer.</p>
+          <div class="pull"><p>Given enough friction, stakeholders don't go looking for research &mdash; they just move forward without it.</p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">04</span>
+        <div>
+          <h2>What changed</h2>
+          <p>Research now sits closer to the center of the room when business decisions get made &mdash; not simply available somewhere, but present in the tools and moments where those decisions actually happen.</p>
+          <div class="pull"><p>The demand hasn't leveled off. It's grown: research needs to go further, faster.</p></div>
+          <p>That's the current chapter: an internally hosted, independent research agent built to field complex questions and requests directly, tailored to a stakeholder's role and the task at hand. The point was never speed for its own sake &mdash; it's making sure friction never gets to decide whether the people we study end up represented in a decision.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="case-foot">
+      <a href="../index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
+      <p class="colophon">Nicholas Pings Rodriguez &middot; UX Research</p>
+    </footer>
+
+  </div>
+</div>
+<script>
+  document.body.classList.add('loaded');
+</script>
+</body>
+</html>
