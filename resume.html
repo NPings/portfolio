@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Nicholas Pings Rodriguez — Resume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: only light;
+    --ink:#16241C;
+    --ink-soft:#39503F;
+    --muted:#72856F;
+    --rule:#CBD5C1;
+    --rule-soft:#DDE4D6;
+    --pine:#2F5B44;
+    --moss:#7E9C60;
+    --leaf:#CFE2A6;
+    --paper:#FFFFFF;
+    --backdrop:#DFE6D8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden;}
+  html{background-color:var(--backdrop);background-image:linear-gradient(var(--backdrop),var(--backdrop));}
+  body{
+    background-color:transparent;
+    font-family:"EB Garamond",Garamond,Georgia,serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+  }
+  @media (prefers-color-scheme:dark){body{background:var(--backdrop);color:var(--ink);}}
+
+  .sheet{
+    width:8.5in;min-height:11in;margin:14px auto 44px;
+    background-color:var(--paper);
+    background-image:linear-gradient(var(--paper),var(--paper));
+    padding:0.55in 0.62in 0.5in;
+    box-shadow:0 14px 44px rgba(22,36,28,.18);
+  }
+
+  .label{
+    font-weight:600;letter-spacing:.17em;text-transform:uppercase;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{border-bottom:1.5px solid var(--ink);padding-bottom:13px;}
+  .name{
+    font-family:"Young Serif",Georgia,serif;font-weight:400;
+    font-size:33pt;line-height:1.0;letter-spacing:-.015em;margin:0;
+  }
+  .name .dot{color:var(--moss);}
+  .undername{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:22px;margin-top:11px;flex-wrap:wrap;
+  }
+  .role{
+    font-size:11.5pt;font-style:italic;color:var(--pine);
+  }
+  .contact{
+    font-size:9pt;line-height:1.6;text-align:right;color:var(--ink-soft);white-space:nowrap;
+  }
+  .contact a{color:inherit;text-decoration:none;}
+
+  /* ---------- lede ---------- */
+  .lede{font-size:11pt;line-height:1.5;margin:15px 0 0;max-width:6.5in;}
+  .mark{
+    background-image:linear-gradient(var(--leaf),var(--leaf));
+    background-repeat:no-repeat;background-position:0 88%;background-size:100% 34%;
+    padding:0 .07em;
+  }
+
+  /* ---------- blocks ---------- */
+  .block{
+    display:grid;grid-template-columns:1.02in minmax(0,1fr);gap:0 20px;
+    padding-top:17px;margin-top:17px;border-top:1px solid var(--rule-soft);
+  }
+  .block-label{
+    font-size:8pt;font-weight:600;letter-spacing:.17em;text-transform:uppercase;
+    color:var(--muted);padding-top:3px;
+  }
+
+  /* ---------- jobs ---------- */
+  .job + .job{margin-top:15px;}
+  .job-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;}
+  .job-title{
+    font-family:"Young Serif",Georgia,serif;font-weight:400;
+    font-size:12pt;letter-spacing:-.01em;margin:0;line-height:1.2;
+  }
+  .job-when{font-size:8.5pt;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+  .job-org{font-size:10.5pt;color:var(--pine);margin:3px 0 7px;font-style:italic;}
+  .job-org span{color:var(--muted);}
+
+  ul.pts{margin:0;padding:0;list-style:none;}
+  ul.pts li{
+    font-size:10.5pt;line-height:1.42;padding-left:14px;position:relative;margin-bottom:4px;
+  }
+  ul.pts li::before{
+    content:"";position:absolute;left:0;top:.55em;width:6px;height:1.5px;background:var(--moss);
+  }
+
+  /* ---------- education ---------- */
+  .edu{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;}
+  .edu h3{
+    font-family:"Young Serif",Georgia,serif;font-weight:400;
+    font-size:11pt;margin:0 0 3px;line-height:1.25;
+  }
+  .edu p{margin:0;font-size:10pt;line-height:1.4;color:var(--ink-soft);}
+  .edu .school{color:var(--pine);font-style:italic;}
+
+  /* ---------- methods ---------- */
+  .methods{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;}
+  .m-group h4{
+    font-size:7.5pt;font-weight:600;letter-spacing:.17em;text-transform:uppercase;
+    color:var(--pine);margin:0 0 4px;
+  }
+  .m-group p{margin:0;font-size:10pt;line-height:1.4;color:var(--ink-soft);}
+
+  @media print{
+    @page{size:letter;margin:0;}
+    html,body{background:#fff;}
+    .sheet{width:auto;min-height:0;margin:0;box-shadow:none;padding:0.5in 0.6in;}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+
+  @media screen and (max-width:900px){
+    .sheet{width:auto;max-width:660px;padding:30px 24px;margin:12px;}
+    .name{font-size:27pt;}
+    .block{grid-template-columns:1fr;gap:9px;}
+    .contact{text-align:left;white-space:normal;}
+    .edu,.methods{grid-template-columns:1fr;gap:14px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <h1 class="name">Nicholas Pings<br>Rodriguez<span class="dot">.</span></h1>
+    <div class="undername">
+      <div class="role">Senior UX Researcher &mdash; Consumer Products &amp; Research Operations</div>
+      <div class="contact">
+        Rancho Cordova, CA 95742<br>
+        (626) 399-8161<br>
+        <a href="mailto:NicholasPings@gmail.com">NicholasPings@gmail.com</a>
+      </div>
+    </div>
+  </header>
+
+  <p class="lede">
+    Six years turning consumer behavior into product decisions. At Experian I've covered the full
+    consumer portfolio, flagship to edge case, <span class="mark">at every stage of the product life
+    cycle</span> &mdash; and spent the last two years rebuilding how that research gets done, so findings
+    reach the people making decisions instead of stopping at a readout.
+  </p>
+
+  <section class="block">
+    <div class="block-label">Experience</div>
+    <div>
+
+      <article class="job">
+        <div class="job-head">
+          <h2 class="job-title">Sr. User Experience Researcher</h2>
+          <div class="job-when">2021 &mdash; Present</div>
+        </div>
+        <div class="job-org">Experian Consumer Services <span>&middot; Remote</span></div>
+        <ul class="pts">
+          <li>Research partner across the full consumer product portfolio, from flagship experiences to narrow edge cases, spanning strategic definition, launch, iteration, and evergreen maintenance &mdash; matching method and rigor to each stage of the life cycle.</li>
+          <li>Partner directly with design, engineering, and product teams, translating findings into product roadmaps and design decisions.</li>
+          <li>Lead research on integrating generative AI into the consumer experience; recommendations shaped the direction of Experian's educational tools.</li>
+          <li>Introduced AI-assisted automation across the research process &mdash; screening, analysis, synthesis &mdash; and set the standards for where a model is trusted and where a human still decides.</li>
+          <li>Operationalized access to insight through a self-service layer for stakeholders, and mentor researchers joining the team through onboarding, study design review, and craft standards.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-head">
+          <h2 class="job-title">User Experience Researcher</h2>
+          <div class="job-when">May &mdash; Nov 2021</div>
+        </div>
+        <div class="job-org">HP Inc. <span>&middot; Contract &middot; Personal Systems Software Design</span></div>
+        <ul class="pts">
+          <li>Ran launch-aligned studies across HP Wolf Security &mdash; including VPN and antivirus protection &mdash; plus webcam utilities and HP Dev One.</li>
+          <li>Facilitated design thinking workshops that aligned cross-disciplinary teams around emerging concepts and early problem framing.</li>
+          <li>Worked with a global cross-functional team to map user needs across business units and touchpoints.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-head">
+          <h2 class="job-title">Principal User Experience Researcher</h2>
+          <div class="job-when">2018 &mdash; 2021</div>
+        </div>
+        <div class="job-org">Freelance <span>&middot; San Francisco, CA</span></div>
+        <ul class="pts">
+          <li>Scoped, recruited, and ran end-to-end research for clients across travel, health and wellness, and personal organization &mdash; spanning mobile applications and personal systems software.</li>
+          <li>Delivered executive readouts, personas, journey maps, NPS and statistical analysis, and prioritized recommendations.</li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-label">Education</div>
+    <div class="edu">
+      <div>
+        <h3>M.S. Information Design &amp; Strategy</h3>
+        <p><span class="school">Northwestern University</span> &middot; Evanston, IL<br>GPA 4.0</p>
+      </div>
+      <div>
+        <h3>B.A. Sociology &amp; Applied Psychology</h3>
+        <p><span class="school">Chapman University</span> &middot; Orange, CA<br>GPA 3.65 &middot; Chancellor's List &middot; Dean's Scholarship</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-label">Methods</div>
+    <div class="methods">
+      <div class="m-group">
+        <h4>Generative</h4>
+        <p>In-depth interviews &middot; Ethnography &middot; Contextual inquiry &middot; Diary studies &middot; Generative workshops &middot; Card sorting &middot; Personas &middot; Journey mapping</p>
+      </div>
+      <div class="m-group">
+        <h4>Evaluative</h4>
+        <p>Usability testing &middot; Rapid iterative testing &middot; Concept validation &middot; Heuristic analysis &middot; Comparative testing</p>
+      </div>
+      <div class="m-group">
+        <h4>Quantitative</h4>
+        <p>Survey design &middot; Statistical analysis &middot; Experimental design &middot; NPS &middot; Longitudinal &amp; adoption studies</p>
+      </div>
+      <div class="m-group">
+        <h4>Operations</h4>
+        <p>AI-assisted synthesis &middot; Research repositories &middot; Self-service enablement &middot; Research standards &middot; Mentorship &middot; Stakeholder management</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-label">Tools</div>
+    <div>
+      <p style="margin:0;font-size:10pt;line-height:1.45;color:var(--ink-soft);">
+        Condens &middot; Dovetail &middot; Great Question &middot; User Interviews &middot; Lyssna &middot; Outset &middot; UserTesting &middot; dscout &middot; LookBack &middot;
+        Optimal Workshop &middot; Maze &middot; Qualtrics &middot; Sprig &middot; Ethnio &middot; UserZoom &middot; TheyDo &middot; Figma &middot; FigJam &middot; Miro &middot; Jira &middot; Tableau &middot; SPSS &middot; Python
+      </p>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
