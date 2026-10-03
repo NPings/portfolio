@@ -143,6 +143,12 @@
   .chain-stop.gate{border-left:2px solid var(--pine);}
   .chain-stop.gate .chain-dot{background:var(--pine);}
   .chain-gate{display:block;color:var(--pine);margin-bottom:4px;}
+  .chain-branch{
+    margin:12px 0 0 14px;padding:10px 12px;
+    border:1px solid var(--rule);border-left:2px solid var(--moss);
+    background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));
+  }
+  .chain-branch .label{display:block;color:var(--moss);margin-bottom:4px;}
 
   /* ---------- draft placeholders (remove each one as the content lands) ---------- */
   .todo{
@@ -184,7 +190,7 @@
 
       <div class="meta rise d3">
         <div><span class="label">Role</span><span>Designed &amp; built</span></div>
-        <div><span class="label">Built through</span><span>Experian Applied AI process</span></div>
+        <div><span class="label">Project</span><span>Pilot with Applied AI team</span></div>
         <div><span class="label">Used by</span><span>Stakeholders &amp; research team</span></div>
         <div><span class="label">Company</span><span>Experian</span></div>
       </div>
@@ -212,8 +218,9 @@
         <span class="section-num">03</span>
         <div>
           <h2>Approach</h2>
-          <p>I built it hands-on through Experian's Applied AI process, with that team's oversight.</p>
-          <p>A lot of the work was defining the data pipeline: where we stop to get researcher sign-off, when a human operator steps in, and when a manager approves new information for release.</p>
+          <p>This grew out of the independent research agent described in <a href="research-self-service.html">Research Self-Service</a>.</p>
+          <p>It's a pilot project I'm using to help build Experian's Applied AI process for future teams, working closely with the Applied AI team.</p>
+          <p>A lot of the work was defining the data pipeline: where we stop to get researcher sign-off, when a human operator steps in, and when a manager approves new information for release. Researcher sign-off and manager approval are fixed checkpoints. A human operator steps in only when the LLM-as-a-judge can't make a safe determination on its own or needs additional input.</p>
           <div class="chain stack">
             <div class="chain-stop">
               <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>New research</span>
@@ -225,10 +232,14 @@
               <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Researcher sign-off</span>
             </div>
             <div class="chain-arrow" aria-hidden="true">&rarr;</div>
-            <div class="chain-stop gate">
-              <span class="label chain-gate">Checkpoint</span>
-              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Human operator</span>
-              <span class="chain-note">Steps in at defined points in the pipeline</span>
+            <div class="chain-stop">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>LLM-as-a-judge</span>
+              <span class="chain-note">Makes the determination when it safely can</span>
+              <div class="chain-branch">
+                <span class="label">&#8627; Only when needed</span>
+                <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Human operator</span>
+                <span class="chain-note">Steps in when the judge can't make a safe call or needs more input, then the item rejoins the flow</span>
+              </div>
             </div>
             <div class="chain-arrow" aria-hidden="true">&rarr;</div>
             <div class="chain-stop gate">
@@ -244,15 +255,11 @@
           </div>
           <div class="todo">
             <span class="label">[Nick to confirm]</span>
-            <p>Is the order of the three checkpoints right, and where does the human operator step in? Rename any stages if you have names for them.</p>
+            <p>Does researcher sign-off come before the LLM-as-a-judge, as shown, or after it?</p>
           </div>
           <div class="todo">
             <span class="label">[Nick to add]</span>
             <p>Optional: how the pipeline took shape over time, or a key decision you made along the way.</p>
-          </div>
-          <div class="todo">
-            <span class="label">[Nick to confirm]</span>
-            <p>Is this the "independent research agent" from the Research Self-Service case study? If so, I'll link the two pages to each other.</p>
           </div>
         </div>
       </div>
