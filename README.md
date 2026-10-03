@@ -1,4 +1,4 @@
-# n-pings.com
+# nickpings.com
 
 Personal UX research portfolio and resume. Static HTML, no build step.
 
@@ -7,7 +7,7 @@ Personal UX research portfolio and resume. Static HTML, no build step.
 
 ## Deploy
 
-Hosted for free on GitHub Pages, with a custom domain (`n-pings.com`) pointed at it via Namecheap DNS.
+Hosted for free on GitHub Pages, with a custom domain (`nickpings.com`) pointed at it via Namecheap DNS.
 
 To push a future update:
 
