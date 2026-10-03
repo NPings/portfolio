@@ -136,6 +136,13 @@
     .chain-stop{flex:0 0 auto;min-width:0;}
     .chain-arrow{width:auto;height:26px;transform:rotate(90deg);}
   }
+  /* stacked chain with human checkpoints */
+  .chain.stack{flex-direction:column;}
+  .chain.stack .chain-stop{flex:0 0 auto;min-width:0;}
+  .chain.stack .chain-arrow{width:auto;height:26px;transform:rotate(90deg);}
+  .chain-stop.gate{border-left:2px solid var(--pine);}
+  .chain-stop.gate .chain-dot{background:var(--pine);}
+  .chain-gate{display:block;color:var(--pine);margin-bottom:4px;}
 
   /* ---------- draft placeholders (remove each one as the content lands) ---------- */
   .todo{
@@ -178,7 +185,7 @@
       <div class="meta rise d3">
         <div><span class="label">Role</span><span>Designed &amp; built</span></div>
         <div><span class="label">Built through</span><span>Experian Applied AI process</span></div>
-        <div><span class="label">Used by</span><span>Stakeholders</span></div>
+        <div><span class="label">Used by</span><span>Stakeholders &amp; research team</span></div>
         <div><span class="label">Company</span><span>Experian</span></div>
       </div>
     </header>
@@ -197,10 +204,7 @@
         <span class="section-num">02</span>
         <div>
           <h2>Why it was hard</h2>
-          <div class="todo">
-            <span class="label">[Nick to add]</span>
-            <p>What made this hard to solve? For example: where the research lived, what stakeholders tried before, what had to stay accurate or approved, and any constraints on data or access.</p>
-          </div>
+          <p>LLM wikis aren't really designed for multiple contributors, or for individual managers signing off on the addition of information. A research knowledge base needs both.</p>
         </div>
       </div>
 
@@ -209,9 +213,42 @@
         <div>
           <h2>Approach</h2>
           <p>I built it hands-on through Experian's Applied AI process, with that team's oversight.</p>
+          <p>A lot of the work was defining the data pipeline: where we stop to get researcher sign-off, when a human operator steps in, and when a manager approves new information for release.</p>
+          <div class="chain stack">
+            <div class="chain-stop">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>New research</span>
+              <span class="chain-note">Contributed by researchers</span>
+            </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
+            <div class="chain-stop gate">
+              <span class="label chain-gate">Checkpoint</span>
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Researcher sign-off</span>
+            </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
+            <div class="chain-stop gate">
+              <span class="label chain-gate">Checkpoint</span>
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Human operator</span>
+              <span class="chain-note">Steps in at defined points in the pipeline</span>
+            </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
+            <div class="chain-stop gate">
+              <span class="label chain-gate">Checkpoint</span>
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Manager approval</span>
+              <span class="chain-note">Approves new information for release</span>
+            </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
+            <div class="chain-stop current">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Released</span>
+              <span class="chain-note">Available in the knowledge base</span>
+            </div>
+          </div>
+          <div class="todo">
+            <span class="label">[Nick to confirm]</span>
+            <p>Is the order of the three checkpoints right, and where does the human operator step in? Rename any stages if you have names for them.</p>
+          </div>
           <div class="todo">
             <span class="label">[Nick to add]</span>
-            <p>How you approached it: who you talked to, what you tried first, the key decisions you made, and how the solution took shape over time.</p>
+            <p>Optional: how the pipeline took shape over time, or a key decision you made along the way.</p>
           </div>
           <div class="todo">
             <span class="label">[Nick to confirm]</span>
@@ -227,7 +264,7 @@
           <p>A retrieval-augmented generation (RAG) knowledge base. It covers the full pipeline from the data lake to the warehouse, plus a front end that generates outputs from approved research artifacts.</p>
           <div class="todo">
             <span class="label">[Nick to add]</span>
-            <p>One or two screenshots of the front end (redacted as needed), and a sentence on what a stakeholder actually does with it, such as the kinds of questions they ask or the outputs they get back.</p>
+            <p>One or two screenshots of the front end (redacted as needed).</p>
           </div>
         </div>
       </div>
@@ -254,7 +291,7 @@
           </div>
           <div class="todo">
             <span class="label">[Nick to confirm]</span>
-            <p>Is this flow right? Add or rename any steps, such as how artifacts get approved or where people ask their questions.</p>
+            <p>Is this flow right? Add or rename any steps, such as where people ask their questions.</p>
           </div>
         </div>
       </div>
@@ -263,9 +300,12 @@
         <span class="section-num">06</span>
         <div>
           <h2>Outcomes</h2>
+          <p>For stakeholders, the immediate benefit is a chatbot they can use to ask questions of approved research.</p>
+          <p>For the research team, a collective knowledge base means we can create comprehensive meta-analyses and extensive user journeys, with work from all of our research divisions automatically included.</p>
+          <div class="pull"><p>The time it takes to review all the work done on a topic across teams went from weeks to hours.</p></div>
           <div class="todo">
             <span class="label">[Nick to add]</span>
-            <p>What changed once it was in use: who uses it, how often, what decisions it has informed, and any numbers you can share. A quote from a stakeholder would also work here.</p>
+            <p>Optional: a stakeholder quote, or an example of a decision, meta-analysis, or journey map the knowledge base made possible.</p>
           </div>
         </div>
       </div>
