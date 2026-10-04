@@ -108,6 +108,11 @@
   .facet .label{color:var(--pine);display:block;margin-bottom:12px;}
   .facet p{margin:0;color:var(--ink-soft);line-height:1.5;font-size:.98em;}
   @media(max-width:760px){.facets{grid-template-columns:1fr;}}
+  .practice-lead{margin:0 0 clamp(22px,3vw,32px);max-width:52ch;color:var(--ink-soft);font-style:italic;font-size:clamp(19px,2vw,23px);line-height:1.4;}
+  .facets.practice{grid-auto-flow:column;grid-template-rows:repeat(3,auto);}
+  .facet.facet-head{background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));}
+  .facet-head .role-org{margin-bottom:8px;}
+  @media(max-width:760px){.facets.practice{grid-auto-flow:row;grid-template-rows:none;}}
 
   /* ================= roles ================= */
   .roles{border-top:1px solid var(--rule);margin-bottom:clamp(30px,5vw,64px);}
@@ -369,10 +374,15 @@
   </div>
 </header>
 
-<section class="band" data-obs="Philosophy">
+<section class="band" id="practice" data-obs="Practice">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Philosophy</p><span class="sec-code mono">S-01</span></div>
-    <div class="facets">
+    <div class="sec-head"><p class="label">Practice</p><span class="sec-code mono">S-01</span></div>
+    <p class="practice-lead">Research and research operations are one practice for me: finding what matters, then making sure it goes further.</p>
+    <div class="facets practice">
+      <div class="facet facet-head">
+        <h3 class="role-org">UX Research</h3>
+        <p>Finding what matters to the people we study, and making sure it shapes the decision.</p>
+      </div>
       <div class="facet">
         <span class="label">Scope</span>
         <p>I cover the whole portfolio, not just the flagship products. The stuff barely anyone opens still gets real research. Traffic isn't what decides that.</p>
@@ -381,37 +391,17 @@
         <span class="label">Stage</span>
         <p>Strategy, discovery, launch, iteration, the long maintenance tail after. I've worked all of it. What changes is the method, depending on what decision is actually on the table.</p>
       </div>
-      <div class="facet">
-        <span class="label">Process</span>
-        <p>My roots are in old school research. But I'm constantly testing what AI can actually do to speed the process up, mostly around screening and analysis these days. There's still a clear line for where a model gets trusted and where a person has to make the call.</p>
+      <div class="facet facet-head">
+        <h3 class="role-org">AI Research Operations</h3>
+        <p>Building the operations and AI systems that help research go further.</p>
       </div>
       <div class="facet">
-        <span class="label">Access</span>
-        <p>Not every question needs a full study. I built a self-service layer so stakeholders can get answers on their own, which keeps the team free for the work that actually needs us.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="band" id="ai-research-ops" data-obs="AI Research Operations">
-  <div class="wrap">
-    <div class="sec-head"><p class="label">AI Research Operations</p><span class="sec-code mono">S-02</span></div>
-    <div class="facets">
-      <div class="facet">
-        <span class="label">Research ops</span>
-        <p>I spent about two years rebuilding how research gets done, so findings reach the people making decisions and don't stop at the readout. That covered self-service access for stakeholders, research standards, onboarding, and mentoring.</p>
+        <span class="label">Operations</span>
+        <p>I spent about two years rebuilding how research gets done, so findings reach the people making decisions and don't stop at the readout. Not every question needs a full study, so I built self-service access for stakeholders. The rebuild also covered research standards, onboarding, and mentoring.</p>
       </div>
       <div class="facet">
         <span class="label">AI in research</span>
-        <p>I introduced AI-assisted screening, analysis, and synthesis to our research process, and set the standards for where a model is trusted and where a person decides.</p>
-      </div>
-      <div class="facet">
-        <span class="label">Applied AI</span>
-        <p>I helped define Experian's internal Applied AI practices. The knowledge base, PMO agent, and skill kits below are pilot projects I'm using to help build the Applied AI process for future teams, working closely with the Applied AI team.</p>
-      </div>
-      <div class="facet">
-        <span class="label">Systems</span>
-        <p>A research knowledge base, a PMO agent for jobs that span many roles, and a shared skills library for the research team. Also PII-stripping preprocessing tools and competitor monitoring.</p>
+        <p>My roots are in old school research, and I keep testing what AI can actually do for it. I introduced AI-assisted screening, analysis, and synthesis, and set the standards for where a model is trusted and where a person decides. I also helped define Experian's internal Applied AI practices.</p>
       </div>
     </div>
   </div>
@@ -419,7 +409,7 @@
 
 <!-- Placeholder figures — swap for real numbers when available. -->
 <section class="band impact" id="impact" data-obs="Impact">
-  <div class="wrap"><div class="sec-head"><p class="label">Impact</p><span class="sec-code mono">S-03</span></div></div>
+  <div class="wrap"><div class="sec-head"><p class="label">Impact</p><span class="sec-code mono">S-02</span></div></div>
   <div class="marquee">
     <div class="track track-impact">
       <div class="stat"><span class="stat-num">24+</span><span class="stat-label">Products launched</span></div>
@@ -432,7 +422,7 @@
 
 <section class="band" id="work" data-obs="Work">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Work</p><span class="sec-code mono">S-04</span></div>
+    <div class="sec-head"><p class="label">Work</p><span class="sec-code mono">S-03</span></div>
     <div class="roles">
 
       <details class="role" data-role="Experian">
@@ -497,7 +487,7 @@
 
 <section class="band" id="case-studies" data-obs="Case Studies">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Case Studies &middot; Research</p><span class="sec-code mono">S-05</span></div>
+    <div class="sec-head"><p class="label">Case Studies &middot; Research</p><span class="sec-code mono">S-04</span></div>
     <div class="cases">
       <a class="case-card" href="experian-eva.html">
         <div class="case-card-top">
@@ -519,7 +509,7 @@
 
 <section class="band" id="ai-systems" data-obs="AI Systems">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Case Studies &middot; AI Research Operations</p><span class="sec-code mono">S-06</span></div>
+    <div class="sec-head"><p class="label">Case Studies &middot; AI Research Operations</p><span class="sec-code mono">S-05</span></div>
     <div class="cases">
       <a class="case-card" href="research-knowledge-base.html">
         <div class="case-card-top">
@@ -555,7 +545,7 @@
 
 <section class="sort" id="methods" data-obs="Methods">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Methods</p><span class="sec-code mono">S-07</span></div>
+    <div class="sec-head"><p class="label">Methods</p><span class="sec-code mono">S-06</span></div>
 
     <div class="board" id="board">
 
@@ -605,7 +595,7 @@
 </section>
 
 <section class="band tools" id="tools" data-obs="Tools">
-  <div class="wrap"><div class="sec-head"><p class="label">Tools</p><span class="sec-code mono">S-08</span></div></div>
+  <div class="wrap"><div class="sec-head"><p class="label">Tools</p><span class="sec-code mono">S-07</span></div></div>
   <div class="marquee">
     <div class="track">
       <span class="tool">Condens</span><span class="tool">Figma</span><span class="tool">Great Question</span>
@@ -621,7 +611,7 @@
 
 <section class="band debrief" id="debrief" data-obs="Debrief">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Your session</p><span class="sec-code mono">S-09</span></div>
+    <div class="sec-head"><p class="label">Your session</p><span class="sec-code mono">S-08</span></div>
     <div class="debrief-grid">
       <div class="d-cell"><span class="d-num" id="dTime">0:00</span><span class="label">Time on page</span></div>
       <div class="d-cell"><span class="d-num" id="dDepth">0%</span><span class="label">Furthest scroll</span></div>
@@ -751,8 +741,7 @@
         if (e.isIntersecting && name && !seen[name]){
           seen[name] = true;
           var lines = {
-            'Philosophy':'Participant reaches Philosophy. Reading pattern: unknown, assumed F-shaped.',
-            'AI Research Operations':'Participant reaches AI Research Operations. The other side of the work.',
+            'Practice':'Participant reaches Practice. Reading pattern: unknown, assumed F-shaped.',
             'AI Systems':'Participant reaches the AI research operations case studies.',
             'Impact':'Impact section in view. Numbers noticed, presumably.',
             'Work':'Participant arrives at Work. The disclosure rows await a first click.',
