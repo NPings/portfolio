@@ -292,6 +292,13 @@
     transition:transform .45s cubic-bezier(.22,.7,.2,1);
   }
   .observer.open{transform:translateY(0);}
+  /* at full scroll the notes widen into a session debrief */
+  .observer{transition:transform .45s cubic-bezier(.22,.7,.2,1),width .6s cubic-bezier(.22,.7,.2,1);}
+  .observer.full{width:calc(100vw - 2 * clamp(12px,2vw,24px));}
+  .observer.full .observer-log{max-height:min(52vh,440px);}
+  body.obs-open.obs-full .page{padding-bottom:clamp(340px,58vh,500px);}
+  .observer-log li.note-head span:last-child{font-weight:600;color:var(--pine);letter-spacing:.04em;}
+  .observer-log li.note-key span:last-child{color:var(--ink);}
   .observer-head{
     display:flex;align-items:center;gap:10px;
     width:100%;padding:12px 14px;border:0;background:transparent;
@@ -394,7 +401,7 @@
     <div class="facets">
       <div class="facet">
         <span class="label">Questions before methods</span>
-        <p>A study starts with the questions that the current open decisions depend on. That sets the method, the sample, and how much rigor it needs.</p>
+        <p>A study starts with the questions that the current open decisions depend on. Everything else branches from there.</p>
       </div>
       <div class="facet">
         <span class="label">Cover the whole lifecycle</span>
@@ -516,10 +523,10 @@
             <h3 class="role-org">Freelance</h3>
             <p class="role-title">Principal User Experience Researcher</p>
           </span>
-          <span class="role-when label">2018 &mdash; 2021</span>
+          <span class="role-when label">2018 &mdash; 2021<span class="chev"></span></span>
         </summary>
         <div class="role-body">
-          <p>I scoped and ran full research programs for clients in travel, health and wellness, and personal organization, plus mobile applications and personal systems software.</p>
+          <p>I scoped and ran full research programs for clients in travel, health and wellness, and personal organization, across various platforms.</p>
           <ul>
             <li>Usability studies, concept validation, comparative testing, and generative workshops.</li>
             <li>Delivered executive readouts, personas, journey maps, NPS and statistical analysis, and prioritized recommendations.</li>
@@ -690,14 +697,14 @@
   var panel = document.getElementById('observer');
   var toggle = document.getElementById('observerToggle');
   var noteCount = 0;
-  var MAX_NOTES = 40;
+  var MAX_NOTES = 90;
 
   function stamp(){
     var s = Math.floor((Date.now() - t0) / 1000);
     var m = Math.floor(s / 60);
     return m + ':' + String(s % 60).padStart(2, '0');
   }
-  function note(text){
+  function note(text, kind){
     if (!log || noteCount >= MAX_NOTES) return;
     noteCount++;
     var li = document.createElement('li');
@@ -706,6 +713,7 @@
     t.textContent = stamp();
     var body = document.createElement('span');
     body.textContent = text;
+    if (kind) li.className = kind;
     li.appendChild(t); li.appendChild(body);
     log.appendChild(li);
     log.scrollTop = log.scrollHeight;
@@ -724,7 +732,7 @@
 
   /* opening lines */
   note('Session begins. One participant, unmoderated.');
-  setTimeout(function(){ note('Participant reads the hero. Or skims it. No judgment.'); }, 6000);
+  setTimeout(function(){ if (!debriefed) note('Participant reads the hero. Or skims it. No judgment.'); }, 6000);
 
   /* section observation */
   var seen = {};
@@ -759,6 +767,7 @@
     if (depth > maxDepth) maxDepth = depth;
     if (depth >= 50 && !depthMarks[50]){ depthMarks[50] = true; note('Halfway down the page. Engagement looks healthy.'); }
     if (depth >= 90 && !depthMarks[90]){ depthMarks[90] = true; }
+    if (depth >= 98) runDebrief();
     var dd = document.getElementById('dDepth');
     if (dd) dd.textContent = maxDepth + '%';
   }
@@ -802,11 +811,11 @@
   });
 
   /* idle + return */
-  var idleTimer, idleNoted = false;
+  var idleTimer, idleNoted = false, idleCount = 0;
   function resetIdle(){
     clearTimeout(idleTimer);
     idleTimer = setTimeout(function(){
-      if (!idleNoted){ idleNoted = true; note('Participant pauses. Thinking, or getting coffee.'); }
+      if (!idleNoted){ idleNoted = true; idleCount++; note('Participant pauses. Thinking, or getting coffee.'); }
     }, 30000);
   }
   ['scroll','click','touchstart','keydown','mousemove'].forEach(function(evt){
@@ -817,6 +826,46 @@
   document.addEventListener('visibilitychange', function(){
     if (document.visibilityState === 'visible') note('Participant returns. Welcome back.');
   });
+
+  /* ---------- full-scroll debrief: the notes widen and get thorough ---------- */
+  var debriefed = false;
+  function listOf(obj){ return Object.keys(obj); }
+  function joinNames(names, max){
+    var shown = names.slice(0, max).join(', ');
+    return names.length > max ? shown + ', and ' + (names.length - max) + ' more' : shown;
+  }
+  function runDebrief(){
+    if (debriefed) return;
+    debriefed = true;
+    var methods = listOf(methodSeen), rolesSeen = listOf(roleSeen);
+    var sectionsSeen = listOf(seen).length;
+    var sectionTotal = document.querySelectorAll('[data-obs]').length;
+    var mins = Math.floor((Date.now() - t0) / 60000);
+    var lines = [
+      ['Debrief. Synthesizing the session while it is still fresh.', 'note-head'],
+      ['Duration: ' + stamp() + '. ' + (mins >= 2 ? 'A considered read. Coffee may have been involved.' : 'Brisk. The participant knows what they came for.'), 'note-key'],
+      ['Coverage: ' + sectionsSeen + ' of ' + sectionTotal + ' sections reached. ' + (sectionsSeen >= sectionTotal ? 'Complete. No skipped tasks.' : 'A few were scrolled past. Noted without judgment.'), 'note-key'],
+      [methods.length
+        ? 'Methods opened: ' + methods.length + ' of 25 (' + joinNames(methods, 3) + '). ' + (methods.length >= 5 ? 'A hands-on participant.' : 'Selective. Respect.')
+        : 'Methods opened: none. The board was admired from a respectful distance.', 'note-key'],
+      [rolesSeen.length
+        ? 'Roles expanded: ' + rolesSeen.length + ' of 3 (' + rolesSeen.join(', ') + '). The details were wanted.'
+        : 'Roles expanded: none. The headlines were enough, apparently.', 'note-key'],
+      ['Pauses observed: ' + idleCount + '. ' + (idleCount ? 'Reflection, or a second tab. Both are valid.' : 'Momentum held the whole way.'), 'note-key'],
+      ['Finding 1: The participant made it to the end. Content held attention, which is the whole point.'],
+      ['Finding 2: ' + (methods.length || rolesSeen.length ? 'The participant clicked things. Interest moved from passive to active.' : 'The participant read rather than clicked. A reader, not a clicker.')],
+      ['Recommendation: Get in touch. The details are just above this panel.'],
+      ['Session closed. Thank you for participating. Nothing was recorded, and nothing leaves this tab.', 'note-head']
+    ];
+    var title = document.querySelector('.observer-title');
+    if (title) title.textContent = 'Participant #1 \u00b7 Session Debrief';
+    panel.classList.add('full');
+    document.body.classList.add('obs-full');
+    setObserverOpen(true);
+    lines.forEach(function(l, i){
+      setTimeout(function(){ note(l[0], l[1]); }, 500 + i * 650);
+    });
+  }
 
   /* time on page ticker */
   setInterval(function(){
