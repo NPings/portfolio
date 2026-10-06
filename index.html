@@ -235,7 +235,8 @@
     -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
     mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
   }
-  .track{display:flex;width:max-content;gap:12px;animation:slide 46s linear infinite;}
+  .track{display:flex;width:max-content;animation:slide 46s linear infinite;}
+  .track > *{margin-right:12px;}
   .track-impact{animation-duration:38s;}
   .marquee:hover .track,.marquee:focus-within .track{animation-play-state:paused;}
   @keyframes slide{to{transform:translateX(-50%);}}
@@ -371,9 +372,9 @@
   </div>
 </header>
 
-<section class="band" id="practice" data-obs="Practice">
+<section class="band" id="philosophy" data-obs="Philosophy">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Practice</p><span class="sec-code mono">S-01</span></div>
+    <div class="sec-head"><p class="label">Philosophy</p><span class="sec-code mono">S-01</span></div>
     <div class="facets">
       <div class="facet facet-head">
         <h3 class="role-org">Find what matters</h3>
@@ -387,17 +388,17 @@
   </div>
 </section>
 
-<section class="band" id="lead" data-obs="How I Lead">
+<section class="band" id="practice" data-obs="Practice">
   <div class="wrap">
-    <div class="sec-head"><p class="label">How I lead research</p><span class="sec-code mono">S-02</span></div>
+    <div class="sec-head"><p class="label">Practice</p><span class="sec-code mono">S-02</span></div>
     <div class="facets">
       <div class="facet">
         <span class="label">Questions before methods</span>
-        <p>A study starts with the question the decision depends on. That sets the method, the sample, and how much rigor it needs.</p>
+        <p>A study starts with the questions that the current open decisions depend on. That sets the method, the sample, and how much rigor it needs.</p>
       </div>
       <div class="facet">
         <span class="label">Cover the whole lifecycle</span>
-        <p>Strategy, discovery, launch, iteration, and the long maintenance tail after. Research belongs at every stage, and the method changes with the stage.</p>
+        <p>Strategy, discovery, launch, iteration, and the long maintenance tail after. Research belongs at every stage, and the methods adjust as needed.</p>
       </div>
       <div class="facet">
         <span class="label">Apply AI strategically and safely</span>
@@ -415,19 +416,12 @@
   <div class="wrap">
     <div class="sec-head"><p class="label">Selected work</p><span class="sec-code mono">S-03</span></div>
     <div class="cases">
-      <a class="case-card" href="research-self-service.html">
-        <div class="case-card-top">
-          <h3>Research Self-Service</h3>
-          <span class="case-arrow" aria-hidden="true">&rarr;</span>
-        </div>
-        <p>Stakeholders don't chase down findings any more than users read instructions. Rebuilding how research reaches people, across three systems and counting.</p>
-      </a>
       <a class="case-card" href="research-knowledge-base.html">
         <div class="case-card-top">
           <h3>Research Knowledge Base</h3>
           <span class="case-arrow" aria-hidden="true">&rarr;</span>
         </div>
-        <p>How do we make our research findings go further, and let stakeholders work with them directly when they have questions?</p>
+        <p>Stakeholders don't chase down findings any more than users read instructions. Three systems later, a knowledge base lets them ask research their own questions, in their own words.</p>
       </a>
       <a class="case-card" href="experian-eva.html">
         <div class="case-card-top">
@@ -665,7 +659,18 @@
   }
 
   /* ---------- marquees ---------- */
-  document.querySelectorAll('.track').forEach(function(t){ t.innerHTML += t.innerHTML; });
+  /* repeat each set until one copy is wider than any likely screen, then
+     double it; the track slides exactly one copy (-50%) and loops cleanly */
+  document.querySelectorAll('.track').forEach(function(t){
+    var set = t.innerHTML;
+    var setWidth = t.scrollWidth;
+    var span = Math.max(window.innerWidth, screen.width || 0, 1920) * 1.5;
+    var reps = Math.max(1, Math.ceil(span / setWidth));
+    var half = new Array(reps + 1).join(set);
+    var base = parseFloat(getComputedStyle(t).animationDuration) || 46;
+    t.innerHTML = half + half;
+    t.style.animationDuration = (base * reps) + 's';
+  });
 
   /* ---------- roles: one open at a time ---------- */
   var roles = document.querySelectorAll('details.role');
@@ -718,7 +723,8 @@
   });
 
   /* opening lines */
-  note('Session started.');
+  note('Session begins. One participant, unmoderated.');
+  setTimeout(function(){ note('Participant reads the hero. Or skims it. No judgment.'); }, 6000);
 
   /* section observation */
   var seen = {};
@@ -728,7 +734,17 @@
         var name = e.target.getAttribute('data-obs');
         if (e.isIntersecting && name && !seen[name]){
           seen[name] = true;
-          note('Viewed ' + name + '.');
+          var lines = {
+            'Philosophy':'Participant reaches Philosophy. Reading pattern assumed F-shaped.',
+            'Practice':'Participant reaches Practice. Four principles, no pop quiz.',
+            'Selected Work':'Participant reaches the case studies. Five to choose from.',
+            'Impact':'Impact numbers in view. Noticed, presumably.',
+            'Experience':'Participant reaches Experience. The rows are waiting for a first click.',
+            'Methods':'Methods board in view. The cards sorted themselves.',
+            'Tools':'Tools marquee observed. It doesn\'t stop. Neither does research.',
+            'Debrief':'Participant reaches the debrief. Full scroll achieved.'
+          };
+          note(lines[name] || ('Participant reaches ' + name + '.'));
         }
       });
     }, { threshold: 0.3 });
@@ -741,7 +757,7 @@
     var doc = document.documentElement;
     var depth = Math.min(100, Math.round((doc.scrollTop + window.innerHeight) / doc.scrollHeight * 100));
     if (depth > maxDepth) maxDepth = depth;
-    if (depth >= 50 && !depthMarks[50]){ depthMarks[50] = true; note('Scrolled halfway.'); }
+    if (depth >= 50 && !depthMarks[50]){ depthMarks[50] = true; note('Halfway down the page. Engagement looks healthy.'); }
     if (depth >= 90 && !depthMarks[90]){ depthMarks[90] = true; }
     var dd = document.getElementById('dDepth');
     if (dd) dd.textContent = maxDepth + '%';
@@ -760,7 +776,9 @@
           methodsOpened++;
           var dm = document.getElementById('dMethods');
           if (dm) dm.textContent = methodsOpened + ' / 25';
-          note('Opened method: ' + label + '.');
+          if (methodsOpened === 1) note('First method opened: "' + label + '". Curiosity confirmed.');
+          else if (methodsOpened === 5) note('Five methods explored. A thorough participant.');
+          else if (methodsOpened === 25) note('All 25 methods opened. Above and beyond.');
         }
       }
     });
@@ -777,7 +795,7 @@
           rolesOpened++;
           var dr = document.getElementById('dRoles');
           if (dr) dr.textContent = rolesOpened + ' / 3';
-          note('Opened ' + r + '.');
+          note('Participant expands ' + r + '. Task success.');
         }
       }
     });
@@ -788,7 +806,7 @@
   function resetIdle(){
     clearTimeout(idleTimer);
     idleTimer = setTimeout(function(){
-      if (!idleNoted){ idleNoted = true; note('Paused for 30 seconds.'); }
+      if (!idleNoted){ idleNoted = true; note('Participant pauses. Thinking, or getting coffee.'); }
     }, 30000);
   }
   ['scroll','click','touchstart','keydown','mousemove'].forEach(function(evt){
@@ -797,7 +815,7 @@
   resetIdle();
 
   document.addEventListener('visibilitychange', function(){
-    if (document.visibilityState === 'visible') note('Returned to the tab.');
+    if (document.visibilityState === 'visible') note('Participant returns. Welcome back.');
   });
 
   /* time on page ticker */
