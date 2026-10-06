@@ -109,21 +109,8 @@
   .facet p{margin:0;color:var(--ink-soft);line-height:1.5;font-size:.98em;}
   @media(max-width:760px){.facets{grid-template-columns:1fr;}}
   .practice-lead{margin:0 0 clamp(22px,3vw,32px);max-width:52ch;color:var(--ink-soft);font-style:italic;font-size:clamp(19px,2vw,23px);line-height:1.4;}
-  .facets.practice{grid-auto-flow:column;grid-template-rows:repeat(3,auto);}
   .facet.facet-head{background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));}
   .facet-head .role-org{margin-bottom:8px;}
-  .facet p a{color:var(--pine);text-decoration:none;border-bottom:1px solid var(--moss);white-space:nowrap;}
-  .facet p a::after{content:" \2192";}
-  .facet p a:hover{border-bottom-color:var(--pine);}
-
-  /* draft placeholders (remove each one as the content lands) */
-  .todo{
-    margin-top:14px;padding:12px 14px;border:1px dashed var(--moss);
-    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
-  }
-  .todo .label{color:var(--pine);display:block;margin-bottom:4px;}
-  .facet .todo p{font-size:.88em;font-style:italic;color:var(--muted);line-height:1.45;}
-  @media(max-width:760px){.facets.practice{grid-auto-flow:row;grid-template-rows:none;}}
 
   /* ================= roles ================= */
   .roles{border-top:1px solid var(--rule);margin-bottom:clamp(30px,5vw,64px);}
@@ -189,6 +176,58 @@
     }
     details.role[open] summary::after{transform:translateY(-30%) rotate(-135deg);}
   }
+
+  /* ================= methods board ================= */
+  .sort{
+    background-color:var(--ink);background-image:linear-gradient(var(--ink),var(--ink));
+    color:#E6EDE0;margin-top:clamp(38px,6vw,80px);padding-bottom:clamp(44px,6vw,80px);overflow:hidden;
+  }
+  .sort .sec-head .label{color:var(--leaf);}
+  .sort .sec-code{color:#7E9179;}
+  .board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.5vw,20px);align-items:start;}
+  @media(max-width:900px){.board{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
+  .cluster{min-width:0;}
+  .cluster-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+    padding-bottom:10px;margin-bottom:13px;border-bottom:1px solid rgba(230,237,224,.22);
+    opacity:0;transform:translateY(8px);
+  }
+  .sorted .cluster-head{opacity:1;transform:none;transition:opacity .6s ease .5s,transform .6s ease .5s;}
+  .cluster-head .label{color:#E6EDE0;}
+  .cluster-head .n{color:#7E9179;font-size:.8em;}
+
+  .chip{
+    display:block;
+    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
+    color:var(--ink);border-left:2px solid var(--moss);
+    padding:0;margin-bottom:9px;
+    box-shadow:0 8px 18px rgba(0,0,0,.2);
+    opacity:0;transform:translate(var(--dx,0px),var(--dy,0px)) rotate(var(--r,0deg));
+    will-change:transform,opacity;
+  }
+  .sorted .chip{
+    opacity:1;transform:none;
+    transition:transform 1s cubic-bezier(.2,.72,.24,1),opacity .55s ease,border-color .25s ease;
+    transition-delay:calc(var(--i) * 38ms);
+  }
+  .chip:last-child{margin-bottom:0;}
+  .chip:hover{border-left-color:var(--pine);}
+  .chip[open]{border-left-color:var(--pine);}
+  .chip summary{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    list-style:none;cursor:pointer;padding:11px 12px 11px 13px;
+  }
+  .chip summary::-webkit-details-marker{display:none;}
+  .chip-name{font-size:.95em;line-height:1.3;}
+  .chip-caret{
+    flex:none;width:9px;height:9px;margin-top:-2px;
+    border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);
+    transform:rotate(45deg);transition:transform .28s ease;
+  }
+  .chip[open] .chip-caret{transform:rotate(-135deg);border-color:var(--pine);}
+  .chip-desc{margin:0;padding:0 13px 13px;font-size:.86em;line-height:1.45;color:var(--ink-soft);font-style:italic;}
+  .chip[open] .chip-desc{animation:fadeUp .3s ease both;}
 
   /* ================= marquees ================= */
   .impact,.tools{padding-bottom:clamp(34px,5vw,64px);}
@@ -306,16 +345,17 @@
     *,*::before,*::after{transition-duration:.01ms !important;}
     .track,.track-impact{animation:none;}
     .rec-dot{animation:none;}
-    .rise{opacity:1;transform:none;}
+    .rise,.chip,.cluster-head{opacity:1;transform:none;}
     .mark{background-size:100% 32%;}
-    details.role[open] .role-body{animation:none;}
+    details.role[open] .role-body,.chip[open] .chip-desc{animation:none;}
     .observer-log li{animation:none;}
     .observer{transition:none;}
   }
   a:focus-visible,summary:focus-visible,button:focus-visible{outline:2px solid var(--pine);outline-offset:3px;}
+  .sort a:focus-visible,.sort summary:focus-visible{outline-color:var(--leaf);}
 </style>
 <noscript><style>
-  .rise{opacity:1;transform:none;}
+  .rise,.chip,.cluster-head{opacity:1;transform:none;}
   .mark{background-size:100% 32%;}
   .observer,.session-pill,.debrief{display:none;}
 </style></noscript>
@@ -335,31 +375,15 @@
 <section class="band" id="practice" data-obs="Practice">
   <div class="wrap">
     <div class="sec-head"><p class="label">Practice</p><span class="sec-code mono">S-01</span></div>
-    <p class="practice-lead">I find what matters with the right mix of methods, then make it go further with operations and AI that hold to a standard.</p>
-    <div class="facets practice">
+    <p class="practice-lead">Research is only worth the decisions it changes. My practice has two halves, and both serve that.</p>
+    <div class="facets">
       <div class="facet facet-head">
-        <h3 class="role-org">Research operations</h3>
-        <p>About two years rebuilding how research gets done at Experian, so findings reach the people making decisions and don't stop at the readout.</p>
-      </div>
-      <div class="facet">
-        <span class="label">Access</span>
-        <p>Not every question needs a full study, so I built self-service access for stakeholders. It started as ChatGPT agents, moved to Condens and Slack, and grew into a research knowledge base. <a href="research-self-service.html">Research Self-Service</a></p>
-      </div>
-      <div class="facet">
-        <span class="label">Standards &amp; people</span>
-        <p>The rebuild also set research standards for method, sample, and rigor at each stage, and covered onboarding and mentoring for researchers joining the team.</p>
+        <h3 class="role-org">Find what matters</h3>
+        <p>Start from the decision on the table and choose the method that can answer it: qualitative, quantitative, or both.</p>
       </div>
       <div class="facet facet-head">
-        <h3 class="role-org">AI in research, both ways</h3>
-        <p>I research AI as a product, and I use AI to run research, with clear limits on each.</p>
-      </div>
-      <div class="facet">
-        <span class="label">Researching AI</span>
-        <p>I led research on integrating generative AI into Experian's consumer experience. The recommendations shaped Experian's educational tools, including where its virtual assistant shows up. <a href="experian-eva.html">Experian Virtual Assistant</a></p>
-      </div>
-      <div class="facet">
-        <span class="label">Using AI in research</span>
-        <p>I introduced AI-assisted screening, analysis, and synthesis, and set the standards for where a model is trusted and where a person decides. I helped define Experian's internal Applied AI practices, and work closely with the Applied AI team on pilots like the knowledge base and skill kits.</p>
+        <h3 class="role-org">Make it go further</h3>
+        <p>Build the operations, standards, and AI that carry findings past the readout and into the room where decisions get made.</p>
       </div>
     </div>
   </div>
@@ -370,21 +394,20 @@
     <div class="sec-head"><p class="label">How I lead research</p><span class="sec-code mono">S-02</span></div>
     <div class="facets">
       <div class="facet">
-        <span class="label">Start from the decision</span>
-        <p>Every study starts with the decision it has to inform. That sets the method, the sample, and how much rigor it needs. I cover the whole portfolio, flagship to edge case, at every stage of the life cycle.</p>
+        <span class="label">Decisions before methods</span>
+        <p>A study starts with the decision it has to inform. That sets the method, the sample, and how much rigor it needs.</p>
       </div>
       <div class="facet">
-        <span class="label">Mixed methods</span>
-        <p>I choose qualitative, quantitative, or both based on the question. Qualitative work explains why. Quantitative work shows how much and how often.</p>
-        <div class="todo"><span class="label">[Nick to add]</span><p>A recent example of working with quant partners: the question, how you aligned on it, and how the qual and quant results came together.</p></div>
+        <span class="label">Cover the whole portfolio</span>
+        <p>The products barely anyone opens still get real research. Traffic isn't what decides where we look.</p>
       </div>
       <div class="facet">
-        <span class="label">Standards that hold</span>
-        <p>Research standards set the bar at each stage. With AI the standard is explicit: where a model is trusted, and where a person decides. In the knowledge base, researchers sign off and a manager approves before anything is released.</p>
+        <span class="label">Write down where AI is trusted</span>
+        <p>Models can speed up screening and synthesis. Where a model is trusted and where a person decides should be a standard, not a habit.</p>
       </div>
       <div class="facet">
-        <span class="label">Grow the team's capability</span>
-        <p>I onboard and mentor researchers through study design review and craft standards. With skill kits, teammates choose where AI helps in their own work instead of waiting for me to build it.</p>
+        <span class="label">Let people serve themselves</span>
+        <p>Not every question needs a full study. When stakeholders can get answers on their own, researchers stay free for the work that needs them.</p>
       </div>
     </div>
   </div>
@@ -516,37 +539,79 @@
   </div>
 </section>
 
-<section class="band" id="methods" data-obs="Methods">
+<section class="sort" id="methods" data-obs="Methods">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Methods &amp; tools</p><span class="sec-code mono">S-06</span></div>
-    <div class="facets">
-      <div class="facet">
-        <span class="label">Qualitative</span>
-        <p>In-depth interviews, ethnography, contextual inquiry, diary studies, generative workshops, card sorting, usability testing, rapid iterative testing, concept validation, heuristic analysis, comparative testing, personas, journey mapping.</p>
+    <div class="sec-head"><p class="label">Methods</p><span class="sec-code mono">S-06</span></div>
+
+    <div class="board" id="board">
+
+      <div class="cluster">
+        <div class="cluster-head"><span class="label">Generative</span><span class="n">7</span></div>
+        <details class="chip"><summary><span class="chip-name">In-depth interviews</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">One-on-one conversations that surface the reasoning behind what people do.</p></details>
+        <details class="chip"><summary><span class="chip-name">Ethnography</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Immersive observation of people in their natural setting to understand behavior in context.</p></details>
+        <details class="chip"><summary><span class="chip-name">Contextual inquiry</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Observing people in their own environment as they work through a real task.</p></details>
+        <details class="chip"><summary><span class="chip-name">Generative workshops</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Structured sessions where teams and users produce early concepts together.</p></details>
+        <details class="chip"><summary><span class="chip-name">Card sorting</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Participants group and label content to reveal the mental model behind an information architecture.</p></details>
+        <details class="chip"><summary><span class="chip-name">Persona creation</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Consolidating research into a small set of user models teams can design against.</p></details>
+        <details class="chip"><summary><span class="chip-name">Journey mapping</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Charting the full path a person takes across touchpoints to locate friction and gaps.</p></details>
       </div>
-      <div class="facet">
-        <span class="label">Quantitative</span>
-        <p>Survey design, statistical analysis, experimental design, Net Promoter Score, longitudinal and adoption studies.</p>
+
+      <div class="cluster">
+        <div class="cluster-head"><span class="label">Evaluative</span><span class="n">6</span></div>
+        <details class="chip"><summary><span class="chip-name">Usability testing</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Watching people attempt real tasks to find where a design breaks down.</p></details>
+        <details class="chip"><summary><span class="chip-name">Rapid iterative testing</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Testing, fixing, and retesting in short cycles so each change is validated as it's made.</p></details>
+        <details class="chip"><summary><span class="chip-name">Concept validation</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Putting an early idea in front of users to check the premise before anything gets built.</p></details>
+        <details class="chip"><summary><span class="chip-name">Heuristic analysis</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Expert review of an interface against established usability principles.</p></details>
+        <details class="chip"><summary><span class="chip-name">Comparative testing</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Running identical tasks across competing designs to see which performs better.</p></details>
+        <details class="chip"><summary><span class="chip-name">Diary studies</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Participants log experiences over days or weeks to capture behavior across time.</p></details>
       </div>
-      <div class="facet">
-        <span class="label">Operations</span>
-        <p>AI-assisted synthesis, research repositories, self-service enablement, research standards, mentorship, stakeholder management.</p>
+
+      <div class="cluster">
+        <div class="cluster-head"><span class="label">Quantitative</span><span class="n">6</span></div>
+        <details class="chip"><summary><span class="chip-name">Survey design</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Structuring questions so the resulting data answers the question actually being asked.</p></details>
+        <details class="chip"><summary><span class="chip-name">Statistical analysis</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Testing whether observed differences in the data are real or noise.</p></details>
+        <details class="chip"><summary><span class="chip-name">Experimental design</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Structuring A/B and multivariate tests so results are attributable to the change.</p></details>
+        <details class="chip"><summary><span class="chip-name">Net Promoter Score</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">A single-question loyalty benchmark, tracked over time and read alongside qualitative signal.</p></details>
+        <details class="chip"><summary><span class="chip-name">Longitudinal studies</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Measuring the same population repeatedly to see how attitudes and behavior shift.</p></details>
+        <details class="chip"><summary><span class="chip-name">Adoption studies</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Measuring whether a released feature is found, used, and kept.</p></details>
       </div>
-      <div class="facet">
-        <span class="label">Tools</span>
-        <p>Condens, Dovetail, Great Question, User Interviews, Lyssna, Outset, UserTesting, dscout, LookBack, Optimal Workshop, Maze, Qualtrics, Sprig, Ethnio, UserZoom, TheyDo, Figma, FigJam, Miro, Jira, Tableau, SPSS, Python.</p>
+
+      <div class="cluster">
+        <div class="cluster-head"><span class="label">Operations</span><span class="n">6</span></div>
+        <details class="chip"><summary><span class="chip-name">AI-assisted synthesis</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Models handle transcription, tagging, and first-pass analysis under defined review standards.</p></details>
+        <details class="chip"><summary><span class="chip-name">Research repositories</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">A searchable store of findings so prior work is reused rather than rediscovered.</p></details>
+        <details class="chip"><summary><span class="chip-name">Self-service enablement</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Tooling and templates that let stakeholders answer routine questions without a full study.</p></details>
+        <details class="chip"><summary><span class="chip-name">Research standards</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Documented expectations for method, sample, and rigor at each stage of the life cycle.</p></details>
+        <details class="chip"><summary><span class="chip-name">Mentorship</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Onboarding and coaching researchers through study design review and craft feedback.</p></details>
+        <details class="chip"><summary><span class="chip-name">Stakeholder management</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Aligning partners on the question, the method, and what the findings can and can't decide.</p></details>
       </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="band tools" id="tools" data-obs="Tools">
+  <div class="wrap"><div class="sec-head"><p class="label">Tools</p><span class="sec-code mono">S-07</span></div></div>
+  <div class="marquee">
+    <div class="track">
+      <span class="tool">Condens</span><span class="tool">Figma</span><span class="tool">Great Question</span>
+      <span class="tool">User Interviews</span><span class="tool">Lyssna</span><span class="tool">Outset</span>
+      <span class="tool">Dovetail</span><span class="tool">UserTesting</span><span class="tool">dscout</span>
+      <span class="tool">Optimal Workshop</span><span class="tool">Maze</span><span class="tool">Qualtrics</span>
+      <span class="tool">Sprig</span><span class="tool">FigJam</span><span class="tool">Miro</span>
+      <span class="tool">Tableau</span><span class="tool">SPSS</span><span class="tool">Ethnio</span>
+      <span class="tool">Jira</span><span class="tool">UserZoom</span><span class="tool">TheyDo</span><span class="tool">LookBack</span>
     </div>
   </div>
 </section>
 
 <section class="band debrief" id="debrief" data-obs="Debrief">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Your session</p><span class="sec-code mono">S-07</span></div>
+    <div class="sec-head"><p class="label">Your session</p><span class="sec-code mono">S-08</span></div>
     <div class="debrief-grid">
       <div class="d-cell"><span class="d-num" id="dTime">0:00</span><span class="label">Time on page</span></div>
       <div class="d-cell"><span class="d-num" id="dDepth">0%</span><span class="label">Furthest scroll</span></div>
-      <div class="d-cell"><span class="d-num" id="dSections">0 / 7</span><span class="label">Sections viewed</span></div>
+      <div class="d-cell"><span class="d-num" id="dMethods">0 / 25</span><span class="label">Methods explored</span></div>
       <div class="d-cell"><span class="d-num" id="dRoles">0 / 3</span><span class="label">Roles opened</span></div>
     </div>
     <p class="debrief-note">Every visit here is a small usability session. I observe it the way I'd observe any study, with the same respect for the participant. Everything above was measured in this tab alone, is stored nowhere, and disappears when you leave.</p>
@@ -580,6 +645,26 @@
 <script>
 (function(){
   document.body.classList.add('loaded');
+
+  /* ---------- methods board scatter ---------- */
+  var chips = document.querySelectorAll('.chip');
+  var seed = 11;
+  function rnd(){ seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  chips.forEach(function(chip, i){
+    chip.style.setProperty('--i', i);
+    chip.style.setProperty('--dx', ((rnd() - 0.5) * 110).toFixed(1) + 'px');
+    chip.style.setProperty('--dy', (34 + rnd() * 110).toFixed(1) + 'px');
+    chip.style.setProperty('--r', ((rnd() - 0.5) * 8).toFixed(1) + 'deg');
+  });
+  var board = document.getElementById('board');
+  if (board && 'IntersectionObserver' in window) {
+    var boardIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting){ board.classList.add('sorted'); boardIO.disconnect(); } });
+    }, { threshold: 0.12 });
+    boardIO.observe(board);
+  } else if (board) {
+    board.classList.add('sorted');
+  }
 
   /* ---------- marquees ---------- */
   document.querySelectorAll('.track').forEach(function(t){ t.innerHTML += t.innerHTML; });
@@ -638,17 +723,13 @@
   note('Session started.');
 
   /* section observation */
-  var seen = {}, sectionsSeen = 0;
-  var sectionTotal = document.querySelectorAll('[data-obs]').length;
+  var seen = {};
   if ('IntersectionObserver' in window) {
     var secIO = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
         var name = e.target.getAttribute('data-obs');
         if (e.isIntersecting && name && !seen[name]){
           seen[name] = true;
-          sectionsSeen++;
-          var ds = document.getElementById('dSections');
-          if (ds) ds.textContent = sectionsSeen + ' / ' + sectionTotal;
           note('Viewed ' + name + '.');
         }
       });
@@ -668,6 +749,24 @@
     if (dd) dd.textContent = maxDepth + '%';
   }
   window.addEventListener('scroll', onScroll, { passive:true });
+
+  /* methods explored */
+  var methodsOpened = 0, methodSeen = {};
+  chips.forEach(function(chip){
+    chip.addEventListener('toggle', function(){
+      if (chip.open){
+        var name = chip.querySelector('.chip-name');
+        var label = name ? name.textContent : 'a method';
+        if (!methodSeen[label]){
+          methodSeen[label] = true;
+          methodsOpened++;
+          var dm = document.getElementById('dMethods');
+          if (dm) dm.textContent = methodsOpened + ' / 25';
+          note('Opened method: ' + label + '.');
+        }
+      }
+    });
+  });
 
   /* roles opened */
   var rolesOpened = 0, roleSeen = {};
