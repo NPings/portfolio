@@ -7,6 +7,7 @@
 - **Status:** Draft for Crit review, then Nick's approval
 - **davinci-prd skill:** not installed on this Mac. Sections written by hand to the same structure.
 - **Addendum (2026-11-12):** sections 13 to 18 and requirements R16 to R32 add the pill-scene polish and the "indulge me" continuation (fork scene). Card t_fb2bf2d9 (PRD addendum), build card t_4749555c (assignee `design`). Where the addendum changes an earlier decision (R10, the section 11 non-goal about "indulge me", the section 4 JS budget, the R14 palette), it says so in section 13.3. Sections 1 to 12 are otherwise unchanged.
+- **Addendum 2 (2026-11-12):** sections 19 to 24 and requirements R33 to R49 add the passion branch intro beat ("I'm. 👏 A. 👏 Nerd. 👏", the scroll-driven "nerd" glitch and takeover, and three stub links: techie, gamer, photographer). Card t_a8f81d69 (PRD addendum), build card t_593e8d60 (assignee `design`). It narrows R26 and R30 to research and technology, raises the R31 script budget to 330 lines, and fixes the one-page constraint for the future passion deep-dives (section 19.3). See section 19.4.
 
 ---
 
@@ -887,9 +888,577 @@ Risks:
 - Avatar likeness pass once Nick gives hair, skin and any signature details (Flag A3).
 - Decide whether the fork scene gets a visible exit to the site (Flag A6).
 
+---
+
+# Addendum 2: passion branch, intro beat ("I'm. 👏 A. 👏 Nerd. 👏") (card t_a8f81d69)
+
+Added 2026-11-12 by product. Builds on the shipped, Crit-passed `intro.html` at commit 15e3e2a (act two, fork scene, three stub prongs). Same harness, tokens, fonts and conventions as sections 1 to 18 unless a line below says otherwise. Build card: t_593e8d60 (assignee `design`). The card suggested numbering this "18"; section 18 already exists, so this addendum is sections 19 to 24 and requirements R33 to R49.
+
+## 19. Source, scope and what it changes
+
+### 19.1 Source brief (Nick, verbatim, via card t_a8f81d69)
+
+> Let's start with 'passion.' It opens to a dramatic animations showing 'I'm. 👏 A. 👏 Nerd.👏' as they scroll the word 'nerd' should start to 'glitch out' and take over the page. Nerd can branch out and link to a few things 'techie' 'gamer' 'photographer' that people can click on. Go ahead and build this next stage and then we can do the three actual things to dig into the passions. That will be end of this 'passion' branch.' Those passions should all be contained on one page.
+
+Citation shorthand added: **[Nick-C]** = the brief above. **[Card3]** = card t_a8f81d69's body (scope boundary and its seven required items). **[Spike2]** = the throwaway prototype I ran for this addendum; results in section 24.3. **[WCAG]** = the WCAG 2.2 sources listed under Research sources.
+
+### 19.2 Scope boundary
+
+This pass builds **from the passion prong up to and including the three branch links**: the entry transition, the staccato reveal, the scroll-driven glitch and takeover, and three clickable links (`techie`, `gamer`, `photographer`). **What is behind each link is out of scope** [Nick-C: "then we can do the three actual things to dig into the passions"]. Each link is an honest stub (R42). The `research` and `technology` prongs stay exactly as they are (stubs, R26).
+
+### 19.3 The one-page constraint (for the next card, decided now)
+
+Nick: **"Those passions should all be contained on one page."** So the techie, gamer and photographer deep-dives will live **together on ONE page**: one scrolling layer, three subsections, in that order. **Not** three files, **not** three overlay layers, **not** three hash-routed scenes that replace each other. Whoever builds the deep-dive content must not fork it into three routes.
+
+Decided shape of that future page, so the links can be wired to it today:
+
+| Thing | Decision |
+|---|---|
+| The page | One `<section class="act4" id="passions">` in `intro.html`, after `#nerd`, using the same fixed-layer pattern as act two and act three (section 14). |
+| Its parts | Three subsections inside it, ids `passions-techie`, `passions-gamer`, `passions-photographer`, in that order, one after another on the same scroll. |
+| The links | Real `<a>` elements with `href="#passions-techie"`, `#passions-gamer`, `#passions-photographer`. Set **now**, and never changed by the next card. |
+| Routing | The `#passions-` hash prefix is reserved now. Today the router answers it with the stub (R42). The next card changes **only** that router branch (open `#passions`, scroll to the subsection), adds the section, and deletes the stub line and the `aria-describedby`. No href or markup rewiring on the chips. |
+
+If Nick later prefers a separate file (`passions.html`), the one-page rule still holds; the three hrefs change to `passions.html#techie` etc. That is Flag B6, not a requirement.
+
+### 19.4 What this changes in sections 1 to 18
+
+| Earlier decision | Change |
+|---|---|
+| R26: all three prongs are stubs | **Narrowed.** `passion` now starts act three (R33). `research` and `technology` stay stubs exactly as R26 says. The `passion` prong loses `aria-describedby="fork-soon"`. |
+| R30: "a `group` containing three `button`s each with description 'Coming soon.'" | Now two of the three buttons (`research`, `technology`) carry that description. |
+| R31: main inline script under 220 lines | Raised to **under 330 lines**, still one inline script, no external scripts (R49). |
+| R31: `grep -ci "preventDefault" intro.html` = 0 | **Unchanged.** The chips are wired so no `preventDefault` is needed (R42). |
+| Section 14 mechanics / R27 router (`#where` or closed) | Extended to four states: closed, `#where`, `#nerd`, `#passions-*` (R48). |
+| Section 18.4 non-goal "anything a prong leads to" | Narrowed: the passion prong's intro beat is now in scope; everything behind techie, gamer and photographer stays a non-goal (24.4). |
+
+### 19.5 Map to the card's seven required items
+
+| Card item | Decided in |
+|---|---|
+| 1. Entry point (transition from the fork) | Section 20.2, R33, R34 |
+| 2. The "I'm. 👏 A. 👏 Nerd. 👏" reveal (copy, emoji, timing, font, screen readers) | Section 20.3, R35, R36, R37 |
+| 3. The glitch on "nerd" and what "takes over the page" means | Section 21, R38, R39, R40 |
+| 4. The three branch links (appearance, styling, affordance, stub) | Section 22, R41, R42 |
+| 5. The one-page constraint for the deep-dive | Section 19.3, R43 |
+| 6. Reduced motion and screen readers | Section 23.2, 23.3, R44, R45, R46 |
+| 7. Responsive | Section 23.1, R47 |
+
+---
+
+## 20. Structure, entry and the staccato reveal
+
+### 20.1 Structure
+
+```html
+<!-- after </section> of #where, before the inline script -->
+<section class="act3" id="nerd" aria-labelledby="nerd-title" hidden>
+  <div class="nerd-track">                                  <!-- 300svh tall when motion is allowed -->
+    <div class="nerd-stage" id="nerd-stage">                <!-- position:sticky; top:0; height:100svh -->
+      <div class="nerd-scan" aria-hidden="true"></div>      <!-- scanline overlay, 21.3 -->
+      <h2 class="nerd-title" id="nerd-title" tabindex="-1">
+        <span class="vh">I'm a nerd.</span>
+        <span class="beats" aria-hidden="true">
+          <span class="beat beat-1">I'm.<span class="clap">👏</span></span>
+          <span class="beat beat-2">A.<span class="clap">👏</span></span>
+          <span class="beat beat-3"><span class="nerd-word" data-text="Nerd.">Nerd<span class="dot">.</span></span><span class="clap">👏</span></span>
+        </span>
+      </h2>
+      <div class="chips" role="group" aria-labelledby="nerd-title">
+        <a class="prong chip" data-passion="techie"       href="#passions-techie"       aria-describedby="nerd-soon">techie</a>
+        <a class="prong chip" data-passion="gamer"        href="#passions-gamer"        aria-describedby="nerd-soon">gamer</a>
+        <a class="prong chip" data-passion="photographer" href="#passions-photographer" aria-describedby="nerd-soon">photographer</a>
+      </div>
+      <p class="nerd-status" id="nerd-status" role="status" aria-live="polite"></p>
+      <span class="vh" id="nerd-soon">Coming soon.</span>
+      <button type="button" class="nerd-cue" id="nerd-cue" hidden>keep scrolling <span aria-hidden="true">&darr;</span></button>
+    </div>
+  </div>
+</section>
+```
+
+- **Layer:** `.act3 { position:fixed; inset:0; z-index:16; background-color:var(--paper); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:none; scroll-timeline:--nerd block; }` plus `.act3::-webkit-scrollbar{display:none}` and `.act3[hidden]{display:none}`. z-index 16 sits above act two (15) and **below the skip link (20)**. The scrollbar is hidden because the spike showed it as a grey strip down the right edge of the dark takeover screen [Spike2]; the cue (21.5) replaces it as the scroll affordance.
+- **While act three is open:** `main.inert = true` (already true from act two), act two stays un-hidden underneath with `.fork-scene.inert = true`. The page never sets `overflow:hidden` on `html`/`body` (R3).
+- **No new class reuse traps:** the "Nerd." word gets its own class `.nerd-word`. It must **not** reuse `.logotype`, because `html.js .logotype .dot` already carries the root-scroll `dot-pop` animation and would hide the period.
+- **State machine** (one variable, separate from act two's): `closed → entering → open`, plus `open|entering → closed` on Back.
+
+### 20.2 Entry: a right-hand wipe, not a second curtain (card item 1)
+
+**Decision: reuse the curtain's technique (one full-screen panel, one transform, the same `cubic-bezier(.7,0,.2,1)` "heavy fly line" easing), but as a horizontal wipe in from the right, with nothing written on it.**
+
+| Option | Tradeoff |
+|---|---|
+| A. Reuse the red curtain (drop, line, raise) | The curtain is the red pill's moment. Repeating it for every prong turns it into a loading screen, and research and technology will need entries too. Rejected. |
+| B. Crossfade to the new scene | Paper over paper: a fade reads as a content swap, not "dramatic" [Nick-C]. Rejected. |
+| **C. Wipe in from the right** | `passion` is the **right-hand road** on the fork (17.3.2), and the avatar already looks right when it is chosen (17.3.3). The new scene arriving from the right is literally taking that road. Same easing and single-panel build as the curtain, so it belongs to the same family. **Chosen.** |
+
+Times are milliseconds from the passion prong's activation (click, tap, Enter or Space).
+
+| t (ms) | What happens | Technique |
+|---|---|---|
+| 0 | The existing prong handler sets `last='passion'` and the avatar's `data-look="passion"` (unchanged, 17.3.3). `#fork-status` is cleared. Act three state `entering`. `history.pushState({act:3}, "", "#nerd")`. `act3.hidden = false`, `act3.scrollTop = 0`, class `is-entering`. `.fork-scene.inert = true`. `.chips.inert = true` (released at the end step). | JS |
+| 120 to 820 | **The wipe.** Act three slides in from the right over the fork scene. The 120ms delay lets the avatar's look-right register first. Its leading edge carries the curtain's hem shadow. | `.act3.is-entering { animation: nerd-wipe 700ms cubic-bezier(.7,0,.2,1) 120ms both; box-shadow:-18px 0 36px -12px rgba(22,36,28,.45); overflow-y:hidden; }` and `@keyframes nerd-wipe { from{transform:translateX(calc(100% + 48px));} to{transform:none;} }` |
+| 820 | Focus moves to `#nerd-title` (`focus({preventScroll:true})`), so a screen reader says "I'm a nerd., heading level 2" (R46). | JS |
+| 820 to 1220 | **Empty paper, held for 400ms.** The dramatic pause before the first word. | none |
+| 1220 to 2720 | **The staccato reveal** (20.3). | CSS |
+| 2720 | **End step** (on `animationend` of the third clap, or a 3200ms safety timeout, or a skip, whichever comes first): class `is-entering` removed, state `open`, the act becomes scrollable. | JS |
+| 3420 | If `act3.scrollTop` is still under 4% of its scroll range, the cue appears (21.5). | JS |
+
+- **No scrolling during the entry:** `.act3.is-entering` has `overflow-y:hidden`. That is set on the overlay, not on `html`/`body`, so the R3 rule is untouched. Without it, a scroll during the reveal would jump the glitch timeline forward while the entry animations still own the beats.
+- **Skip (impatient visitors):** same rules as 17.2. From t = 400ms until the end step, a `pointerdown` on act three or a `keydown` of Escape, Enter or Space calls `finish()` on every animation in `act3.getAnimations({subtree:true})` and runs the end step immediately. The 400ms arming delay stops the key press that activated the prong from also skipping. Skip fires once.
+- The reveal is time-based, not scroll-based, because Nick separates the two: it "opens to a dramatic animation", and then "as they scroll" the glitch starts [Nick-C].
+
+### 20.3 The staccato reveal (card item 2)
+
+**Copy, exact, three stacked lines, centered:**
+
+| Line | Text | Characters |
+|---|---|---|
+| 1 | `I'm.` then 👏 | straight apostrophe U+0027 (matches scene 2's `I'm` and Nick's typing) |
+| 2 | `A.` then 👏 | |
+| 3 | `Nerd.` then 👏 | the period is `<span class="dot">` |
+
+- **Clap placement:** one 👏 (U+1F44F, no variation selector needed, it is emoji-presentation by default) after each word's period, on the same line, as in Nick's string. Nick typed `Nerd.👏` with no space and the other two with a space; I normalized all three to the same small gap (`margin-left:.18em`, no literal space character). Flag B1.
+- **Why stacked, at every width:** each beat lands on its own line, like a slide, which is what makes it staccato. It also keeps "Nerd." alone on the bottom line, ready to take over (21.2), and it avoids a one-line layout that would need a different layout on phones.
+- **The period:** only the "Nerd." period is `--moss`, the site's green-period signature (`welcome.`, `Nick.`). The first two periods are `--ink`, so the green lands once, on the last beat.
+
+**Type (no new families):**
+
+| Part | Spec |
+|---|---|
+| `.beat` (all lines) | `display:block; white-space:nowrap; font-family:"Fraunces",Georgia,serif; font-weight:600; font-variation-settings:"opsz" 144; font-size:min(clamp(56px,16vw,128px),22svh); line-height:1; letter-spacing:-.02em; color:inherit;` (the `welcome.` voice). `.beats { display:grid; justify-items:center; gap:.04em; }` |
+| `.nerd-word` | `display:inline-block; position:relative; font-weight:800; font-variation-settings:"opsz" 144, "SOFT" 50, "WONK" 0; letter-spacing:-.045em; transform-origin:50% 55%;` The `Nick.` logotype treatment, so "I'm. A. Nerd." echoes "I'm Nick." two scenes earlier. **No `will-change`** on it (21.2). |
+| `.clap` | `display:inline-block; margin-left:.18em; font-size:.62em; vertical-align:.06em; font-style:normal; font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;` These are the OS emoji fonts, not web fonts. The Google Fonts URL does not change. |
+| `.nerd-title` | `margin:0; font-weight:400;` and `#nerd-title:focus{outline:none}` (programmatic focus target, not interactive, same as `#where-title`). |
+
+Spike sizes: at 1440×900 the lines measure 271, 191 and 371px wide at 128px; the claps render in full color [Spike2]. The `22svh` cap keeps all three lines inside a landscape phone (3 × 86px at 844×390).
+
+**Timing (ms from the prong activation; per-beat interval 520ms, the clap 260ms after its word):**
+
+| Beat | Word lands | Clap lands |
+|---|---|---|
+| `I'm.` | 1220 (`beat-in`, 180ms) | 1480 (`clap-in`, 200ms) |
+| `A.` | 1740 (`beat-in`, 180ms) | 2000 (`clap-in`, 200ms) |
+| `Nerd.` | 2260 (`beat-in-big`, 240ms) | 2520 (`clap-in`, 200ms), ends at 2720 |
+
+```css
+.act3.is-entering .beat   { animation: beat-in 180ms cubic-bezier(.2,.9,.3,1.25) both; }
+.act3.is-entering .beat-1 { animation-delay:1220ms; }
+.act3.is-entering .beat-2 { animation-delay:1740ms; }
+.act3.is-entering .beat-3 { animation: beat-in-big 240ms cubic-bezier(.2,.9,.3,1.25) 2260ms both; }
+.act3.is-entering .clap   { animation: clap-in 200ms cubic-bezier(.2,.9,.3,1.4) both; }
+.act3.is-entering .beat-1 .clap { animation-delay:1480ms; }
+.act3.is-entering .beat-2 .clap { animation-delay:2000ms; }
+.act3.is-entering .beat-3 .clap { animation-delay:2520ms; }
+@keyframes beat-in     { from{opacity:0; transform:scale(1.35);} to{opacity:1; transform:none;} }
+@keyframes beat-in-big { from{opacity:0; transform:scale(1.6);}  to{opacity:1; transform:none;} }
+@keyframes clap-in     { from{opacity:0; transform:scale(.4) rotate(-14deg);} to{opacity:1; transform:none;} }
+```
+
+Each word **slams** in (starts large, drops to size with a small overshoot), and each clap **pops** with a twist like a hand hitting. The reveal lasts 1.5 seconds from first word to last clap, plus the 400ms pause before it. When `is-entering` is removed, the beats' base style is fully visible, so nothing depends on a held fill.
+
+**Screen readers and the emoji:** the whole visual line is `aria-hidden="true"`. Assistive tech reads only the visually hidden `I'm a nerd.` inside the same `<h2>`, so the heading's accessible name is exactly "I'm a nerd." No "clapping hands" read three times, and no "I'm period A period". This also covers emoji rendering differences: if a device draws 👏 badly, it is purely visual. Every platform this site targets (iOS, Android, macOS, Windows 10+) ships 👏 (Unicode 6.0, 2010). An old Linux box with no emoji font shows an empty box. That is accepted and listed in the risks (24.3).
+
+---
+
+## 21. The glitch and the takeover (card item 3)
+
+### 21.1 The scroll track
+
+When motion is allowed, `.nerd-track { height:300svh; }` and `.nerd-stage { position:sticky; top:0; height:100svh; overflow:clip; display:grid; place-items:center; text-align:center; padding:0 var(--pad); }`, the same sticky-stage pattern as the intro (section 4). The timeline is the act's own scroller: `scroll-timeline:--nerd block` on `.act3`, and `animation-timeline:--nerd` on the animated children (written after the `animation` shorthand, section 4 item 2). Progress `q` runs 0% to 100% across the 200svh of scroll.
+
+| q | What is on screen |
+|---|---|
+| 0 to 5% | Rest: the reveal as it landed, on paper. |
+| 5 to 20% | `I'm.`, `A.` and all three claps fall away (opacity 1 to 0, up 4svh). "Nerd." starts to glitch and drifts to the vertical center. |
+| 20 to 55% | **Takeover.** "Nerd." grows until it is 130% of the viewport width (edges cropped). The glitch peaks. Between 25 and 55% the page turns from paper to ink and the word from ink to cream. Scanlines fade in between 35 and 60%. |
+| 55 to 75% | **Settle.** "Nerd." shrinks back to fit (`--s-rest`) and rises to 36% of the screen height. The glitch fully clears by 75%. |
+| 70 to 88% | **Branch out.** The three links emerge from the word, staggered (22.1). |
+| 90 to 100% | Rest. Links live (pointer gating lifts at q ≥ 90%, as scene 3 does). |
+
+Gate: every scroll-driven rule lives inside `@supports (animation-timeline: scroll())` **and** `@media (prefers-reduced-motion:no-preference)`. Only `transform`, `translate`, `scale`, `opacity`, `background-color`, `color` and the two registered custom properties animate.
+
+### 21.2 What "takes over the page" means, concretely
+
+Three things at once, all scrubbed by scroll:
+
+1. **The word grows past the edges.** "Nerd." scales from 1 to `--s-peak`, where its width is 130% of the viewport, centered. It is bigger than the screen, so it reads as the word swallowing the page.
+2. **The page flips to "terminal mode".** The stage background goes from `--paper` `#EAEEE4` to `--ink` `#16241C`, and the word goes from `--ink` to `--card` `#F8FAF4`. This is the first dark screen on the site (Flag B2). The moss period stays moss.
+3. **Scanlines.** A full-stage overlay, `.nerd-scan { position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(248,250,244,.05) 0 1px, transparent 1px 3px); opacity:0; }`, fades in. This is texture, not motion. The lines never move.
+
+Not tiling or repeating the word: one giant word is a stronger image, and repeated text would be extra DOM for screen readers to skip.
+
+**Geometry is computed once, not per frame.** On act three's open, after `document.fonts.ready`, and on `resize`, the script removes the word's transform, measures it, and sets four custom properties on `#nerd-stage`:
+
+```
+w, h  = nerdWord.offsetWidth, nerdWord.offsetHeight          (untransformed)
+cy    = nerdWord.getBoundingClientRect() center y              (stage is sticky at top:0)
+pad   = parseFloat(getComputedStyle(stage).paddingLeft)
+--s-peak  = innerWidth * 1.3 / w
+--s-rest  = min((innerWidth - 2*pad) * 0.92 / w,  innerHeight * 0.38 / h)
+--dy      = innerHeight * 0.50 - cy      (px)
+--dy-rest = innerHeight * 0.36 - cy      (px)
+```
+
+Spike values: at 1440×900, `--s-peak` 6.686 and `--s-rest` 2.672; at 390×844, 4.829 and 3.007 [Spike2]. **No `will-change:transform`** on the word: it makes browsers rasterize the text once at its small size and stretch the bitmap, which blurs it at 6×. Without it, the spike's 6.7× word was judged "sharp… no obvious blur" in an image check [Spike2].
+
+### 21.3 The glitch technique
+
+**Decision: two pseudo-element copies of the word (`::before`, `::after`), offset left and right in two palette colors (an RGB-split look), cut into horizontal slices by stepped `clip-path: inset()` keyframes. Intensity and offset are scroll-scrubbed through two registered custom properties. No libraries, no canvas, no SVG filters.**
+
+```css
+@property --g    { syntax:'<length>'; inherits:true; initial-value:0px; }
+@property --g-on { syntax:'<number>'; inherits:true; initial-value:0; }
+
+@media (prefers-reduced-motion:no-preference){            /* the layers only exist when motion is allowed */
+  .nerd-word::before, .nerd-word::after{
+    content:attr(data-text); content:attr(data-text) / "";  /* empty alt text: never read aloud */
+    position:absolute; inset:0; pointer-events:none;
+    opacity:var(--g-on);
+  }
+  .nerd-word::before{ color:rgb(var(--glow-ember));          /* #C4543A, existing token */
+    transform:translateX(calc(var(--g) * -1));
+    animation:slice-a 1.5s steps(1,end) infinite paused; }
+  .nerd-word::after { color:var(--leaf);                     /* #CFE2A6, existing token */
+    transform:translateX(var(--g));
+    animation:slice-b 1.5s steps(1,end) infinite paused; }
+  .act3.is-scrolling .nerd-word::before,
+  .act3.is-scrolling .nerd-word::after{ animation-play-state:running; }
+}
+@keyframes slice-a{
+  0%      { clip-path:inset(8% 0 72% 0); }   16.667% { clip-path:inset(55% 0 20% 0); }
+  33.333% { clip-path:inset(30% 0 52% 0); }  50%     { clip-path:inset(78% 0 6% 0); }
+  66.667% { clip-path:inset(15% 0 64% 0); }  83.333% { clip-path:inset(44% 0 38% 0); }
+}
+@keyframes slice-b{
+  0%      { clip-path:inset(62% 0 14% 0); }  16.667% { clip-path:inset(10% 0 70% 0); }
+  33.333% { clip-path:inset(70% 0 12% 0); }  50%     { clip-path:inset(22% 0 58% 0); }
+  66.667% { clip-path:inset(48% 0 30% 0); }  83.333% { clip-path:inset(4% 0 80% 0); }
+}
+```
+
+**The scroll-driven parts** (inside the `@supports` + motion gate):
+
+```css
+.nerd-stage           { animation:nerd-bg linear both;        animation-timeline:--nerd; }
+.beat-1, .beat-2, .beats .clap
+                      { animation:nerd-drop linear both;      animation-timeline:--nerd; }
+.nerd-word            { animation:nerd-takeover linear both;  animation-timeline:--nerd; }
+.nerd-scan            { animation:nerd-scan linear both;      animation-timeline:--nerd; }
+
+@keyframes nerd-bg{ 0%,25%{ background-color:var(--paper); color:var(--ink); }
+                    55%,100%{ background-color:var(--ink); color:var(--card); } }
+@keyframes nerd-drop{ 0%,5%{ opacity:1; transform:none; } 20%,100%{ opacity:0; transform:translateY(-4svh); } }
+@keyframes nerd-takeover{
+  0%,5%    { --g:0px;   --g-on:0;  transform:none; }
+  20%      { --g:.03em; --g-on:.8; transform:translate(0,var(--dy)) scale(1.15); }
+  55%      { --g:.06em; --g-on:1;  transform:translate(0,var(--dy)) scale(var(--s-peak)); }
+  75%,100% { --g:0px;   --g-on:0;  transform:translate(0,var(--dy-rest)) scale(var(--s-rest)); }
+}
+@keyframes nerd-scan{ 0%,35%{ opacity:0; } 60%,100%{ opacity:1; } }
+```
+
+(While `is-entering` is set, the entry rules in 20.3 win over these by specificity, so the beats never have two owners at once. Scrolling is blocked during that time anyway.)
+
+**The glitch only moves while the visitor is scrolling.** The act's `scroll` listener (passive) adds `.is-scrolling` to `.act3` and removes it 400ms after the last scroll event. While it is off, the slices freeze in place, still offset and colored, but static. That is Nick's wording taken literally ("as they scroll the word… should start to glitch out"), and it is also the accessibility design (21.4).
+
+**Colors:** ember (`--glow-ember`, from the red-pill glow) and leaf (`--leaf`). Not a true red/cyan RGB split, because the site has neither and this addendum adds no new hex. The spike's image check read it as "a sliced, offset-layer glitch… deliberately misregistered print layers combined with a digital slicing effect" [Spike2]. Flag B3.
+
+### 21.4 Photosensitivity rules (a hard requirement, not polish)
+
+Glitch effects can trigger photosensitive seizures. These rules apply **even when motion is allowed** (R45):
+
+1. **At most 4 visual state changes per second, so at most 2 flashes per second.** WCAG 2.3.1 sets the limit at 3 [WCAG]. Both slice layers use the same 1.5s duration, 6 steps, `steps(1,end)`, with no delay or offset between them, so they change together: 6 states ÷ 1.5s = 4 changes per second.
+2. **Time-based change only while scrolling.** With `.is-scrolling` off, the slices are paused. Nothing on act three changes on its own after the reveal, so WCAG 2.2.2 (pause, stop, hide) is met without a pause button [WCAG].
+3. **The dark flip is scrubbed, never automatic.** Paper to ink happens across 30% of the track (60svh of scroll). It never toggles on a timer. No `filter:invert`, no opacity blinking, no full-screen color strobe.
+4. **The glitch fully clears at rest.** `--g-on` reaches 0 at q = 75%, so the screen with the links is clean. (The spike's version left a 0.3 residue; an image check called it "glitch residue… not a fully settled result", so it is removed.)
+5. **Reduced motion gets none of it** (23.2).
+
+### 21.5 The scroll cue
+
+A visitor who has never seen a scrolling overlay may not scroll. `#nerd-cue` is a `<button type="button">` reading `keep scrolling ↓` (arrow `aria-hidden`), styled after the nudge (3.2) in the technical voice: `position:absolute; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translateX(-50%); min-height:44px; padding:8px 16px; border:1px solid var(--rule); border-radius:999px; background-color:var(--card); color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; font-size:14px;`. It sits inside the sticky stage, not `position:fixed`, because act three is transformed during the wipe.
+
+- Appears 700ms after the end step if `act3.scrollTop` < 4% of its scroll range. Fade in 300ms (`opacity`, motion allowed only).
+- Gone for good once q ≥ 4% or it is clicked. Clicking it scrolls act three to the end (`behavior:'smooth'`).
+- Never shown under reduced motion (there is nothing to scroll for, 23.2).
+
+### 21.6 Fallback: browsers without `animation-timeline`
+
+Same idea as R4. In `html.fb` (motion allowed, no scroll timelines), the act's scroll listener sets `#nerd-stage` `data-q` to `0` (q < 5%), `1` (5 to 20%), `2` (20 to 75%) or `3` (q ≥ 75%). CSS keyed on that attribute applies the same end states as the keyframes (q=0: rest; 1: beats gone, `--g-on:.8`; 2: ink, `--s-peak`, `--g-on:1`; 3: ink, `--s-rest`, `--g-on:0`, chips visible) with `transition: transform .6s cubic-bezier(.22,.7,.2,1), opacity .5s ease, background-color .6s ease, color .6s ease, --g .4s, --g-on .4s`. Steps, not scrubbing, but the same scenes. The slice animation and the `.is-scrolling` rule are unchanged.
+
+---
+
+## 22. The three branch links (card item 4)
+
+### 22.1 How they appear
+
+They **emerge from the word**: between q = 70% and 88% each chip moves out and down from the word's center to its place, growing from 60% to full size and fading in, staggered left to right, so the word visibly "branches out" into three [Nick-C]. Their final row sits under the word: `.chips { position:absolute; left:0; right:0; bottom:clamp(40px,14svh,140px); display:flex; justify-content:center; flex-wrap:wrap; gap:16px; padding:0 var(--pad); }` (gap 12px under 560px wide).
+
+```css
+/* individual transform properties, so the chip's hover/focus `transform` still works on top */
+.chip[data-passion="techie"]      { animation:nerd-branch-1 linear both; animation-timeline:--nerd; }
+.chip[data-passion="gamer"]       { animation:nerd-branch-2 linear both; animation-timeline:--nerd; }
+.chip[data-passion="photographer"]{ animation:nerd-branch-3 linear both; animation-timeline:--nerd; }
+@keyframes nerd-branch-1{ 0%,70%{ opacity:0; translate:48px -40px;  scale:.6; } 84%,100%{ opacity:1; translate:0 0; scale:1; } }
+@keyframes nerd-branch-2{ 0%,72%{ opacity:0; translate:0 -40px;     scale:.6; } 86%,100%{ opacity:1; translate:0 0; scale:1; } }
+@keyframes nerd-branch-3{ 0%,74%{ opacity:0; translate:-48px -40px; scale:.6; } 88%,100%{ opacity:1; translate:0 0; scale:1; } }
+```
+
+Why `translate`/`scale` and not `transform`: a scroll animation with `both` fill holds its end value forever. If it held `transform:none`, it would override the chip's hover and focus lift (the same trap 17.3.4 avoided with `backwards`). The individual properties stack with `transform`.
+
+**Pointer gating:** `.chips { pointer-events:none; }` until JS adds `.is-live` to `#nerd-stage` at q ≥ 90% (same pattern as scene 3, section 6). Keyboard focus is never gated (23.3).
+
+### 22.2 Styling: the fork scene's chip, on ink
+
+**Decision: reuse the prong chip exactly.** Each link carries both classes, `prong chip`, so it inherits every `.prong` rule from 17.3.4: IBM Plex Mono 500 16px, square corners, 2px border, `--card` face, `--ink` text, the hard 4px pixel shadow, the hover/focus lift to `translate(-2px,-2px)` with a 6px shadow, the press-down on `:active`, the pine focus outline and the blinking ▼ caret above. Same game-menu voice as "research / technology / passion", one level deeper. (The existing prong script selects `.prongs .prong`, so these chips, which sit outside `.prongs`, are not picked up by it.)
+
+Additions for anchors on ink:
+
+```css
+.chip{ display:inline-flex; align-items:center; text-decoration:none; }
+.chip[data-passion="techie"]      { --prong-c: var(--leaf); }             /* terminal green */
+.chip[data-passion="gamer"]       { --prong-c: rgb(var(--glow-ember)); }  /* ember red */
+.chip[data-passion="photographer"]{ --prong-c: var(--rule); }             /* silver, like film */
+.nerd-status{ margin:0; position:absolute; left:0; right:0; bottom:clamp(8px,5svh,48px);
+  padding:0 var(--pad); min-height:1.6em; font-style:italic; font-size:clamp(17px,1.6vw,19px); color:var(--rule); }
+```
+
+The prong colors (pine, slate, brick) mostly disappear on ink, so the three shadows use existing tokens that show up on dark: leaf, ember, rule. No new hex. Labels are lowercase exactly as Nick wrote them, in his order: `techie`, `gamer`, `photographer`.
+
+Spike measurements (rest state): at 1440×900 the chips sit at y 730 to 774, under a word ending at y 484; at 390×844 they fit on one row (x 31 to 359); at 320×568 `photographer` wraps to a second centered row; at 844×390 they sit at y 291 to 335 under a word ending at y 212. No overlap and no horizontal overflow at any size [Spike2].
+
+### 22.3 Stub behavior for this card (decided: real links, honest stub, no `preventDefault`)
+
+**Product call:** the content is coming very soon, so the links are **real anchors wired to their final hrefs now** (19.3). They are not buttons that will need rewiring later. What changes is only what the router does when it sees `#passions-…`.
+
+When a chip is activated (click, tap, Enter):
+
+1. The browser follows the fragment link natively. The URL becomes `intro.html#passions-techie` and a history entry is pushed. No element has that id yet, so nothing scrolls. **No `preventDefault`** (R31 stays at zero).
+2. The chip's own `click` handler clears `#nerd-status`, then on the next animation frame writes `<Label> is coming soon. Still nerding out on it.` (`Techie is…`, `Gamer is…`, `Photographer is…`). Clearing first makes a repeat click re-announce. Placeholder copy, Flag B4.
+3. The router (R48) sees a `#passions-` hash and leaves act three exactly as it is (open, scrolled to the links). It does **not** announce (the click handler already did), unless this is a direct load (step 4).
+4. Direct load or new tab (`intro.html#passions-gamer`, from a Cmd-click or a shared link): the router opens act three at its end state (q = 100%, chips live, no wipe, no reveal) and announces the matching line once.
+
+Each chip has `aria-describedby="nerd-soon"` ("Coming soon."), the same reasoning as 17.3.4: real, enabled links whose description says "Coming soon." are honest and look as live as they are. No `aria-disabled`. Back from `#passions-techie` returns to `#nerd` (same screen, status cleared), which is exactly how Back will behave once the deep-dive page exists.
+
+---
+
+## 23. Responsive and accessibility (card items 6 and 7)
+
+### 23.1 Responsive
+
+| Concern | Desktop (≥ 900px) | Mobile (< 560px) | Short screens (`max-height:500px`) |
+|---|---|---|---|
+| Wipe | full viewport, from the right | same | same |
+| Beats | 128px, three lines | `16vw` (62px at 390, 56px floor at 320) | capped at `22svh` (86px at 390 tall) |
+| Clap | `.62em` of the line | same | same |
+| Takeover peak | 130% of viewport width | same | same |
+| Rest word | `--s-rest`: 92% of padded width or 38% of height, whichever is smaller | same formula | same formula (word about 150px tall at 844×390) |
+| Chips | one row, gap 16px, 16px text | one row at 390 (gap 12px, 15px text); wraps to two centered rows under 360px | one row, 14px text, padding 8px 10px |
+| Chip height | ≥ 44px | ≥ 44px | ≥ 44px |
+| Hover lift / caret | `@media (hover:hover)` | none; focus-visible still shows them | per device |
+| Cue | bottom center | bottom center plus safe-area inset | bottom center |
+| Status line | under the chips | same, wraps | same |
+| Scrollbar | hidden | hidden | hidden |
+
+`svh` only, never `dvh` (section 5). Safe-area insets on the cue and status line. Touch scrolling of act three is native momentum scrolling with no gesture code, so the glitch follows the thumb.
+
+### 23.2 Reduced motion (photosensitivity: a real requirement)
+
+With `prefers-reduced-motion: reduce`:
+
+- **No wipe.** Act three appears in one cut at t = 0. Focus goes to `#nerd-title` at once.
+- **No staccato slams, no clap pops, no glitch layers at all** (the `::before`/`::after` rules only exist inside the motion-allowed media query), no scale, no dark flip, no scanlines, no slices, no cue.
+- **Layout is static:** `.nerd-track { height:auto; }`, `.nerd-stage { position:static; min-height:100svh; height:auto; }`, paper background, ink text, the three lines centered and the chips directly below them in normal flow (`.chips`, `.nerd-status` `position:static; margin-top:clamp(28px,5svh,48px)`), chips live at once (no pointer gating).
+- **A clean fade, as the card asks:** the script runs two Web Animations API fades, opacity only, no transforms: `.beats` from 0 to 1 over 400ms `ease-out`, and `.chips` from 0 to 1 over 300ms starting at 300ms. The spike confirmed WAAPI fades still run under the page's global reduced-motion rule (`animation:none !important`), because that rule only stops CSS animations [Spike2]. An opacity fade is not motion and cannot flash.
+- **No flashing in any state.**
+- Toggling the setting while act three is open applies live through the media queries. A visitor who switches to reduced motion mid-glitch gets the static layout at once.
+
+### 23.3 Screen readers and keyboard
+
+- **Clean text only:** the `<h2>`'s accessible name is exactly `I'm a nerd.` The visual beats, claps, period span and glitch copies are all `aria-hidden` or empty-alt pseudo content. Nothing glitched, doubled or emoji-named reaches assistive tech.
+- **Announcements:** focus at t = 820ms to `#nerd-title` says "I'm a nerd., heading level 2". Chip activation is announced by the `role="status"` line. The section is a named region (`aria-labelledby="nerd-title"`); the chips are a group labelled by the heading; each chip is a `link` described by "Coming soon.".
+- **Tab order inside act three:** cue (if visible), `techie`, `gamer`, `photographer`. The skip link stays above everything (`z-index:20`), so Shift+Tab reaches it.
+- **Focus never sits on something invisible:** while act three is entering, `.chips` is `inert`, so the chips can't be tabbed to. After the end step, when a chip receives focus while q < 90%, the script scrolls act three to the end (`smooth`, or `auto` under reduced motion), the same rule as R13.
+- **Keyboard scrolling:** with focus on `#nerd-title` (inside the act's scroller), Space, Page Down and the arrow keys scroll act three natively. No key handling code beyond the skip.
+- **Back:** focus returns to the `passion` prong on the fork scene (R48).
+
+---
+
+## 24. Requirements, deployment, flags, feasibility, non-goals
+
+All requirements use the section 7 harness (local `python3 -m http.server 8000`, Chromium over CDP, the same desktop, mobile and reduced-motion emulation). "At the fork" means a direct load of `http://localhost:8000/intro.html#where`, wait 600ms. "Open act three" means at the fork, click `.prong[data-prong="passion"]`, wait 3400ms. "Set q" means `const a=document.getElementById('nerd'); a.scrollTop=(a.scrollHeight-a.clientHeight)*q`, then wait 400ms. Build/deployment for every requirement: **not Docker**, by the same justified exception as section 8 (static GitHub Pages site; nothing to containerize; deploy is a push to `main`, which stays forbidden).
+
+### R33. Activating the passion prong starts act three in the same page: no navigation, the URL becomes `#nerd`, and research and technology are unchanged stubs.
+- **Source:** [Nick-C] "Let's start with 'passion.' It opens to…"; [Card3] item 1; section 20.1, 19.4.
+- **Acceptance:** at the fork, set `window.__stay = 1`, click the passion prong; after 3400ms: `window.__stay === 1`, `location.pathname` ends in `/intro.html`, `location.hash === "#nerd"`, `document.getElementById('nerd').hidden === false`, `document.querySelector('#where .fork-scene').inert === true`, `document.querySelector('main').inert === true`, avatar `dataset.look === "passion"`. The passion prong has no `aria-describedby`; research and technology still have `aria-describedby="fork-soon"`, and clicking each still writes the R26 line to `#fork-status` with `location.hash` staying `#where`. `#nerd` comes after `#where` in the DOM, outside `main` (`document.querySelector('main #nerd') === null`).
+- **Edge cases:** double-click, or Enter then click, starts act three once (`document.getAnimations().filter(a => a.animationName === "nerd-wipe").length <= 1` at all times); Enter and Space on the focused passion prong both start it; activating passion while act two is still in its curtain sequence is impossible (`.fork-scene` is inert until act two's end step).
+- **Resources:** `intro.html` markup, prong handler, state machine.
+
+### R34. Act three wipes in from the right over 700ms after a 120ms beat, with a hem shadow and a skip.
+- **Source:** [Card3] item 1; section 20.2 (assumption: timings).
+- **Acceptance:** motion allowed, 1440×900, at the fork click passion at t = 0: (a) a `nerd-wipe` animation exists on `#nerd` with `getTiming()` `duration 700`, `delay 120`, `easing "cubic-bezier(0.7, 0, 0.2, 1)"`; (b) at t ≈ 450ms the act's computed transform `tx` is strictly between 0 and `innerWidth`; (c) at t ≈ 1000ms `tx` is 0 and `document.activeElement.id === "nerd-title"`; (d) while `is-entering`, `getComputedStyle(nerd).overflowY === "hidden"`; after the end step (t ≈ 3400ms) it is `auto` and `nerd.classList.contains('is-entering') === false`. **Skip:** fresh run, at t ≈ 900ms dispatch `keydown` Escape on `document`; within 150ms `is-entering` is gone and every `.beat` has computed opacity `"1"`. A `keydown` at t ≈ 100ms does **not** skip.
+- **Edge cases:** background tab during the entry: the 3200ms safety timeout still runs the end step; resizing mid-wipe still covers the screen; `document.documentElement.scrollWidth <= innerWidth` throughout (the off-screen start position must not add page width).
+- **Resources:** `intro.html` CSS (`nerd-wipe`), script.
+
+### R35. The reveal shows "I'm. 👏", "A. 👏", "Nerd. 👏" on three centered lines, and assistive tech gets exactly "I'm a nerd."
+- **Source:** [Nick-C] "'I'm. 👏 A. 👏 Nerd.👏'"; [Card3] item 2; sections 20.1, 20.3.
+- **Acceptance:** after the end step: the three `.beat` elements' `textContent` are `"I'm.👏"`, `"A.👏"`, `"Nerd.👏"` (U+0027 apostrophe, U+1F44F); each `.clap` contains exactly `👏`; `.beats` has `aria-hidden="true"`; `#nerd-title` is an `H2` containing a `.vh` span whose `textContent === "I'm a nerd."`. CDP `Accessibility.getFullAXTree`: the heading node's name is exactly `I'm a nerd.` and no AX node's name contains `👏`, `clapping` or `Nerd.Nerd`. The three `.beat` boxes are stacked (`beat1.bottom <= beat2.top + 2`, `beat2.bottom <= beat3.top + 2`) and each box's horizontal center is within 4px of `innerWidth/2` at 1440 and 390.
+- **Edge cases:** no line wraps (`white-space:nowrap`) and no horizontal overflow at 320 wide; a missing emoji font only affects the hidden visual; the `.vh` text stays out of view (bounding width ≤ 1px).
+- **Resources:** `intro.html` act-three markup.
+
+### R36. The reveal is staccato: each word slams in on a 520ms beat, each clap pops 260ms after its word, and it ends 2720ms after the click.
+- **Source:** [Nick-C] "a dramatic animation"; [Card3] item 2 "concrete per-segment timing"; table in 20.3 (assumption: values).
+- **Acceptance:** motion allowed, open act three, and at t ≈ 900ms read `document.getAnimations()`: `beat-in` animations with delays `1220` and `1740` (duration 180), `beat-in-big` with delay `2260` (duration 240), and three `clap-in` with delays `1480`, `2000`, `2520` (duration 200), all with `easing` starting `cubic-bezier(0.2, 0.9, 0.3`. At t ≈ 1300ms `.beat-1` opacity > 0.5 and `.beat-2` opacity < 0.05; at t ≈ 2100ms `.beat-2` opacity > 0.95 and `.beat-3` opacity < 0.05; at t ≈ 3000ms all beats and claps opacity > 0.95.
+- **Edge cases:** skip (R34) jumps straight to the landed state; a slow font load falls back to Georgia in place without moving the timing; the `is-entering` removal must not make anything blink (base styles are fully visible).
+- **Resources:** `intro.html` CSS keyframes `beat-in`, `beat-in-big`, `clap-in`.
+
+### R37. The reveal uses Fraunces in the `welcome.` voice, "Nerd." in the `Nick.` logotype voice with a moss period, and OS color emoji, with no new font families.
+- **Source:** [Card3] item 2 "font choice (reuse Fraunces/EB Garamond…)"; section 20.3.
+- **Acceptance:** `.beat-1` computed `fontFamily` starts with `"Fraunces"`, `fontWeight === "600"`; `.nerd-word` computed `fontWeight === "800"`, `fontVariationSettings` contains `"SOFT" 50`, `letterSpacing` negative; `.nerd-word .dot` `color === "rgb(126, 156, 96)"`; the first two beats' periods are `--ink` (no `.dot` inside `.beat-1`/`.beat-2`); `.clap` `fontFamily` starts with `"Apple Color Emoji"`; `.beat` computed `fontSize` is `128px` at 1440×900, between 60 and 64px at 390×844, `56px` at 320×568, and ≤ 86px at 844×390. `.nerd-word` does not have class `logotype` and its computed `willChange === "auto"`. The Google Fonts URL is unchanged (R14).
+- **Edge cases:** Fraunces blocked: Georgia fallback keeps the stack centered; at 844×390 the three lines plus gaps fit inside the viewport before any scroll (`beat3.bottom <= innerHeight`).
+- **Resources:** `intro.html` CSS.
+
+### R38. Act three is a scroll track driven by its own named scroll timeline, gated by `@supports` and motion preference, with no scroll hijacking.
+- **Source:** [Nick-C] "as they scroll"; section 21.1; [Spike2] F10.
+- **Acceptance:** `grep -c "scroll-timeline: *--nerd" intro.html` ≥ 1 and `grep -c "animation-timeline: *--nerd" intro.html` ≥ 6; motion allowed, act three open: `document.getAnimations().filter(a => a.timeline && a.timeline.constructor.name === "ScrollTimeline" && a.timeline.source === document.getElementById('nerd')).length` ≥ 6; `#nerd .nerd-track` height ≥ 2.9 × `innerHeight`; `#nerd-stage` computed `position === "sticky"`. Scrubbing: at q = 0.12 the `.beat-1` opacity is strictly between 0.05 and 0.95. `grep -ci "preventDefault" intro.html` = 0; `getComputedStyle(document.documentElement).overflowY !== "hidden"` and the same for `body`. **Cue:** after the end step with no scroll, wait 900ms: `#nerd-cue` is not hidden and its text contains `keep scrolling`; set q = 0.05: within 500ms the cue is hidden; on a fresh run, clicking the cue brings q ≥ 0.95 within 1500ms.
+- **Edge cases:** scrolling back up reverses every scroll animation; touch swipe on 390×844 (`Input.dispatchTouchEvent` start y=700, move to y=200, end) increases `#nerd`'s `scrollTop`, not `window.scrollY`; the act's scrollbar is hidden (`getComputedStyle(nerd).scrollbarWidth === "none"`); wheel input at the end of act three does not scroll the page underneath (`overscroll-behavior:contain`).
+- **Resources:** `intro.html` CSS and script.
+
+### R39. "Nerd." glitches with two offset, sliced color copies whose strength follows the scroll, and the slices move only while the visitor is scrolling.
+- **Source:** [Nick-C] "the word 'nerd' should start to 'glitch out'"; [Card3] item 3; section 21.3.
+- **Acceptance:** motion allowed, act three open: the registered property scrubs: `getComputedStyle(nerdWord).getPropertyValue('--g')` is `0px` at q = 0 and ≥ `6px` at q = 0.55 (1440×900); `getComputedStyle(nerdWord,'::before').content` contains `Nerd.` and its `color === "rgb(196, 84, 58)"`; `::after` `color === "rgb(207, 226, 166)"`; at q = 0.55 `::before` opacity ≥ 0.95 and its transform `tx` ≤ −6. Animations named `slice-a` and `slice-b` exist with `duration 1500`, `iterations Infinity`, `easing "steps(1, end)"`, and equal `delay` (0). With no scroll for 600ms, both have `playState === "paused"`; during a scroll (dispatch a scroll by `scrollBy(0,40)` every 100ms for 600ms) at least one check sees `playState === "running"` and `#nerd.classList.contains('is-scrolling')`. **Rendered check:** screenshot at q = 0.55, 1440×900, while paused: at least one pixel inside the word's box matches ember (`R ≥ 170, G ≤ 110, B ≤ 90`) and at least one matches leaf (`R ≥ 190, G ≥ 210, B ≥ 140`).
+- **Edge cases:** no `<canvas>`, SVG filter or external script is used (`grep -cE "<canvas|feTurbulence|feDisplacementMap" intro.html` = 0); the glitch copies never change the word's accessible name (R46); the word stays sharp at peak (no `will-change`, R37).
+- **Resources:** `intro.html` CSS (`@property`, `slice-a`, `slice-b`), scroll listener.
+
+### R40. As the visitor scrolls, "Nerd." takes over the page: it grows past both screen edges, the page turns to ink with scanlines, then it settles clean.
+- **Source:** [Nick-C] "take over the page"; [Card3] item 3 "give a specific visual direction"; section 21.2.
+- **Acceptance:** motion allowed, act three open, at 1440×900 and 390×844: at q = 0.55, `.nerd-word` bounding `width ≥ innerWidth` and its `left ≤ 0`; `#nerd-stage` computed `backgroundColor === "rgb(22, 36, 28)"`; `.nerd-word` `color === "rgb(248, 250, 244)"`; `.nerd-scan` opacity ≥ 0.75. At q = 0.15: `backgroundColor === "rgb(234, 238, 228)"`. At q = 1: word `width ≤ innerWidth − 2·pad + 2`, `width ≥ 0.35 × innerWidth`, `top ≥ 0`; `--g-on` is `0`; `.beat-1`, `.beat-2` and all `.clap` opacity < 0.05. `#nerd-stage` has inline custom properties `--s-peak`, `--s-rest`, `--dy`, `--dy-rest`, and resizing from 1440×900 to 390×844 changes `--s-peak`.
+- **Edge cases:** no horizontal page overflow at any q (`document.documentElement.scrollWidth <= innerWidth`; the stage's `overflow:clip` crops the word); the period stays moss on ink; resizing mid-scroll re-measures without a jump larger than one frame; the scanlines never animate position.
+- **Resources:** `intro.html` CSS (`nerd-bg`, `nerd-takeover`, `nerd-scan`) and the geometry function.
+
+### R41. Three links, "techie", "gamer", "photographer", branch out of the word and wear the fork scene's chip style.
+- **Source:** [Nick-C] "Nerd can branch out and link to a few things 'techie' 'gamer' 'photographer' that people can click on"; [Card3] item 4; section 22.1, 22.2.
+- **Acceptance:** motion allowed, act three open: `.chips` contains exactly three `a.prong.chip` with `textContent` `techie`, `gamer`, `photographer` in DOM order and left to right on screen (or, under 360px, the first two on row one); each has computed `fontFamily` starting `"IBM Plex Mono"`, `borderRadius === "0px"`, height ≥ 44px, `textDecorationLine === "none"`, `cursor === "pointer"`; box-shadow colors `rgb(207, 226, 166)`, `rgb(196, 84, 58)`, `rgb(200, 211, 190)`. At q = 0.6 all three have opacity < 0.05; at q = 1 all three have opacity > 0.95 and their tops are > the word's bottom + 24px. Animations `nerd-branch-1/2/3` exist on the scroll timeline. Hover at q = 1 (CDP mouseMoved to a chip's center, 1440×900): computed `transform` `tx = −2, ty = −2` and `::after` opacity `"1"`. Pointer gating: at q = 0.5, `document.elementFromPoint` at a chip's final center does not return the chip; at q = 1, it does.
+- **Edge cases:** at 1440, 768, 390, 320 and 844×390 (q = 1) chip boxes don't intersect and sit inside the viewport; touch emulation shows no hover lift; the prong script does not attach its avatar-look handlers to these chips; labels stay lowercase.
+- **Resources:** `intro.html` CSS and markup.
+
+### R42. Each link is an honest stub: it goes to its final `#passions-…` hash, announces "coming soon", and shows nothing else.
+- **Source:** [Nick-C] "then we can do the three actual things"; [Card3] item 4 "be explicit"; section 22.3.
+- **Acceptance:** at q = 1, for each chip: its `getAttribute('href')` is `#passions-techie`, `#passions-gamer`, `#passions-photographer` respectively; click it: within 300ms `location.hash` equals that href, `#nerd-status` (`role="status"`, `aria-live="polite"`) has `textContent === "<Label> is coming soon. Still nerding out on it."` (`Techie`, `Gamer`, `Photographer`), `#nerd.hidden === false`, `window.__stay === 1`, `document.getElementById('passions') === null`, and no new `section` appears. Clicking the same chip twice re-announces (the status is empty on the frame after the click, then refilled). Keyboard: focus a chip and press Enter: same result. Each chip has `aria-describedby="nerd-soon"` and `#nerd-soon` `textContent === "Coming soon."`, visually hidden. No chip has `aria-disabled`. `grep -ci "preventDefault" intro.html` = 0. Zero console errors and zero `Runtime.exceptionThrown` across the run.
+- **Edge cases:** a direct load of `intro.html#passions-gamer` opens act three at q = 1 with chips live and announces `Gamer is coming soon. Still nerding out on it.` once; an unknown `#passions-foo` opens act three at q = 1 with no announcement; middle-click opens the same direct-load case in a new tab.
+- **Resources:** `intro.html` markup, chip click handler, router.
+
+### R43. The deep-dive constraint is wired in now: all three links point into one future page, never three routes.
+- **Source:** [Nick-C] "Those passions should all be contained on one page."; [Card3] item 5; section 19.3.
+- **Acceptance:** `grep -oE 'href="#passions-[a-z]+"' intro.html | sort -u` returns exactly the three hrefs in R42 and nothing else; `grep -cE 'href="[^"#]*(techie|gamer|photographer)' intro.html` = 0 (no file links); `git ls-files | grep -ciE "techie|gamer|photographer|passion"` = 0 (no new files); the PRD section 19.3 table exists (`grep -c "passions-photographer" docs/intro-experience-PRD.md` ≥ 1); `BACKLOG.md` has an Open row for the passion deep-dives that contains the words `one page` and `#passions`.
+- **Edge cases:** the router treats every `#passions-` hash the same way (one branch, not three); the next card's diff should touch only the router branch, the new `#passions` section and the stub lines (stated in 19.3, verified on that card, not this one).
+- **Resources:** `intro.html`, `BACKLOG.md`, this PRD.
+
+### R44. Browsers without `animation-timeline` get a stepped fallback with the same scenes.
+- **Source:** section 21.6; same reasoning as R4.
+- **Acceptance:** build the forced-fallback copy as in R4 (`sed 's/animation-timeline: scroll()/animation-timeline: nope()/'` so the `@supports` test fails and `html.fb` is set), serve it on 8001, open act three, set q = 0.5, wait 900ms: `#nerd-stage` `dataset.q === "2"`, `backgroundColor === "rgb(22, 36, 28)"`, `.nerd-word` width ≥ `innerWidth`; set q = 1, wait 900ms: `dataset.q === "3"`, all three chips opacity > 0.95 and clickable (R42 click check passes); `getAnimations()` contains no `ScrollTimeline`.
+- **Edge cases:** if `CSS.registerProperty` is missing, `--g` jumps instead of easing, and nothing else breaks; the slice pause rule is unchanged.
+- **Resources:** `intro.html` CSS (`html.fb` rules) and script.
+
+### R45. Nothing in act three can flash more than 2 times a second, nothing changes on its own after the reveal, and reduced motion gets a clean fade with no glitch at all.
+- **Source:** [Card3] item 6 "treat it as a real accessibility requirement"; [WCAG] 2.3.1 and 2.2.2; sections 21.4 and 23.2.
+- **Acceptance:** **(a) Motion allowed:** `slice-a` and `slice-b` each have exactly 6 keyframes, `duration 1500`, `steps(1, end)`, the same `delay`, so changes per second = 6 / 1.5 = 4 (≤ 6, the 3-flash limit); after the end step and 600ms with no input, `document.getAnimations().filter(a => a.effect && a.effect.target && document.getElementById('nerd').contains(a.effect.target) && a.playState === "running" && !(a.timeline && a.timeline.constructor.name === "ScrollTimeline")).length === 0` (nothing time-based runs inside act three while still; the avatar idle and pill ember underneath are outside it and out of scope); `grep -ciE "filter: *invert|animation:[^;]*blink" intro.html` = 0. **(b) Reduced motion emulated:** open act three: `#nerd.hidden === false` and focus on `#nerd-title` within 100ms (no wipe); `document.getAnimations()` contains no `CSSAnimation` and nothing on a `ScrollTimeline` at t = 50, 500 and 2000ms; every script-made animation (`a.constructor.name === "Animation"`) animates only `opacity` (`a.effect.getKeyframes()` keys limited to `opacity`, `offset`, `easing`, `composite`, `computedOffset`); ignore `CSSTransition`s, which the global rule shortens to 0.01ms; at t ≈ 150ms `.beats` opacity strictly between 0.05 and 0.95 (it fades), at t ≈ 800ms both `.beats` and `.chips` opacity "1"; `getComputedStyle(nerdWord,'::before').content === "none"`; `#nerd-stage` background `rgb(234, 238, 228)` and `position` not `sticky`; chips are clickable at once (R42 passes without scrolling); `#nerd-cue` stays hidden.
+- **Edge cases:** toggling reduced motion while act three is open switches to the static layout without a reload; skip still works; R29's act-two checks still pass.
+- **Resources:** `intro.html` CSS and script.
+
+### R46. Keyboard and screen-reader users get the whole beat: the clean heading, operable links, and no focus on hidden content.
+- **Source:** [Card3] item 6; section 23.3.
+- **Acceptance:** keyboard only, at the fork: Tab to `passion`, press Enter; at t ≈ 1000ms `document.activeElement.id === "nerd-title"`; after the end step, Tab reaches `techie`, `gamer`, `photographer` in order (the cue first if it is showing); focusing `techie` at q = 0 brings q ≥ 0.95 within 1500ms (motion) or immediately (reduced) and the chip is fully inside the viewport. While act three is open, `main.inert === true` and `.fork-scene.inert === true`. Shift+Tab from `techie` eventually focuses the skip link, which `elementFromPoint` confirms is on top. CDP `Accessibility.getFullAXTree`: a `region` named `I'm a nerd.`, a `heading` level 2 with that name, a `group` with three `link`s named `techie`, `gamer`, `photographer`, each with description `Coming soon.`, a `status` node, and no node whose name contains `👏` or a doubled `Nerd.`.
+- **Edge cases:** before the click, act three is `hidden` and absent from the AX tree; VoiceOver hears no "dimmed"; the visible focus outline shows on every chip (`outline-style` not `none` on `:focus-visible`).
+- **Resources:** `intro.html`.
+
+### R47. Act three works at desktop, tablet, mobile and landscape-phone sizes with no horizontal overflow.
+- **Source:** [Card3] item 7; [Nick] original brief "desktop and mobile friendly"; section 23.1.
+- **Acceptance:** at 1440×900, 768×1024, 390×844, 320×568 and 844×390, act three open, at q = 0, 0.55 and 1: `document.documentElement.scrollWidth <= innerWidth` and `#nerd.scrollWidth <= #nerd.clientWidth`; at q = 0 all three beats are inside the viewport; at q = 1 the word, all chips and the status line are inside the viewport and chips are ≥ 44px tall. `grep -c "dvh" intro.html` stays 0. `env(safe-area-inset-bottom)` appears in the cue's CSS.
+- **Edge cases:** rotating the phone mid-scroll re-measures geometry (R40); iOS URL-bar changes don't move the sticky stage (`svh`); hover-only styles stay under `@media (hover:hover)`.
+- **Resources:** `intro.html` CSS.
+
+### R48. Back, Forward and direct links work across all four states.
+- **Source:** section 19.4; extends R27.
+- **Acceptance:** (a) after R33, `history.back()`, wait 500ms: `location.hash === "#where"`, `#nerd.hidden === true`, `.fork-scene.inert === false`, `document.activeElement` is the passion prong, the fork's curtain stays hidden, and no `nerd-*`/`beat-*`/`clap-*` animation remains (`document.getAnimations().filter(a => /nerd|beat|clap|slice/.test(a.animationName)).length === 0`); (b) `history.forward()`: act three is open at q = 0 with no wipe (`nerd-wipe` absent) and all beats opacity "1" within 300ms; (c) direct load of `intro.html#nerd`: within 600ms act three is open at rest, act two is open underneath, `main.inert === true`, the R6 nudge stays hidden after 4500ms; (d) from `#passions-techie`, `history.back()` returns to `#nerd` with `#nerd-status` empty; (e) Back twice from `#nerd` reaches the pill scene with R27(b) passing.
+- **Edge cases:** Back during the entry aborts it cleanly (act three hidden, no orphaned animations after 500ms); the router is idempotent, so a `popstate` plus `hashchange` pair for one navigation does one thing (anchor clicks fire both in Chromium [Spike2]); reloading on any of the four hashes restores that state.
+- **Resources:** `intro.html` router (one `route()` called on load and on `popstate`).
+
+### R49. Palette, fonts, script budget, file footprint, and nothing earlier regresses.
+- **Source:** R31, R32; section 19.4.
+- **Acceptance:** the R31 hex grep returns the same set as at 15e3e2a (**no new hex**); the Google Fonts URL is unchanged; `grep -cE "<script[^>]+src=" intro.html` = 0; the main inline script is under 330 lines; `grep -ci "preventDefault" intro.html` = 0; `git diff --name-only 15e3e2a..HEAD` lists only `intro.html`, `BACKLOG.md` and files under `docs/`. All acceptance checks of R1 to R9, R11 to R25 and R27 to R32 pass again, with the amendments in 19.4 (R26 and R30 apply to research and technology only; R31's script limit is 330).
+- **Edge cases:** no new font, image, CSS or JS files; no third-party code; act two's own timings, skip and Back behavior are unchanged.
+- **Resources:** `intro.html`; `index.html` (read-only).
+
+### 24.1 Deployment and build
+
+Unchanged from sections 8 and 18.1: **not Docker**, by the same justified exception (static GitHub Pages site, nothing to containerize, production deploy is a push to `main`, which stays forbidden). Local preview `python3 -m http.server 8000` from the repo root on `feature/intro-experience`. Demo URLs: `http://localhost:8000/intro.html#where` (then tap passion) and `http://localhost:8000/intro.html#nerd`. No build step. The build card may push `feature/intro-experience` to origin.
+
+### 24.2 Flags for Nick (addendum 2)
+
+1. **B1, copy.** You wrote `Nerd.👏` with no space and the others with a space. I gave all three the same small gap, and stacked the beats on three lines at every screen size. Only the "Nerd." period is green.
+2. **B2, the page goes dark.** "Takes over the page" became: the word grows past the screen edges while the page flips from paper to ink with faint scanlines, then the word settles and the links appear on the dark screen. It is the first dark screen on the site.
+3. **B3, glitch colors.** Ember and light green from your existing palette, not true RGB red and cyan. It reads more like misregistered print than a CRT. True RGB would mean two new colors.
+4. **B4, stub copy.** "Techie is coming soon. Still nerding out on it." is placeholder text. Change freely.
+5. **B5, the glitch only moves while you scroll.** When the visitor stops, the slices freeze, and the glitch fully clears once the links show. That is deliberate. A glitch that crackles on its own forever would break accessibility rules on flashing and on motion you can't stop.
+6. **B6, "one page" means one layer inside `intro.html`.** The deep-dives will be one scrolling page with techie, gamer and photographer sections, opened from these links. If you'd rather it be its own file (`passions.html`), it's a three-href change and still one page.
+7. **B7, real-device check.** Emoji and iOS momentum scroll inside the overlay are worth 2 minutes on your phone. Emulation can't prove either.
+
+No new cost, services, infrastructure or recurring manual steps.
+
+### 24.3 Feasibility (spike method) and risks
+
+I ran a throwaway spike: one HTML page with the act-three layer, beats, claps, glitch, takeover and chips. I served it locally on port 8011 and measured it in Chromium over CDP at 1440×900, 390×844, 320×568 and 844×390, plus image checks of three screenshots. It lived in my scratch folder and is not in the repo. Every value it validated is written into sections 20 to 22 above.
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| F10 | Given a `position:fixed; overflow-y:auto` layer with `scroll-timeline:--nerd block`, when its children (including `::before`/`::after`) use `animation-timeline:--nerd`, then they scrub with the layer's scroll. | VALIDATED | `getAnimations()` listed `nerd-bg`, `drop`, `takeover`, `scan`, `branch` on a `ScrollTimeline`; at q = 0.12 `--g` was 1.79px and `::before` transform `tx` −1.79; at q = 0.55 `tx` −7.68 and background `rgb(22,36,28)`. |
+| F11 | Given `@property --g` / `--g-on`, when scroll keyframes animate them and use `var(--s-peak)` inside `transform`, then they interpolate. | VALIDATED | `--g-on` 0 → 0.373 → 1 → 0.3 across q (the 0.3 rest was then changed to 0); word width at q = 0.55: 1873px at 1440, 507 at 390, 1096 at 844, 416 at 320 (all ≥ viewport). |
+| F12 | Given a Fraunces 800 word scaled 6.7×, when rendered at the takeover, then it stays sharp and reads as a glitch takeover. | VALIDATED | Image check: "Sharp… no obvious blur"; "Yes, particularly as a sliced, offset-layer glitch"; "Definitely" takes over the page. Found a visible scrollbar strip (now hidden, 20.1) and leftover glitch at rest (now cleared, 21.4). |
+| F13 | Given 👏 after each beat, when rendered, then it shows in color and reads as a staccato beat. | PARTIAL | Image check: "all three clapping-hands emoji render in full color… strongly reads as a dramatic, staccato moment." Only proven on this Mac's emoji font (Flag B7). Beats measured too small at 390 (48px), so the size became `min(clamp(56px,16vw,128px),22svh)`. |
+| F14 | Given three Plex Mono chips, when laid out at the four sizes, then they don't overlap and stay in view. | VALIDATED | No overlap and `scrollWidth` = viewport at all sizes; one row at 390 (x 31 to 359), two rows at 320. |
+| F15 | Given the page's global `animation:none !important` reduced-motion rule, when the script runs a WAAPI opacity fade, then it still plays. And given a `#passions-*` anchor, when clicked, then the router can see it. | VALIDATED | Opacity at 200ms of a 400ms fade: 0.877. One click fired `popstate` then `hashchange`; a repeat click fired `popstate` again, so the router must be idempotent (R48). |
+
+Risks:
+
+- **Photosensitivity.** Mitigated by design (21.4, R45): ≤ 4 changes a second, nothing time-based while still, scrubbed dark flip, nothing at all under reduced motion. One residual risk: a visitor who flicks the wheel up and down very fast could scrub the paper/ink flip quickly. That is user-driven, it spans 60svh per direction, and it is accepted.
+- **Safari text scaling.** Some engines rasterize a scaled text layer once and stretch it. Mitigated by forbidding `will-change` (R37). Real-device check is Flag B7.
+- **Emoji on systems without a color emoji font** (old Linux) show an empty box. It is visual only, since the line is `aria-hidden` and screen readers get "I'm a nerd." Accepted.
+- **Scroll inside an overlay** is less familiar than page scroll. Mitigated by the cue (21.5) and native keyboard scrolling from the focused heading.
+- **Specificity fights between the entry and scroll animations** on the beats. Mitigated by blocking scroll during entry and letting the `is-entering` rules win until the end step (20.2).
+- **Scope creep into the deep-dives.** This is the biggest practical risk for an AI builder. Sections 19.2, 19.3 and 24.4 rule it out explicitly.
+
+### 24.4 Non-goals for addendum 2 (do not build)
+
+- **Anything behind techie, gamer or photographer:** no `#passions` section, no content, images, tabs or subsections, no modals or drawers. A chip only goes to its hash and announces "coming soon" (R42).
+- **Three separate routes, files or layers for the passions, ever.** The future deep-dive is one page (19.3).
+- Any change to the `research` or `technology` prongs, act two's curtain or timings, the scroll intro, the nudge, or the blue pill.
+- Tiling or repeating "nerd" across the screen, typewriter or scramble-text effects, sound, particles, canvas, WebGL, SVG filters, CRT bulge or a moving scanline.
+- A glitch that runs on its own when the visitor isn't scrolling, a glitch on chip hover, or any flicker above the R45 rate.
+- Drawn "branch" lines or SVG paths connecting the word to the chips, and any avatar appearance in act three.
+- A visible exit or "straight to business" link in act three (same open question as Flag A6), a replay control, or persisting anything (cookies, storage) or analytics.
+- Any change to `index.html`, the case-study pages, `resume.html`, `README.md`, `CNAME`, `AGENTS.md`, or new HTML, CSS, JS, image or font files. No JS libraries, CDN scripts or build tooling. No push to or merge into `main`, and no PR.
+
+**Authorized boundaries (build card t_593e8d60):** edit `intro.html` on `feature/intro-experience` in `~/Documents/github/portfolio`; update `BACKLOG.md` rows for this work; commit and `git push origin feature/intro-experience`; run or reuse the local preview server on port 8000.
+
+**Forbidden actions:** editing any other site file; pushing any other branch; committing to or merging into `main`; adding dependencies, files or services beyond the preview server.
+
+### 24.5 Follow-ups (logged in BACKLOG.md, not requirements)
+
+- **Passion deep-dives:** build techie, gamer and photographer as **one page** (`#passions`, three subsections), per 19.3. The router branch and stub lines are the only wiring to change.
+- Optional: a glitch-on-hover touch for the chips, if Nick wants more life on the rest screen (would need its own flash-rate check).
+- The research and technology prongs (already logged).
+
+---
+
 ## Research sources
 
 - Josh W. Comeau, "Scroll-Driven Animations": https://www.joshwcomeau.com/animation/scroll-driven-animations/
 - "Scroll-driven animations are Baseline at last" (Firefox 159, 2026-10-27; `overflow:clip` and shorthand pitfalls): https://dev.to/richicodes/scroll-driven-animations-are-baseline-at-last-3c8g
 - Can I use, `animation-timeline: scroll()`: https://caniuse.com/mdn-css_properties_animation-timeline_scroll
+- WCAG 2.2 Understanding 2.3.1, Three Flashes or Below Threshold: https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold.html
+- WCAG 2.2 Understanding 2.2.2, Pause, Stop, Hide: https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html
+- MDN, `scroll-timeline` (named scroll progress timelines): https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-timeline
+- MDN, `@property` (registered, animatable custom properties): https://developer.mozilla.org/en-US/docs/Web/CSS/@property
+- MDN, `content` alternative text (`content: "x" / ""`): https://developer.mozilla.org/en-US/docs/Web/CSS/content
 - Skill: `tech-viability-and-platform-choice` (cheapest-first platform order: responsive web is sufficient here, no native app question; ADR proportionality; non-goals and edge cases).
