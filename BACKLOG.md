@@ -6,6 +6,11 @@ Open / In progress / Shipped. Never delete shipped rows; merge, never overwrite.
 - Fork scene, **research** prong: define and build what it leads to. Stub today ("coming soon"). (Nick, 2026-11-12: "We will talk about each of the prongs after." PRD addendum section 13.2.)
 - Fork scene, **technology** prong: define and build what it leads to. Stub today. (Same source.)
 - Passion deep-dives: build **techie**, **gamer** and **photographer** as **one page** (one `#passions` layer in `intro.html` with three subsections `#passions-techie`, `#passions-gamer`, `#passions-photographer`), never three routes, files or layers. The act-three chips already link to these hashes; only the router's `#passions-` branch and the stub lines change. (Nick, 2026-11-12: "Those passions should all be contained on one page." PRD section 19.3.)
+  - Backgrounds spec'd in PRD addendum 3 (sections 25-31, R50-R65, card t_027c5838): techie circuit board draws itself, gamer rotating gameplay clips + disclaimer, photographer collage scaffold. Build card t_24e05978.
+- **Photographer photos, BLOCKED on Nick:** swap the placeholder frames in `#passions-photographer` for Nick's photos (10-15, resized to a 1000px long edge, location data stripped) per PRD R61. Nick: "I'll send photos in a later message."
+- Passion panel content: what Nick wants to say on the techie, gamer and photographer panels (placeholder "More on this soon." today). PRD Flag C4.
+- Lower-risk gamer footage: replace the web-sourced clips with captures Nick records himself, after checking each publisher's fan-content policy. Decide before merging to `main`. PRD section 28.8, Flag C1.
+- Optional: a captioned photo gallery behind the photographer collage. PRD section 31.5.
 - Optional: glitch-on-hover touch for the techie/gamer/photographer chips, if Nick wants more life on the rest screen. Needs its own flash-rate check (PRD R45). (PRD section 24.5.)
 - Avatar likeness pass: swap the placeholder hair/skin colors (and any signature detail) in the 12×16 pixel map. Needs Nick's input. (PRD addendum Flag A3.)
 - Decide whether the fork scene gets a visible exit to the site ("straight to business"). (PRD addendum Flag A6.)

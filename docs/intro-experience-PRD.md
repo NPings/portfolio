@@ -8,6 +8,7 @@
 - **davinci-prd skill:** not installed on this Mac. Sections written by hand to the same structure.
 - **Addendum (2026-11-12):** sections 13 to 18 and requirements R16 to R32 add the pill-scene polish and the "indulge me" continuation (fork scene). Card t_fb2bf2d9 (PRD addendum), build card t_4749555c (assignee `design`). Where the addendum changes an earlier decision (R10, the section 11 non-goal about "indulge me", the section 4 JS budget, the R14 palette), it says so in section 13.3. Sections 1 to 12 are otherwise unchanged.
 - **Addendum 2 (2026-11-12):** sections 19 to 24 and requirements R33 to R49 add the passion branch intro beat ("I'm. 👏 A. 👏 Nerd. 👏", the scroll-driven "nerd" glitch and takeover, and three stub links: techie, gamer, photographer). Card t_a8f81d69 (PRD addendum), build card t_593e8d60 (assignee `design`). It narrows R26 and R30 to research and technology, raises the R31 script budget to 330 lines, and fixes the one-page constraint for the future passion deep-dives (section 19.3). See section 19.4.
+- **Addendum 3 (2026-11-12):** sections 25 to 31 and requirements R50 to R65 add the passion deep-dive backgrounds: one `#passions` layer with three stacked subsections; techie (a circuit board that draws itself, buildable now), gamer (rotating gameplay clips with a disclaimer, buildable now, copyright risk flagged as C1) and photographer (collage mechanism with marked placeholders; real photos BLOCKED on Nick, R61). Card t_027c5838 (PRD addendum), build card t_24e05978 (assignee `design`). It replaces R42 with R50 and amends R31, R43, R49 and the 24.4 non-goal. See section 25.3.
 
 ---
 
@@ -1451,6 +1452,623 @@ Risks:
 
 ---
 
+---
+
+# Addendum 3: passion deep-dive backgrounds (techie, gamer, photographer) (card t_027c5838)
+
+Added 2026-11-12 by product. Builds on `intro.html` at commit 560f493 (act three, with the three chips wired to `#passions-*` stubs). Same harness, tokens, fonts and conventions as sections 1 to 24 unless a line below says otherwise. Build card: t_24e05978 (assignee `design`). This addendum is sections 25 to 31 and requirements R50 to R65.
+
+## 25. Source, scope, sequencing and what it changes
+
+### 25.1 Source brief (Nick, verbatim, via card t_027c5838)
+
+> Let's talk about how these passion screens will play out. Each the background should fill up with certain things. For techie we want a circuit board pattern/design to draw itself across the screen. For photography, I will provide photos to fill in the background as a messy collage that idly shuffles around. For gamer, I'd like it to fill in with a full screen loop of gifs of gameplay from some of my favorite games (sourced from the web). We will need to include a disclaimer that I don't own any of the background art on that one.
+>
+> Gamer list: borderlands, Pokemon series games, Fire emblem, Smash bros, Destiny, Baldur's gate.
+>
+> You source them. I don't have the time. I'll send photos in a later message.
+
+Citation shorthand added: **[Nick-D]** = the brief above. **[Card4]** = card t_027c5838's body (scope, sequencing and its six required items). **[Spike3]** = the throwaway prototype I ran for this addendum; results in 31.3. **[WCAG]**, **[GIPHY-ToS]**, **[GitHub-DMCA]**, **[web.dev-video]** = sources listed under Research sources.
+
+### 25.2 Scope and sequencing
+
+| Background | Status | Depends on | Who builds it |
+|---|---|---|---|
+| Techie (circuit board draws itself) | **Buildable now** | nothing | build card t_24e05978 |
+| Gamer (looping gameplay + disclaimer) | **Buildable now** | the build worker sources the clips. Nick delegated it: "You source them. I don't have the time." | build card t_24e05978 |
+| Photographer (messy collage that shuffles) | **Mechanism buildable now. Real photos BLOCKED on Nick** ("I'll send photos in a later message") | Nick's photos | t_24e05978 builds the mechanism with clearly marked placeholder frames (R59). A follow-up card swaps in the real photos (R61). |
+
+**In scope:** the `#passions` layer shell (one section, three subsections, a heading and one placeholder line in each so legibility can be tested), the three backgrounds, the gamer disclaimer and credits, one motion toggle, and routing the chips into the layer.
+
+**Out of scope:** what Nick actually says about being a techie, gamer or photographer. Each panel carries an honest placeholder line until he writes it (Flag C4).
+
+### 25.3 What this changes in sections 1 to 24
+
+| Earlier decision | Change |
+|---|---|
+| R42: each chip is an honest stub that announces "coming soon" | **Replaced by R50.** The chips now open `#passions` at their subsection. The chip click announcement, the chips' `aria-describedby="nerd-soon"` and the `#nerd-soon` span are removed. The hrefs do not change (19.3 promised this). |
+| R43: `git ls-files \| grep -ciE "techie\|gamer\|photographer\|passion"` = 0 | **Amended.** Files under `assets/passions/` are allowed. Still one page, still no new HTML, CSS or JS files. |
+| R45: nothing in act three changes on its own | **Unchanged for act three.** Act four has continuous motion because Nick asked for it (shuffle, looping clips), so it meets WCAG 2.2.2 with a pause control instead (R53). |
+| R48: router with four states | Same hash families. `#passions-*` now opens act four on top of act three instead of announcing. R48(d) still holds: Back from `#passions-techie` returns to `#nerd`. |
+| R31 and R49: one inline script under 330 lines; no new files or images | **Amended.** The main inline script stays one block, under 345 lines (only its router branch and the removed stub lines change). Act four gets **one** second inline block, `<script id="passions-js">`, under 280 lines. So `intro.html` has exactly three `<script>` tags: head bootstrap, main, passions. Still no `src=` scripts and no libraries. Files under `assets/passions/` are allowed. |
+| 24.4 non-goal: "Anything behind techie, gamer or photographer" | **Narrowed.** The shell and backgrounds are in scope. Written passion content stays out. |
+| Section 1 palette and fonts | **Unchanged.** No new hex and no new font. Every color below is an existing token or an `rgba()` of one. |
+
+### 25.4 Map to the card's six required items
+
+| Card item | Decided in |
+|---|---|
+| 1. Layout: one shared page, swap vs stacked | 26.1, 26.2, 26.3, R50 |
+| 2. Techie background | 27, R54, R55 |
+| 3. Gamer background, disclaimer, sourcing, risk | 28, R56, R57, R58, Flag C1 |
+| 4. Photographer background (pending photos) | 29, R59, R60, R61 |
+| 5. Legibility, reduced motion, accessibility | 26.4, 26.5, 30.2, 30.3, R51, R53, R62, R63 |
+| 6. Mobile and desktop | 30.1, R64 |
+
+---
+
+## 26. The shared page (card item 1)
+
+### 26.1 Decision: three stacked subsections in one scrolling layer, each owning its background
+
+| Option | Tradeoff |
+|---|---|
+| A. One container whose background swaps with the active passion (tabs or scroll-spy) | Needs a tab UI or a scroll-spy. All three hrefs would land on the same box. Mid-swap, two heavy backgrounds coexist. And it contradicts 19.3, which already fixed three subsections in order with their own ids. Rejected. |
+| **B. Three stacked full-screen subsections in the one `#passions` layer, each with its own background** | Exactly the shape 19.3 locked and the chips already link to. Each background lives inside its own subsection, so it is only seen, and only runs, while that subsection is on screen. Scrolling down walks techie, then gamer, then photographer, and each background "fills up" as it arrives [Nick-D]. **Chosen.** |
+
+One page, one layer, three subsections, three backgrounds. Only what is on screen animates (26.3).
+
+### 26.2 Structure
+
+```html
+<!-- after </section> of #nerd, before the main inline script -->
+<section class="act4" id="passions" aria-label="Passions" hidden>
+  <button type="button" class="p-motion" id="passions-motion">Pause motion</button>
+
+  <section class="passion techie" id="passions-techie" aria-labelledby="pt-title">
+    <div class="p-bg" aria-hidden="true"><svg class="circuit" id="circuit" focusable="false"></svg></div>
+    <div class="p-fore">
+      <h2 class="p-title" id="pt-title" tabindex="-1">techie</h2>
+      <p class="p-copy" data-placeholder-copy>More on this soon.</p>
+    </div>
+  </section>
+
+  <section class="passion gamer" id="passions-gamer" aria-labelledby="pg-title">
+    <div class="p-bg" aria-hidden="true">
+      <div class="g-posters" id="g-posters"></div>   <!-- poster fallback: slow network, Save-Data, autoplay blocked, reduced motion -->
+      <video class="g-clip" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <video class="g-clip" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <div class="g-dim"></div>
+    </div>
+    <div class="p-fore">
+      <h2 class="p-title" id="pg-title" tabindex="-1">gamer</h2>
+      <p class="p-copy" data-placeholder-copy>More on this soon.</p>
+    </div>
+    <p class="g-note" id="g-note">Game footage shown for fun. I don't own any of it. All rights belong to the games' developers and publishers.<span class="g-credit" id="g-credit" aria-hidden="true"></span><span class="vh" id="g-credits"></span></p>
+  </section>
+
+  <section class="passion photographer" id="passions-photographer" aria-labelledby="pp-title">
+    <!-- TODO(photos): placeholder frames until Nick sends photos (PRD R61) -->
+    <div class="p-bg" aria-hidden="true"><div class="ph-box" id="ph-box"></div></div>
+    <div class="p-fore">
+      <h2 class="p-title" id="pp-title" tabindex="-1">photographer</h2>
+      <p class="p-copy" data-placeholder-copy>More on this soon.</p>
+      <p class="ph-pending">Placeholder frames. Nick's photos are on the way.</p>
+    </div>
+  </section>
+</section>
+```
+
+- **Layer:** `.act4 { position:fixed; inset:0; z-index:17; background-color:var(--ink); color:var(--card); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:none; }`, `.act4::-webkit-scrollbar{display:none}`, `.act4[hidden]{display:none}`. z-index 17 sits above act three (16) and below the skip link (20). **The layer is never transformed**, because the motion toggle inside it is `position:fixed`.
+- **Subsection:** `.passion { position:relative; min-height:100svh; overflow:clip; isolation:isolate; display:grid; grid-template-columns:minmax(0,1fr); place-items:center; padding:clamp(72px,10svh,120px) 0; }`. The `minmax(0,1fr)` column is required: without it the spike's panel grew past the right edge at 390 and 320 wide, because an auto grid track sizes to the panel's max-content width [Spike3].
+- **Background slot:** `.p-bg { position:absolute; inset:0; z-index:0; pointer-events:none; }`.
+- `.act4 :focus-visible { outline-color:var(--leaf); }`. The site's pine outline nearly disappears on ink.
+
+### 26.3 Entry, routing and activation
+
+- **Chip click:** the browser follows the fragment (no `preventDefault`, R31 stays at 0). The router (R48) sees `#passions-<p>` with a known `p` and: keeps act three open at its rest state underneath (as R42's direct load did), sets `act4.hidden = false`, sets `#nerd.inert = true`, sets `act4.scrollTop` to the target subsection's `offsetTop`, and focuses that subsection's `h2` with `preventScroll:true`. With motion allowed, act four fades in with a WAAPI opacity animation, 0 to 1 over 300ms. Act three's rest screen and act four are both ink, so it reads as the background filling in on the same dark page.
+- **Direct load** of `intro.html#passions-gamer`: same as above with acts two and three open at rest underneath and no fade.
+- **Unknown** `#passions-foo`: opens act four at the top (techie).
+- **Back** from any `#passions-*` returns to `#nerd`: act four hidden, every timer cleared, both videos paused and emptied (`removeAttribute('src'); load()`, which frees the decoders), `#nerd.inert = false`, focus back on the chip that was used (`techie` after a direct load).
+- **No hash changes while scrolling** between subsections. No history spam.
+- **Activation:** one `IntersectionObserver` with `root: #passions` and `threshold: [0, 0.4]`. A subsection is **near** when its ratio is above 0 and **active** at 0.4 or more. Near starts its asset loading (gamer clip 0, photos later). Active starts its background. Dropping below 0.4 stops it. At a boundary two subsections can be active at once; never three. The router sets `act4.scrollTop` **before** the observer starts observing, so a direct load of `#passions-photographer` never briefly sees techie or gamer as near (R52).
+- **Hidden tab:** on `visibilitychange` to hidden, pause the videos and the shuffle; resume on visible if still active and not paused by the visitor.
+
+### 26.4 Foreground panel and legibility (all three)
+
+| Part | Spec |
+|---|---|
+| `.p-fore` | `position:relative; z-index:2; width:max-content; max-width:min(40rem, calc(100% - 2*var(--pad))); padding:24px 28px; background-color:rgba(22,36,28,.86); border:1px solid rgba(200,211,190,.25);` Under 560px wide: `padding:16px 18px`. |
+| `.p-title` | Fraunces 600, `font-variation-settings:"opsz" 144`, lowercase as Nick wrote them, `font-size:clamp(28px,8vw,80px); line-height:1; margin:0; color:var(--card);` `#pt-title:focus, #pg-title:focus, #pp-title:focus { outline:none }` (programmatic focus targets). |
+| `.p-copy` | EB Garamond (the site's body voice) 19px, `line-height:1.5; margin:.6em 0 0; color:var(--card);` |
+
+**Contrast, worked out:** `--card` text on the scrim composited over pure white, the worst pixel any background can put behind it, is **9.89:1**. Over pure ink it is 15.32:1. AA needs 4.5:1. So the text never depends on what the background is doing. The motion toggle and the gamer disclaimer sit on the same `.86` scrim, so they get the same floor. (WCAG relative-luminance math on the token values, run during the spike [Spike3].)
+
+Per-background calming, on top of the scrim: techie traces at 42% opacity (27.3); gamer clips under a 55% ink overlay (28.2); photographer needs none beyond the panel, since the photos are the point.
+
+### 26.5 The motion toggle (WCAG 2.2.2)
+
+The gamer clips and the photo shuffle move on their own for more than five seconds next to other content, so WCAG 2.2.2 requires a way to pause them [WCAG]. One button covers the whole layer.
+
+- `#passions-motion`, a `<button type="button">`. Its text swaps between **"Pause motion"** and **"Play motion"**, so its name always says what pressing it will do (no `aria-pressed`).
+- Style: `position:fixed; top:calc(12px + env(safe-area-inset-top)); right:var(--pad); z-index:4; min-height:44px; padding:8px 14px; font-family:"IBM Plex Mono",monospace; font-weight:500; font-size:14px; color:var(--card); background-color:rgba(22,36,28,.86); border:1px solid var(--rule); border-radius:0;`
+- **Paused:** both videos `pause()` and the rotation stops on the current clip; the photo shuffle stops; a techie draw in progress is finished at once (`finish()` on its animations). **Play** resumes from where things stopped.
+- Initial state: "Pause motion" (playing) when motion is allowed. "Play motion" (paused) under reduced motion (30.2).
+- Session only. Nothing is stored.
+- First in act four's tab order.
+
+---
+
+## 27. Techie: a circuit board that draws itself (card item 2)
+
+### 27.1 Decision: inline SVG traces generated once in vanilla JS, drawn by CSS `stroke-dashoffset`
+
+| Option | Tradeoff |
+|---|---|
+| Canvas, traces drawn each frame | Needs a `requestAnimationFrame` loop, device-pixel-ratio scaling and its own reduced-motion branch. More code and CPU for the same picture. Rejected. |
+| A hand-made SVG tile, repeated | Small and static, but the repeat shows, and a tile can't draw as one sweep across the screen. Rejected. |
+| **Generated inline SVG, each trace a `<path pathLength="1">` animated from `stroke-dashoffset:1` to `0`** | No library and no per-frame JS: CSS does the drawing. Reduced motion simply skips the animation and the paths are already complete. Generation took 12ms at 1440×900 [Spike3]. **Chosen.** |
+
+### 27.2 The generator (exact, validated in the spike)
+
+Runs once each time act four opens, and again on a resize that changes width or height by more than 80px (debounced 250ms). After a resize while the board is already drawn, the new board appears drawn.
+
+```js
+function rng(s){ return function(){ s|=0; s=s+0x6D2B79F5|0; var t=Math.imul(s^s>>>15,1|s);
+  t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }   // mulberry32
+function buildCircuit(svg, W, H){
+  var c = W < 560 ? 22 : 28, cols = Math.ceil(W/c)+1, rows = Math.ceil(H/c)+1, r = rng(7), occ = {},
+      N = Math.max(36, Math.min(140, Math.round(W*H/12000))), made = 0, tries = 0, out = [],
+      D = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]];
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  while (made < N && tries++ < 4*N){
+    var x = Math.floor(r()*cols), y = Math.floor(r()*rows); if (occ[x+','+y]) continue;
+    var dir = Math.floor(r()*4)*2, pts = [[x,y]], segs = 3 + Math.floor(r()*5); occ[x+','+y] = 1;
+    for (var s = 0; s < segs; s++){
+      var len = 2 + Math.floor(r()*5), ok = 0;
+      for (var k = 0; k < len; k++){ var nx = x+D[dir][0], ny = y+D[dir][1];
+        if (nx<0 || ny<0 || nx>=cols || ny>=rows || occ[nx+','+ny]) break; x = nx; y = ny; occ[x+','+y] = 1; ok = 1; }
+      if (!ok) break; pts.push([x,y]);
+      dir = (dir + (r()<.5 ? 1 : 7)) % 8; if (r()<.5) dir = (dir + (r()<.5 ? 1 : 7)) % 8;   // 45° or 90° bend
+    }
+    if (pts.length < 2) continue; made++;
+    var d0 = Math.round(pts[0][0]*c/W*2200), t = 900 + Math.round(r()*600), e = pts[pts.length-1];
+    out.push('<path pathLength="1" d="M' + pts.map(function(p){ return p[0]*c + ',' + p[1]*c; }).join('L') +
+             '" style="--d:' + d0 + 'ms;--t:' + t + 'ms"/>');
+    out.push('<circle r="3.5" cx="' + pts[0][0]*c + '" cy="' + pts[0][1]*c + '" style="--d:' + d0 + 'ms"/>');
+    out.push('<circle r="3.5" cx="' + e[0]*c + '" cy="' + e[1]*c + '" style="--d:' + (d0+t-120) + 'ms"/>');
+  }
+  svg.innerHTML = out.join('');
+}
+```
+
+`W` is `#passions`'s `clientWidth`, `H` is `innerHeight`. The seed is fixed (7), so the same viewport always gets the same board, which makes tests repeatable. The spike ran this logic without the retry loop and placed 72 traces at 1440×900 and 24 at 390×844; the `4*N` retry loop above only adds traces.
+
+### 27.3 Visual direction
+
+| Part | Spec |
+|---|---|
+| Board | `--ink` (act three's "terminal mode" carries on) |
+| Traces | `fill:none; stroke:var(--leaf); stroke-width:1.5; opacity:.42; stroke-linecap:round; stroke-linejoin:round;` (`stroke-width:1.25` under 560px) |
+| Pads | `fill:var(--ink); stroke:var(--moss); stroke-width:1.5; opacity:.7;` radius 3.5, one at each end of every trace |
+| Geometry | 28px grid (22px under 560px), straight runs with 45° and 90° bends, the classic PCB routing look |
+| Density | about one trace per 12,000 px², 36 to 140 traces. Image check at 1440×900: "Balanced overall… the pattern remains secondary to the heading"; at 390×844: "its overall density is reasonable, not too sparse" [Spike3] |
+| Crossings | Diagonal runs may cross. Accepted: it's a decorative board, not a working netlist |
+
+### 27.4 The draw
+
+```css
+@media (prefers-reduced-motion:no-preference){
+  .techie .circuit path   { stroke-dasharray:1; stroke-dashoffset:1; }
+  .techie .circuit circle { opacity:0; }
+  .techie.is-drawing .circuit path   { animation:trace var(--t) cubic-bezier(.35,.1,.25,1) var(--d) forwards; }
+  .techie.is-drawing .circuit circle { animation:pad-in 240ms ease-out var(--d) forwards; }
+  .techie.is-drawn .circuit path     { stroke-dashoffset:0; }
+  .techie.is-drawn .circuit circle   { opacity:.7; }
+}
+@keyframes trace  { to { stroke-dashoffset:0; } }
+@keyframes pad-in { to { opacity:.7; } }
+```
+
+- **Sweep left to right:** each trace's delay is `round(x0 / W × 2200)` ms from its start point's x, duration 900 to 1500ms. The start pad pops with its trace, the end pad as the trace arrives. The board is complete by about 3.94s.
+- **Trigger:** the first time techie becomes active in this open of act four, add `is-drawing`. At 3,800ms after that, plus the last `animationend` or a 4,500ms safety timeout, swap to `is-drawn` (holds the finished board with no running animations).
+- **Looping: none.** It draws once per open, then holds still. No moving "signal pulses" and no redraw when scrolling back up. Closing act four (Back) and opening it again redraws. Why: Nick described one event, the board drawing "itself across the screen", and a still board is calmer behind content. The whole draw is under five seconds, so WCAG 2.2.2 doesn't require a pause for it, though the toggle still finishes it.
+- **Spike:** at 0.2s, 16 traces were part-drawn; at 2s, 39 were complete; at 4s, all 72. Image check of the 1s frame: "Yes, it looks like a left-to-right drawing reveal" [Spike3].
+
+---
+
+## 28. Gamer: a full-screen loop of gameplay (card item 3)
+
+### 28.1 Decision: looping silent MP4 clips, not GIF files
+
+Nick said "gifs", meaning short silent looping clips. The files will be H.264 MP4s played by `<video muted loop playsinline>`. They look the same as a GIF, they are typically several times smaller (web.dev's example: a 3.7 MB GIF became a 551 KB MP4 [web.dev-video]), and unlike a GIF they can be paused from JS, which the motion toggle and reduced motion both need. Flag C2.
+
+One format only. H.264 MP4 plays in every browser this site targets. A WebM second copy would roughly double the repo weight for a small transfer saving.
+
+### 28.2 Layout: one clip fills the screen, rotating through the six games
+
+| Option | Tradeoff |
+|---|---|
+| A mosaic of all six at once | Six video decodes at the same time on a phone, all six clips' bytes before anything shows, and a busy wall behind the text. Rejected. |
+| **One clip fills the screen and crossfades to the next game every 7 seconds** | Literally "a full screen loop". At most two decoders (only during the 800ms crossfade). Bytes arrive one clip at a time. **Chosen.** |
+
+- **Two** `<video class="g-clip">` elements (A and B), never six: `position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 800ms ease;` and `.g-clip.is-on { opacity:1; }`.
+- **Order:** Nick's order, then repeat: borderlands, pokemon, fire-emblem, smash-bros, destiny, baldurs-gate. A full cycle is 42 seconds.
+- **Swap:** 5.5s into a clip's turn, the idle element gets the next clip's `src` with `preload="auto"`. At 7s, the script calls `play()` on it, adds `is-on`, removes `is-on` from the current one, and pauses the old one 800ms later. If the next clip isn't ready (`readyState < 3`) at 7s, the current clip keeps playing and the swap retries on the next 7s tick. Never a black frame.
+- **Under the clips,** `.g-posters` shows the current clip's poster as a `background-image` (`background-size:cover`), so a slow network shows a still, not black.
+- **Dim:** `.g-dim { position:absolute; inset:0; z-index:1; background-color:rgba(22,36,28,.55); }` above the clips. It calms the panel area and cuts any brightness swing in the footage by more than half (28.7).
+- **A clip that fails** (`error` event) is dropped from the rotation for the session. If every clip fails, the section shows plain ink plus the disclaimer.
+- **Clip list in code:** `var CLIPS = [{slug:'borderlands', title:'…', credit:'…'}, …]` in the passions script, filled from `SOURCES.md` (28.6).
+
+### 28.3 Files and the performance budget
+
+| Item | Spec |
+|---|---|
+| Path | `assets/passions/gamer/<slug>.mp4` and `assets/passions/gamer/<slug>.jpg`. Slugs: `borderlands`, `pokemon`, `fire-emblem`, `smash-bros`, `destiny`, `baldurs-gate` |
+| Clip | H.264 MP4, **no audio track**, at most 960px wide (16:9 preferred), at most 30 fps, 3 to 8 seconds, loops cleanly or close to it, `+faststart` |
+| Clip size | **≤ 900 KB each** |
+| Poster | the clip's first frame as JPEG, same size, **≤ 60 KB** |
+| Total | **≤ 5,760 KB** for all twelve files |
+| Manifest | `assets/passions/gamer/SOURCES.md` (28.6) |
+
+Conversion. ffmpeg with libx264 is on this Mac at `~/.hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffmpeg` (checked during the spike):
+
+```
+ffmpeg -i <source.gif|source.mp4> -ss <start> -t 6 -an \
+  -vf "fps=24,scale='min(960,iw)':-2:flags=lanczos" \
+  -c:v libx264 -preset slow -crf 28 -pix_fmt yuv420p -movflags +faststart <slug>.mp4
+ffmpeg -i <slug>.mp4 -frames:v 1 -q:v 5 <slug>.jpg
+```
+
+Over budget: raise `-crf` to 30, then 32; then shorten `-t`; then scale to 854 wide. Prefer sources at least 640px wide; smaller ones look soft at full screen (the dim helps hide it).
+
+**Lazy loading:** no `src` or `poster` in the markup. Nothing under `assets/passions/gamer/` is requested until the gamer subsection is near (26.3). Then poster 0 and clip 0 load; later clips load one at a time, 1.5s before their turn. Opening `#passions-techie` and staying there fetches zero gamer bytes. A visitor who watches the full 42s cycle downloads at most about 5.8 MB.
+
+**Save-Data:** if `navigator.connection && navigator.connection.saveData` is true, no video loads. The posters rotate on the same 7s schedule instead (at most about 360 KB).
+
+**Autoplay blocked** (iOS Low Power Mode can block even muted autoplay): the `play()` rejection is caught, and the poster rotation runs instead. No uncaught error.
+
+### 28.4 Disclaimer and credits (exact copy and placement)
+
+Nick: "We will need to include a disclaimer that I don't own any of the background art on that one." In his voice, first person, exact text:
+
+> Game footage shown for fun. I don't own any of it. All rights belong to the games' developers and publishers.
+
+Straight apostrophes (U+0027), matching the rest of the intro. Flag C3.
+
+A second line names the clip on screen, updated at each swap: `Now showing: <Game title> · <Developer> / <Publisher>`, built from `CLIPS[i].title` and `CLIPS[i].credit`. Example of the format only: `Now showing: Borderlands 3 · Gearbox Software / 2K`. The build worker fills the real title and credit for each clip it sources.
+
+- **Placement:** `.g-note` sits bottom-left of the gamer subsection, over the footage: `position:absolute; left:var(--pad); bottom:calc(16px + env(safe-area-inset-bottom)); z-index:3; max-width:calc(100% - 2*var(--pad)); margin:0; padding:6px 10px; font-family:"IBM Plex Mono",monospace; font-weight:400; font-size:13px; line-height:1.45; color:var(--card); background-color:rgba(22,36,28,.86);`. `.g-credit { display:block; color:var(--rule); }`. Contrast at worst: 9.89:1 for the disclaimer, 6.69:1 for the `--rule` credit line.
+- **Always visible** whenever the gamer background is on screen, in every state: playing, paused, reduced motion, Save-Data, autoplay blocked, or a failed clip.
+- **Screen readers:** the disclaimer is plain text in reading order, after the panel. The rotating credit line is `aria-hidden` (an `aria-live` line would talk every 7 seconds). Instead, `#g-credits` (visually hidden) lists all six once: "Clips from: <title> (<credit>), …".
+- Only in the gamer subsection. Never on techie or photographer.
+
+### 28.5 Sourcing guidance (the build worker sources; Nick delegated it)
+
+Preference order, for every game:
+
+1. **The publisher's or developer's own channel on GIPHY.** Search the game's name on giphy.com. GIPHY shows the relevant channels at the top of search results [GIPHY-search]. Prefer an official, verified channel's uploads. Take the MP4 rendition if the page offers one, otherwise the GIF, and convert it (28.3).
+2. **Official media files:** the publisher's press or media kit B-roll, or a trailer file it offers for download, where its stated terms allow that use. Trim 3 to 8 seconds.
+3. **Last resort:** other GIPHY or Tenor uploads of real gameplay. Mark the row "official: no" in `SOURCES.md` and list it in the handoff.
+
+**Never:** download from YouTube, Twitch or TikTok (their terms forbid it); use clips with a streamer's face-cam, overlay, watermark or caption text (that adds a second rights holder); use anime, TV or movie footage instead of gameplay; use anything with gore, nudity, or a GIPHY rating above PG; commit anything that fails the flash check (28.7). One clip per game. If a game can't be sourced cleanly within budget, ship its poster only (a still in the rotation) and say so in `SOURCES.md` and the handoff. Never swap in a different game without saying so.
+
+| Game (Nick's word) | What to look for | Search terms to start with | Credit (confirm from the source) | Watch out for |
+|---|---|---|---|---|
+| borderlands | Shooting or looting in a bright, cel-shaded world | "Borderlands 3 gameplay", "Borderlands gameplay" | Gearbox Software / 2K | Gore; rapid muzzle flashes |
+| Pokemon series games | An in-game battle or an overworld walk from a mainline game | "Pokemon Scarlet Violet gameplay", "Pokemon battle gameplay" | Game Freak / Nintendo, The Pokémon Company | Results are flooded with anime clips. Those are not gameplay; reject them |
+| Fire emblem | Units moving on the tactical map, or a battle animation | "Fire Emblem Engage gameplay", "Fire Emblem Three Houses battle" | Intelligent Systems / Nintendo | Story cutscenes with subtitles; prefer gameplay |
+| Smash bros | A fight on a stage with several fighters | "Super Smash Bros Ultimate gameplay" | Bandai Namco Studios, Sora Ltd. / Nintendo | Final Smash and hit-spark flashes: run the flash check |
+| Destiny | A first-person firefight or a raid moment | "Destiny 2 gameplay" | Bungie | Super abilities and explosions flash |
+| Baldur's gate | Party exploration or turn-based combat | "Baldur's Gate 3 gameplay" | Larian Studios | The game has nudity and gore; pick tame shots |
+
+### 28.6 `SOURCES.md`, the takedown-ready manifest
+
+`assets/passions/gamer/SOURCES.md` has one row per clip with these columns: `slug | game title | source page URL | uploader or channel | official (yes/no) | retrieved (date) | rating | clip KB | poster KB | flash check`. Under the table, the removal recipe: "To take a clip down, delete `<slug>.mp4`, `<slug>.jpg`, its row here and its entry in `CLIPS` in `intro.html`. The rotation skips missing clips." This is what makes a takedown a five-minute job (Flag C1).
+
+### 28.7 Photosensitivity with someone else's footage
+
+Game footage can flash: explosions, hit sparks, supers. WCAG 2.3.1 allows at most three flashes in any second [WCAG]. Every clip must pass this check before it is committed. The build card saves it as `docs/tools/flashcheck.py` and records each result in `SOURCES.md`:
+
+```python
+# flashcheck.py <clip.mp4>: whole-frame luma flash heuristic (a WCAG 2.3.1 general-flash proxy)
+import re, subprocess, sys, os
+FF = os.path.expanduser("~/.hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffmpeg")
+out = subprocess.run([FF, "-hide_banner", "-i", sys.argv[1], "-vf",
+      "signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-", "-f", "null", "-"],
+      capture_output=True, text=True).stdout
+t, y = [], []
+for line in out.splitlines():
+    m = re.search(r"pts_time:([\d.]+)", line)
+    if m: t.append(float(m.group(1)))
+    m = re.search(r"YAVG=([\d.]+)", line)
+    if m: y.append(float(m.group(1)))
+# a transition = a luma swing of at least 10% of full range (25.5 of 255) from the last extreme
+ext, d, trans = y[0], 0, []
+for ti, yi in zip(t, y):
+    s = 1 if yi > ext else -1
+    if s == d or d == 0:
+        if abs(yi - ext) >= 25.5 and d == 0: trans.append(ti); d = s; ext = yi
+        elif s == d: ext = yi
+    elif abs(yi - ext) >= 25.5: trans.append(ti); d = s; ext = yi
+# a flash = a pair of opposing transitions; count them in any 1 s window
+worst = max([sum(1 for x in trans if a <= x < a + 1.0) for a in trans] or [0]) // 2
+print(f"frames={len(y)} transitions={len(trans)} max_flashes_per_second={worst} {'PASS' if worst <= 3 else 'FAIL'}")
+```
+
+Spike: a synthetic 6 Hz black/white strobe scored 6 flashes per second, FAIL; a calm test pattern scored 0, PASS [Spike3]. Its limit: it averages the whole frame, so a small flashing area may not trip it. Three more layers cover that: the 55% dim overlay shrinks any brightness swing, the curation rule ("watch out for" column) rejects strobe-heavy shots, and the motion toggle and reduced motion (30.2) stop the footage.
+
+### 28.8 Copyright risk, in plain words (Flag C1)
+
+Nick owns this decision and asked for it, so the build goes ahead. He should still see the risk clearly before this reaches `main`.
+
+- **Short clips are still copies.** Six loops of game footage committed to a public GitHub repo and served on nickpings.com are reproductions and public displays of the publishers' copyrighted work. Length doesn't change that.
+- **A disclaimer is not a license.** It shows good faith and credits the owners. It doesn't grant any right to use the footage.
+- **Fair use is a defense, not a permission.** It is weighed case by case after someone objects. A decorative background on a professional portfolio is not very "transformative", which is the factor that matters most. Short length and no harm to game sales help, but nothing guarantees the outcome. (This is a product risk note, not legal advice.)
+- **GIPHY doesn't launder the rights.** GIPHY's own terms say content found there is generally for personal, non-commercial use within its services, and forbid copying and displaying it elsewhere without permission [GIPHY-ToS]. A job-hunting portfolio is arguably commercial-adjacent.
+- **The realistic worst case is a DMCA notice to GitHub, not a lawsuit.** GitHub's published process: it forwards the notice and gives about **one business day** to remove the content; if nothing changes, it **disables the whole repository** [GitHub-DMCA]. For a GitHub Pages site, that takes nickpings.com down until it's fixed.
+- **Half the list is Nintendo-family IP** (Pokémon, Fire Emblem, Smash). Nintendo and The Pokémon Company are widely reported to enforce their IP actively (assumption, not checked against case records).
+
+Built-in mitigations: prefer publisher-uploaded clips (28.5), credit every clip on screen (28.4), keep a manifest with a five-minute removal recipe (28.6), and degrade gracefully when clips are deleted (28.2).
+
+**A lower-risk alternative for later (not in this build):** footage Nick records from his own play sessions. Many publishers publish fan-content or video policies that allow sharing your own gameplay captures for non-commercial use, which is better footing than clips copied from other uploaders. It's still the publishers' artwork, so check each policy first. Logged in BACKLOG.
+
+---
+
+## 29. Photographer: a messy collage that idly shuffles (card item 4)
+
+### 29.1 Status: the mechanism now, the photos later
+
+**The real photos are BLOCKED on Nick** ("I'll send photos in a later message"). Build card t_24e05978 builds the whole mechanism with **placeholder frames that look like placeholders** and says so in its handoff. A follow-up card adds the photos (R61). Nothing on this card may look finished: **no stock or royalty-free stand-in photos.** The card allowed stand-ins as an option; I chose solid frames because a stand-in photo can be mistaken for Nick's own work, which is exactly the fake finish the card warns against.
+
+### 29.2 Layout: scattered polaroids on a jittered grid
+
+| Option | Tradeoff |
+|---|---|
+| A neat grid | Not "messy". Kept only as the reduced-motion state (30.2). |
+| Fully random positions | Clumps and leaves holes. The spike's first version did exactly that: "top-heavy and locally clumped", with "substantial open areas" [Spike3]. Rejected. |
+| **A jittered grid: one frame per cell, nudged up to ±20% of the cell, tilted up to ±8°, overlapping its neighbors** | Reads as a pile on a table but always covers the screen. Spike coverage 0.90 to 0.97 [Spike3]. **Chosen.** |
+
+| Viewport | Grid | Frames |
+|---|---|---|
+| ≥ 900px wide | 5 × 3 | 15 |
+| 560 to 899px | 4 × 3 | 12 |
+| < 560px | 3 × 4 | 12 |
+| `max-height:500px` (landscape phone) | 5 × 2 | 10 |
+
+- Cell = subsection width ÷ columns by `innerHeight` ÷ rows. Frame width = `min(cellW × 1.1, cellH × 0.92)`. Frame shape 4:5, border included.
+- Frame look (a polaroid with a deeper bottom lip): `.ph { position:absolute; left:0; top:0; width:var(--w); aspect-ratio:4/5; padding:8px 8px 28px; background-color:var(--card); box-shadow:0 6px 18px rgba(0,0,0,.35); transition:transform 1200ms cubic-bezier(.3,.7,.2,1); }`. Position and tilt are one inline `transform: translate(x,y) rotate(a)`.
+- Jitter and tilt come from `rng(11)` (the same mulberry32 as 27.2), so a reload at the same size gives the same first layout.
+
+### 29.3 The idle shuffle
+
+- While photographer is active, motion is allowed and the visitor hasn't paused: **every 3,200ms, pick two frames at random and swap their cells.** Each gets a fresh nudge and tilt, both are raised to the top (`z-index` counter), and they glide to their new spots over 1,200ms (transform only).
+- One swap at a time keeps it idle, not busy.
+- Swapping cells, instead of re-randomizing positions, keeps every cell covered, so the collage never drifts into a clump. Spike, after 20, 40 and 60 swaps: coverage 0.94, 0.94, 0.90 at 1440×900 and 0.93, 0.91, 0.95 at 390×844 [Spike3].
+- Stops when inactive, paused or reduced motion. Resumes from the current layout.
+
+### 29.4 The placeholder scaffold (what t_24e05978 ships)
+
+- In the passions script: `var PHOTOS = [];  // TODO(photos): fill from assets/passions/photos/ when Nick sends photos (PRD R61)`.
+- While `PHOTOS` is empty, each frame's picture area is a solid fill cycling through existing tokens: `--pine`, `--moss`, `--pill-blue`, `--rec`, `--ink-soft`, `--muted`. Each frame's bottom lip has a label in IBM Plex Mono 11px, `--ink-soft`: `photo N · pending`. Each frame has `data-placeholder="true"`.
+- The panel shows `.ph-pending`: "Placeholder frames. Nick's photos are on the way." (IBM Plex Mono 13px, `--rule`, 6.69:1 at worst on the scrim).
+- The HTML comment `<!-- TODO(photos): … -->` sits in the subsection (26.2).
+- The spike's image check: "Yes, very obvious" that these are placeholders [Spike3].
+
+### 29.5 The real photos (follow-up card, BLOCKED on Nick)
+
+- Files: `assets/passions/photos/01.jpg`, `02.jpg`, … in the order Nick wants them.
+- Processing, on this Mac: iPhone HEIC first becomes JPEG with `sips -s format jpeg in.HEIC --out tmp.jpg`. Then
+  `ffmpeg -i tmp.jpg -vf "scale='if(gt(iw,ih),min(1000,iw),-2)':'if(gt(iw,ih),-2,min(1000,ih))'" -q:v 4 -map_metadata -1 NN.jpg`
+  resizes to a 1000px long edge and **drops all metadata, including GPS location**. Each file ≤ 160 KB (raise `-q:v` to 6 if over), total ≤ 2,400 KB.
+- Markup: `<img src="assets/passions/photos/NN.jpg" alt="" decoding="async">` with `width:100%; height:100%; object-fit:cover;`, `src` set when photographer becomes near (26.3). `alt=""` because they're a background behind the panel. A captioned gallery is a separate follow-up.
+- Fewer photos than frames: repeat them in order. More: the first N in manifest order.
+- Remove every placeholder marker: `data-placeholder`, the `photo N · pending` labels, `.ph-pending` and both `TODO(photos)` comments.
+
+---
+
+## 30. Responsive and accessibility (card items 5 and 6)
+
+### 30.1 Responsive
+
+| Concern | Desktop (≥ 900px) | Mobile (< 560px) | Short screens (`max-height:500px`) |
+|---|---|---|---|
+| Subsection | full viewport height, background full-bleed | same | same |
+| Panel | up to 40rem wide, padding 24/28 | full width minus `--pad`, padding 16/18 | same as width class; title floor 28px |
+| Title | 80px | `8vw` (31px at 390, 28px floor at 320) | per width |
+| Techie grid | 28px pitch, up to 140 traces | 22px pitch, stroke 1.25 | per width |
+| Gamer clip | `object-fit:cover`, crops the 16:9 sides on tall screens | same (a portrait phone shows the middle third) | same |
+| Disclaimer | bottom-left, 13px, wraps under `--pad` width | same, wraps to 3 to 4 lines | same; must not overlap the panel (R58) |
+| Photo grid | 5 × 3 | 3 × 4 | 5 × 2 |
+| Motion toggle | top-right, 44px tall | same, plus safe-area inset | same |
+| Scrollbar | hidden | hidden | hidden |
+
+`svh` only, never `dvh` (section 5). Touch scrolling of act four is native momentum scrolling with no gesture code.
+
+### 30.2 Reduced motion
+
+| Part | With `prefers-reduced-motion: reduce` |
+|---|---|
+| Act four entry | No fade. Appears in one cut. |
+| Techie | No draw. The board is complete from the first frame: the dash rules only exist inside the motion-allowed query, and the page's global rule (`animation:none !important`) stops CSS animations anyway. |
+| Gamer | **No autoplay at all.** `.g-posters` shows the six posters as a still grid (3 × 2 at 560px and wider, 2 × 3 below) under the same dim, with the disclaimer. The toggle reads "Play motion". Pressing it is the visitor's explicit opt-in and starts the one-clip rotation. Judgment call (the card asked): a GIF can't be paused from CSS, but a `<video>` can, so reduced motion gets stills instead of "loops anyway". |
+| Photographer | No shuffle. Frames sit in a neat grid: no nudge, no tilt, centered in their cells, width `min(cellW, cellH × 0.8) × 0.9` so none overlap. |
+| Live change | A `matchMedia` change listener applies the switch without a reload: playing clips pause and the posters show; the shuffle stops and the frames settle into the neat grid. |
+
+### 30.3 Screen readers and keyboard
+
+- Every background is inside `.p-bg[aria-hidden="true"]`. The SVG has `focusable="false"`. The videos have no `controls`, no `tabindex` and `disablepictureinpicture`. Nothing in a background is focusable or announced.
+- Act four is a region named "Passions" with three level-2 headings: techie, gamer, photographer. On open, focus goes to the target subsection's heading.
+- Tab order inside act four: the motion toggle, and nothing else (the panels have no links yet). The skip link stays reachable above everything.
+- The disclaimer is read in order after the gamer panel. The credits list is read once (28.4).
+- While act four is open, `main` and `#nerd` are `inert`. Back returns focus to the chip that opened it.
+
+---
+
+## 31. Requirements, deployment, flags, feasibility, non-goals
+
+All requirements use the section 7 harness (local `python3 -m http.server 8000`, Chromium over CDP, the same desktop, mobile and reduced-motion emulation). Definitions: **"Open at X"** means a direct load of `http://localhost:8000/intro.html#passions-X`, then wait 800ms. **`L`** is `document.getElementById('passions')`. **"Scroll to Y"** means `L.scrollTop = document.getElementById('passions-Y').offsetTop`, then wait 600ms. **"Assets"** means `performance.getEntriesByType('resource').filter(e => /assets\/passions\//.test(e.name))`. Build and deployment for every requirement: **not Docker**, by the same justified exception as sections 8 and 24.1 (a static GitHub Pages site with nothing to containerize; production deploy is a push to `main`, which stays forbidden).
+
+### R50. The chips open one `#passions` page with three stacked subsections; no new route, file or layer per passion.
+- **Source:** [Nick-C] "Those passions should all be contained on one page."; [Card4] item 1; sections 19.3, 26.1 to 26.3.
+- **Acceptance:** load `intro.html#nerd`, set q = 1 (R38 harness), set `window.__stay = 1`, click the `gamer` chip; within 1000ms: `location.hash === "#passions-gamer"`, `window.__stay === 1`, `L.hidden === false`, `document.querySelectorAll('section.act4').length === 1`, `L.querySelectorAll(':scope > section.passion')` has 3 elements with ids `passions-techie`, `passions-gamer`, `passions-photographer` in that order, `Math.abs(L.scrollTop - document.getElementById('passions-gamer').offsetTop) <= 2`, `document.activeElement.id === "pg-title"`, `document.getElementById('nerd').inert === true`, `getComputedStyle(L).zIndex === "17"`, `getComputedStyle(L).transform === "none"`, and every subsection's `offsetHeight >= innerHeight`. `grep -c 'id="nerd-soon"' intro.html` = 0; `grep -c "Still nerding out on it" intro.html` = 0; no chip has `aria-describedby`; `grep -oE 'href="#passions-[a-z]+"' intro.html | sort -u` returns exactly the three R42 hrefs; `git ls-files '*.html'` lists the same files as at 560f493.
+- **Edge cases:** `#passions-foo` opens act four with `L.scrollTop === 0`; `history.back()` from `#passions-gamer` gives `location.hash === "#nerd"`, `L.hidden === true`, focus on the `gamer` chip, and no `<video>` in `L` with a `src` attribute; reloading on `#passions-photographer` reopens there; a Cmd-click on a chip opens a new tab in the direct-load state; zero `Runtime.exceptionThrown`.
+- **Resources:** `intro.html` (markup, main router branch, passions script).
+
+### R51. Every passion's heading and copy stay readable over its background on a shared scrim, at every size.
+- **Source:** [Card4] item 5 "foreground text/chips must stay readable"; section 26.4.
+- **Acceptance:** for each subsection: `.p-fore` computed `backgroundColor === "rgba(22, 36, 28, 0.86)"`; `.p-title` and `.p-copy` `color === "rgb(248, 250, 244)"`; `.p-title` `fontFamily` starts with `"Fraunces"`; `.passion` computed `gridTemplateColumns` is a single track (not `"none"`). At 1440×900, 390×844 and 320×568 after "Scroll to" each subsection: `.p-title.scrollWidth <= .p-title.clientWidth + 1`; the `.p-fore` rect has `left >= 0` and `right <= innerWidth`. The contrast floor is fixed by these values (9.89:1 worst case, section 26.4), so the computed-value checks are the test.
+- **Edge cases:** a missing Fraunces falls back to Georgia and still fits at 320; the panel never takes the background's `pointer-events:none`; long placeholder copy wraps inside the panel.
+- **Resources:** `intro.html` CSS.
+
+### R52. Only on-screen backgrounds run, and nothing loads before its subsection is near.
+- **Source:** [Card4] item 3 "lazy-load/defer-until-visible"; section 26.3, 28.3.
+- **Acceptance:** motion allowed. Open at techie, wait 3000ms: Assets has 0 entries. Scroll to gamer, wait 1500ms: Assets includes `gamer/borderlands.mp4` and `gamer/borderlands.jpg` and no other `.mp4`; exactly one `L` video has `paused === false`. Scroll to photographer, wait 1000ms: every `L` video has `paused === true`. Scroll to techie, then record every `.ph` inline `transform`, wait 4000ms: unchanged. Open at photographer, wait 3000ms: Assets has no `gamer/` entry. `grep -cE "https?://[^\"' ]*(giphy|tenor|youtube|ytimg|twimg)" intro.html` = 0, and every media URL that act four requests is relative and starts with `assets/passions/`.
+- **Edge cases:** a fast flick past gamer may start loading clip 0 but must leave every video paused within 1000ms; `document.visibilityState` hidden (CDP `Emulation.setFocusEmulationEnabled` plus a `visibilitychange` dispatch, or a background tab) pauses videos and the shuffle; at no time are more than two videos playing.
+- **Resources:** passions script (IntersectionObserver, visibility handler).
+
+### R53. One "Pause motion" control stops every self-moving background in act four.
+- **Source:** [WCAG] 2.2.2; section 26.5.
+- **Acceptance:** motion allowed. Open at gamer, wait 1500ms: `#passions-motion` is a `BUTTON` with `type="button"`, `textContent === "Pause motion"`, computed `position === "fixed"`, height ≥ 44px, and `document.elementFromPoint` at its center returns it at each of the three subsections. Click it: within 300ms every `L` video is paused and its text is `"Play motion"`. Scroll to photographer, record the `.ph` transforms, wait 4000ms: unchanged. Click again: within 4000ms at least one `.ph` transform changes and the text is `"Pause motion"`. Open at techie and click the toggle at t ≈ 800ms: within 200ms every `#circuit path` has `parseFloat(getComputedStyle(p).strokeDashoffset) === 0`. After the first Tab inside act four, `document.activeElement.id === "passions-motion"`.
+- **Edge cases:** paused stays paused while scrolling between subsections; Enter and Space both toggle; reload resets to playing and `localStorage.length` and `document.cookie` are unchanged; the focus outline shows on `:focus-visible` (`outlineStyle !== "none"`).
+- **Resources:** `intro.html` markup and passions script.
+
+### R54. The techie background is a generated SVG circuit board: traces on a grid with 45° and 90° bends, a pad at each end, in leaf and moss on ink.
+- **Source:** [Nick-D] "a circuit board pattern/design"; [Card4] item 2; sections 27.1 to 27.3.
+- **Acceptance:** open at techie: `#circuit` is an inline `svg` inside `.p-bg[aria-hidden="true"]` with `viewBox === "0 0 " + L.clientWidth + " " + innerHeight`; `#circuit path` count is between 60 and 140 at 1440×900 and between 24 and 60 at 390×844; `#circuit circle` count is exactly twice the path count; every path has `pathLength="1"` and a `d` of the form `M x,y L x,y …` where every segment's `dx`, `dy` are both multiples of the grid pitch (28, or 22 under 560px) and are either axis-aligned or `|dx| === |dy|`; computed path `stroke === "rgb(207, 226, 166)"`, `opacity === "0.42"`, `strokeWidth === "1.5px"` (1.25px at 390); loading the same viewport twice gives an identical `#circuit` `innerHTML`; `performance.measure` around generation (`circuit-gen`) is under 50ms. `grep -cE "<canvas|<script[^>]+src=" intro.html` = 0.
+- **Edge cases:** resizing from 1440×900 to 390×844 regenerates (`viewBox` changes, pitch becomes 22); 320×568 still gets at least 20 traces; a resize after the draw shows the new board complete, not undrawn.
+- **Resources:** passions script (`buildCircuit`), `intro.html` CSS.
+
+### R55. The board draws itself once, left to right, finishing in under 4 seconds, then holds still.
+- **Source:** [Nick-D] "draw itself across the screen"; section 27.4.
+- **Acceptance:** motion allowed, open at techie at t = 0 (read `strokeDashoffset` with `parseFloat`): at t ≈ 400ms at least 5 paths have an offset strictly between 0 and 1, and the mean start x of paths at offset 1 is greater than the mean start x of paths below 1 (left goes first); at t ≈ 4600ms every path's offset is 0, `#passions-techie` has class `is-drawn` and not `is-drawing`, and `document.getAnimations().filter(a => a.animationName === "trace").length === 0`. Scroll to gamer and back: no `trace` animation starts again. Back, then click the `techie` chip again: the draw runs again (`trace` animations exist at t ≈ 400ms).
+- **Edge cases:** opening at gamer and scrolling up to techie starts the draw then, not at open; reduced motion is R62; the motion toggle finishes it (R53).
+- **Resources:** `intro.html` CSS (`trace`, `pad-in`), passions script.
+
+### R56. Six gameplay clips, one per game Nick listed, are sourced, documented and within budget.
+- **Source:** [Nick-D] "gifs of gameplay from some of my favorite games (sourced from the web)… borderlands, Pokemon series games, Fire emblem, Smash bros, Destiny, Baldur's gate. You source them."; sections 28.3, 28.5 to 28.7.
+- **Acceptance:** `assets/passions/gamer/` contains `borderlands`, `pokemon`, `fire-emblem`, `smash-bros`, `destiny`, `baldurs-gate` as both `.mp4` and `.jpg` (or `.jpg` only for a game documented as poster-only in `SOURCES.md`), plus `SOURCES.md`. For each `.mp4`: `ffmpeg -i <f> 2>&1` shows `Video: h264` and no `Audio:` line, a width ≤ 960 and a duration from 3 to 8 seconds; `stat -f%z` ≤ 921600. For each `.jpg`: `stat -f%z` ≤ 61440. `du -ck assets/passions/gamer/*.mp4 assets/passions/gamer/*.jpg | tail -1` ≤ 5760. `python3 docs/tools/flashcheck.py <f>` prints `PASS` for every `.mp4`. `SOURCES.md` has 6 data rows, each with a URL starting `https://`, an official `yes` or `no`, a retrieved date and a flash check of `PASS`, and contains the removal recipe line from 28.6. The build handoff lists every `official: no` row and every poster-only game.
+- **Edge cases:** no file under `assets/` is over 1,000 KB (`find assets -size +1000k` prints nothing); no clip shows a streamer face-cam, watermark or anime footage (checked by an image look at each poster, noted in the handoff); a clip that fails the flash check is not committed.
+- **Resources:** `assets/passions/gamer/`, `docs/tools/flashcheck.py`, web sourcing.
+
+### R57. Gamer plays one full-screen clip at a time and crossfades to the next game every 7 seconds, in Nick's order.
+- **Source:** [Nick-D] "a full screen loop of gifs of gameplay"; sections 28.1 to 28.3.
+- **Acceptance:** motion allowed, 1440×900, open at gamer: within 1500ms exactly one `.g-clip.is-on`, it is playing, its `currentSrc` ends `borderlands.mp4`, its rect covers the subsection (width ≥ `innerWidth`, height ≥ `innerHeight`), and `objectFit === "cover"`, `muted === true`, `loop === true`, `playsInline === true`; `L.querySelectorAll('video').length === 2`; `.g-dim` `backgroundColor === "rgba(22, 36, 28, 0.55)"`. At t ≈ 8.5s the playing `is-on` clip is `pokemon.mp4` and `#g-credit` contains `CLIPS[1].title`. Sampling every 500ms for 45s: the `is-on` sequence follows `borderlands, pokemon, fire-emblem, smash-bros, destiny, baldurs-gate, borderlands`, and no sample has more than two playing videos. **Save-Data:** with `Page.addScriptToEvaluateOnNewDocument` defining `navigator.connection` as `{saveData:true}`, open at gamer and wait 9s: Assets has no `.mp4` and `#g-posters`'s `backgroundImage` has changed at least once. **Autoplay blocked:** with `HTMLMediaElement.prototype.play` stubbed to return `Promise.reject(new DOMException('', 'NotAllowedError'))`, open at gamer: a poster is visible and there are zero `Runtime.exceptionThrown`.
+- **Edge cases:** a missing clip (served copy with one `.mp4` renamed) is skipped and the rotation continues with zero exceptions; a slow clip (CDP network throttling to "Slow 3G") never shows a black frame (the poster is under it); Back mid-crossfade leaves no playing video.
+- **Resources:** passions script (`CLIPS`, rotation), `intro.html` CSS.
+
+### R58. The gamer background always shows the exact disclaimer and names the game on screen.
+- **Source:** [Nick-D] "We will need to include a disclaimer that I don't own any of the background art on that one."; [Card4] item 3; section 28.4.
+- **Acceptance:** `#g-note`'s first text node is exactly `Game footage shown for fun. I don't own any of it. All rights belong to the games' developers and publishers.` (U+0027 apostrophes); `#g-note` is inside `#passions-gamer`, not inside `.p-bg` and has no `aria-hidden` ancestor; computed `fontFamily` starts with `"IBM Plex Mono"`, `fontSize === "13px"`, `color === "rgb(248, 250, 244)"`, `backgroundColor === "rgba(22, 36, 28, 0.86)"`. After "Scroll to gamer" at 1440×900, 768×1024, 390×844, 320×568 and 844×390: its rect is inside the viewport, does not intersect the `.p-fore` rect, and `elementFromPoint` at its center returns `#g-note` or a descendant, in each of these states: playing, paused (R53), reduced motion (R62), Save-Data (R57). `#g-credit` text starts with `Now showing: ` and has `aria-hidden="true"`; CDP `Accessibility.getFullAXTree` has a text node containing `I don't own any of it` and one containing all six `CLIPS` titles. `document.querySelectorAll('#passions-techie .g-note, #passions-photographer .g-note').length === 0`.
+- **Edge cases:** no `aria-live` on `#g-note` or anything inside it; the disclaimer still shows when every clip has failed; the text wraps, never truncates (no `text-overflow`, no `overflow:hidden` on it).
+- **Resources:** `intro.html` markup and CSS, passions script.
+
+### R59. Photographer ships as a visibly marked placeholder scaffold until Nick's photos arrive.
+- **Source:** [Nick-D] "I will provide photos… I'll send photos in a later message"; [Card4] "clearly mark it incomplete pending real photos"; section 29.4.
+- **Acceptance:** `grep -c "TODO(photos)" intro.html` ≥ 2; the passions script contains `var PHOTOS = [];`. Open at photographer: 15 `.ph` frames at 1440×900, 12 at 390×844, 10 at 844×390; every frame has `data-placeholder="true"` and a label matching `/^photo \d+ · pending$/`; `#ph-box img` count is 0; `.ph-pending` is visible with text exactly `Placeholder frames. Nick's photos are on the way.`; each frame's fill color is one of the six token colors (`rgb(47, 91, 68)`, `rgb(126, 156, 96)`, `rgb(46, 74, 107)`, `rgb(176, 112, 58)`, `rgb(59, 82, 69)`, `rgb(110, 130, 112)`). `git ls-files assets/passions/photos` prints nothing. Assets has no `photos/` entry.
+- **Edge cases:** no stock or royalty-free image is committed anywhere (`git diff --name-only 560f493..HEAD -- '*.jpg' '*.jpeg' '*.png' '*.webp'` lists only `assets/passions/gamer/*.jpg`); the build handoff says in words that photographer is a placeholder pending Nick's photos.
+- **Resources:** `intro.html`, passions script.
+
+### R60. The frames form a messy, overlapping collage that covers the screen and idly swaps two frames every 3.2 seconds.
+- **Source:** [Nick-D] "a messy collage that idly shuffles around"; sections 29.2, 29.3.
+- **Acceptance:** motion allowed, open at photographer: at least 80% of `.ph` frames have a nonzero rotation and every rotation is within ±8° (parsed from the computed matrix); every `.ph` has computed `transitionDuration === "1.2s"` and `transitionProperty === "transform"`. Coverage test (temporarily set `pointer-events:auto` on `#ph-box` and every `.ph`; sample a 12 × 8 grid of points across the subsection with `document.elementsFromPoint`): at least 0.85 of points hit a frame at t = 0, t = 10s and t = 30s, at 1440×900 and 390×844. Between t = 0 and t = 10s, from 4 to 8 frames change transform (about three swaps). `L.scrollWidth <= L.clientWidth` throughout. A reload at the same size gives the same initial transforms.
+- **Edge cases:** the shuffle stops when the subsection is inactive, paused or the tab is hidden (R52, R53); a resize across 560 or 900 wide re-lays the grid with the new frame count; frames never cover the motion toggle or the panel (both have a higher `z-index`).
+- **Resources:** passions script (collage, shuffle), `intro.html` CSS.
+
+### R61. BLOCKED on Nick's photos (follow-up card, not t_24e05978): real photos replace the placeholders, resized and stripped of location data.
+- **Source:** [Nick-D] "I will provide photos"; section 29.5.
+- **Acceptance (once photos exist):** each `assets/passions/photos/NN.jpg` has a long edge ≤ 1000 (`sips -g pixelWidth -g pixelHeight`), size ≤ 163840 bytes, and `LC_ALL=C grep -c Exif <f>` = 0 (EXIF, which carries GPS, starts with the bytes `Exif`); `du -ck assets/passions/photos/*.jpg | tail -1` ≤ 2400; `PHOTOS` lists every file; open at photographer: every frame contains an `img` with `alt=""`, `decoding="async"`, computed `objectFit === "cover"` and `naturalWidth > 0`; `grep -cE "TODO\(photos\)|data-placeholder|ph-pending|· pending" intro.html` = 0; Assets has no `photos/` entry before photographer is near; R60's coverage test still passes.
+- **Edge cases:** HEIC input converts via `sips` first; portrait and landscape both crop cleanly into the 4:5 frame; a corrupt file leaves its frame showing the card color with zero exceptions; fewer photos than frames repeat in order.
+- **Resources:** `assets/passions/photos/`, passions script. Blocked until Nick sends photos.
+
+### R62. Reduced motion: the board appears complete, the gamer clips don't autoplay, and the photos sit still in a neat grid.
+- **Source:** [Card4] item 5; [WCAG] 2.2.2 and 2.3.1; section 30.2.
+- **Acceptance:** with `prefers-reduced-motion: reduce` emulated. Open at techie: within 100ms every `#circuit path` offset is 0 and every `#circuit circle` opacity is `"0.7"`; `L.getAnimations({subtree:true})` contains no `CSSAnimation`; `getComputedStyle(L).opacity === "1"` at 50ms (no fade). Open at gamer and wait 5000ms: Assets has no `.mp4`; `#g-posters` shows 6 tiles (3 columns at 1440×900, 2 at 390×844); `.g-dim` present; `#passions-motion` text is `"Play motion"`; the disclaimer passes R58. Click the toggle: within 1500ms one video is playing. Open at photographer: every `.ph` rotation is 0, no two `.ph` rects overlap, and no `.ph` transform changes over 8000ms. Switching emulation from no-preference to reduce while gamer is playing pauses every video within 500ms and shows the posters.
+- **Edge cases:** the skip link, Back and the R45 checks for act three still pass; no WAAPI animation in act four animates anything but `opacity`.
+- **Resources:** `intro.html` CSS, passions script.
+
+### R63. Screen readers and keyboard users get three clean headings, the disclaimer and the toggle, and nothing from the backgrounds.
+- **Source:** [Card4] item 5; section 30.3.
+- **Acceptance:** open at techie; CDP `Accessibility.getFullAXTree` has a `region` named `Passions`, three `heading` level 2 nodes named `techie`, `gamer`, `photographer`, a `button` named `Pause motion`, the disclaimer text, and no `video`, `image`, `graphics-document` or `svg`-role nodes from inside any `.p-bg`. `document.activeElement.id === "pt-title"`. Tab once: focus on `#passions-motion`. Shift+Tab repeatedly reaches the skip link, which `elementFromPoint` confirms is on top. While act four is open, `document.querySelector('main').inert === true` and `document.getElementById('nerd').inert === true`. After Back, focus is on the chip that opened act four.
+- **Edge cases:** no element inside `.p-bg` is focusable (`L.querySelectorAll('.p-bg [tabindex], .p-bg a, .p-bg button, .p-bg video[controls]').length === 0`); VoiceOver reads the headings without "dimmed".
+- **Resources:** `intro.html`.
+
+### R64. All three backgrounds work at desktop, tablet, phone and landscape-phone sizes with no horizontal overflow.
+- **Source:** [Card4] item 6; [Nick] original brief "desktop and mobile friendly"; section 30.1.
+- **Acceptance:** at 1440×900, 768×1024, 390×844, 320×568 and 844×390, after "Scroll to" each subsection: `document.documentElement.scrollWidth <= innerWidth`, `L.scrollWidth <= L.clientWidth`, the subsection's `offsetHeight >= innerHeight`, the panel and the motion toggle are inside the viewport and don't intersect, and (gamer) the disclaimer is inside the viewport. `grep -c "dvh" intro.html` = 0. `env(safe-area-inset-bottom)` appears in the `.g-note` rule and `env(safe-area-inset-top)` in the `.p-motion` rule.
+- **Edge cases:** rotating a phone mid-act regenerates the board and re-lays the collage; hover-only styles stay under `@media (hover:hover)`; iOS URL-bar changes don't resize the subsections (`svh`).
+- **Resources:** `intro.html` CSS, passions script.
+
+### R65. Palette, fonts, script budget and file footprint hold, and nothing earlier regresses.
+- **Source:** R31, R49; section 25.3.
+- **Acceptance:** the R31 hex grep returns the same set as at 560f493 (**no new hex**); the Google Fonts URL is unchanged; `grep -c "<script" intro.html` = 3 and `grep -cE "<script[^>]+src=" intro.html` = 0; the main inline script is under 345 lines and `<script id="passions-js">` is under 280 lines; `grep -ci "preventDefault" intro.html` = 0; `git diff --name-only 560f493..HEAD` lists only `intro.html`, `BACKLOG.md`, files under `docs/` and files under `assets/passions/`; `du -sk assets/passions` ≤ 5800 before photos. All acceptance checks of R1 to R41 and R44 to R49 pass again with the 25.3 amendments (R42 is replaced by R50; R43's file rule is amended).
+- **Edge cases:** no new font, CSS or JS files; no third-party code or hotlinked media; act three's glitch, timings, Back behavior and reduced-motion layout are unchanged.
+- **Resources:** `intro.html`; `index.html` (read-only).
+
+### 31.1 Deployment and build
+
+Unchanged from sections 8, 18.1 and 24.1: **not Docker**, by the same justified exception (static GitHub Pages site, nothing to containerize, production deploy is a push to `main`, which stays forbidden). Local preview `python3 -m http.server 8000` from the repo root on `feature/intro-experience`. Demo URLs: `http://localhost:8000/intro.html#passions-techie`, `#passions-gamer`, `#passions-photographer`, or `#nerd`, then scroll and tap a chip. No build step. Media conversion uses the ffmpeg already on this Mac (28.3); nothing new to install. The build card may push `feature/intro-experience` to origin.
+
+### 31.2 Flags for Nick (addendum 3)
+
+1. **C1, copyright risk on the gamer clips (the big one).** Short loops of game footage on a public site are copies of the publishers' work. Your disclaimer shows good faith but doesn't grant rights, and fair use is a case-by-case defense, not a permission. GIPHY's own terms limit its content to personal, non-commercial use. The realistic worst case is a DMCA notice to GitHub, which gives about one business day to remove the clips before it disables the whole repo, taking nickpings.com down. Half your list is Nintendo-family IP. The build goes ahead as you asked, with official-channel sourcing preferred, on-screen credits and a five-minute removal recipe. Worth deciding before this merges to `main`. A lower-risk path later: clips you record yourself (section 28.8).
+2. **C2, "gifs" will be silent looping videos.** They look the same, they're several times smaller, and they can be paused, which accessibility needs.
+3. **C3, disclaimer wording.** "Game footage shown for fun. I don't own any of it. All rights belong to the games' developers and publishers." Plus a "Now showing" credit line. Change freely.
+4. **C4, placeholder copy.** Each passion panel says "More on this soon." until you write what you want there. The photographer collage shows labeled color frames until your photos arrive.
+5. **C5, what to send for photos.** 10 to 15 photos fills the collage (15 show on a desktop). Any mix of portrait and landscape. Send originals: they'll be resized and stripped of location data before they go public.
+6. **C6, a "Pause motion" button.** Act four has one, top right. Accessibility rules require a way to stop motion that runs more than five seconds. Reduced-motion visitors start paused.
+7. **C7, weight.** About 5.8 MB of clips added to the repo, loaded only when someone scrolls to gamer, one clip at a time. About 2.4 MB more once photos land. No cost, no new services.
+8. **C8, real-device check.** iPhone Low Power Mode can block autoplay (the posters show instead), and iOS Safari's handling of inline video in a scrolling overlay is worth two minutes on your phone. Emulation can't prove either.
+
+No new cost, services, infrastructure or recurring manual steps.
+
+### 31.3 Feasibility (spike method) and risks
+
+I ran a throwaway spike: one HTML page with the `#passions` layer, three subsections, the circuit generator and draw, an A/B video rotation with test clips, and the jittered-grid collage with swap shuffle. I served it locally on port 8012 and measured it in headless Chromium 145 over CDP at 1440×900, 390×844 and 320×568, with image checks of five screenshots. I also tested ffmpeg encoding and the flash check on synthetic clips. It lived in my scratch folder and is not in the repo. Every value it validated is written into sections 26 to 29.
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| F16 | Given the 27.2 generator, when run at 1440×900, then it builds a board fast and CSS draws it left to right in under 4s. | VALIDATED | Generation 12ms; 72 traces and 144 pads; complete traces at 0.2s / 2s / 4s: 0 / 39 / 72; image check of the 1s frame: "a left-to-right drawing reveal". |
+| F17 | Given the board behind the scrim panel, when viewed at 1440×900 and 390×844, then it reads as a circuit board and the text stays readable. | VALIDATED | Image check: "Yes, clearly… stylized PCB traces with pads", density "balanced", heading "excellent readability". Found the mobile panel overflow, fixed with `grid-template-columns:minmax(0,1fr)` (26.2) and rechecked: panel inside 390 and 320. |
+| F18 | Given two muted, looping, inline videos in a fixed scrolling layer with an IntersectionObserver rooted on it, when gamer scrolls in and out, then one clip plays, crossfades at 6 to 7s, and both pause off-screen. | VALIDATED (Chromium). PARTIAL for iOS Safari | Clip 0 playing at 1.5s with `readyState` 4; after the swap clip 1 playing and clip 0 paused at opacity 0; both paused after scrolling to photographer. iOS not tested (Flag C8). |
+| F19 | Given the jittered grid and swap shuffle, when it runs 60 swaps, then coverage stays at least 0.85. | VALIDATED | Coverage 0.91 → 0.94, 0.94, 0.90 at 1440×900 and 0.97 → 0.93, 0.91, 0.95 at 390×844. The fully random first version clumped (image check), so it was replaced. |
+| F20 | Given the `.86` ink scrim, when text sits over the brightest possible pixel, then contrast stays at AA or better. | VALIDATED | WCAG luminance math: `--card` 9.89:1, `--rule` 6.69:1, `--leaf` 7.47:1 on the scrim over white; `--card` alone on the `.55` dim over white would be only 3.53:1, which is why the text gets its own scrim. |
+| F21 | Given `flashcheck.py`, when run on a 6 Hz strobe and a calm clip, then it fails the strobe and passes the calm clip. | VALIDATED as a heuristic; PARTIAL as a WCAG proof | Strobe: 6 flashes/s, FAIL. Calm: 0, PASS. Whole-frame average only (28.7). |
+| F22 | Given real gameplay at 960×540, 6s, CRF 28, then it fits 900 KB. | PARTIAL | A synthetic 960×540 5s pattern encoded to 483 KB, a fractal one to 773 KB. Real high-motion gameplay may need CRF 30 to 32 or 854 wide (28.3). Proven only on the build card. |
+
+Risks:
+
+- **Copyright (Flag C1).** The biggest risk in this addendum, and the only one that could take the whole site down. Mitigated by sourcing order, credits, manifest and graceful removal; not removable while third-party footage is used.
+- **Weight on phones.** Mitigated: nothing loads until gamer is near, one clip at a time, Save-Data gets posters only, Back frees the decoders.
+- **Third-party flashing.** Mitigated by the flash check, the dim overlay, curation, the toggle and reduced motion. The check's whole-frame limit is accepted.
+- **Source quality.** Many GIPHY GIFs are 480px wide and soft at full screen. The dim hides some of it; prefer 640px+ sources.
+- **Placeholder shipped as final.** Mitigated by R59's visible labels and copy, and R61 being a separate, blocked card.
+- **Scope creep into passion content.** Ruled out in 25.2 and 31.4.
+
+### 31.4 Non-goals for addendum 3 (do not build)
+
+- Written content about each passion beyond the one placeholder line per panel; links, galleries, captions, lightboxes or modals in act four.
+- Tabs, a sub-nav, a scroll-spy, hash updates while scrolling, or any second layer, file or route for the passions.
+- A mosaic of several clips at once; audio; video controls; GIFs as files; a WebM copy; hotlinking or embedding from GIPHY, Tenor, YouTube or any other host; a GIPHY API key or SDK.
+- Stock or royalty-free stand-in photos; any photo of Nick's before he sends it; a photo upload UI.
+- Moving "signal pulses", a looping redraw, or any interaction (hover, click, parallax) on the circuit board; canvas or WebGL.
+- Persisting the motion toggle or anything else (cookies, storage); analytics.
+- Any change to act three's glitch, timings or chips (other than removing the stub description), the fork, the pills, the scroll intro or the research and technology prongs.
+- Any change to `index.html`, the case-study pages, `resume.html`, `README.md`, `CNAME`, `AGENTS.md`. No new HTML, CSS or JS files, libraries, CDN scripts or build tooling. No push to or merge into `main`, and no PR.
+
+**Authorized boundaries (build card t_24e05978):** edit `intro.html` on `feature/intro-experience` in `~/Documents/github/portfolio`; add files under `assets/passions/gamer/` and save `docs/tools/flashcheck.py`; update `BACKLOG.md` rows for this work; web search and browser tools to source clips; the local ffmpeg for conversion; commit and `git push origin feature/intro-experience`; run or reuse the preview server on port 8000.
+
+**Forbidden actions:** editing any other site file; adding photos or stock images; hotlinking media; pushing any other branch; committing to or merging into `main`; installing packages or adding services beyond the preview server.
+
+### 31.5 Follow-ups (logged in BACKLOG.md, not requirements)
+
+- **Photographer photos (BLOCKED on Nick):** swap the placeholder frames for Nick's photos per R61 once he sends them.
+- **Passion content:** what Nick wants to say in each of the three panels.
+- **Lower-risk gamer footage:** replace sourced clips with captures Nick records himself, after checking each publisher's fan-content policy (28.8).
+- Optional: a captioned photo gallery behind the collage.
+
+---
+
 ## Research sources
 
 - Josh W. Comeau, "Scroll-Driven Animations": https://www.joshwcomeau.com/animation/scroll-driven-animations/
@@ -1461,4 +2079,9 @@ Risks:
 - MDN, `scroll-timeline` (named scroll progress timelines): https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-timeline
 - MDN, `@property` (registered, animatable custom properties): https://developer.mozilla.org/en-US/docs/Web/CSS/@property
 - MDN, `content` alternative text (`content: "x" / ""`): https://developer.mozilla.org/en-US/docs/Web/CSS/content
+- GIPHY User Terms of Service (content generally for personal, non-commercial use within the Services; no copying or display elsewhere without permission) [GIPHY-ToS]: https://support.giphy.com/hc/en-us/articles/360020027752-GIPHY-User-Terms-of-Service
+- GIPHY Help, "How to Find the Content You Want" (relevant channels shown at the top of search results) [GIPHY-search]: https://support.giphy.com/hc/en-us/articles/360019823451-How-to-Find-the-Content-You-Want
+- GitHub Docs, DMCA Takedown Policy (about one business day to change content, else the repository is disabled) [GitHub-DMCA]: https://docs.github.com/en/site-policy/content-removal-policies/dmca-takedown-policy
+- web.dev, "Replace animated GIFs with video for faster page loads" (3.7 MB GIF to 551 KB MP4; `autoplay loop muted playsinline`) [web.dev-video]: https://web.dev/articles/replace-gifs-with-videos
+- Chrome for Developers, Lighthouse "Use video formats for animated content": https://developer.chrome.com/docs/lighthouse/performance/efficient-animated-content
 - Skill: `tech-viability-and-platform-choice` (cheapest-first platform order: responsive web is sufficient here, no native app question; ADR proportionality; non-goals and edge cases).
