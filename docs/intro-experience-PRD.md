@@ -9,6 +9,7 @@
 - **Addendum (2026-11-12):** sections 13 to 18 and requirements R16 to R32 add the pill-scene polish and the "indulge me" continuation (fork scene). Card t_fb2bf2d9 (PRD addendum), build card t_4749555c (assignee `design`). Where the addendum changes an earlier decision (R10, the section 11 non-goal about "indulge me", the section 4 JS budget, the R14 palette), it says so in section 13.3. Sections 1 to 12 are otherwise unchanged.
 - **Addendum 2 (2026-11-12):** sections 19 to 24 and requirements R33 to R49 add the passion branch intro beat ("I'm. 👏 A. 👏 Nerd. 👏", the scroll-driven "nerd" glitch and takeover, and three stub links: techie, gamer, photographer). Card t_a8f81d69 (PRD addendum), build card t_593e8d60 (assignee `design`). It narrows R26 and R30 to research and technology, raises the R31 script budget to 330 lines, and fixes the one-page constraint for the future passion deep-dives (section 19.3). See section 19.4.
 - **Addendum 3 (2026-11-12):** sections 25 to 31 and requirements R50 to R65 add the passion deep-dive backgrounds: one `#passions` layer with three stacked subsections; techie (a circuit board that draws itself, buildable now), gamer (rotating gameplay clips with a disclaimer, buildable now, copyright risk flagged as C1) and photographer (collage mechanism with marked placeholders; real photos BLOCKED on Nick, R61). Card t_027c5838 (PRD addendum), build card t_24e05978 (assignee `design`). It replaces R42 with R50 and amends R31, R43, R49 and the 24.4 non-goal. See section 25.3.
+- **Addendum 4 (2026-11-12):** sections 32 to 37 and requirements R66 to R79 add the research branch intro beat: the research prong wipes in from the left to an affinity-map board where 12 sticky notes drift in, sort themselves into three pinned clusters (Education, Philosophy, Practice) joined by a self-drawing copper thread, under "Research, sorted." The clusters are stub links reserved for one future shared page (`#research-*`). Card t_b6a0515b (PRD addendum), build card t_f25a55e9 (assignee `design`). It narrows R26, R30 and R33 to technology, extends the router (R78) and allows a fourth inline script. See section 32.4.
 
 ---
 
@@ -2069,6 +2070,581 @@ Risks:
 
 ---
 
+# Addendum 4: research branch, intro beat (affinity map) (card t_b6a0515b)
+
+Added 2026-11-12 by product. Builds on `intro.html` at commit 845f15a (passion branch complete: act three, act four with all three backgrounds and Nick's photos). Same harness, tokens, fonts and conventions as sections 1 to 31 unless a line below says otherwise. Build card: t_f25a55e9 (assignee `design`). This addendum is sections 32 to 37 and requirements R66 to R79. Spec only: this card changes no code.
+
+## 32. Source, scope and what it changes
+
+### 32.1 Source brief (Nick, verbatim, via card t_b6a0515b)
+
+> For research, we will break it down into three sections as well. Education, philosophy, and practice. We need an engaging and on theme (though probably more professional) way of guiding the user down those three paths.
+
+Maestro offered three directions. Nick replied "1" to this one:
+
+> Affinity map / corkboard assembly: sticky notes drift onto the screen and self-organize into three labeled clusters — Education, Philosophy, Practice — connected by string, like a live research synthesis board. This is strong because it's literally what Nick does for a living (UX research/affinity mapping) — it doubles as a subtle flex, not just a transition effect.
+
+Citation shorthand added: **[Nick-E]** = Nick's brief above. **[Pick-1]** = the direction Nick chose. **[Card5]** = card t_b6a0515b's body (scope, the seven required items, done-when). **[Spike4]** = the throwaway prototype I ran for this addendum; results in 37.3.
+
+### 32.2 Scope boundary: the three clusters are stubs
+
+This pass builds **from the research prong up to and including three labeled, clickable-looking clusters**: the entry transition, the sticky-note assembly, the connecting thread, and the three cluster links `Education`, `Philosophy`, `Practice`. **Education, Philosophy and Practice are stubs for this pass. What is behind each cluster is out of scope for this pass.** No education, philosophy or practice content is specified or built here. Each cluster is an honest stub (R73), exactly as the passion branch's techie, gamer and photographer chips were before addendum 3 (R42). The content gets its own PRD addendum and build card later. The `technology` prong stays a stub (R26).
+
+### 32.3 Do Education, Philosophy and Practice share one page? (decided here, flagged as D1)
+
+Nick said "contained on one page" for the passions (19.3). He did not say it for research. **My recommendation: yes, one shared page, the same shape as `#passions`.**
+
+| Option | Tradeoff |
+|---|---|
+| A. Three separate layers or routes, one per cluster | Three times the router, Back and focus code; three entry transitions to design; a visitor who wants all three has to bounce back to the board twice. Rejected. |
+| **B. One page, three stacked subsections in Nick's order** | Education, then Philosophy, then Practice reads as one story (where I learned it, what I believe, how I do it). It reuses the exact act-four mechanics the passion branch already proved (one layer, one router branch, Back returns to the board). On a phone it is one continuous scroll. **Chosen.** |
+
+Decided shape, so the links can be wired to their final targets today (same move as 19.3):
+
+| Thing | Decision |
+|---|---|
+| The page | One future `<section id="findings">` in `intro.html`, after `#research`, using the fixed-layer pattern of act four (z-index 17). Built by a later card, not this one. |
+| Its parts | Three subsections, ids `research-education`, `research-philosophy`, `research-practice`, in that order, on one scroll. |
+| The links | Real `<a>` elements with `href="#research-education"`, `#research-philosophy`, `#research-practice`. Set **now** and never changed by the next card. |
+| Routing | The `#research-` hash prefix is reserved now. Today the router answers it with the stub (R73). The next card changes only that router branch, adds `#findings`, and deletes the stub line and the `aria-describedby`. |
+
+The container is `findings`, not `research-…`, so the reserved prefix only ever means "a subsection". If Nick prefers three separate pages, it is a three-href change. That is Flag D1, not a requirement.
+
+### 32.4 What this changes in sections 1 to 31
+
+| Earlier decision | Change |
+|---|---|
+| R26: research and technology prongs are stubs | **Narrowed.** `research` now starts the research beat (R66). `technology` stays a stub exactly as R26 says. The `research` prong loses `aria-describedby="fork-soon"`. |
+| R30 and R33: research and technology carry "Coming soon." and write the R26 line | Now only `technology` does. R33's check "research and technology still have `aria-describedby`" reads "technology still has". |
+| R27, R48, R50: router with `#where`, `#nerd`, `#passions-*` | Two more hash families: `#research` and `#research-*` (R78). Act two stays open underneath both. |
+| R31, R49, R65: script budget | The main inline script changes by two lines (34.6) and stays under 345. A new **fourth** block, `<script id="research-js">`, under 200 lines, holds the research beat. So `grep -c "<script" intro.html` becomes **4** (R65 said 3). Still no `src=` scripts, no libraries. |
+| R65: no new hex, same fonts | **Unchanged.** Every color below is an existing token or an `rgba()` of `--ink`. No new font family, no new weight request (EB Garamond italic 500 is already in the section 1 URL). |
+| 18.4 and 24.4 non-goals ("anything a prong leads to") | Narrowed: the research prong's intro beat is in scope. Everything behind the three clusters stays a non-goal (37.4). |
+| Section 7 harness server line | For this addendum, `python3 docs/tools/serve.py 8000` (the byte-range server the iOS clip fix introduced). `python3 -m http.server 8000` also works, since this beat loads no media. |
+
+### 32.5 Map to the card's seven required items
+
+| Card item | Decided in |
+|---|---|
+| 1. Entry transition, prong order, reuse of the wipe | 33.2, R66, R67 |
+| 2. Assembly sequence: notes, drift, clustering, thread, final clickable state | 34, R69, R70, R71, R72 |
+| 3. Tone and typography, concrete | 35, R68 |
+| 4. Stub behavior | 36.1, R73, R74 |
+| 5. Reduced motion | 36.3, R75 |
+| 6. Mobile and desktop | 36.2, R76 |
+| 7. Screen readers | 36.4, R77 |
+
+---
+
+## 33. Structure and entry
+
+### 33.1 Structure
+
+```html
+<!-- after </section> of #passions, before the main inline script -->
+<section class="act-research" id="research" aria-labelledby="research-title" hidden>
+  <div class="board" id="board">
+    <div class="board-head">
+      <span class="board-meta" aria-hidden="true">Synthesis · 12 notes · 3 themes</span>
+      <h2 id="research-title" tabindex="-1">Research, sorted<span class="dot">.</span></h2>
+    </div>
+    <div class="clusters" role="group" aria-labelledby="research-title">
+      <a class="cluster" data-theme="education" href="#research-education" aria-describedby="board-soon">
+        <span class="c-head"><span class="c-theme" aria-hidden="true">Theme 01</span><span class="c-label">Education<span class="c-arrow" aria-hidden="true">&rarr;</span></span></span>
+        <span class="c-notes" aria-hidden="true">
+          <span class="note"><span class="note-face">coursework</span></span>
+          <span class="note"><span class="note-face">statistics</span></span>
+          <span class="note"><span class="note-face">reading list</span></span>
+          <span class="note"><span class="note-face">mentors</span></span>
+        </span>
+      </a>
+      <a class="cluster" data-theme="philosophy" href="#research-philosophy" aria-describedby="board-soon">
+        <span class="c-head"><span class="c-theme" aria-hidden="true">Theme 02</span><span class="c-label">Philosophy<span class="c-arrow" aria-hidden="true">&rarr;</span></span></span>
+        <span class="c-notes" aria-hidden="true">
+          <span class="note"><span class="note-face">ask why</span></span>
+          <span class="note"><span class="note-face">evidence first</span></span>
+          <span class="note"><span class="note-face">bias check</span></span>
+          <span class="note"><span class="note-face">plain words</span></span>
+        </span>
+      </a>
+      <a class="cluster" data-theme="practice" href="#research-practice" aria-describedby="board-soon">
+        <span class="c-head"><span class="c-theme" aria-hidden="true">Theme 03</span><span class="c-label">Practice<span class="c-arrow" aria-hidden="true">&rarr;</span></span></span>
+        <span class="c-notes" aria-hidden="true">
+          <span class="note"><span class="note-face">interviews</span></span>
+          <span class="note"><span class="note-face">usability tests</span></span>
+          <span class="note"><span class="note-face">surveys</span></span>
+          <span class="note"><span class="note-face">synthesis</span></span>
+        </span>
+      </a>
+    </div>
+    <p class="board-status" id="board-status" role="status" aria-live="polite"></p>
+    <span class="vh" id="board-soon">Coming soon.</span>
+    <svg class="threads" id="threads" aria-hidden="true" focusable="false"><path pathLength="1"/><path pathLength="1"/></svg>
+  </div>
+</section>
+```
+
+- **Each cluster is one link.** The whole cluster (header note plus its four notes) is the `<a>`, so the hit area is the whole group. Its accessible name is only the visible label (`Education`), because the theme number, the arrow and the four notes are all `aria-hidden` (36.4).
+- **Layer:** `.act-research { position:fixed; inset:0; z-index:16; background-color:var(--paper); overflow-y:auto; overscroll-behavior:contain; }`, `.act-research[hidden]{display:none}`. z-index 16 is act three's tier: research and passion are sibling branches and are never open together. It sits above act two (15) and below the skip link (20). The layer only scrolls if a screen is too short for the board (it fits at every tested size, 37.3).
+- **While open:** `main.inert = true` (already, from act two), act two stays un-hidden underneath with `.fork-scene.inert = true`. The page never sets `overflow:hidden` on `html`/`body` (R3).
+- **State machine** (one variable in `research-js`): `closed → entering → open`, plus `open|entering → closed` on Back.
+- **Class names are new and collision-free.** `grep` on 845f15a finds no existing `.board`, `.cluster`, `.note`, `.c-head` or `.threads` rule. (`.g-note` exists and is unrelated.) Keyframe names are new too: `research-wipe`, `note-drift`, `note-sort`, `head-stick`, `thread-draw`, `board-title-in`. Do not reuse `trace`, `pop` or `beat-in`.
+
+### 33.2 Entry: a wipe in from the left (card item 1)
+
+**Fork order, checked:** research is the **left-hand road** (17.3.2: "Left prong (research)"), and the prong row is `research`, `technology`, `passion`, left to right (R25). The avatar already looks left when research is chosen (17.3.3: `translate(-2px,0)`).
+
+**Decision: the passion branch's wipe, mirrored.** Same single full-screen panel, same 700ms, same 120ms beat for the avatar's glance, same "heavy fly line" easing `cubic-bezier(.7,0,.2,1)`, same hem shadow, but the board slides in **from the left**, so the visitor literally takes the left road. No new transition technique: a wipe is already this intro's "you took a branch" move (20.2), and the curtain stays the red pill's moment.
+
+Times are milliseconds from the research prong's activation (click, tap, Enter or Space). The full beat timeline is in 34.3.
+
+| t (ms) | What happens | Technique |
+|---|---|---|
+| 0 | The existing prong handler sets `last='research'`, the avatar's `data-look="research"` and clears `#fork-status` (unchanged), then returns (34.6). `research-js` takes over: state `entering`, `history.pushState({act:'research'}, "", "#research")`, `L.hidden = false`, `L.scrollTop = 0`, `.fork-scene.inert = true`, `#board-status` cleared, `layout()` (34.5), `.clusters.inert = true`, class `is-entering` on `L`. | JS |
+| 120 to 820 | **The wipe.** `.act-research.is-entering { animation: research-wipe 700ms cubic-bezier(.7,0,.2,1) 120ms both; box-shadow: 18px 0 36px -12px rgba(22,36,28,.45); overflow-y:hidden; }` (inside the motion query, 34.3) and `@keyframes research-wipe { from{transform:translateX(calc(-100% - 48px));} to{transform:none;} }`. The hem shadow sits on the **right**, the leading edge. | CSS |
+| 820 | On `animationend` of `research-wipe`: focus moves to `#research-title` (`focus({preventScroll:true})`), so a screen reader says "Research, sorted., heading level 2" (R77). | JS |
+
+- **No scrolling during the entry:** `overflow-y:hidden` on the layer while `is-entering` (not on `html`/`body`).
+- **Skip (impatient visitors):** same rules as 17.2 and 20.2. From t = 400ms until the end step, a `pointerdown` on `L` or a `keydown` of Escape, Enter or Space calls `finish()` on every animation in `L.getAnimations({subtree:true})` whose timeline is the document timeline, then runs the end step on the next task (`setTimeout(…, 0)`, so Space doesn't also scroll). The 400ms arming delay stops the key that activated the prong from also skipping. Skip fires once.
+
+---
+
+## 34. The board: the affinity-map assembly (card item 2)
+
+### 34.1 What the board is
+
+A UX researcher's synthesis board as it actually looks in 2026: the dotted canvas of a digital whiteboard (FigJam, Miro), with the corkboard part carried by brass pins and one copper thread rather than a literal cork texture. That keeps it inside the site's palette and reads as a working tool, not a crime-show prop (Flag D5).
+
+| Part | Spec |
+|---|---|
+| `.board` | `position:relative; min-height:100svh; overflow:clip; display:grid; grid-template-rows:auto auto auto; align-content:center; justify-items:center; padding:max(env(safe-area-inset-top), clamp(28px,7svh,80px)) var(--pad) calc(clamp(20px,4svh,40px) + env(safe-area-inset-bottom));` |
+| Canvas texture | `background-image: radial-gradient(circle, rgba(22,36,28,.10) 1px, transparent 1.6px); background-size: 24px 24px; background-position: center;` on `--paper`. A dot every 24px, barely there. |
+| Board meta (eyebrow) | `Synthesis · 12 notes · 3 themes`, `aria-hidden`. IBM Plex Mono 500, 12px, `letter-spacing:.14em`, `text-transform:uppercase`, `--ink-soft`, `margin:0 0 10px`. The label a whiteboard frame carries. |
+| Title | `Research, sorted.` (`<h2 id="research-title">`), period `<span class="dot">` in `--moss`. Style in 35. |
+| `.clusters` | `width:100%; max-width:1056px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(24px,3.4vw,48px); margin:clamp(28px,5svh,56px) 0 0;` |
+| Status line | `.board-status { margin:16px 0 0; min-height:1.6em; text-align:center; font-style:italic; font-size:clamp(17px,1.6vw,19px); color:var(--ink-soft); }` (EB Garamond italic, same as `#fork-status`). |
+
+### 34.2 The notes: twelve data notes, three header notes
+
+Affinity mapping has two kinds of note: **data notes** (one observation each) and a **header note** written once a group forms. The board uses both.
+
+**Data notes: exactly 12, four per theme, each with a short text fragment.** Not blank squares: blank squares read as a loading skeleton, and real fragments are what make it read as research (the "flex" in [Pick-1]). The fragments are generic method and mindset words, not claims about Nick's history. They are decorative and `aria-hidden`, and Nick can swap any of them (Flag D3).
+
+| i | Theme | Text | Note color | Final tilt `R[i]` |
+|---|---|---|---|---|
+| 0 | Education | `coursework` | `--leaf` `#CFE2A6` | −2° |
+| 1 | Education | `statistics` | `--leaf` | 1.5° |
+| 2 | Education | `reading list` | `--leaf` | −1° |
+| 3 | Education | `mentors` | `--leaf` | 2.5° |
+| 4 | Philosophy | `ask why` | `--card` `#F8FAF4` | 1° |
+| 5 | Philosophy | `evidence first` | `--card` | −2.5° |
+| 6 | Philosophy | `bias check` | `--card` | 2° |
+| 7 | Philosophy | `plain words` | `--card` | −1.5° |
+| 8 | Practice | `interviews` | `--rule` `#C8D3BE` | −1° |
+| 9 | Practice | `usability tests` | `--rule` | 2° |
+| 10 | Practice | `surveys` | `--rule` | −2° |
+| 11 | Practice | `synthesis` | `--rule` | 1° |
+
+- **One color per theme**, three quiet tints of the site's own greens. During the scatter the colors are mixed, so the sort is legible as "like goes with like" (the whole point of affinity mapping).
+- Note face: `.note-face { display:block; aspect-ratio:1/.82; padding:10px 12px; font-style:italic; font-weight:500; font-size:clamp(14px,1.25vw,18px); line-height:1.2; color:var(--ink); background-image:linear-gradient(to bottom, rgba(22,36,28,.06), rgba(22,36,28,0) 18%); box-shadow: inset 0 0 0 1px rgba(22,36,28,.08), 0 1px 1px rgba(22,36,28,.10), 0 8px 14px -10px rgba(22,36,28,.40); }` (EB Garamond, from `body`). The top gradient is the adhesive strip; the 1px inset line keeps the near-white Philosophy notes visible on paper.
+- Color per theme: `.cluster[data-theme="education"] .note-face{background-color:var(--leaf)}`, `philosophy` → `var(--card)`, `practice` → `var(--rule)`.
+- Final layout per cluster: `.c-notes { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }` (2 × 2 under the header). Each `.note` carries `rotate: var(--r)` (its final tilt, set by `layout()`).
+- Text contrast (WCAG math on the tokens): `--ink` on `--leaf` 11.57:1, on `--card` 15.32:1, on `--rule` 10.37:1.
+
+**Header notes: 3, one per theme, pinned.** These are the clickable labels.
+
+```css
+.cluster{ position:relative; display:block; color:inherit; text-decoration:none;
+  transition:transform .18s cubic-bezier(.22,.7,.2,1); -webkit-tap-highlight-color:transparent; }
+.c-head{ position:relative; display:block; padding:20px 16px 14px; background-color:var(--pine); color:var(--card);
+  box-shadow:0 1px 1px rgba(22,36,28,.12), 0 10px 18px -12px rgba(22,36,28,.5); transition:box-shadow .18s ease; }
+.c-head::before{ content:""; position:absolute; left:50%; top:-5px; width:12px; height:12px; margin-left:-6px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, rgba(248,250,244,.65) 0 1.5px, transparent 2.5px), var(--rec);
+  box-shadow:0 1px 2px rgba(22,36,28,.45); }                                   /* the brass pin */
+.c-theme{ display:block; font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--leaf); }
+.c-label{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-top:4px;
+  font-family:"Fraunces",Georgia,serif; font-weight:600; font-variation-settings:"opsz" 72;
+  font-size:clamp(20px,2.1vw,28px); line-height:1.1; }
+.c-arrow{ display:inline-block; font-family:"IBM Plex Mono",monospace; font-weight:500; font-size:.9em; color:var(--leaf);
+  transition:transform .18s cubic-bezier(.22,.7,.2,1); }
+@media (hover:hover){
+  .cluster:hover{ transform:translateY(-3px); }
+  .cluster:hover .c-head{ box-shadow:0 1px 1px rgba(22,36,28,.12), 0 16px 24px -14px rgba(22,36,28,.6); }
+  .cluster:hover .c-arrow{ transform:translateX(3px); }
+}
+.cluster:focus-visible{ outline:2px solid var(--pine); outline-offset:6px; transform:translateY(-3px); }
+.cluster:focus-visible .c-arrow{ transform:translateX(3px); }
+.cluster:active{ transform:translateY(-1px); }
+```
+
+- Contrast: `--card` label on `--pine` 7.39:1; `--leaf` theme line and arrow on `--pine` 5.58:1; the pine header against paper 6.61:1 (WCAG 1.4.11 non-text contrast for the control's boundary).
+- **Why it reads as clickable:** a solid, raised, high-contrast card with a right arrow, the whole group lifting on hover and on keyboard focus, the arrow nudging forward, `cursor:pointer` from the link. Touch screens have no hover, so the arrow carries the affordance there. An image check of the spike's final frame: "the right arrows suggest navigable cards" [Spike4].
+
+### 34.3 The assembly sequence (exact timeline)
+
+Five movements, all time-based (no scroll), all from the one click. Notes **drift in** unsorted, **hold** a beat as a messy brain dump, **sort** themselves into the three clusters, the header notes **stick on**, then the **thread draws** itself and the title lands.
+
+| t (ms) | Movement | Spec |
+|---|---|---|
+| 120 to 820 | Wipe from the left | 33.2 |
+| 900 to 2360 | **Drift in.** The 12 data notes float onto the board from off-screen, in `ORDER` (themes interleaved), one every 60ms. Each lands at its scatter spot with a long, soft landing and a small tilt settling out. | inner `.note-face`: `note-drift 800ms cubic-bezier(.16,.84,.3,1) var(--dd) both`; `--dd = 900 + ORDER.indexOf(i)*60` |
+| 2360 to 2450 | **Hold.** Twelve mixed-color notes scattered across the board. The "before". | none |
+| 2450 to 3445 | **Sort.** Each note glides from its scatter spot to its slot in its theme's 2 × 2 grid, Education first, then Philosophy, then Practice (80ms apart), notes within a theme 25ms apart. Smooth and deliberate, no bounce. | outer `.note`: `note-sort 760ms cubic-bezier(.6,0,.25,1) var(--sd) both`; `--sd = 2450 + floor(i/4)*80 + (i%4)*25` |
+| 3000 to 3460 | **Name the themes.** Each header note sticks on above its group (a slight press: 1.08 to 1 scale, 6px drop, fade in), left to right, 110ms apart. | `.c-head`: `head-stick 240ms cubic-bezier(.2,.8,.3,1.1) var(--hd) both`; `--hd = 3000 + c*110` |
+| 3400 to 3920 | **Connect them.** The copper thread draws itself pin to pin: Education to Philosophy, then Philosophy to Practice. | `thread-draw 400ms cubic-bezier(.35,.1,.25,1) var(--td) both`; `--td = 3400 + i*120` |
+| 3700 to 4100 | **Title lands.** Board meta and `Research, sorted.` fade up 8px. | `.board-head`: `board-title-in 400ms cubic-bezier(.22,.7,.2,1) 3700ms both` |
+| 4100 | **End step** (on `animationend` of `board-title-in`, or a 4700ms safety timeout, or a skip): `is-entering` removed, state `open`, `.clusters.inert = false`, focus stays on the title (moved there at 820). | JS |
+
+The whole beat is 4.1 seconds, skippable from 0.4s (Flag D6). Nothing moves after the end step: no idle wobble, no looping, so WCAG 2.2.2 needs no pause control and there is nothing that can flash.
+
+```css
+/* === research branch (PRD 33-36) === */   /* ALL research CSS (34.1, 34.2, this block, 36.2) sits between this comment and the end marker */
+@media (prefers-reduced-motion:no-preference){
+  .act-research.is-entering{ animation:research-wipe 700ms cubic-bezier(.7,0,.2,1) 120ms both;
+    box-shadow:18px 0 36px -12px rgba(22,36,28,.45); overflow-y:hidden; }               /* 33.2 */
+  .act-research.is-entering .clusters{ pointer-events:none; }
+  .act-research.is-entering .note       { animation:note-sort 760ms cubic-bezier(.6,0,.25,1) var(--sd) both; }
+  .act-research.is-entering .note-face  { animation:note-drift 800ms cubic-bezier(.16,.84,.3,1) var(--dd) both; }
+  .act-research.is-entering .c-head     { animation:head-stick 240ms cubic-bezier(.2,.8,.3,1.1) var(--hd) both; }
+  .act-research.is-entering .threads path{ stroke-dasharray:1; stroke-dashoffset:1;
+                             animation:thread-draw 400ms cubic-bezier(.35,.1,.25,1) var(--td) both; }
+  .act-research.is-entering .board-head { animation:board-title-in 400ms cubic-bezier(.22,.7,.2,1) 3700ms both; }
+}
+@keyframes research-wipe{ from{ transform:translateX(calc(-100% - 48px)); } to{ transform:none; } }
+@keyframes note-drift{ from{ translate:var(--dx) var(--dy); rotate:var(--dr); opacity:0; } to{ translate:0 0; rotate:0deg; opacity:1; } }
+@keyframes note-sort { from{ translate:var(--sx) var(--sy); rotate:var(--sr); }            to{ translate:0 0; rotate:var(--r); } }
+@keyframes head-stick{ from{ opacity:0; scale:1.08; translate:0 -6px; }                    to{ opacity:1; scale:1; translate:0 0; } }
+@keyframes thread-draw{ to{ stroke-dashoffset:0; } }
+@keyframes board-title-in{ from{ opacity:0; translate:0 8px; } to{ opacity:1; translate:0 0; } }
+/* === end research branch === */
+```
+
+**Why two elements per note.** The outer `.note` owns the sort (scatter spot to slot), the inner `.note-face` owns the drift (off-screen to the scatter spot). Their translations add up, so each note drifts in, rests at its scatter spot (the outer's `backwards` fill holds it there until its sort starts), then sorts. Both use the individual `translate`/`rotate`/`scale` properties, never `transform`, so the cluster's hover and focus `transform` still works on top (the trap 17.3.4 and 22.1 already avoided).
+
+**Base styles are the final state.** All from-states live only in keyframes with `both` fill inside the motion query. When `is-entering` is removed, or under reduced motion, or after a skip, the base CSS already shows every note in its slot with its final tilt, the headers and thread complete, the title visible.
+
+### 34.4 The thread (connecting string)
+
+- **What it connects:** the three header notes' pins, Education to Philosophy to Practice: two segments, one continuous thread. Not one string per note: 12 strings would be a detective wall, and an affinity map groups by proximity, not by string. The thread says "these three themes are one body of work".
+- **Look:** `.threads { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:3; overflow:visible; }` and `.threads path { fill:none; stroke:var(--rec); stroke-width:2; stroke-linecap:round; }` (`stroke-width:1.75` in the stacked layout, 36.2). Copper (`--rec` `#B0703A`, an existing token) reads as twine next to the brass pins; it is 3.42:1 on paper, so it is visible without shouting. It sits **above** the notes, so it rides over the pins like real string, and the geometry keeps it off all text (below).
+- **It draws itself**, exactly like the techie board (27.4): each path has `pathLength="1"`, starts at `stroke-dasharray:1; stroke-dashoffset:1` and animates to 0. At rest there is no dash rule, so it is simply a complete line.
+- **Geometry, computed by `layout()` (34.5) from layout boxes, never per frame:**
+  - Pin points: in the row layout (3 columns), the top center of each header, `(x + w/2, y + 1)`; in the stacked layout (36.2), the header's top-left corner, `(x + 6, y + 6)`. The CSS pin sits on that point in both layouts.
+  - Row layout: a hanging curve, `M a Q mid.x, max(a.y,b.y) + S  b` with sag `S = min(28px, 0.07 × distance)`. It crosses the header notes only in their top padding (deepest point 14px below the header top at 1440×900; the theme line starts 20px down) [Spike4].
+  - Stacked layout: a curve that swings out into the left margin, `M a C (a.x − 32, a.y + h/3) (b.x − 32, b.y − h/3) b`, `h = b.y − a.y`. It runs down the gutter beside the notes and never crosses one; its leftmost point stays at x ≥ 4px [Spike4].
+- **Measured from layout boxes** (`offsetLeft`/`offsetTop` up to `.board`), not `getBoundingClientRect`, so the wipe's and the notes' in-flight transforms never skew the pins.
+
+### 34.5 `layout()`: the scatter and thread math (exact, validated in the spike)
+
+Runs when the board opens (after `L.hidden = false`), on `document.fonts.ready`, and on `resize` (debounced 150ms). After a resize while open, the board simply re-lays out at rest (no replay). `rng` is the same mulberry32 as 27.2 (copy the three-line function into `research-js`; the passions copy is private to its IIFE). Fixed seed 5, so the same viewport always gets the same scatter, which keeps tests repeatable.
+
+```js
+var STACK = window.matchMedia('(max-width:699px) and (min-height:501px)');
+var R     = [-2, 1.5, -1, 2.5,  1, -2.5, 2, -1.5,  -1, 2, -2, 1];   // final tilt (deg) per note i = 0..11
+var ORDER = [0, 5, 10, 3, 6, 9, 1, 8, 11, 4, 2, 7];                 // drift-in order: themes interleaved
+var SHUF  = [13, 2, 8, 10, 0, 11, 6, 4, 9, 3, 14, 5];               // scatter cell per note (15 cells, 12 used)
+function pos(el){ var x = 0, y = 0; while(el && el !== board){ x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return {x:x, y:y}; }
+function layout(){
+  if(L.hidden) return;
+  var W = board.clientWidth, H = board.clientHeight, stacked = STACK.matches, r = rng(5);
+  var cols = stacked ? 3 : 5, rows = stacked ? 5 : 3;
+  var padX = parseFloat(getComputedStyle(board).paddingLeft), cw = (W - 2*padX) / cols, ch = H * .76 / rows;
+  Array.prototype.forEach.call(board.querySelectorAll('.note'), function(n, i){
+    var p = pos(n), cx = p.x + n.offsetWidth/2, cy = p.y + n.offsetHeight/2, c = SHUF[i] % cols, rw = Math.floor(SHUF[i] / cols);
+    var tx = padX + cw*(c + .5) + (r() - .5)*.8*cw, ty = H*.12 + ch*(rw + .5) + (r() - .5)*.8*ch;   // scatter spot
+    var dx = tx - W/2, dy = ty - H/2, d = Math.max(1, Math.hypot(dx, dy)), k = .8 * Math.max(W, H);   // fly in along the ray from the center
+    var s = n.style, f = n.firstElementChild.style;
+    s.setProperty('--r',  R[i] + 'deg');
+    s.setProperty('--sx', (tx - cx).toFixed(1) + 'px'); s.setProperty('--sy', (ty - cy).toFixed(1) + 'px');
+    s.setProperty('--sr', (r()*16 - 8).toFixed(1) + 'deg');
+    s.setProperty('--sd', (2450 + Math.floor(i/4)*80 + (i%4)*25) + 'ms');
+    f.setProperty('--dx', (dx/d*k).toFixed(1) + 'px'); f.setProperty('--dy', (dy/d*k).toFixed(1) + 'px');
+    f.setProperty('--dr', (r()*24 - 12).toFixed(1) + 'deg');
+    f.setProperty('--dd', (900 + ORDER.indexOf(i)*60) + 'ms');
+  });
+  var heads = board.querySelectorAll('.c-head');
+  var P = Array.prototype.map.call(heads, function(h, c){
+    h.style.setProperty('--hd', (3000 + c*110) + 'ms');
+    var p = pos(h); return stacked ? {x: p.x + 6, y: p.y + 6} : {x: p.x + h.offsetWidth/2, y: p.y + 1};
+  });
+  threads.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  Array.prototype.forEach.call(threads.querySelectorAll('path'), function(path, i){
+    var a = P[i], b = P[i + 1], d;
+    if(!stacked){ var S = Math.min(28, .07 * Math.hypot(b.x - a.x, b.y - a.y));
+      d = 'M' + a.x + ',' + a.y + ' Q' + (a.x + b.x)/2 + ',' + (Math.max(a.y, b.y) + S) + ' ' + b.x + ',' + b.y; }
+    else { var t = (b.y - a.y) / 3;
+      d = 'M' + a.x + ',' + a.y + ' C' + (a.x - 32) + ',' + (a.y + t) + ' ' + (b.x - 32) + ',' + (b.y - t) + ' ' + b.x + ',' + b.y; }
+    path.setAttribute('d', d); path.style.setProperty('--td', (3400 + i*120) + 'ms');
+  });
+}
+```
+
+- **The scatter is a jittered 5 × 3 grid over the whole board** (3 × 5 when stacked), 12 of 15 cells used, each spot nudged up to ±40% of a cell. `SHUF` puts every theme's notes far apart, so the brain dump is visibly mixed. The spike's first version scattered over the cluster area only, on a 4 × 3 grid with ±15% jitter, and an image check called it "too much underlying spatial regularity… four fairly obvious vertical groupings"; this version was judged "an unsorted, mixed scatter rather than tidy columns" [Spike4].
+- `--sx/--sy` are the scatter spot minus the note's final slot center, in px. The drift start `--dx/--dy` is 0.8 × the board's longer side along the ray from the board center, so every note enters from the nearest off-screen edge. `.board`'s `overflow:clip` hides them until they cross in.
+- `R`, `ORDER`, `SHUF`, the seed and the draw order of `r()` (scatter x, scatter y, `--sr`, `--dr`) are the source of truth. Changing them changes the look; R70's checks are written against them.
+
+### 34.6 Wiring into the existing scripts
+
+`research-js` is a fourth inline block after `passions-js`. It owns the layer, `layout()`, the state machine, the skip, the cluster click handler and its own `route()` on `popstate`, `hashchange` and `load`, the same pattern `passions-js` uses. The **main** inline script changes in exactly two places:
+
+1. Prong click handler: after `status.textContent = '';` add `if(n === 'research') return;` (the main handler still sets `last` and the avatar look; `research-js`'s own click listener on the same button, registered later, starts the beat). The `research` button loses `aria-describedby="fork-soon"` in the markup.
+2. Router: `if(h === '#where') openDirect(); else close();` becomes `if(h === '#where' || /^#research(-|$)/.test(h)) openDirect(); else close();`, so act two stays open under the research layer on Back, Forward and direct loads.
+
+Router behavior in `research-js` (idempotent, because one anchor click fires both `popstate` and `hashchange` [Spike2, F15]):
+
+| Hash | Research layer |
+|---|---|
+| `#research` | If closed: open at rest (no wipe, no assembly, end-step state, focus `#research-title`). If open: clear `#board-status`, return focus to the last activated cluster if focus fell to `<body>` or the layer. |
+| `#research-education`, `-philosophy`, `-practice` | If closed (direct load, new tab, Forward): open at rest and announce that cluster's stub line once. If open (a click just happened): leave it, no second announcement. |
+| any other `#research-…` | Open at rest, no announcement. |
+| anything else | If open: close (hidden, timers cleared, `is-entering` removed, `.fork-scene.inert = false`, status cleared, focus to the `research` prong). |
+
+---
+
+## 35. Tone and typography: "more professional", concretely (card item 3)
+
+Passion was a nerd shouting (Fraunces 600 to 800 slamming in at 128px, emoji claps, an RGB-split glitch, the page flipping to ink, a game-menu chip). Research should sound like Nick at work: calm, evidence-led, precise. The concrete direction:
+
+| Dimension | Passion branch (contrast) | Research branch (this spec) |
+|---|---|---|
+| Ground | Paper that flips to `--ink` "terminal mode", scanlines | `--paper` throughout, faint 24px dot grid. Stays light. No dark flip. |
+| Display type | Fraunces 600 (beats) and 800 SOFT 50 (`Nerd.`), up to 128px, slammed in with overshoot | Title: Fraunces **500**, `clamp(30px,5vw,56px)`, `line-height:1.08`, `letter-spacing:-.015em`, `--ink`, `margin:0`, `text-wrap:balance`: exactly the `#where-title` voice. Labels: Fraunces **600**, `opsz 72`, **no SOFT/WONK axes** (crisp, not playful). |
+| Body/annotation type | Emoji, glitch copies | EB Garamond italic **500** on the notes (a pen on a sticky note), EB Garamond italic on the status line (the site's narrator voice) |
+| Technical type | Plex Mono game-menu chips with hard pixel shadows and a blinking caret | Plex Mono only as quiet metadata: the board eyebrow and `THEME 01/02/03`, 11 to 12px, wide tracking, uppercase. No chips, no caret, no `steps()` easing. |
+| Palette | `--ink`, ember `rgb(196,84,58)`, `--leaf` glitch, `--pill-red`, `--pill-blue`, `--rule` | `--paper`, `--ink`, `--ink-soft`, `--pine` (headers), `--leaf` / `--card` / `--rule` (note tints), `--moss` (the period), `--rec` (pins and thread). **None** of `--pill-red`, `--pill-blue`, `--glow-ember`, `--glow-warm`. Greens only, plus one warm metal accent. |
+| Motion character | Stepped, staccato, overshoot slams, glitch slices | Eased, continuous, a soft landing, one gentle sort, a single draw. Max overshoot is the 1.08 header press. No flicker, no steps, no shake. |
+| Green-period signature | `Nerd.` | `Research, sorted.` (continues `welcome.`, `Nick.`, `Nerd.`) |
+
+Copy: `Research, sorted.` is mine (Flag D2): three words that name the move the visitor just watched. The eyebrow `Synthesis · 12 notes · 3 themes` is the subtle flex Nick's pick asked for: it is how a real synthesis frame is labeled. Cluster labels are capitalized `Education`, `Philosophy`, `Practice` (the card's spelling, and the more formal register). The fork's prongs stay lowercase; the difference is deliberate (Flag D4).
+
+---
+
+## 36. Stubs, responsive, reduced motion and accessibility (card items 4 to 7)
+
+### 36.1 Stub behavior (card item 4): the passion pattern, reused
+
+**Decision: reuse the stub convention the passion chips used and Crit passed (22.3, R42), not the fork's button stub (R26).** Both are "coming soon" patterns; the passion one is the newer and fits this case exactly, because the content behind these links will also arrive later as one page (32.3), and real anchors wired to their final hrefs mean the next card only touches the router.
+
+When a cluster is activated (click, tap, Enter):
+
+1. The browser follows the fragment natively. The URL becomes `intro.html#research-practice` and a history entry is pushed. No element has that id, so nothing scrolls. **No `preventDefault`** (R31 stays at 0).
+2. The cluster's own `click` handler clears `#board-status`, then on the next animation frame writes `<Label> is coming soon. Still synthesizing.` (`Education is…`, `Philosophy is…`, `Practice is…`). Clearing first makes a repeat click re-announce. Placeholder copy, Flag D7.
+3. The router sees `#research-…` with the layer open and leaves it as it is.
+4. Direct load or new tab: open at rest and announce once (34.6).
+
+Each cluster has `aria-describedby="board-soon"` ("Coming soon."), the same reasoning as 17.3.4 and 22.3: real, enabled links, honestly described, no `aria-disabled`. Back from `#research-practice` returns to `#research` with the status cleared and focus on the Practice cluster.
+
+### 36.2 Responsive (card item 6)
+
+Three clusters side by side need about 700px. Below that, **stack them, all three visible at once**, not one at a time: a carousel or "one cluster per screen" would hide two of the three choices behind a swipe, which is the opposite of guiding someone down three paths, and it needs gesture code. Stacked, the whole board still fits one phone screen with nothing to scroll [Spike4].
+
+| Concern | Row layout (≥ 700px wide, or any width with height ≤ 500px) | Stacked (`(max-width:699px) and (min-height:501px)`) |
+|---|---|---|
+| Clusters | 3 columns, `gap:clamp(24px,3.4vw,48px)`, max 1056px wide | 1 column, `gap:18px`, `max-width:480px` |
+| Header note | `padding:20px 16px 14px`, label `clamp(20px,2.1vw,28px)` | `padding:14px 14px 10px`, label 22px |
+| Data notes | 2 × 2 under the header, `gap:12px`, `aspect-ratio:1/.82`, text `clamp(14px,1.25vw,18px)` | **one row of 4** under the header, `gap:8px`, `margin-top:8px`, `aspect-ratio:1/.85`, `padding:6px 7px`, text 14px |
+| Pin and thread | pin top center; hanging curve between pins | pin on the header's top-left corner (`.c-head::before{ left:0; top:0; margin-left:0; }`); thread swings down the left margin |
+| Thread width | 2 | 1.75 |
+| Scatter grid | 5 × 3 | 3 × 5 |
+
+Extra rules:
+
+- **Stacked and short** (`(max-width:699px) and (min-height:501px) and (max-height:700px)`, e.g. 375×667, 320×568): `.board{ padding-top:max(env(safe-area-inset-top),24px) }`, `.board-meta{ display:none }`, `.clusters{ gap:12px; margin-top:16px }`, `.c-head{ padding:10px 12px 8px }`.
+- **Under 360px wide:** `.note-face{ font-size:12px; padding:5px 6px }`, `.board-status{ font-size:16px }`.
+- **Landscape phones** (`max-height:500px`, any width): keep the row layout. `.board{ padding-top:max(env(safe-area-inset-top),16px); padding-bottom:calc(8px + env(safe-area-inset-bottom)) }`, `#research-title{ font-size:28px }`, `.board-meta{ margin-bottom:4px }`, `.clusters{ margin-top:12px }`, `.c-head{ padding:12px 12px 8px }`, `.c-label{ font-size:20px }`, `.c-notes{ gap:8px; margin-top:8px }`, `.note-face{ aspect-ratio:1/.56; padding:6px 8px; font-size:14px }`. Without this, a 667×375 phone would get the stacked layout and overflow by 185px [Spike4].
+- Hover lift only under `@media (hover:hover)`. `svh` only, never `dvh`. Safe-area insets on the board padding. Touch targets: every cluster is at least 120px tall.
+
+Spike measurements (rest state, status line filled with the longest stub line, `Philosophy is coming soon. Still synthesizing.`) [Spike4]:
+
+| Viewport | Layout | Board fits without scrolling | Status line bottom | Note text overflow |
+|---|---|---|---|---|
+| 1440×900 | row | yes | 732 | none |
+| 1024×768 | row | yes | 635 | none |
+| 768×1024 | row | yes | 738 | none |
+| 390×844 | stacked | yes | 737 | none |
+| 375×667 | stacked, short | yes | 590 | none |
+| 320×568 | stacked, short, < 360 | yes | 524 | none |
+| 844×390 | row, landscape | yes | 351 | none |
+| 667×375 | row, landscape | yes | 330 | none |
+
+### 36.3 Reduced motion (card item 5)
+
+With `prefers-reduced-motion: reduce`, consistent with act two (a cut) and act four (appears in one cut):
+
+- **No wipe.** The board appears in one cut at t = 0, already assembled: notes in their slots with their small static tilts, header notes and pins in place, the thread complete, the title visible. No fade either (the card asks for "static/instant"; a tilt is a pose, not motion).
+- **Focus goes to `#research-title` at once.** The end step runs immediately (no `animationend` to wait for).
+- **How:** every animation rule is inside `@media (prefers-reduced-motion:no-preference)` (34.3), the page's global rule (`animation:none !important`) backs that up, and the base CSS is the final state. `layout()` still runs, because the final tilts (`--r`) and the thread `d` come from it.
+- Hover lift and focus lift become instant state changes (the global rule shortens transitions to 0.01ms), the same as the prong chips.
+- **Toggling the setting mid-entry** (the `change` event on the media query) calls the skip path: everything jumps to the assembled board.
+- No-JS visitors: the layer is `hidden` and the research prong is a plain button, so nothing happens on click. Accepted, as for act two (17.5).
+
+### 36.4 Screen readers and keyboard (card item 7)
+
+The visual metaphor is decoration. Assistive tech should hear one heading and three choices, nothing else.
+
+- **Clean announcement:** the region is named by `#research-title` ("Research, sorted."). The group of links is labelled by the same heading. Each link's name is exactly `Education`, `Philosophy` or `Practice`, with the description "Coming soon." A screen-reader user hears "Research, sorted., heading level 2", then "Education, link, Coming soon.", and so on.
+- **Nothing decorative leaks:** the eyebrow, `Theme 01/02/03`, the arrows, all 12 note fragments (`.c-notes`) and the thread SVG are `aria-hidden="true"`. The pins are CSS pseudo-elements with empty content. No note text appears in any accessible name or in the AX tree.
+- **Focus:** at 820ms (end of the wipe) to `#research-title` (programmatic, `#research-title:focus{outline:none}`, not interactive). While entering, `.clusters` is `inert` and has `pointer-events:none`, so Tab can't land on a moving link. After the end step, Tab goes `Education`, `Philosophy`, `Practice`. Focus rings: 2px `--pine`, 6px offset, plus the lift.
+- **Status:** `#board-status` is `role="status"` `aria-live="polite"` and only speaks on a cluster activation.
+- **Inert underneath:** `main.inert` and `.fork-scene.inert` while the layer is open. The skip link stays on top (z-index 20); Shift+Tab reaches it.
+- **Back:** focus returns to the `research` prong on the fork (from `#research`), or to the last-used cluster (from `#research-…`).
+
+---
+
+## 37. Requirements, deployment, flags, feasibility, non-goals
+
+All requirements use the section 7 harness with the 32.4 server line (`python3 docs/tools/serve.py 8000`), Chromium over CDP, the same desktop (1440×900), mobile (390×844, DPR 3) and reduced-motion emulation. Definitions:
+
+- **"At the fork"**: load `http://localhost:8000/intro.html#where`, wait 600ms.
+- **`L`** is `document.getElementById('research')`; **`B`** is `document.getElementById('board')`.
+- **"Open the board"**: at the fork, click `.prong[data-prong="research"]`, wait 4600ms.
+- **"Seek T"**: right after the click, `L.getAnimations({subtree:true}).forEach(a => { a.pause(); a.currentTime = T; })`, then wait two animation frames. Every research animation is created by the click, so they share t = 0 and `currentTime` includes each delay. Use seek, not wall-clock sampling, for mid-sequence checks: in the spike, headless Chromium's real-time frames lagged the animation clock by up to ~1.5s [Spike4].
+
+Build and deployment for every requirement: **not Docker**, by the same justified exception as sections 8, 18.1, 24.1 and 31.1 (a static GitHub Pages site with nothing to containerize; production deploy is a push to `main`, which stays forbidden).
+
+### R66. Activating the research prong starts the research beat in the same page: no navigation, the URL becomes `#research`, and technology stays a stub.
+- **Source:** [Nick-E] "For research, we will break it down into three sections"; [Pick-1]; [Card5] item 1; sections 33.1, 34.6.
+- **Acceptance:** at the fork, set `window.__stay = 1`, click the research prong; after 4600ms: `window.__stay === 1`, `location.pathname` ends in `/intro.html`, `location.hash === "#research"`, `L.hidden === false`, `document.querySelector('#where .fork-scene').inert === true`, `document.querySelector('main').inert === true`, avatar `.avatar` `dataset.look === "research"`, `#fork-status` is empty. The research prong has no `aria-describedby`; the technology prong still has `aria-describedby="fork-soon"` and clicking it still writes `Technology is coming soon. I'm still paving that road.` with `location.hash` staying `#where`. `#research` is outside `main` (`document.querySelector('main #research') === null`) and comes after `#passions` in the DOM. `getComputedStyle(L).zIndex === "16"`.
+- **Edge cases:** double-click, or Enter then click, starts it once (`document.getAnimations().filter(a => a.animationName === "research-wipe").length <= 1` at all times); Enter and Space on the focused prong both start it; the prong can't be activated during act two's curtain (`.fork-scene` is inert); with no JS nothing happens and nothing breaks.
+- **Resources:** `intro.html` markup, main script (two lines, 34.6), `research-js`.
+
+### R67. The board wipes in from the left over 700ms after a 120ms beat, with the hem shadow on its right edge and a skip.
+- **Source:** [Card5] item 1 "pick a consistent, directionally-appropriate transition (reuse the established wipe/curtain mechanics)"; section 33.2.
+- **Acceptance:** motion allowed, 1440×900, at the fork click research at t = 0: (a) a `research-wipe` animation exists on `L` with `getTiming()` `duration 700`, `delay 120`, `easing "cubic-bezier(0.7, 0, 0.2, 1)"`; (b) Seek 450: `L`'s computed transform `tx` strictly between `−innerWidth − 48` and 0 (negative: it comes from the left); Seek 900: `tx === 0`; (c) on a fresh run in real time, by t ≈ 1500ms `document.activeElement.id === "research-title"`; (d) while `is-entering`, `getComputedStyle(L).boxShadow` starts with `rgba(22, 36, 28, 0.45) 18px 0px 36px -12px` (positive x: right edge) and `overflowY === "hidden"`; after the end step (t ≈ 4600ms) `L.classList.contains('is-entering') === false`. **Skip:** fresh run, at t ≈ 900ms dispatch `keydown` Escape on `document`; within 150ms `is-entering` is gone, every `.note` and `.note-face` computed `translate` is `none` or `0px`, and every `.threads path` has `strokeDashoffset` 0 or no dash array. A `keydown` at t ≈ 100ms does **not** skip.
+- **Edge cases:** background tab during the entry: the 4700ms safety timeout runs the end step; resize mid-wipe still covers the screen; `document.documentElement.scrollWidth <= innerWidth` throughout (the off-screen start must not add page width); `grep -c "nerd-wipe" intro.html` is unchanged (passion's wipe is untouched).
+- **Resources:** `intro.html` CSS (`research-wipe`), `research-js`.
+
+### R68. The board reads professional and on-brand: paper with a dot grid, the eyebrow, and "Research, sorted." in the `#where-title` voice, using only greens and copper.
+- **Source:** [Nick-E] "though probably more professional"; [Card5] item 3; section 35.
+- **Acceptance:** open the board: `#research-title` is an `H2`, `textContent === "Research, sorted."`, computed `fontFamily` starts with `"Fraunces"`, `fontWeight === "500"`, `fontSize === "56px"` at 1440×900; `#research-title .dot` `color === "rgb(126, 156, 96)"`; `.board-meta` text matches `/^Synthesis · 12 notes · 3 themes$/` with `textTransform === "uppercase"` and `fontFamily` starting `"IBM Plex Mono"`; `#board` computed `backgroundImage` contains `radial-gradient` and `backgroundSize === "24px 24px"`, and `L` `backgroundColor === "rgb(234, 238, 228)"`. Palette check: for every element inside `L` (including `::before`), the computed `color`, `backgroundColor` and `stroke` are drawn only from `rgb(234, 238, 228)`, `rgb(248, 250, 244)`, `rgb(22, 36, 28)`, `rgb(59, 82, 69)`, `rgb(47, 91, 68)`, `rgb(126, 156, 96)`, `rgb(207, 226, 166)`, `rgb(200, 211, 190)`, `rgb(176, 112, 58)`, transparent, or `rgba(22, 36, 28, a)`; specifically none is `rgb(154, 59, 46)`, `rgb(46, 74, 107)` or `rgb(196, 84, 58)`. Nothing inside `L` has `fontVariationSettings` containing `"WONK" 1`. The research CSS block uses no stepped easing: `awk '/=== research branch \(PRD 33-36\) ===/,/=== end research branch ===/' intro.html | grep -c "steps("` = 0, and the same `awk` range is non-empty (`wc -l` ≥ 40).
+- **Edge cases:** Fraunces blocked: Georgia fallback keeps the title on one or two balanced lines at 320 wide without overflow; the background never flips dark at any point in the sequence (`L` and `#board` background stay paper at Seek 0, 2400, 4300).
+- **Resources:** `intro.html` CSS.
+
+### R69. Twelve decorative data notes, four per theme, carry the exact fragments, tints and fonts in 34.2, and all of them are hidden from assistive tech.
+- **Source:** [Pick-1] "sticky notes drift onto the screen"; [Card5] item 2 "how many, what do they show"; section 34.2.
+- **Acceptance:** open the board: `B.querySelectorAll('.note').length === 12`, each with exactly one `.note-face` child; per cluster 4 notes, texts in order: Education `coursework`, `statistics`, `reading list`, `mentors`; Philosophy `ask why`, `evidence first`, `bias check`, `plain words`; Practice `interviews`, `usability tests`, `surveys`, `synthesis`. `.note-face` computed `backgroundColor` is `rgb(207, 226, 166)` (education), `rgb(248, 250, 244)` (philosophy), `rgb(200, 211, 190)` (practice); `fontFamily` starts `"EB Garamond"`, `fontStyle === "italic"`, `fontWeight === "500"`, `color === "rgb(22, 36, 28)"`. Every `.c-notes` has `aria-hidden="true"`. At rest each `.note`'s computed `rotate` equals `R[i]` from 34.5 (`-2deg`, `1.5deg`, … `1deg`). At every viewport in R76, no `.note-face` overflows (`scrollWidth <= clientWidth + 1` and `scrollHeight <= clientHeight + 1`).
+- **Edge cases:** EB Garamond blocked: Georgia italic fallback still fits each face (same overflow check); the fragments are placeholder copy Nick can edit in the markup without touching the script (Flag D3); no note is focusable.
+- **Resources:** `intro.html` markup and CSS.
+
+### R70. The notes drift in unsorted, hold as a mixed scatter, then sort themselves into their three clusters, on the 34.3 timeline.
+- **Source:** [Pick-1] "drift onto the screen and self-organize into three labeled clusters"; [Card5] item 2 "timing, physics-ish easing, stagger, how they cluster"; sections 34.3, 34.5.
+- **Acceptance:** motion allowed. Timing: right after the click, `L.getAnimations({subtree:true})` contains 12 `note-drift` (duration 800, easing `cubic-bezier(0.16, 0.84, 0.3, 1)`, delays exactly `{900 + 60·k : k = 0..11}`, and note `i`'s delay is `900 + 60·ORDER.indexOf(i)`), 12 `note-sort` (duration 760, easing `cubic-bezier(0.6, 0, 0.25, 1)`, note `i`'s delay `2450 + 80·floor(i/4) + 25·(i%4)`), 3 `head-stick` (240, delays 3000/3110/3220), 2 `thread-draw` (400, delays 3400/3520), 1 `board-title-in` (400, delay 3700), 1 `research-wipe`: 31 in total. Geometry, at 1440×900 and at 390×844: **Seek 600**: every `.note-face` computed opacity is 0. **Seek 2400** (scatter): all 12 note-face centers are inside the viewport; for each theme, the diagonal of the bounding box of its 4 note centers is ≥ 0.35 × `Math.hypot(innerWidth, innerHeight)` (spike: 0.46 to 0.70); `.c-head` opacity < 0.05 for all three. **Seek 4300** (rest): every note's center lies inside its own `.cluster`'s bounding box, and all three `.c-head` have opacity > 0.95.
+- **Edge cases:** reload at the same viewport gives identical `--sx/--sy/--dx/--dy` inline values on every note (seeded); resizing while open re-runs `layout()` and the board stays assembled; `B`'s `overflow` is `clip` so no note adds page or layer width at any seek time (`L.scrollWidth <= L.clientWidth`, `document.documentElement.scrollWidth <= innerWidth` at Seek 900, 1500, 2400, 3000); the outer/inner split uses individual properties (`grep -E "@keyframes note-(drift|sort)" -A1` shows `translate`/`rotate`, not `transform`).
+- **Resources:** `intro.html` CSS keyframes, `research-js` (`layout()`, `R`, `ORDER`, `SHUF`).
+
+### R71. The final board shows three pinned header notes labeled Education, Philosophy and Practice, in that order, and each whole cluster looks and behaves clickable.
+- **Source:** [Nick-E] "Education, philosophy, and practice"; [Pick-1] "three labeled clusters"; [Card5] item 2 "reads as clickable"; section 34.2.
+- **Acceptance:** open the board: `.clusters` has `role="group"` and `aria-labelledby="research-title"` and contains exactly three `a.cluster` with `data-theme` `education`, `philosophy`, `practice` in DOM order; their `.c-label` visible text (excluding the arrow) is `Education`, `Philosophy`, `Practice`; at 1440×900 they sit left to right (`left` strictly increasing, `top` within 2px), at 390×844 top to bottom (`top` strictly increasing, `left` within 2px). Each `.c-head` computed `backgroundColor === "rgb(47, 91, 68)"`, `.c-label` `fontFamily` starts `"Fraunces"`, `fontWeight === "600"`, `color === "rgb(248, 250, 244)"`; `.c-head::before` `backgroundColor` or `backgroundImage` includes `rgb(176, 112, 58)` and `borderRadius === "50%"`; each `.c-arrow` has `aria-hidden="true"` and text `→`. Each cluster's height ≥ 120px. Hover (CDP `mouseMoved` to a cluster's center, 1440×900): the cluster's computed transform has `ty === −3` and its `.c-arrow` transform `tx === 3`. Keyboard focus: `:focus-visible` shows `outlineStyle === "solid"`, `outlineColor === "rgb(47, 91, 68)"`, `outlineOffset === "6px"`. `cursor === "pointer"`.
+- **Edge cases:** touch emulation shows no hover lift; no cluster box intersects another at any R76 viewport; the cluster's hover `transform` does not cancel the notes' tilts (each `.note` `rotate` unchanged while hovered).
+- **Resources:** `intro.html` markup and CSS.
+
+### R72. A copper thread draws itself pin to pin, Education to Philosophy to Practice, and never crosses note or label text.
+- **Source:** [Pick-1] "connected by string"; [Card5] item 2 "the connecting string visual (color, style, does it draw itself)"; section 34.4.
+- **Acceptance:** open the board: `#threads` is an `svg` with `aria-hidden="true"` inside `#board`, containing exactly 2 `path` elements, each with `pathLength="1"`, computed `stroke === "rgb(176, 112, 58)"`, `fill === "none"`, `strokeWidth` `2px` at 1440×900 and `1.75px` at 390×844; `viewBox === "0 0 " + B.clientWidth + " " + B.clientHeight`. Each path starts at its pin and ends at the next (path 0 start within 2px of the Education pin center, end within 2px of the Philosophy pin center; path 1 Philosophy to Practice; pin center = `.c-head` box top center + 1px at 1440×900, top-left + 6px at 390×844, from layout boxes). Draw: Seek 3300: both `strokeDashoffset` = 1; Seek 3600: path 0 strictly between 0 and 1; Seek 4300: both 0. Text safety, sampling 120 points along each path (`getPointAtLength`) at every R76 viewport: no point falls inside any `.note-face` box, and no point falls inside a `.c-head` box deeper than `parseFloat(getComputedStyle(cHead).paddingTop) − 4` px below its top edge; every point's x is ≥ 0 and ≤ `innerWidth`.
+- **Edge cases:** resize from 1440×900 to 390×844 with the board open recomputes the `d` (stacked curve) and keeps the line complete; at rest no `stroke-dasharray` is applied (`getComputedStyle(path).strokeDasharray === "none"`); reduced motion shows both lines complete at t = 50ms.
+- **Resources:** `intro.html` markup and CSS, `research-js` (`layout()`).
+
+### R73. Each cluster is an honest stub: it goes to its final `#research-…` hash, announces "coming soon", and shows nothing else.
+- **Source:** [Card5] item 4 "follow the same 'coming soon'-style pattern already established and Crit-verified"; [Card5] scope "Do NOT design what's behind Education/Philosophy/Practice yet"; section 36.1.
+- **Acceptance:** open the board, set `window.__stay = 1`; for each cluster: `getAttribute('href')` is `#research-education`, `#research-philosophy`, `#research-practice` respectively; click it: within 300ms `location.hash` equals that href, `#board-status` (`role="status"`, `aria-live="polite"`) `textContent === "<Label> is coming soon. Still synthesizing."` (`Education`, `Philosophy`, `Practice`), `L.hidden === false`, `window.__stay === 1`, `document.getElementById('findings') === null`, and `document.querySelectorAll('section').length` is unchanged. Clicking the same cluster twice re-announces (status empty on the frame after the click, then refilled). Keyboard: focus a cluster, press Enter: same result. Each cluster has `aria-describedby="board-soon"`; `#board-soon` `textContent === "Coming soon."` and is visually hidden (bounding width ≤ 1px). No cluster has `aria-disabled`. `grep -ci "preventDefault" intro.html` = 0. Zero console errors and zero `Runtime.exceptionThrown` across the run.
+- **Edge cases:** a direct load of `intro.html#research-philosophy` opens the board at rest (no wipe, `is-entering` never set) and announces `Philosophy is coming soon. Still synthesizing.` once; an unknown `#research-foo` opens the board at rest with no announcement; middle-click or Cmd-click opens the direct-load case in a new tab; the status line wraps inside the viewport at 320 wide (R76).
+- **Resources:** `intro.html` markup, cluster click handler and router in `research-js`.
+
+### R74. The future one-page shape is wired in now: all three links point into one page, never three routes, and the decision is recorded.
+- **Source:** [Card5] "consider whether Education/Philosophy/Practice should also share one page, and make an explicit recommendation either way"; section 32.3 (product decision, Flag D1).
+- **Acceptance:** `grep -oE 'href="#research-[a-z]+"' intro.html | sort -u` returns exactly the three hrefs in R73; `grep -cE 'href="[^"#]*(education|philosophy|practice)' intro.html` = 0; `git ls-files | grep -ciE "education|philosophy|practice"` = 0 (no new files); `grep -c "research-practice" docs/intro-experience-PRD.md` ≥ 1 (the 32.3 table exists); `BACKLOG.md` has an Open row for the research deep-dives containing `one page` and `#research-`.
+- **Edge cases:** the router treats every `#research-` hash in one branch (not three); no element with id `findings` exists yet; the next card's diff should touch only that router branch, the new `#findings` section and the stub lines (verified on that card, not this one).
+- **Resources:** `intro.html`, `BACKLOG.md`, this PRD.
+
+### R75. With reduced motion, the board appears already assembled in one cut, nothing animates, and focus lands on the title.
+- **Source:** [Card5] item 5 "notes appear already clustered, no motion"; section 36.3.
+- **Acceptance:** with `prefers-reduced-motion: reduce` emulated, at the fork click research: within 100ms `L.hidden === false`, `L.classList.contains('is-entering') === false`, `document.activeElement.id === "research-title"`; at t = 50, 500 and 2000ms `L.getAnimations({subtree:true}).length === 0`; every note center is inside its own cluster box (as R70's rest check); every `.c-head` and `.board-head` opacity is `"1"`; both thread paths have `strokeDashoffset` 0 or `strokeDasharray === "none"`; each `.note` computed `rotate` equals `R[i]`; the R73 click check passes immediately. Switching emulation from no-preference to reduce at t ≈ 1500ms (mid-entry) lands the assembled board within 200ms with no `CSSAnimation` left in `L`.
+- **Edge cases:** hover/focus lift still applies as an instant state change; skip link, Back and R29, R45 and R62 still pass; no WAAPI animation is created by `research-js` in any mode (`awk '/<script id="research-js">/,/<\/script>/' intro.html | grep -c "\.animate("` = 0).
+- **Resources:** `intro.html` CSS, `research-js`.
+
+### R76. The board fits one screen with no horizontal overflow at desktop, tablet, phone and landscape-phone sizes, stacking the clusters below 700px wide.
+- **Source:** [Card5] item 6 "3 clusters side by side won't fit — stack vertically? One at a time?"; [Nick] original brief "desktop and mobile friendly"; section 36.2.
+- **Acceptance:** at 1440×900, 1024×768, 768×1024, 390×844, 375×667, 320×568, 844×390 and 667×375, board open at rest, with `#board-status` showing the longest stub line (`Philosophy is coming soon. Still synthesizing.`): `document.documentElement.scrollWidth <= innerWidth`, `L.scrollWidth <= L.clientWidth`, `L.scrollHeight - L.clientHeight <= 1` (no scrolling needed), and the title, all three clusters and the status line are inside the viewport. `getComputedStyle(B.querySelector('.clusters')).gridTemplateColumns` has 3 tracks at 1440, 1024, 768, 844×390 and 667×375 and 1 track at 390, 375 and 320. At 390×844 each cluster's `.c-notes` shows 4 notes in one row (equal `top` within 4px). `.board-meta` is `display:none` at 375×667 and 320×568. `grep -c "dvh" intro.html` stays 0; `env(safe-area-inset-top)` and `env(safe-area-inset-bottom)` appear in the `.board` rule.
+- **Edge cases:** rotating a phone with the board open re-lays out and redraws the thread (R72 resize edge); hover-only styles stay under `@media (hover:hover)`; iOS URL-bar changes don't shift the board (`svh`); every cluster ≥ 44px tall in both axes (it is ≥ 120px).
+- **Resources:** `intro.html` CSS, `research-js` (`STACK`).
+
+### R77. Screen-reader and keyboard users get one clean heading and three clean choices, with no sticky-note noise and no focus on moving or hidden content.
+- **Source:** [Card5] item 7 "assistive tech gets a clean announcement of the three choices, not sticky-note visual noise"; section 36.4.
+- **Acceptance:** keyboard only, at the fork: Tab to `research`, press Enter; by t ≈ 1500ms `document.activeElement.id === "research-title"`; while `is-entering`, `.clusters.inert === true` and `getComputedStyle(clusters).pointerEvents === "none"`; after the end step, Tab focuses `Education`, `Philosophy`, `Practice` in order; Shift+Tab from `Education` eventually focuses the skip link, which `elementFromPoint` confirms is on top. While open, `main.inert === true` and `.fork-scene.inert === true`. CDP `Accessibility.getFullAXTree`: a `region` named `Research, sorted.`; a `heading` level 2 with that name; a `group` with exactly three `link` nodes named exactly `Education`, `Philosophy`, `Practice`, each with description `Coming soon.`; a `status` node; and **no** AX node whose name contains any of the 12 note fragments, `Theme 0`, `Synthesis ·`, or `→`, and no `image`/`graphics-document` node from `#threads`.
+- **Edge cases:** before the click, `#research` is `hidden` and absent from the AX tree; VoiceOver hears no "dimmed"; the visible focus ring shows on every cluster (`outlineStyle` not `none` on `:focus-visible`); the heading has no visible focus ring (`#research-title:focus` `outlineStyle === "none"`).
+- **Resources:** `intro.html`.
+
+### R78. Back, Forward and direct links work for `#research` and `#research-…`, and the passion branch's routing is unchanged.
+- **Source:** sections 34.6, 32.4; extends R27, R48 and R50.
+- **Acceptance:** (a) after R66, `history.back()`, wait 500ms: `location.hash === "#where"`, `L.hidden === true`, `.fork-scene.inert === false`, `document.activeElement` is the research prong, the curtain stays hidden, and `document.getAnimations().filter(a => /research-wipe|note-|head-stick|thread-draw|board-title/.test(a.animationName)).length === 0`; (b) `history.forward()`: the board is open at rest within 300ms with no `research-wipe` animation; (c) direct load of `intro.html#research`: within 600ms the board is open at rest, act two is open underneath (`#where.hidden === false`), `main.inert === true`, and the R6 nudge stays hidden after 4500ms; (d) from `#research-education`, `history.back()` returns to `#research` with `#board-status` empty and focus on the Education cluster; (e) Back twice from `#research` reaches the pill scene with R27(b) passing; (f) R48 and R50 pass unchanged (passion's four states), and opening `#nerd` or `#passions-gamer` never shows the research layer (`L.hidden === true`).
+- **Edge cases:** Back during the entry aborts it cleanly (layer hidden, no orphaned research animations after 500ms); the router is idempotent across a `popstate` + `hashchange` pair; reloading on `#research` or any `#research-…` restores that state; `#researchfoo` (no hyphen) is not treated as research (act two closes per R27).
+- **Resources:** main script router line, `research-js` router.
+
+### R79. Palette, fonts, script budget and file footprint hold, and nothing earlier regresses.
+- **Source:** R31, R49, R65; section 32.4.
+- **Acceptance:** the R31 hex grep returns the same set as at 845f15a (**no new hex**); the Google Fonts URL is unchanged; `grep -c "<script" intro.html` = 4 and `grep -cE "<script[^>]+src=" intro.html` = 0; the main inline script is under 345 lines, `passions-js` under 280 lines, and `awk '/<script id="research-js">/,/<\/script>/' intro.html | wc -l` < 200; `grep -ci "preventDefault" intro.html` = 0; `git diff --name-only 845f15a..HEAD` lists only `intro.html`, `BACKLOG.md` and files under `docs/`; `git diff 845f15a..HEAD -- intro.html` touches the main script in at most the two places named in 34.6 (plus the research prong's `aria-describedby` removal in markup). All acceptance checks of R1 to R25, R27 to R41, R44 to R65 pass again, with the 32.4 amendments (R26 and R30 now apply to `technology` only; R33's describedby check applies to `technology` only; R65's script count is 4).
+- **Edge cases:** no new font, image, CSS or JS files; no third-party code; act three's glitch and act four's backgrounds behave exactly as before; the passion prong still starts act three (R33).
+- **Resources:** `intro.html`; `index.html` (read-only).
+
+### 37.1 Deployment and build
+
+Unchanged from sections 8, 18.1, 24.1 and 31.1: **not Docker**, by the same justified exception (static GitHub Pages site, nothing to containerize, production deploy is a push to `main`, which stays forbidden). Local preview `python3 docs/tools/serve.py 8000` from the repo root on `feature/intro-experience` (reuse the server on :8000 if it is already running). Demo URLs: `http://localhost:8000/intro.html#where` (then tap research) and `http://localhost:8000/intro.html#research` (the board at rest). No build step. The build card may push `feature/intro-experience` to origin. No ADR: one self-contained beat inside one file, cheap to reverse (section 4's reasoning).
+
+### 37.2 Flags for Nick (addendum 4)
+
+1. **D1, one shared page for Education, Philosophy and Practice.** You said this for the passions, not for research, so it's my call: one page, three sections in your order, like `#passions`. It reads as one story, reuses what's already built, and is one scroll on a phone. If you want three separate pages, the links change in three places.
+2. **D2, the headline is "Research, sorted."** with the green period, plus a small label above it: "SYNTHESIS · 12 NOTES · 3 THEMES". My words. Change freely.
+3. **D3, the sticky-note text is placeholder.** Generic method and mindset words (coursework, statistics, ask why, evidence first, interviews, usability tests…), deliberately not claims about your background. Swap in your own fragments any time; it's twelve words in the markup.
+4. **D4, labels are capitalized:** Education, Philosophy, Practice. The fork's prongs are lowercase as you typed them. The capitals make the research board read a bit more formal. Say if you want them lowercase.
+5. **D5, it's a whiteboard, not cork.** A dotted digital canvas (what a researcher actually synthesizes on now), with brass pins and one copper thread joining the three themes. No cork texture, no red conspiracy string. Notes are tinted in your site's greens, one tint per theme.
+6. **D6, timing.** About 4 seconds end to end: notes drift in (1.5s), hold as a messy pile, sort themselves (1s), headers stick on, the thread draws, the title lands. Tap or press a key to skip.
+7. **D7, stub copy.** "Practice is coming soon. Still synthesizing." is placeholder text.
+8. **D8, real-device check.** Worth two minutes on your phone: the stacked layout and the thread down the left edge on a real iPhone. Emulation can't prove touch feel.
+
+No new cost, services, infrastructure or recurring manual steps.
+
+### 37.3 Feasibility (spike method) and risks
+
+I ran a throwaway spike: one HTML page with the research layer, the board, the 12 notes plus 3 headers, `layout()`, the thread and the full animated sequence, served locally on port 8013 and measured in Chromium over CDP at eight viewports, with image checks of eleven screenshots (frames seeked to exact times). It lived in my scratch folder and is not in the repo. Every value it validated is written into sections 33 to 36.
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| F23 | Given three clusters of 1 header + 4 notes, when laid out at 8 sizes from 1440×900 to 320×568 and 667×375, then the whole board plus the longest status line fits one screen with no overflow. | VALIDATED | `L` vertical and horizontal overflow 0 at all eight; status bottoms 732, 635, 738, 737, 590, 524, 351, 330 px. First pass failed twice: 320×568 overflowed by 47px (fixed by the stacked-and-short rules) and 667×375 by 185px (fixed by keeping the row layout on any screen ≤ 500px tall). No note text overflow anywhere. |
+| F24 | Given the 34.4 thread geometry, when drawn on top of the notes, then it never crosses note text or header labels and stays on screen. | VALIDATED | 120-point sampling per path: 0 note hits at every size; deepest point inside a header 14px (theme line starts at 20px); leftmost x 4 to 5px in the stacked layout. The first stacked version (pin 20px in, 40px swing) crossed `coursework` and `ask why`; moving the pin to the corner and the swing to 32px fixed it. |
+| F25 | Given an outer `.note` (sort) and inner `.note-face` (drift) using individual `translate`/`rotate` properties, when animated with the 34.3 delays, then it reads as an unsorted brain dump that then self-organizes into three clusters. | VALIDATED | Seek 2350: per-theme spread 0.46 to 0.70 of the viewport diagonal at 1440, 390, 320 and 844×390, all 12 centers on screen; Seek 4300: every note inside its own cluster. Image checks: scatter "an unsorted, mixed scatter rather than tidy columns"; final "a calm, professional synthesis board… three clearly labeled themes". The first scatter (4 × 3 over the cluster area, ±15%) was judged too regular and replaced. |
+| F26 | Given two `pathLength="1"` paths, when `thread-draw` runs, then the thread draws itself and reads as string. | VALIDATED | `strokeDashoffset` at Seek 3300 / 3600 / 3800 / 4300: `[1,1]`, `[0.22,0.80]`, `[0,0.06]`, `[0,0]`. Image check: "the warm color, shallow sag, and circular attachment points make it read as a continuous physical thread". An earlier `--ink-soft` 1.5px version read as "a thin connecting rule", hence copper at 2px. |
+| F27 | Given the stacked layout at 390 and 320 wide, when notes are 4 in a row, then the fragments stay legible. | PARTIAL | 14px (12px under 360) EB Garamond italic 500 fits every face with no overflow; an image check called it "readable, but borderline for comfortable scanning" at phone size. Acceptable because the notes are decoration and `aria-hidden`; the labels that matter are 22px. Real-device check is Flag D8. |
+
+Risks:
+
+- **Wall-clock timing tests are flaky in headless Chromium.** The spike's real-time screenshots trailed the animation clock by up to ~1.5s. Mitigated by defining "Seek T" and `getTiming()` checks (37 definitions, R67, R70, R72).
+- **Hover transform vs. note animations:** handled by putting the entry animations on individual properties and the hover on `transform` of the cluster, and by `pointer-events:none` plus `inert` while entering.
+- **Thread geometry depends on layout:** computed from layout boxes once per open and resize; a resize mid-entry re-runs `layout()`, which can make a note's scatter spot jump once. Accepted (rare, and the sequence is 4s).
+- **Two scripts editing one router:** the main router gains one condition and `research-js` owns the rest, mirroring how `passions-js` coexists today. R78(f) re-checks passion routing.
+- **Scope creep into the three sections:** the biggest practical risk for an AI builder. Sections 32.2, 32.3 and 37.4 rule it out.
+
+### 37.4 Non-goals for addendum 4 (do not build)
+
+- **Anything behind Education, Philosophy or Practice:** no `#findings` section, no content, no subsections, panels, modals, drawers, tooltips or expanding notes. A cluster only goes to its hash and announces "coming soon" (R73).
+- Three separate routes, files or layers for the research sections (the future page is one page, 32.3).
+- Any change to the `technology` prong (still a stub), act two's curtain or timings, the passion branch (acts three and four), the scroll intro, the nudge or the blue pill.
+- More than 12 data notes, notes that are draggable or interactive, per-note links, per-note strings, a cork texture, red string, sound, particles, canvas, WebGL, SVG filters, a typewriter effect on the title, or any looping or idle animation after the end step.
+- A visible exit or "straight to business" link on the board (same open question as Flag A6), a replay control, or persisting anything (cookies, storage) or analytics.
+- New tokens or hex values, new font families or weights, `steps()` easing, the passion palette (`--pill-red`, `--pill-blue`, ember).
+- Any change to `index.html`, the case-study pages, `resume.html`, `README.md`, `CNAME`, `AGENTS.md`, or new HTML, CSS, JS, image or font files. No JS libraries, CDN scripts or build tooling. No push to or merge into `main`, and no PR.
+
+**Authorized boundaries (build card t_f25a55e9):** edit `intro.html` on `feature/intro-experience` in `~/Documents/github/portfolio` (markup, CSS, the two main-script lines in 34.6, and the new `research-js` block); update `BACKLOG.md` rows for this work; commit and `git push origin feature/intro-experience`; run or reuse the preview server on port 8000.
+
+**Forbidden actions:** editing any other site file; pushing any other branch; committing to or merging into `main`; adding dependencies, files or services beyond the preview server.
+
+### 37.5 Follow-ups (logged in BACKLOG.md, not requirements)
+
+- **Research deep-dives:** build Education, Philosophy and Practice as **one page** (`#findings`, subsections `#research-education`, `#research-philosophy`, `#research-practice`), per 32.3, once Nick says what goes in each. Only the router branch and the stub lines change on the board.
+- **Note fragments in Nick's words** (Flag D3).
+- The **technology** prong (already logged).
+
+---
+
 ## Research sources
 
 - Josh W. Comeau, "Scroll-Driven Animations": https://www.joshwcomeau.com/animation/scroll-driven-animations/
@@ -2084,4 +2660,5 @@ Risks:
 - GitHub Docs, DMCA Takedown Policy (about one business day to change content, else the repository is disabled) [GitHub-DMCA]: https://docs.github.com/en/site-policy/content-removal-policies/dmca-takedown-policy
 - web.dev, "Replace animated GIFs with video for faster page loads" (3.7 MB GIF to 551 KB MP4; `autoplay loop muted playsinline`) [web.dev-video]: https://web.dev/articles/replace-gifs-with-videos
 - Chrome for Developers, Lighthouse "Use video formats for animated content": https://developer.chrome.com/docs/lighthouse/performance/efficient-animated-content
+- MDN, individual transform properties `translate`, `rotate`, `scale` (they compose with `transform`; used for the note drift and sort): https://developer.mozilla.org/en-US/docs/Web/CSS/translate
 - Skill: `tech-viability-and-platform-choice` (cheapest-first platform order: responsive web is sufficient here, no native app question; ADR proportionality; non-goals and edge cases).
