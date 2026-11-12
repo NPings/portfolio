@@ -390,6 +390,7 @@
   /* ================= act three: passion, "I'm. A. Nerd." (PRD sections 20-23) ================= */
   @property --g    { syntax:'<length>'; inherits:true; initial-value:0px; }
   @property --g-on { syntax:'<number>'; inherits:true; initial-value:0; }
+  @property --j    { syntax:'<number>'; inherits:true; initial-value:0; }   /* "is my computer breaking" amount, 0-1 */
   .act3{
     position:fixed;inset:0;z-index:16;
     background-color:var(--paper);overflow-y:auto;overscroll-behavior:contain;
@@ -419,6 +420,7 @@
     font-variation-settings:"opsz" 144, "SOFT" 50, "WONK" 0;
     letter-spacing:-.045em;transform-origin:50% 55%;
   }
+  .nerd-tear{display:none;}   /* signal-tear layer: motion only */
   .clap{
     display:inline-block;margin-left:.18em;font-size:.62em;vertical-align:.06em;font-style:normal;
     font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
@@ -477,16 +479,46 @@
       position:absolute;inset:0;pointer-events:none;opacity:var(--g-on);
     }
     .nerd-word::before{color:rgb(var(--glow-ember));transform:translateX(calc(var(--g) * -1));
-      animation:slice-a 1.5s steps(1,end) infinite paused;}
+      animation:slice-a .6s steps(1,end) infinite paused;}
     .nerd-word::after{color:var(--leaf);transform:translateX(var(--g));
-      animation:slice-b 1.5s steps(1,end) infinite paused;}
+      animation:slice-b .8s steps(1,end) infinite paused;}
+    /* the tear: thin bands of the word ripped sideways on a dead-signal bar.
+       Short bars, one hit per cycle, so the flash rate stays well under 3/s (WCAG 2.3.1). */
+    .nerd-tear{display:block;position:absolute;inset:0;pointer-events:none;opacity:var(--g-on);}
+    .nerd-tear::before,.nerd-tear::after{position:absolute;inset:0;clip-path:inset(0 0 100% 0);}
+    .nerd-tear::before{content:"";background-color:var(--ink);animation:tear-bar 1s steps(1,end) infinite paused;}
+    .nerd-tear::after{content:"Nerd.";content:"Nerd." / "";color:var(--card);animation:tear-txt 1s steps(1,end) infinite paused;}
+    /* static: SVG fractal noise riding over the scanlines, strength follows --j */
+    .nerd-scan::before{
+      content:"";position:absolute;inset:-60px;opacity:calc(var(--j) * .85);mix-blend-mode:screen;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.55'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:160px 160px;
+      animation:noise-jump .36s steps(1,end) infinite paused;
+    }
+    /* a soft rolling bar, like a CRT losing vertical hold */
+    .nerd-scan::after{
+      content:"";position:absolute;left:0;right:0;top:0;height:18%;opacity:calc(var(--j) * .9);
+      background:linear-gradient(to bottom,transparent,rgba(248,250,244,.07) 45%,rgba(248,250,244,.12) 50%,transparent);
+      animation:roll 2.4s linear infinite paused;
+    }
+    /* the whole word lurches: holds (freeze frames), small judders, and one big displacement jump */
+    .nerd-word{animation:word-jolt 1.3s steps(1,end) infinite paused;}
+    /* and the line it sits on warps: one-frame shears and a vertical stretch, like the sync is slipping */
+    .act3:not(.is-entering) .beat-3{animation:beat-warp 1.7s steps(1,end) infinite paused;}
     .act3.is-scrolling .nerd-word::before,
-    .act3.is-scrolling .nerd-word::after{animation-play-state:running;}
+    .act3.is-scrolling .nerd-word::after,
+    .act3.is-scrolling .nerd-tear::before,
+    .act3.is-scrolling .nerd-tear::after,
+    .act3.is-scrolling .nerd-scan::before,
+    .act3.is-scrolling .nerd-scan::after,
+    .act3.is-scrolling:not(.is-entering) .beat-3,
+    .act3.is-scrolling .nerd-word{animation-play-state:running;}
 
     @supports (animation-timeline: scroll()){
       .nerd-stage{animation:nerd-bg linear both;animation-timeline:--nerd;}
       .beat-1,.beat-2,.beats .clap{animation:nerd-drop linear both;animation-timeline:--nerd;}
-      .nerd-word{animation:nerd-takeover linear both;animation-timeline:--nerd;}
+      .nerd-word{animation:nerd-takeover linear both,word-jolt 1.3s steps(1,end) infinite paused;animation-timeline:--nerd,auto;}
+      .act3.is-scrolling .nerd-word{animation-play-state:running,running;}
       .nerd-scan{animation:nerd-scan linear both;animation-timeline:--nerd;}
       /* individual translate/scale so the chip's hover/focus transform still stacks on top */
       .chip[data-passion="techie"]      {animation:nerd-branch-1 linear both;animation-timeline:--nerd;}
@@ -495,37 +527,116 @@
     }
 
     /* fallback (no animation-timeline): same scenes, stepped on data-q (PRD 21.6) */
-    html.fb .nerd-stage{transition:background-color .6s ease,color .6s ease;}
+    html.fb .nerd-stage{transition:background-color .6s ease,color .6s ease,--j .4s;}
+    html.fb .nerd-stage[data-q="1"]{--j:.6;}
+    html.fb .nerd-stage[data-q="2"]{--j:1;}
     html.fb .nerd-word{transition:transform .6s cubic-bezier(.22,.7,.2,1),--g .4s,--g-on .4s;}
     html.fb .beat-1,html.fb .beat-2,html.fb .beats .clap{transition:opacity .5s ease,transform .6s cubic-bezier(.22,.7,.2,1);}
     html.fb .nerd-scan{transition:opacity .5s ease;}
     html.fb .chip{opacity:0;translate:0 -40px;scale:.6;
       transition:opacity .5s ease,translate .6s cubic-bezier(.22,.7,.2,1),scale .6s cubic-bezier(.22,.7,.2,1),transform .12s steps(2),box-shadow .12s steps(2);}
     html.fb .nerd-stage:not([data-q="0"]) :is(.beat-1,.beat-2,.clap){opacity:0;transform:translateY(-4svh);}
-    html.fb .nerd-stage[data-q="1"] .nerd-word{--g:.03em;--g-on:.8;transform:translate(0,var(--dy)) scale(1.15);}
+    html.fb .nerd-stage[data-q="1"] .nerd-word{--g:.09em;--g-on:.8;transform:translate(0,var(--dy)) scale(1.15);}
     html.fb .nerd-stage:is([data-q="2"],[data-q="3"]){background-color:var(--ink);color:var(--card);}
     html.fb .nerd-stage:is([data-q="2"],[data-q="3"]) .nerd-scan{opacity:1;}
-    html.fb .nerd-stage[data-q="2"] .nerd-word{--g:.06em;--g-on:1;transform:translate(0,var(--dy)) scale(var(--s-peak));}
+    html.fb .nerd-stage[data-q="2"] .nerd-word{--g:.2em;--g-on:1;transform:translate(0,var(--dy)) scale(var(--s-peak));}
     html.fb .nerd-stage[data-q="3"] .nerd-word{transform:translate(0,var(--dy-rest)) scale(var(--s-rest));}
     html.fb .nerd-stage[data-q="3"] .chip{opacity:1;translate:0 0;scale:1;}
   }
+  /* "is my computer breaking": four layers on co-prime periods so it never visibly loops.
+     Flash safety (WCAG 2.3.1): anything that changes many times a second is a THIN band (2-6% of the word,
+     at most 3 per layer); big events (full channel split, whole-word jump) happen ~1x/s each, under 3/s combined.
+     RGB slices: thin bands ripped sideways, offsets scaled by --j */
   @keyframes slice-a{
-    0%      {clip-path:inset(8% 0 72% 0);}   16.667% {clip-path:inset(55% 0 20% 0);}
-    33.333% {clip-path:inset(30% 0 52% 0);}  50%     {clip-path:inset(78% 0 6% 0);}
-    66.667% {clip-path:inset(15% 0 64% 0);}  83.333% {clip-path:inset(44% 0 38% 0);}
+    0%      {clip-path:polygon(0 8%,100% 8%,100% 12%,0 12%,0 31%,100% 31%,100% 34%,0 34%,0 66%,100% 66%,100% 71%,0 71%);translate:calc(var(--j) * -0.35em) 0;}
+    10%     {clip-path:polygon(0 52%,100% 52%,100% 58%,0 58%,0 88%,100% 88%,100% 91%,0 91%);translate:calc(var(--j) * 0.6em) 0;}
+    20%     {clip-path:polygon(0 18%,100% 18%,100% 21%,0 21%,0 40%,100% 40%,100% 42%,0 42%,0 73%,100% 73%,100% 77%,0 77%);translate:calc(var(--j) * -0.12em) 0;}
+    30%     {clip-path:polygon(0 18%,100% 18%,100% 21%,0 21%,0 40%,100% 40%,100% 42%,0 42%,0 73%,100% 73%,100% 77%,0 77%);translate:calc(var(--j) * -0.12em) 0;}
+    40%     {clip-path:polygon(0 79%,100% 79%,100% 84%,0 84%,0 12%,100% 12%,100% 14%,0 14%);translate:calc(var(--j) * 0.85em) 0;}
+    50%     {clip-path:polygon(0 26%,100% 26%,100% 30%,0 30%,0 58%,100% 58%,100% 61%,0 61%,0 94%,100% 94%,100% 97%,0 97%);translate:calc(var(--j) * -0.6em) 0;}
+    60%     {clip-path:polygon(0 44%,100% 44%,100% 50%,0 50%);translate:calc(var(--j) * 0.2em) 0;}
+    70%     {clip-path:polygon(0 2%,100% 2%,100% 7%,0 7%,0 36%,100% 36%,100% 39%,0 39%,0 61%,100% 61%,100% 63%,0 63%);translate:calc(var(--j) * 1.1em) 0;}
+    80%     {clip-path:polygon(0 68%,100% 68%,100% 72%,0 72%,0 84%,100% 84%,100% 87%,0 87%);translate:calc(var(--j) * -0.45em) 0;}
+    90%     {clip-path:polygon(0 22%,100% 22%,100% 24%,0 24%,0 49%,100% 49%,100% 54%,0 54%);translate:calc(var(--j) * 0.3em) 0;}
   }
-  @keyframes slice-b{
-    0%      {clip-path:inset(62% 0 14% 0);}  16.667% {clip-path:inset(10% 0 70% 0);}
-    33.333% {clip-path:inset(70% 0 12% 0);}  50%     {clip-path:inset(22% 0 58% 0);}
-    66.667% {clip-path:inset(48% 0 30% 0);}  83.333% {clip-path:inset(4% 0 80% 0);}
+  @keyframes slice-b{  /* third frame: full channel split */
+    0%      {clip-path:polygon(0 62%,100% 62%,100% 67%,0 67%,0 14%,100% 14%,100% 17%,0 17%);translate:calc(var(--j) * 0.45em) 0;}
+    12.5%   {clip-path:polygon(0 10%,100% 10%,100% 14%,0 14%,0 33%,100% 33%,100% 35%,0 35%,0 81%,100% 81%,100% 86%,0 86%);translate:calc(var(--j) * -0.7em) 0;}
+    25%     {clip-path:inset(0 0 0 0);translate:calc(var(--j) * 0.16em) calc(var(--j) * -0.04em);}
+    37.5%   {clip-path:polygon(0 70%,100% 70%,100% 74%,0 74%,0 47%,100% 47%,100% 50%,0 50%);translate:calc(var(--j) * -0.3em) 0;}
+    50%     {clip-path:polygon(0 22%,100% 22%,100% 27%,0 27%,0 57%,100% 57%,100% 59%,0 59%,0 90%,100% 90%,100% 93%,0 93%);translate:calc(var(--j) * 0.9em) 0;}
+    62.5%   {clip-path:polygon(0 48%,100% 48%,100% 52%,0 52%,0 5%,100% 5%,100% 8%,0 8%);translate:calc(var(--j) * -0.18em) 0;}
+    75%     {clip-path:polygon(0 48%,100% 48%,100% 52%,0 52%,0 5%,100% 5%,100% 8%,0 8%);translate:calc(var(--j) * -0.18em) 0;}
+    87.5%   {clip-path:polygon(0 4%,100% 4%,100% 7%,0 7%,0 28%,100% 28%,100% 32%,0 32%,0 76%,100% 76%,100% 78%,0 78%);translate:calc(var(--j) * 0.5em) 0;}
   }
+  /* tears: a dead-signal bar blanks a strip of the word in place, and the strip itself is dragged sideways */
+  @keyframes tear-bar{
+    0%   {clip-path:inset(0 0 100% 0);}
+    10%  {clip-path:polygon(0 72%,100% 72%,100% 76%,0 76%);}
+    20%  {clip-path:polygon(0 30%,100% 30%,100% 32%,0 32%,0 73%,100% 73%,100% 76%,0 76%);}
+    30%  {clip-path:inset(0 0 100% 0);}
+    40%  {clip-path:inset(0 0 100% 0);}
+    50%  {clip-path:polygon(0 40%,100% 40%,100% 43%,0 43%,0 47%,100% 47%,100% 49%,0 49%);}
+    60%  {clip-path:polygon(0 41%,100% 41%,100% 45%,0 45%,0 78%,100% 78%,100% 80%,0 80%);}
+    70%  {clip-path:inset(0 0 100% 0);}
+    80%  {clip-path:polygon(0 15%,100% 15%,100% 17%,0 17%);}
+    90%  {clip-path:polygon(0 55%,100% 55%,100% 57%,0 57%);}
+  }
+  @keyframes tear-txt{
+    0%   {clip-path:inset(0 0 100% 0);translate:calc(var(--j) * 0em) 0;}
+    10%  {clip-path:polygon(0 72%,100% 72%,100% 76%,0 76%);translate:calc(var(--j) * -1.2em) 0;}
+    20%  {clip-path:polygon(0 30%,100% 30%,100% 32%,0 32%,0 73%,100% 73%,100% 76%,0 76%);translate:calc(var(--j) * -0.4em) 0;}
+    30%  {clip-path:inset(0 0 100% 0);translate:calc(var(--j) * 0em) 0;}
+    40%  {clip-path:inset(0 0 100% 0);translate:calc(var(--j) * 0em) 0;}
+    50%  {clip-path:polygon(0 40%,100% 40%,100% 43%,0 43%,0 47%,100% 47%,100% 49%,0 49%);translate:calc(var(--j) * 0.9em) 0;}
+    60%  {clip-path:polygon(0 41%,100% 41%,100% 45%,0 45%,0 78%,100% 78%,100% 80%,0 80%);translate:calc(var(--j) * -0.65em) 0;}
+    70%  {clip-path:inset(0 0 100% 0);translate:calc(var(--j) * 0em) 0;}
+    80%  {clip-path:polygon(0 15%,100% 15%,100% 17%,0 17%);translate:calc(var(--j) * 1.4em) 0;}
+    90%  {clip-path:polygon(0 55%,100% 55%,100% 57%,0 57%);translate:calc(var(--j) * 0.7em) 0;}
+  }
+  /* the whole word (viewport units, not scaled by the takeover): judder, freeze, big jump, vertical slip */
+  @keyframes word-jolt{
+    0%  {translate:0 0;}
+    8%  {translate:calc(var(--j) * .8vw) 0;}
+    12% {translate:calc(var(--j) * -1.4vw) calc(var(--j) * .3vh);}
+    16% {translate:calc(var(--j) * .5vw) 0;}
+    20% {translate:calc(var(--j) * .5vw) 0;}
+    38% {translate:calc(var(--j) * -.6vw) 0;}
+    42% {translate:calc(var(--j) * 9vw) calc(var(--j) * -1.5vh);}
+    48% {translate:calc(var(--j) * 8.4vw) calc(var(--j) * -1.5vh);}
+    52% {translate:0 0;}
+    70% {translate:0 calc(var(--j) * 3vh);}
+    73% {translate:calc(var(--j) * -1.8vw) 0;}
+    77% {translate:0 0;}
+    90% {translate:calc(var(--j) * -.5vw) 0;}
+  }
+  @keyframes beat-warp{
+    0%  {transform:none;}
+    14% {transform:skewX(calc(var(--j) * 7deg));}
+    17% {transform:none;}
+    30% {transform:skewX(calc(var(--j) * -16deg));}
+    34% {transform:none;}
+    48% {transform:scale(calc(1 + var(--j) * .05),calc(1 - var(--j) * .1));}
+    51% {transform:none;}
+    60% {transform:scale(1,calc(1 + var(--j) * .16));}
+    63% {transform:skewX(calc(var(--j) * 6deg)) scale(1,calc(1 - var(--j) * .06));}
+    67% {transform:none;}
+    86% {transform:skewX(calc(var(--j) * 11deg));}
+    89% {transform:none;}
+  }
+  @keyframes noise-jump{
+    0%{background-position:0 0;} 25%{background-position:-53px 31px;}
+    50%{background-position:27px -44px;} 75%{background-position:-11px 59px;}
+  }
+  @keyframes roll{from{transform:translateY(-100%);}to{transform:translateY(560%);}}
   @keyframes nerd-bg{0%,25%{background-color:var(--paper);color:var(--ink);}
-                     55%,100%{background-color:var(--ink);color:var(--card);}}
+                     55%,100%{background-color:var(--ink);color:var(--card);}
+                     0%,5%{--j:0;} 20%{--j:.6;} 55%{--j:1;} 75%,100%{--j:0;}}
   @keyframes nerd-drop{0%,5%{opacity:1;transform:none;}20%,100%{opacity:0;transform:translateY(-4svh);}}
   @keyframes nerd-takeover{
     0%,5%    {--g:0px;  --g-on:0; transform:none;}
-    20%      {--g:.03em;--g-on:.8;transform:translate(0,var(--dy)) scale(1.15);}
-    55%      {--g:.06em;--g-on:1; transform:translate(0,var(--dy)) scale(var(--s-peak));}
+    20%      {--g:.09em;--g-on:.85;transform:translate(0,var(--dy)) scale(1.15);}
+    55%      {--g:.2em; --g-on:1; transform:translate(0,var(--dy)) scale(var(--s-peak));}
     75%,100% {--g:0px;  --g-on:0; transform:translate(0,var(--dy-rest)) scale(var(--s-rest));}
   }
   @keyframes nerd-scan{0%,35%{opacity:0;}60%,100%{opacity:1;}}
@@ -601,7 +712,7 @@
         <span class="beats" aria-hidden="true">
           <span class="beat beat-1">I'm.<span class="clap">&#x1F44F;</span></span>
           <span class="beat beat-2">A.<span class="clap">&#x1F44F;</span></span>
-          <span class="beat beat-3"><span class="nerd-word" data-text="Nerd.">Nerd<span class="dot">.</span></span><span class="clap">&#x1F44F;</span></span>
+          <span class="beat beat-3"><span class="nerd-word" data-text="Nerd.">Nerd<span class="dot">.</span><span class="nerd-tear" aria-hidden="true"></span></span><span class="clap">&#x1F44F;</span></span>
         </span>
       </h2>
       <div class="chips" role="group" aria-labelledby="nerd-title">
