@@ -644,6 +644,82 @@
   @keyframes nerd-branch-2{0%,72%{opacity:0;translate:0 -40px;scale:.6;}86%,100%{opacity:1;translate:0 0;scale:1;}}
   @keyframes nerd-branch-3{0%,74%{opacity:0;translate:-48px -40px;scale:.6;}88%,100%{opacity:1;translate:0 0;scale:1;}}
 
+  /* ================= act four: passions, one page, three backgrounds (PRD sections 26-30) ================= */
+  .act4{
+    position:fixed;inset:0;z-index:17;background-color:var(--ink);color:var(--card);
+    overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  }
+  .act4::-webkit-scrollbar{display:none;}
+  .act4[hidden]{display:none;}
+  .act4 :focus-visible{outline-color:var(--leaf);}
+  .passion{
+    position:relative;min-height:100svh;overflow:clip;isolation:isolate;
+    display:grid;grid-template-columns:minmax(0,1fr);place-items:center;
+    padding:clamp(72px,10svh,120px) 0;
+  }
+  .p-bg{position:absolute;inset:0;z-index:0;pointer-events:none;}
+  .p-fore{
+    position:relative;z-index:2;width:max-content;max-width:min(40rem, calc(100% - 2*var(--pad)));
+    padding:24px 28px;background-color:rgba(22,36,28,.86);border:1px solid rgba(200,211,190,.25);
+  }
+  .p-title{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;font-variation-settings:"opsz" 144;
+    font-size:clamp(28px,8vw,80px);line-height:1;margin:0;color:var(--card);
+  }
+  #pt-title:focus,#pg-title:focus,#pp-title:focus{outline:none;}
+  .p-copy{font-family:"EB Garamond",Garamond,Georgia,serif;font-size:19px;line-height:1.5;margin:.6em 0 0;color:var(--card);}
+  .p-motion{
+    position:fixed;top:calc(12px + env(safe-area-inset-top));right:var(--pad);z-index:4;
+    min-height:44px;padding:8px 14px;cursor:pointer;
+    font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:14px;
+    color:var(--card);background-color:rgba(22,36,28,.86);border:1px solid var(--rule);border-radius:0;
+  }
+  @media (max-width:559px){ .p-fore{padding:16px 18px;} }
+
+  /* techie: a generated circuit board that draws itself once (PRD 27) */
+  .circuit{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .circuit path{fill:none;stroke:var(--leaf);stroke-width:1.5;opacity:.42;stroke-linecap:round;stroke-linejoin:round;}
+  .circuit circle{fill:var(--ink);stroke:var(--moss);stroke-width:1.5;opacity:.7;}
+  @media (max-width:559px){ .circuit path{stroke-width:1.25;} }
+  @media (prefers-reduced-motion:no-preference){
+    .techie .circuit path   { stroke-dasharray:1; stroke-dashoffset:1; }
+    .techie .circuit circle { opacity:0; }
+    .techie.is-drawing .circuit path   { animation:trace var(--t) cubic-bezier(.35,.1,.25,1) var(--d) forwards; }
+    .techie.is-drawing .circuit circle { animation:pad-in 240ms ease-out var(--d) forwards; }
+    .techie.is-drawn .circuit path     { stroke-dashoffset:0; }
+    .techie.is-drawn .circuit circle   { opacity:.7; }
+  }
+  @keyframes trace  { to { stroke-dashoffset:0; } }
+  @keyframes pad-in { to { opacity:.7; } }
+
+  /* gamer: one full-screen clip at a time, poster underneath, dim on top (PRD 28) */
+  .g-posters{position:absolute;inset:0;background-color:var(--ink);background-size:cover;background-position:center;}
+  .g-posters.is-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;background-image:none !important;}
+  .g-tile{display:none;background-size:cover;background-position:center;}
+  .g-posters.is-grid .g-tile{display:block;}
+  @media (max-width:559px){ .g-posters.is-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .g-clip{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 800ms ease;}
+  .g-clip.is-on{opacity:1;}
+  .g-dim{position:absolute;inset:0;z-index:1;background-color:rgba(22,36,28,.55);}
+  .g-note{
+    position:absolute;left:var(--pad);bottom:calc(16px + env(safe-area-inset-bottom));z-index:3;
+    max-width:calc(100% - 2*var(--pad));margin:0;padding:6px 10px;
+    font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:13px;line-height:1.45;
+    color:var(--card);background-color:rgba(22,36,28,.86);
+  }
+  .g-credit{display:block;color:var(--rule);}
+
+  /* photographer: placeholder polaroids on a jittered grid, idle swaps (PRD 29) */
+  .ph-box{position:absolute;inset:0;}
+  .ph{
+    position:absolute;left:0;top:0;width:var(--w);aspect-ratio:4/5;padding:8px 8px 28px;
+    display:flex;flex-direction:column;background-color:var(--card);box-shadow:0 6px 18px rgba(0,0,0,.35);
+    transition:transform 1200ms cubic-bezier(.3,.7,.2,1);
+  }
+  .ph-fill{flex:1;min-height:0;}
+  .ph-label{position:absolute;left:8px;right:8px;bottom:7px;font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.2;color:var(--ink-soft);white-space:nowrap;overflow:hidden;}
+  .ph-pending{margin:.8em 0 0;font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.45;color:var(--rule);}
+
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{transition-duration:.01ms !important;animation:none !important;}
   }
@@ -716,15 +792,50 @@
         </span>
       </h2>
       <div class="chips" role="group" aria-labelledby="nerd-title">
-        <a class="prong chip" data-passion="techie" href="#passions-techie" aria-describedby="nerd-soon">techie</a>
-        <a class="prong chip" data-passion="gamer" href="#passions-gamer" aria-describedby="nerd-soon">gamer</a>
-        <a class="prong chip" data-passion="photographer" href="#passions-photographer" aria-describedby="nerd-soon">photographer</a>
+        <a class="prong chip" data-passion="techie" href="#passions-techie">techie</a>
+        <a class="prong chip" data-passion="gamer" href="#passions-gamer">gamer</a>
+        <a class="prong chip" data-passion="photographer" href="#passions-photographer">photographer</a>
       </div>
       <p class="nerd-status" id="nerd-status" role="status" aria-live="polite"></p>
-      <span class="vh" id="nerd-soon">Coming soon.</span>
       <button type="button" class="nerd-cue" id="nerd-cue" hidden>keep scrolling <span aria-hidden="true">&darr;</span></button>
     </div>
   </div>
+</section>
+
+<section class="act4" id="passions" aria-label="Passions" hidden>
+  <section class="passion techie" id="passions-techie" aria-labelledby="pt-title">
+    <div class="p-bg" aria-hidden="true"><svg class="circuit" id="circuit" focusable="false"></svg></div>
+    <div class="p-fore">
+      <h2 class="p-title" id="pt-title" tabindex="-1">techie</h2>
+      <p class="p-copy" data-placeholder-copy>More on this soon.</p>
+    </div>
+  </section>
+
+  <section class="passion gamer" id="passions-gamer" aria-labelledby="pg-title">
+    <div class="p-bg" aria-hidden="true">
+      <div class="g-posters" id="g-posters"></div>
+      <video class="g-clip" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <video class="g-clip" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <div class="g-dim"></div>
+    </div>
+    <div class="p-fore">
+      <h2 class="p-title" id="pg-title" tabindex="-1">gamer</h2>
+      <p class="p-copy" data-placeholder-copy>More on this soon.</p>
+    </div>
+    <p class="g-note" id="g-note">Game footage shown for fun. I don't own any of it. All rights belong to the games' developers and publishers.<span class="g-credit" id="g-credit" aria-hidden="true"></span><span class="vh" id="g-credits"></span></p>
+  </section>
+
+  <section class="passion photographer" id="passions-photographer" aria-labelledby="pp-title">
+    <!-- TODO(photos): placeholder frames until Nick sends photos (PRD R61) -->
+    <div class="p-bg" aria-hidden="true"><div class="ph-box" id="ph-box"></div></div>
+    <div class="p-fore">
+      <h2 class="p-title" id="pp-title" tabindex="-1">photographer</h2>
+      <p class="p-copy" data-placeholder-copy>More on this soon.</p>
+      <p class="ph-pending">Placeholder frames. Nick's photos are on the way.</p>
+    </div>
+  </section>
+  <!-- last in the DOM so Tab from any (programmatically focused) heading lands on it first; fixed, so placement is visual-neutral -->
+  <button type="button" class="p-motion" id="passions-motion">Pause motion</button>
 </section>
 
 <script>
@@ -965,12 +1076,6 @@
     if(nst !== 'open' || cueDone || reduce.matches || qNow() >= 0.04) return;
     cue.hidden = false; void cue.offsetWidth; cue.classList.add('is-shown');
   }
-  function announce(p){
-    nStatus.textContent = '';
-    requestAnimationFrame(function(){
-      nStatus.textContent = p.charAt(0).toUpperCase() + p.slice(1) + ' is coming soon. Still nerding out on it.';
-    });
-  }
   function fadeIn(){                           // reduced motion: opacity-only WAAPI fades (PRD 23.2)
     fades = [beats.animate([{opacity:0},{opacity:1}], {duration:400, easing:'ease-out'}),
              chips.animate([{opacity:0},{opacity:1}], {duration:300, delay:300, fill:'backwards'})];
@@ -1033,21 +1138,15 @@
   chips.addEventListener('focusin', function(){    // never focus an invisible chip (R13 rule)
     if(nst === 'open' && !reduce.matches && qNow() < 0.9) act3.scrollTo({top: range(), behavior: behavior()});
   });
-  Array.prototype.forEach.call(chips.querySelectorAll('.chip'), function(a){
-    a.addEventListener('click', function(e){
-      if(!(e.metaKey || e.ctrlKey || e.shiftKey)) announce(a.getAttribute('data-passion'));
-    });
-  });
 
-  /* ---- router: closed, #where, #nerd, #passions-* (R48); idempotent ---- */
+  /* ---- router: closed, #where, #nerd, #passions-* (R48, R50); idempotent. Act four itself lives in passions-js. ---- */
   function route(){
-    var h = location.hash, deep = h.indexOf('#passions-') === 0, p = h.slice(10);
+    var h = location.hash, deep = h.indexOf('#passions-') === 0;
     if(h === '#nerd' || deep){
       var wasClosed = nst === 'closed';
-      openDirect();   // stale line from another hash (Back/Forward) clears; a fresh click's line stays
-      if(!wasClosed){ fixFocus(); if(!(deep && p && nStatus.textContent.toLowerCase().indexOf(p + ' ') === 0)) nStatus.textContent = ''; return; }
-      nerdOpen(deep);
-      if(deep && chips.querySelector('[data-passion="' + p + '"]')) announce(p);
+      openDirect();
+      if(!wasClosed){ fixFocus(); nStatus.textContent = ''; return; }
+      nerdOpen(deep);   // a deep link keeps act three open at rest underneath act four
       return;
     }
     nerdClose();
@@ -1055,6 +1154,251 @@
   }
   function fixFocus(){ if(document.activeElement === act3) nTitle.focus({preventScroll:true}); }   // browser focuses the #nerd scroller
   window.addEventListener('popstate', route); window.addEventListener('hashchange', route); window.addEventListener('load', fixFocus);
+  route();
+})();
+</script>
+<script id="passions-js">
+/* ================= act four: #passions, three stacked subsections with live backgrounds (PRD 26-30) ================= */
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var L = $('passions'), nerd = $('nerd'), toggle = $('passions-motion'), svg = $('circuit'), tech = $('passions-techie');
+  var posters = $('g-posters'), credit = $('g-credit'), vids = L.querySelectorAll('.g-clip'), phBox = $('ph-box');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var saveData = !!(navigator.connection && navigator.connection.saveData);
+  var SECS = {techie:tech, gamer:$('passions-gamer'), photographer:$('passions-photographer')};
+  var DIR = 'assets/passions/gamer/';
+  /* filled from assets/passions/gamer/SOURCES.md; Nick's order (PRD 28.2) */
+  var CLIPS = [
+    {slug:'borderlands',  title:'Borderlands 3',              credit:'Gearbox Software / 2K'},
+    {slug:'pokemon',      title:'Pok\u00e9mon Legends: Z-A',  credit:'Game Freak / Nintendo, The Pok\u00e9mon Company'},
+    {slug:'fire-emblem',  title:'Fire Emblem Engage',         credit:'Intelligent Systems / Nintendo'},
+    {slug:'smash-bros',   title:'Super Smash Bros. Ultimate', credit:'Bandai Namco Studios, Sora Ltd. / Nintendo'},
+    {slug:'destiny',      title:'Destiny 2: Beyond Light',    credit:'Bungie'},
+    {slug:'baldurs-gate', title:"Baldur's Gate 3",            credit:'Larian Studios'}
+  ];
+  var PHOTOS = [];  // TODO(photos): fill from assets/passions/photos/ when Nick sends photos (PRD R61)
+  var FILLS = ['--pine','--moss','--pill-blue','--rec','--ink-soft','--muted'];
+  var open = false, paused = false, optIn = false, viaClick = false, lastChip = 'techie', io = null, active = {}, near = {};
+
+  function rng(s){ return function(){ s|=0; s=s+0x6D2B79F5|0; var t=Math.imul(s^s>>>15,1|s);
+    t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }   // mulberry32
+
+  /* ---------- techie: generated board (PRD 27.2), drawn once per open by CSS ---------- */
+  var bw = 0, bh = 0, drawState = 'idle', drawT = null, drawLeft = 0;
+  function buildCircuit(svg, W, H){
+    var c = W < 560 ? 22 : 28, cols = Math.ceil(W/c)+1, rows = Math.ceil(H/c)+1, r = rng(7), occ = {},
+        N = Math.max(36, Math.min(140, Math.round(W*H/12000))), made = 0, tries = 0, out = [],
+        D = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]];
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    while (made < N && tries++ < 4*N){
+      var x = Math.floor(r()*cols), y = Math.floor(r()*rows); if (occ[x+','+y]) continue;
+      var dir = Math.floor(r()*4)*2, pts = [[x,y]], segs = 3 + Math.floor(r()*5); occ[x+','+y] = 1;
+      for (var s = 0; s < segs; s++){
+        var len = 2 + Math.floor(r()*5), ok = 0;
+        for (var k = 0; k < len; k++){ var nx = x+D[dir][0], ny = y+D[dir][1];
+          if (nx<0 || ny<0 || nx>=cols || ny>=rows || occ[nx+','+ny]) break; x = nx; y = ny; occ[x+','+y] = 1; ok = 1; }
+        if (!ok) break; pts.push([x,y]);
+        dir = (dir + (r()<.5 ? 1 : 7)) % 8; if (r()<.5) dir = (dir + (r()<.5 ? 1 : 7)) % 8;   // 45° or 90° bend
+      }
+      if (pts.length < 2) continue; made++;
+      var d0 = Math.round(pts[0][0]*c/W*2200), t = 900 + Math.round(r()*600), e = pts[pts.length-1];
+      out.push('<path pathLength="1" d="M' + pts.map(function(p){ return p[0]*c + ',' + p[1]*c; }).join('L') +
+               '" style="--d:' + d0 + 'ms;--t:' + t + 'ms"/>');
+      out.push('<circle r="3.5" cx="' + pts[0][0]*c + '" cy="' + pts[0][1]*c + '" style="--d:' + d0 + 'ms"/>');
+      out.push('<circle r="3.5" cx="' + e[0]*c + '" cy="' + e[1]*c + '" style="--d:' + (d0+t-120) + 'ms"/>');
+    }
+    svg.innerHTML = out.join('');
+  }
+  function genBoard(){
+    bw = L.clientWidth; bh = window.innerHeight;
+    performance.mark('circuit-gen-start'); buildCircuit(svg, bw, bh); performance.measure('circuit-gen', 'circuit-gen-start');
+    drawLeft = svg.childElementCount;
+  }
+  function finishDraw(){
+    clearTimeout(drawT); drawState = 'drawn';
+    tech.classList.remove('is-drawing'); tech.classList.add('is-drawn');
+  }
+  function startTechie(){
+    if(drawState !== 'idle') return;
+    if(paused || reduce.matches){ finishDraw(); return; }
+    drawState = 'drawing'; tech.classList.add('is-drawing');
+    drawT = setTimeout(finishDraw, 4500);                     // safety net if an animationend is lost
+  }
+  svg.addEventListener('animationend', function(){ if(drawState === 'drawing' && --drawLeft <= 0) finishDraw(); });
+
+  /* ---------- gamer: A/B video rotation over a poster, 7s per game (PRD 28.2-28.3) ---------- */
+  var cur = 0, on = null, gPrepT = null, gSwapT = null, blocked = false, alive = CLIPS.map(function(){ return true; });
+  var tiles = CLIPS.map(function(c){ var d = document.createElement('div'); d.className = 'g-tile'; posters.appendChild(d); return d; });
+  $('g-credits').textContent = 'Clips from: ' + CLIPS.map(function(c){ return c.title + ' (' + c.credit + ')'; }).join(', ') + '.';
+  function gMode(){ return (reduce.matches && !optIn) ? 'grid' : ((saveData || blocked) ? 'posters' : 'video'); }
+  function nextAlive(i){ for(var k = 1; k <= CLIPS.length; k++){ var j = (i + k) % CLIPS.length; if(alive[j]) return j; } return -1; }
+  function setPoster(i){ posters.style.backgroundImage = alive[i] || gMode() !== 'video' ? 'url("' + DIR + CLIPS[i].slug + '.jpg")' : 'none'; }
+  function setCredit(i){ credit.textContent = 'Now showing: ' + CLIPS[i].title + ' \u00b7 ' + CLIPS[i].credit; }
+  function setSrc(v, i){ if(v.dataset.i === String(i) && v.getAttribute('src')) return; v.dataset.i = i; v.preload = 'auto'; v.src = DIR + CLIPS[i].slug + '.mp4'; }
+  function play(v){
+    var p = v.play();
+    if(p && p.catch) p.catch(function(e){ if(e && e.name === 'NotAllowedError' && !blocked){ blocked = true; gStop(); gShow(); if(active.gamer && !paused) gStart(); } });
+  }
+  function gShow(){                                   // poster grid (reduced motion) or single full-bleed poster
+    var grid = gMode() === 'grid';
+    posters.classList.toggle('is-grid', grid);
+    if(grid){ tiles.forEach(function(t, i){ t.style.backgroundImage = 'url("' + DIR + CLIPS[i].slug + '.jpg")'; }); }
+    if(gMode() !== 'video'){ for(var k = 0; k < vids.length; k++){ vids[k].classList.remove('is-on'); vids[k].pause(); } on = null; }
+    setPoster(cur); setCredit(cur);
+  }
+  function gNear(){ gShow(); if(gMode() === 'video' && alive[cur]) setSrc(on || vids[0], cur); }
+  function gSchedule(){
+    clearTimeout(gPrepT); clearTimeout(gSwapT);
+    gPrepT = setTimeout(function(){ var n = nextAlive(cur); if(n >= 0 && n !== cur && gMode() === 'video') setSrc(on === vids[0] ? vids[1] : vids[0], n); }, 5500);
+    gSwapT = setTimeout(gSwap, 7000);
+  }
+  function gStart(){
+    if(!open || paused || !active.gamer) return;
+    gShow(); if(gMode() === 'grid') return;
+    if(!alive[cur]){ var a = nextAlive(cur); if(a < 0){ posters.style.backgroundImage = 'none'; return; } cur = a; gShow(); }
+    if(gMode() === 'video'){ on = on || vids[0]; setSrc(on, cur); on.classList.add('is-on'); play(on); }
+    gSchedule();
+  }
+  function gSwap(){
+    var n = nextAlive(cur);
+    if(n < 0 || n === cur){ gSchedule(); return; }
+    if(gMode() === 'video'){
+      var idle = on === vids[0] ? vids[1] : vids[0];
+      setSrc(idle, n);
+      if(idle.readyState < 3){ gSchedule(); return; }        // not ready: keep the current clip, retry next tick
+      play(idle); idle.classList.add('is-on'); on.classList.remove('is-on');
+      var old = on; on = idle; setTimeout(function(){ if(old !== on) old.pause(); }, 800);
+    }
+    cur = n; setPoster(n); setCredit(n); gSchedule();
+  }
+  function gStop(){ clearTimeout(gPrepT); clearTimeout(gSwapT); for(var k = 0; k < vids.length; k++) vids[k].pause(); }
+  function gEmpty(){
+    gStop(); on = null; cur = nextAlive(-1) < 0 ? 0 : nextAlive(-1);
+    for(var k = 0; k < vids.length; k++){ var v = vids[k]; v.classList.remove('is-on'); v.removeAttribute('src'); v.removeAttribute('data-i'); v.load(); }
+  }
+  Array.prototype.forEach.call(vids, function(v){
+    v.addEventListener('error', function(){
+      if(!v.getAttribute('src')) return;
+      var i = +v.dataset.i; alive[i] = false; v.removeAttribute('src'); v.removeAttribute('data-i');
+      if(v === on){ v.classList.remove('is-on'); on = null; var n = nextAlive(i); if(n >= 0){ cur = n; gStart(); } else { gStop(); posters.style.backgroundImage = 'none'; } }
+    });
+  });
+
+  /* ---------- photographer: placeholder polaroids, jittered grid, idle swaps (PRD 29) ---------- */
+  var frames = [], cellOf = [], cols = 0, rows = 0, cw = 0, ch = 0, fw = 0, z = 1, pr = rng(11), shufT = null;
+  function grid(){ var W = L.clientWidth; return window.innerHeight <= 500 ? [5,2] : (W >= 900 ? [5,3] : (W >= 560 ? [4,3] : [3,4])); }
+  function place(f, cell, messy){
+    var cx = (cell % cols + .5) * cw, cy = (Math.floor(cell / cols) + .5) * ch, w = messy ? fw : Math.min(cw, ch * .8) * .9;
+    var dx = messy ? (pr() * 2 - 1) * .2 * cw : 0, dy = messy ? (pr() * 2 - 1) * .2 * ch : 0;
+    var a = messy ? (pr() < .5 ? -1 : 1) * (1.5 + pr() * 6.5) : 0;
+    f.style.setProperty('--w', w.toFixed(1) + 'px');
+    f.style.transform = 'translate(' + (cx + dx - w / 2).toFixed(1) + 'px,' + (cy + dy - w * .625).toFixed(1) + 'px) rotate(' + a.toFixed(2) + 'deg)';
+  }
+  function layoutPhotos(){
+    var g = grid(), n = g[0] * g[1], messy = !reduce.matches;
+    cols = g[0]; rows = g[1]; cw = L.clientWidth / cols; ch = window.innerHeight / rows; fw = Math.min(cw * 1.1, ch * .92); pr = rng(11);
+    if(frames.length !== n){
+      phBox.textContent = ''; frames = []; cellOf = [];
+      for(var i = 0; i < n; i++){
+        var f = document.createElement('div'), fill = document.createElement('div'), lab = document.createElement('span');
+        f.className = 'ph'; f.setAttribute('data-placeholder', 'true');
+        fill.className = 'ph-fill'; fill.style.backgroundColor = 'var(' + FILLS[i % FILLS.length] + ')';
+        lab.className = 'ph-label'; lab.textContent = 'photo ' + (i + 1) + ' \u00b7 pending';
+        f.appendChild(fill); f.appendChild(lab); phBox.appendChild(f); frames.push(f);
+      }
+    }
+    for(var j = 0; j < n; j++){ cellOf[j] = j; frames[j].style.zIndex = ''; place(frames[j], j, messy); }
+  }
+  function shuffle(){
+    var a = Math.floor(Math.random() * frames.length), b = Math.floor(Math.random() * (frames.length - 1)); if(b >= a) b++;
+    var t = cellOf[a]; cellOf[a] = cellOf[b]; cellOf[b] = t;
+    [a, b].forEach(function(i){ frames[i].style.zIndex = ++z; place(frames[i], cellOf[i], true); });
+  }
+  function phStart(){ if(!shufT && open && active.photographer && !paused && !reduce.matches) shufT = setInterval(shuffle, 3200); }
+  function phStop(){ clearInterval(shufT); shufT = null; }
+
+  /* ---------- activation: near loads, active runs (PRD 26.3) ---------- */
+  var START = {techie:startTechie, gamer:gStart, photographer:phStart}, STOP = {techie:function(){}, gamer:gStop, photographer:phStop};
+  function observe(){
+    io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var p = e.target.id.slice(9), r = e.intersectionRatio;
+        if(r > 0 && !near[p]){ near[p] = true; if(p === 'gamer') gNear(); }
+        var on2 = r >= .4;
+        if(on2 && !active[p]){ active[p] = true; if(!document.hidden) START[p](); }
+        else if(!on2 && active[p]){ active[p] = false; STOP[p](); }
+      });
+    }, {root:L, threshold:[0, .01, .4]});
+    Object.keys(SECS).forEach(function(p){ io.observe(SECS[p]); });
+  }
+  function setToggle(){ toggle.textContent = paused ? 'Play motion' : 'Pause motion'; }
+  function runAll(){ Object.keys(active).forEach(function(p){ if(active[p]) START[p](); }); }
+  function stopAll(){ gStop(); phStop(); }
+
+  function openAct(p, fade){
+    open = true; L.hidden = false; nerd.inert = true; paused = reduce.matches; optIn = false; setToggle();
+    active = {}; near = {}; drawState = 'idle'; tech.classList.remove('is-drawing', 'is-drawn');
+    genBoard(); layoutPhotos();
+    L.scrollTop = p ? SECS[p].offsetTop : 0;
+    (SECS[p] || tech).querySelector('.p-title').focus({preventScroll:true});
+    if(fade && !reduce.matches) L.animate([{opacity:0}, {opacity:1}], {duration:300, easing:'ease-out'});
+    observe();
+  }
+  function closeAct(){
+    open = false; if(io) io.disconnect(); io = null; active = {}; near = {};
+    clearTimeout(drawT); stopAll(); gEmpty(); L.hidden = true; nerd.inert = false; refocus = true; refocusChip();
+  }
+  function refocusChip(){
+    if(refocus && location.hash === '#nerd'){ var chip = nerd.querySelector('[data-passion="' + lastChip + '"]'); if(chip) chip.focus({preventScroll:true}); }
+  }
+  /* the browser's fragment step (between popstate and hashchange, and on load) moves focus to the #nerd scroller
+     or to <body>; re-assert the right target on every route and on load */
+  function fixFocus(){
+    if(open){ if(!L.contains(document.activeElement)){ var p = location.hash.slice(10); (SECS[p] || tech).querySelector('.p-title').focus({preventScroll:true}); } }
+    else refocusChip();
+  }
+  var refocus = false;
+  function route(e){
+    var h = location.hash;
+    if(h.indexOf('#passions-') !== 0){ if(open) closeAct(); else if(e && e.type === 'hashchange'){ fixFocus(); refocus = false; } viaClick = false; return; }
+    refocus = false;
+    var p = h.slice(10); if(!SECS[p]) p = null;
+    if(!open){ if(!viaClick) lastChip = p || 'techie'; openAct(p, viaClick); }
+    else if(p && Math.abs(L.scrollTop - SECS[p].offsetTop) > 2){ L.scrollTop = SECS[p].offsetTop; SECS[p].querySelector('.p-title').focus({preventScroll:true}); }
+    else fixFocus();
+    viaClick = false;
+  }
+  Array.prototype.forEach.call(nerd.querySelectorAll('.chip'), function(a){
+    a.addEventListener('click', function(e){ if(!(e.metaKey || e.ctrlKey || e.shiftKey)){ viaClick = true; lastChip = a.getAttribute('data-passion'); } });
+  });
+  toggle.addEventListener('click', function(){
+    paused = !paused; setToggle();
+    if(paused){ if(drawState === 'drawing') finishDraw(); stopAll(); }
+    else { if(reduce.matches) optIn = true; runAll(); }
+  });
+  document.addEventListener('visibilitychange', function(){
+    if(!open) return;
+    if(document.hidden) stopAll(); else if(!paused) runAll();
+  });
+  reduce.addEventListener('change', function(){
+    if(!open) return;
+    paused = reduce.matches; optIn = false; setToggle();
+    if(reduce.matches){ finishDraw(); stopAll(); }
+    gShow(); layoutPhotos(); if(!paused) runAll();
+  });
+  var rzT = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(rzT);
+    rzT = setTimeout(function(){
+      if(!open) return;
+      if(Math.abs(L.clientWidth - bw) > 80 || Math.abs(window.innerHeight - bh) > 80){
+        var was = drawState; genBoard(); if(was !== 'idle') finishDraw();
+      }
+      layoutPhotos();
+    }, 250);
+  }, {passive:true});
+  window.addEventListener('popstate', route); window.addEventListener('hashchange', route);
+  window.addEventListener('load', fixFocus);
   route();
 })();
 </script>
