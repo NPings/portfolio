@@ -34,6 +34,10 @@
     /* intro-only tokens (PRD section 1) */
     --pill-red:#9A3B2E;
     --pill-blue:#2E4A6B;
+    /* addendum tokens (PRD section 15) */
+    --glow-ember:196,84,58;
+    --glow-warm:222,132,84;
+    --px-skin:#C9946E;
   }
 
   *{box-sizing:border-box;}
@@ -106,9 +110,17 @@
     font-size:clamp(22px,3.6vw,38px);line-height:1.25;
     margin:clamp(10px,1.6vw,18px) 0 0;text-wrap:balance;
   }
+  /* prompt labels the pills: big gap above, small gap below (PRD 16.1, 16.2) */
+  .prompt{
+    margin:clamp(40px, 7svh, 72px) 0 0;
+    font-family:"Fraunces",Georgia,serif;font-weight:500;font-style:normal;
+    font-variation-settings:"opsz" 24, "SOFT" 100;
+    font-size:clamp(18px,1.9vw,22px);line-height:1.3;letter-spacing:.01em;
+    color:var(--ink);text-wrap:balance;
+  }
   .pills{
     display:flex;gap:24px;justify-content:center;align-items:center;flex-wrap:wrap;
-    margin-top:clamp(30px,5svh,56px);
+    margin-top:clamp(14px, 2svh, 20px);
   }
   .pill{
     display:inline-flex;align-items:center;justify-content:center;
@@ -123,7 +135,22 @@
     font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:400;
     font-variation-settings:"opsz" 72, "SOFT" 100, "WONK" 1;
     font-size:clamp(22px,2.4vw,28px);
+    position:relative;
   }
+  /* "tempting": a soft ember glow on its own layer so only opacity animates (PRD 16.3) */
+  .pill-red::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    box-shadow:
+      0 0 18px 2px  rgba(var(--glow-ember), .38),
+      0 0 44px 10px rgba(var(--glow-warm),  .20);
+    opacity:.85;
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .pill-red::before{animation:ember 3.2s ease-in-out infinite alternate;}
+  }
+  @keyframes ember{from{opacity:.55;}to{opacity:1;}}
+  @media (hover:hover){.pill-red:hover::before{animation:none;opacity:1;}}
+  .pill-red:focus-visible::before{animation:none;opacity:1;}
   .pill-blue{
     background-color:var(--pill-blue);
     font-family:"IBM Plex Mono",monospace;font-weight:500;
@@ -133,10 +160,6 @@
     .pill:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 12px 24px -10px rgba(22,36,28,.55);}
   }
   .pill:active{transform:scale(.98);}
-  .stub{
-    min-height:1.6em;margin:18px 0 0;
-    font-style:italic;color:var(--muted);font-size:clamp(17px,1.6vw,19px);
-  }
   @media (max-width:559px){
     .pills{flex-direction:column;gap:14px;}
     .pill{width:100%;max-width:320px;min-height:52px;}
@@ -197,7 +220,7 @@
         animation:s3-or linear both;
         animation-timeline: scroll(root block);
       }
-      html.js .pills,html.js .stub{
+      html.js .prompt,html.js .pills{
         animation:s3-pills linear both;
         animation-timeline: scroll(root block);
       }
@@ -250,6 +273,120 @@
     90%,100%{opacity:1;transform:none;}
   }
 
+  /* ================= act two: "indulge me" (PRD section 17) ================= */
+  .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;}
+  .act2{
+    position:fixed;inset:0;z-index:15;
+    background-color:var(--paper);overflow-y:auto;overscroll-behavior:contain;
+  }
+  .act2[hidden]{display:none;}
+  .curtain{
+    position:absolute;inset:0;z-index:2;
+    display:grid;place-items:center;padding:0 var(--pad);text-align:center;
+    background-color:var(--pill-red);
+    background-image:repeating-linear-gradient(90deg,
+      rgba(22,36,28,0) 0px, rgba(22,36,28,.16) 28px, rgba(22,36,28,0) 56px);   /* soft pleats */
+    box-shadow:inset 0 -10px 0 rgba(22,36,28,.28),                        /* hem */
+               0 18px 36px -12px rgba(22,36,28,.45);                      /* weight under the hem */
+  }
+  .curtain[hidden]{display:none;}
+  .liked{
+    margin:0;max-width:14ch;
+    font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:400;
+    font-variation-settings:"opsz" 144, "SOFT" 100, "WONK" 1;
+    font-size:clamp(36px,7vw,88px);line-height:1.05;letter-spacing:-.01em;
+    color:var(--card);text-wrap:balance;
+  }
+  .liked:focus{outline:none;}
+  .liked .dot{color:var(--leaf);}
+  .act2.is-playing .curtain{
+    animation:curtain-in 280ms ease-out both,
+              curtain-raise 900ms cubic-bezier(.7,0,.2,1) 2250ms both;
+  }
+  .act2.is-playing .liked{animation:liked-in 500ms cubic-bezier(.22,.7,.2,1) 250ms both;}
+  @keyframes curtain-in{from{opacity:0;}to{opacity:1;}}
+  @keyframes liked-in{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+  @keyframes curtain-raise{from{transform:translateY(0);}to{transform:translateY(calc(-100% - 48px));}}
+
+  .fork-scene{
+    min-height:100%;display:grid;grid-template-rows:auto 1fr auto;justify-items:center;text-align:center;
+    padding:max(env(safe-area-inset-top), clamp(28px,7svh,80px)) var(--pad)
+            calc(clamp(20px,4svh,40px) + env(safe-area-inset-bottom));
+  }
+  #where-title{
+    margin:0;font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:clamp(30px,5vw,56px);line-height:1.08;letter-spacing:-.015em;
+    color:var(--ink);text-wrap:balance;
+  }
+  #where-title:focus{outline:none;}
+  .fork{align-self:center;width:min(100%, 720px, max(200px, calc((100svh - 300px) * 1.5)));}
+  .road{display:block;width:100%;height:auto;aspect-ratio:3/2;}
+  .prongs{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:nowrap;margin:28px 0 6px;}
+  .prong{
+    --prong-c:var(--pine);                       /* research */
+    position:relative;min-height:44px;padding:10px 16px;
+    font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:16px;letter-spacing:.04em;line-height:1.2;
+    color:var(--ink);background-color:var(--card);
+    border:2px solid var(--ink);border-radius:0;          /* square, pixel corners */
+    box-shadow:4px 4px 0 0 var(--prong-c);                 /* hard pixel shadow = a raised key */
+    cursor:pointer;-webkit-tap-highlight-color:transparent;
+    transition:transform .12s steps(2),box-shadow .12s steps(2);
+  }
+  .prong[data-prong="technology"]{--prong-c:var(--pill-blue);}
+  .prong[data-prong="passion"]{--prong-c:var(--pill-red);}
+  @media (hover:hover){
+    .prong:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 0 var(--prong-c);}
+  }
+  .prong:focus-visible{transform:translate(-2px,-2px);box-shadow:6px 6px 0 0 var(--prong-c);
+                       outline:2px solid var(--pine);outline-offset:3px;}
+  .prong:active{transform:translate(2px,2px);box-shadow:2px 2px 0 0 var(--prong-c);}
+  /* pixel pointer above the hovered/focused chip */
+  .prong::after{
+    content:"\25BC";content:"\25BC" / "";   /* empty alt text: decorative, keeps it out of the button name */
+    position:absolute;left:50%;bottom:calc(100% + 6px);
+    transform:translateX(-50%);font-size:10px;line-height:1;color:var(--prong-c);
+    opacity:0;pointer-events:none;
+  }
+  @media (hover:hover){.prong:hover::after{opacity:1;}}
+  .prong:focus-visible::after{opacity:1;}
+  .fork-status{
+    margin:16px 0 0;min-height:1.6em;
+    font-style:italic;color:var(--ink-soft);font-size:clamp(17px,1.6vw,19px);
+  }
+  .avatar{transition:transform .2s steps(2);}
+  .avatar[data-look="research"]{transform:translate(-2px,0);}
+  .avatar[data-look="technology"]{transform:translate(0,-1px);}
+  .avatar[data-look="passion"]{transform:translate(2px,0);}
+  @media (prefers-reduced-motion:no-preference){
+    .prong:hover::after,.prong:focus-visible::after{animation:caret .8s steps(1,end) infinite;}
+    .avatar-body{animation:idle 1.6s steps(1,end) infinite;}
+    /* backwards, not both: a held transform would override the hover/focus lift */
+    .prongs.is-revealed .prong{animation:pop 240ms steps(3) backwards;}
+    .prongs.is-revealed .prong:nth-child(2){animation-delay:120ms;}
+    .prongs.is-revealed .prong:nth-child(3){animation-delay:240ms;}
+  }
+  @keyframes caret{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,-2px);}}
+  @keyframes idle{0%,100%{transform:none;}50%{transform:translateY(-1px);}}
+  @keyframes pop{from{transform:scale(.9);opacity:0;}to{transform:none;opacity:1;}}
+
+  @media (max-width:559px){
+    .prong{font-size:15px;padding:10px 12px;}
+  }
+  @media (max-width:359px){
+    .prong{font-size:14px;padding:8px;letter-spacing:0;}
+  }
+  /* short screens (landscape phones): PRD 16.2 + 17.4 */
+  @media (max-height:500px){
+    .scene-3{padding-block:16px;}
+    .prompt{margin-top:18px;}
+    .pills{margin-top:10px;}
+    .fork-scene{padding-top:max(env(safe-area-inset-top), 16px);padding-bottom:calc(8px + env(safe-area-inset-bottom));}
+    #where-title{font-size:28px;}
+    .fork{width:min(100%, 400px);}
+    .prongs{margin-top:12px;}
+    .prong{font-size:14px;padding:8px 10px;}
+  }
+
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{transition-duration:.01ms !important;animation:none !important;}
   }
@@ -278,22 +415,42 @@
       <div class="choice">
         <p class="ask">Allow me to introduce myself&hellip;</p>
         <p class="or">Or we can get right to business.</p>
-        <div class="pills">
+        <p class="prompt" id="choice-prompt">What&rsquo;ll it be? The choice is yours.</p>
+        <div class="pills" role="group" aria-labelledby="choice-prompt">
           <button type="button" class="pill pill-red" id="pill-red">indulge me</button>
           <a class="pill pill-blue" id="pill-blue" href="index.html">straight to business</a>
         </div>
-        <p class="stub" id="stub" aria-live="polite"></p>
       </div>
     </section>
   </div>
 </main>
+
+<section class="act2" id="where" aria-labelledby="where-title" hidden>
+  <div class="fork-scene">
+    <h2 id="where-title" tabindex="-1">Where should we start?</h2>
+    <div class="fork">
+      <div class="prongs" role="group" aria-labelledby="where-title">
+        <button type="button" class="prong" data-prong="research" aria-describedby="fork-soon">research</button>
+        <button type="button" class="prong" data-prong="technology" aria-describedby="fork-soon">technology</button>
+        <button type="button" class="prong" data-prong="passion" aria-describedby="fork-soon">passion</button>
+      </div>
+      <svg class="road" id="road" viewBox="0 0 120 80" shape-rendering="crispEdges"
+           preserveAspectRatio="xMidYMax meet" role="img"
+           aria-label="A pixel-art figure, seen from behind, standing where a road splits three ways."></svg>
+    </div>
+    <p class="fork-status" id="fork-status" role="status" aria-live="polite"></p>
+    <span class="vh" id="fork-soon">Coming soon.</span>
+  </div>
+  <div class="curtain" id="curtain">
+    <p class="liked" tabindex="-1">I knew I liked you<span class="dot">.</span></p>
+  </div>
+</section>
 
 <script>
 (function(){
   var root = document.documentElement;
   var stage = document.getElementById('stage');
   var nudge = document.getElementById('nudge');
-  var stub = document.getElementById('stub');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var behavior = function(){ return reduce.matches ? 'auto' : 'smooth'; };
   var layered = function(){ return !reduce.matches; };   // sticky-stage layout active
@@ -351,11 +508,150 @@
     });
   });
 
-  /* ---- red pill stub (R10) ---- */
-  document.getElementById('pill-red').addEventListener('click', function(){
-    var msg = 'Coming soon. Take the blue pill for now.';
-    if(stub.textContent !== msg) stub.textContent = msg;
+  /* ================= act two: "indulge me" (PRD section 17) ================= */
+  var NS = 'http://www.w3.org/2000/svg';
+  var C = {ink:'#16241C', card:'#F8FAF4', muted:'#6E8270', rule:'#C8D3BE', pine:'#2F5B44',
+           moss:'#7E9C60', red:'#9A3B2E', blue:'#2E4A6B', skin:'#C9946E'};
+  var road = document.getElementById('road');
+  function grp(parent, attr, val){
+    var el = document.createElementNS(NS, 'g'); el.setAttribute(attr, val);
+    parent.appendChild(el); return el;
+  }
+  function px(parent, x, y, w, h, fill){
+    var r = document.createElementNS(NS, 'rect');
+    r.setAttribute('x', x); r.setAttribute('y', y); r.setAttribute('width', w); r.setAttribute('height', h);
+    r.setAttribute('fill', fill); parent.appendChild(r);
+  }
+  /* road geometry (PRD 17.3.2): one user unit = one pixel */
+  var fills = {trunk:[[55,56,10,24]], research:[], technology:[[55,0,10,56]], passion:[]};
+  var dashes = {research:[], technology:[], passion:[]};
+  var dashC = {research:C.pine, technology:C.blue, passion:C.red};
+  for(var y = 2; y <= 44; y += 6) dashes.technology.push([60,y,1,4]);
+  for(var k = 1; k <= 28; k++){
+    var xl = Math.floor(55 - 1.9*k + 0.5), xr = Math.floor(55 + 1.9*k + 0.5), yk = 56 - 2*k;
+    fills.research.push([xl,yk,10,2]); fills.passion.push([xr,yk,10,2]);
+    if(k >= 4 && k % 3 !== 0){ dashes.research.push([xl+5,yk,1,2]); dashes.passion.push([xr+5,yk,1,2]); }
+  }
+  var edges = grp(road, 'data-part', 'edges');
+  Object.keys(fills).forEach(function(n){
+    fills[n].forEach(function(f){ px(edges, f[0]-1, f[1], f[2]+2, f[3], C.muted); });
   });
+  px(grp(road, 'data-part', 'trunk'), 55, 56, 10, 24, C.card);
+  ['research','technology','passion'].forEach(function(n){
+    var g = grp(road, 'data-prong', n);
+    fills[n].forEach(function(f){ px(g, f[0], f[1], f[2], f[3], C.card); });
+    dashes[n].forEach(function(f){ px(g, f[0], f[1], f[2], f[3], dashC[n]); });
+  });
+  var tufts = grp(road, 'data-part', 'tufts');
+  [[10,60],[28,72],[38,46],[34,12],[110,60],[92,72],[82,46],[86,12]].forEach(function(t){
+    px(tufts, t[0], t[1]+1, 1, 1, C.moss); px(tufts, t[0]+1, t[1], 1, 1, C.moss); px(tufts, t[0]+2, t[1]+1, 1, 1, C.moss);
+  });
+  px(road, 55, 78, 10, 1, C.rule);   // avatar shadow
+  /* pixel avatar, back view, 12x16 (PRD 17.3.3). Edit the map to change the look. */
+  var MAP = ['....HHHH....','...HHHHHH...','..HHHHHHHH..','..HHHHHHHH..',
+             '..SHHHHHHS..','...HHHHHH...','....SSSS....','..GGRRRRGG..',
+             '.GGRRRRRRGG.','.GGRRRRRRGG.','.SGRRRRRRGS.','..GGRRRRGG..',
+             '...BBBBBB...','...BB..BB...','...BB..BB...','..KKK..KKK..'];
+  var PAL = {H:C.ink, S:C.skin, G:C.pine, R:C.red, B:C.blue, K:C.ink};
+  var avatar = document.createElementNS(NS, 'g'); avatar.setAttribute('class', 'avatar'); road.appendChild(avatar);
+  var body = grp(avatar, 'class', 'avatar-body');
+  MAP.forEach(function(row, r){
+    row.split('').forEach(function(ch, c){ if(PAL[ch]) px(body, 54 + c, 62 + r, 1, 1, PAL[ch]); });
+  });
+
+  /* ---- state machine: closed -> playing -> open, open|playing -> closed on Back ---- */
+  var act2 = document.getElementById('where');
+  var track = document.getElementById('track');
+  var forkScene = act2.querySelector('.fork-scene');
+  var curtain = document.getElementById('curtain');
+  var liked = curtain.querySelector('.liked');
+  var title = document.getElementById('where-title');
+  var prongs = act2.querySelector('.prongs');
+  var status = document.getElementById('fork-status');
+  var pillRed = document.getElementById('pill-red');
+  var act = 'closed', t0 = 0, skipped = false, endTimer = null, last = '';
+
+  function reveal(){
+    prongs.classList.remove('is-revealed'); void prongs.offsetWidth; prongs.classList.add('is-revealed');
+  }
+  function finish(){
+    if(act !== 'playing') return;
+    clearTimeout(endTimer); act = 'open';
+    curtain.hidden = true; act2.classList.remove('is-playing');
+    forkScene.inert = false;
+    title.focus({preventScroll:true});
+    reveal();
+  }
+  function start(){
+    if(act !== 'closed') return;
+    act = 'playing'; t0 = performance.now(); skipped = false;
+    history.pushState({act:2}, '', '#where');
+    cancel();
+    track.inert = true; forkScene.inert = true;
+    curtain.hidden = false; act2.hidden = false; act2.scrollTop = 0;
+    act2.classList.add('is-playing');
+    liked.focus({preventScroll:true});
+    // reduced motion: a 1.5s cut. Otherwise a safety net if animationend is lost.
+    endTimer = setTimeout(finish, reduce.matches ? 1500 : 3600);
+  }
+  function skip(){
+    if(act !== 'playing' || skipped || performance.now() - t0 < 400) return;
+    var anims = curtain.getAnimations({subtree:true});
+    var raise = anims.filter(function(a){ return a.animationName === 'curtain-raise'; })[0];
+    if(!raise){ skipped = true; finish(); return; }          // reduced motion: cut now
+    if(raise.currentTime >= 2250) return;                    // already raising
+    skipped = true;
+    anims.forEach(function(a){
+      if(a.animationName === 'curtain-raise') a.currentTime = 2250; else a.finish();
+    });
+  }
+  function openDirect(){
+    if(act === 'open') return;
+    clearTimeout(endTimer); cancel(); act = 'open';
+    act2.classList.remove('is-playing'); curtain.hidden = true;
+    track.inert = true; forkScene.inert = false; act2.hidden = false;
+    title.focus({preventScroll:true});
+    reveal();
+  }
+  function close(){
+    if(act === 'closed') return;
+    clearTimeout(endTimer); act = 'closed';
+    act2.classList.remove('is-playing'); act2.hidden = true; curtain.hidden = false;
+    track.inert = false; status.textContent = ''; last = ''; look('');
+    window.scrollTo({top: maxY(), behavior: 'auto'}); update();
+    pillRed.focus({preventScroll:true});
+  }
+
+  pillRed.addEventListener('click', start);
+  curtain.addEventListener('pointerdown', skip);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip();
+  });
+  curtain.addEventListener('animationend', function(e){
+    if(e.animationName === 'curtain-raise') finish();
+  });
+  window.addEventListener('popstate', function(){
+    if(location.hash === '#where') openDirect(); else close();
+  });
+
+  /* ---- prongs: honest stubs (R26). No navigation, just an announced "coming soon". ---- */
+  function look(n){ if(n) avatar.setAttribute('data-look', n); else avatar.removeAttribute('data-look'); }
+  Array.prototype.forEach.call(prongs.querySelectorAll('.prong'), function(b){
+    var n = b.getAttribute('data-prong');
+    b.addEventListener('pointerenter', function(){ look(n); });
+    b.addEventListener('focus', function(){ look(n); });
+    b.addEventListener('pointerleave', function(){ look(last); });
+    b.addEventListener('blur', function(){ look(last); });
+    b.addEventListener('click', function(){
+      last = n; look(n);
+      status.textContent = '';                 // clear first so a repeat is re-announced
+      requestAnimationFrame(function(){
+        status.textContent = n.charAt(0).toUpperCase() + n.slice(1) + " is coming soon. I'm still paving that road.";
+      });
+    });
+  });
+
+  if(location.hash === '#where') openDirect();
 })();
 </script>
 </body>

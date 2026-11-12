@@ -13,6 +13,7 @@ Open / In progress / Shipped. Never delete shipped rows; merge, never overwrite.
 
 ## In progress
 - Intro experience (scroll-driven walkthrough: welcome → idle nudge → "Nice to meet you. I'm Nick." → red pill/blue pill choice). PRD approved (`docs/intro-experience-PRD.md`, Crit-passed), building on branch `feature/intro-experience`.
+- Intro addendum (card t_4749555c): pill-scene prompt "What’ll it be? The choice is yours." + red-pill ember glow; "indulge me" now plays "I knew I liked you." on a red curtain that raises to the fork scene ("Where should we start?", pixel avatar, research/technology/passion stub prongs). Built in `intro.html` on `feature/intro-experience` per PRD sections 16-17; awaiting Crit and Nick's review. Not merged to main.
 
 ## Shipped
 (none yet)
