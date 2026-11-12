@@ -1247,27 +1247,39 @@
     setPoster(cur); setCredit(cur);
   }
   function gNear(){ gShow(); if(gMode() === 'video' && alive[cur]) setSrc(on || vids[0], cur); }
+  /* The 7s clock never waits on a video. iOS WebKit (Safari and Firefox iOS) will not buffer a paused, never-played
+     <video> past HAVE_METADATA (readyState 1), so the old "swap only when the next clip reports readyState >= 3"
+     gate never opened on iPhone and the rotation sat on Borderlands forever. Now: the next clip is started muted and
+     hidden 1.5s early (playing is the only thing that makes iOS buffer it), the game always advances on time, and a
+     clip is only faded in once its frames are actually moving (reveal). Until then the game's poster shows. */
+  function idleOf(){ return on === vids[0] ? vids[1] : vids[0]; }
+  function reveal(v){
+    if(v !== on || !open || gMode() !== 'video' || v.paused || !(v.currentTime > 0)) return;
+    if(!v.classList.contains('is-on')){ v.classList.add('is-on'); idleOf().classList.remove('is-on'); }
+  }
   function gSchedule(){
     clearTimeout(gPrepT); clearTimeout(gSwapT);
-    gPrepT = setTimeout(function(){ var n = nextAlive(cur); if(n >= 0 && n !== cur && gMode() === 'video') setSrc(on === vids[0] ? vids[1] : vids[0], n); }, 5500);
+    gPrepT = setTimeout(function(){
+      var n = nextAlive(cur); if(n < 0 || n === cur || gMode() !== 'video') return;
+      var idle = idleOf(); setSrc(idle, n); play(idle);        // hidden (opacity 0) warm-up
+    }, 5500);
     gSwapT = setTimeout(gSwap, 7000);
   }
   function gStart(){
     if(!open || paused || !active.gamer) return;
     gShow(); if(gMode() === 'grid') return;
     if(!alive[cur]){ var a = nextAlive(cur); if(a < 0){ posters.style.backgroundImage = 'none'; return; } cur = a; gShow(); }
-    if(gMode() === 'video'){ on = on || vids[0]; setSrc(on, cur); on.classList.add('is-on'); play(on); }
+    if(gMode() === 'video'){ on = on || vids[0]; setSrc(on, cur); play(on); reveal(on); }
     gSchedule();
   }
   function gSwap(){
     var n = nextAlive(cur);
     if(n < 0 || n === cur){ gSchedule(); return; }
     if(gMode() === 'video'){
-      var idle = on === vids[0] ? vids[1] : vids[0];
-      setSrc(idle, n);
-      if(idle.readyState < 3){ gSchedule(); return; }        // not ready: keep the current clip, retry next tick
-      play(idle); idle.classList.add('is-on'); on.classList.remove('is-on');
-      var old = on; on = idle; setTimeout(function(){ if(old !== on) old.pause(); }, 800);
+      var idle = idleOf(), old = on;
+      setSrc(idle, n); if(idle.paused) play(idle);
+      on = idle; old.classList.remove('is-on'); reveal(idle);  // crossfade if rolling, else poster until it rolls
+      setTimeout(function(){ if(old !== on) old.pause(); }, 800);
     }
     cur = n; setPoster(n); setCredit(n); gSchedule();
   }
@@ -1277,6 +1289,8 @@
     for(var k = 0; k < vids.length; k++){ var v = vids[k]; v.classList.remove('is-on'); v.removeAttribute('src'); v.removeAttribute('data-i'); v.load(); }
   }
   Array.prototype.forEach.call(vids, function(v){
+    v.addEventListener('playing', function(){ reveal(v); });
+    v.addEventListener('timeupdate', function(){ reveal(v); });
     v.addEventListener('error', function(){
       if(!v.getAttribute('src')) return;
       var i = +v.dataset.i; alive[i] = false; v.removeAttribute('src'); v.removeAttribute('data-i');
