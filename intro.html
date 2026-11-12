@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Nicholas Pings Rodriguez &middot; Welcome</title>
+<meta name="description" content="Welcome. Nice to meet you, I'm Nick. A short introduction before the work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..800,0..100,0..1;1,9..144,300..800,0..100,0..1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  // Progressive enhancement flags. No JS = static stack (PRD section 6).
+  (function(d){
+    d.classList.add('js');
+    if(!(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'))) d.classList.add('fb');
+  })(document.documentElement);
+</script>
+<style>
+  :root{
+    color-scheme: only light;
+    --paper:#EAEEE4;
+    --card:#F8FAF4;
+    --ink:#16241C;
+    --ink-soft:#3B5245;
+    --muted:#6E8270;
+    --rule:#C8D3BE;
+    --pine:#2F5B44;
+    --moss:#7E9C60;
+    --leaf:#CFE2A6;
+    --rec:#B0703A;
+    --pad:clamp(22px,6vw,72px);
+    /* intro-only tokens (PRD section 1) */
+    --pill-red:#9A3B2E;
+    --pill-blue:#2E4A6B;
+  }
+
+  *{box-sizing:border-box;}
+  /* overflow-x:clip, never hidden: hidden breaks sticky + the root scroll timeline */
+  html,body{margin:0;padding:0;max-width:100%;overflow-x:clip;}
+  html{background-color:var(--paper);scroll-snap-type:y proximity;}
+  body{
+    color:var(--ink);
+    font-family:"EB Garamond",Garamond,Georgia,serif;
+    font-size:clamp(17px,1.05vw,19px);line-height:1.6;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+  }
+  a{color:inherit;}
+
+  /* ================= skip link ================= */
+  .skip{
+    position:absolute;left:12px;top:12px;z-index:20;
+    font-family:"IBM Plex Mono",monospace;font-size:14px;
+    padding:10px 14px;border:1px solid var(--rule);border-radius:6px;
+    background-color:var(--card);color:var(--ink);text-decoration:none;
+    clip-path:inset(50%);width:1px;height:1px;overflow:hidden;white-space:nowrap;
+  }
+  .skip:focus{clip-path:none;width:auto;height:auto;overflow:visible;}
+
+  /* ================= base: static stack (reduced motion / no JS) ================= */
+  .track{position:relative;}
+  .scene{
+    min-height:100svh;display:grid;place-items:center;
+    padding:clamp(48px,8svh,96px) var(--pad);text-align:center;
+    scroll-snap-align:start;
+  }
+  .snap{display:none;}
+
+  /* scene 1 */
+  .welcome{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;
+    font-variation-settings:"opsz" 144;
+    font-size:clamp(56px,15vw,160px);line-height:1;letter-spacing:-.02em;
+    margin:0;color:var(--ink);
+  }
+  .dot{color:var(--moss);}
+
+  /* scene 2 */
+  .meet{margin:0;text-align:left;font-weight:400;}
+  .meet .line{
+    display:block;font-style:italic;color:var(--ink-soft);
+    font-size:clamp(22px,4.4vw,40px);line-height:1.2;
+  }
+  .meet .line + .line{margin-top:.1em;}
+  .logotype{
+    display:block;white-space:nowrap;
+    font-family:"Fraunces",Georgia,serif;font-style:normal;font-weight:800;
+    font-variation-settings:"opsz" 144, "SOFT" 50, "WONK" 0;
+    font-size:min(clamp(96px,30vw,280px),40svh);
+    letter-spacing:-.045em;line-height:.9;color:var(--ink);
+    margin:.06em 0 0 -.04em;
+  }
+  .logotype .dot{display:inline-block;margin-left:-.03em;transform-origin:50% 80%;}
+
+  /* scene 3 */
+  .choice{max-width:900px;width:100%;}
+  .ask{
+    font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:clamp(30px,5.6vw,64px);line-height:1.08;letter-spacing:-.015em;
+    margin:0;color:var(--ink);text-wrap:balance;
+  }
+  .or{
+    font-style:italic;color:var(--ink-soft);
+    font-size:clamp(22px,3.6vw,38px);line-height:1.25;
+    margin:clamp(10px,1.6vw,18px) 0 0;text-wrap:balance;
+  }
+  .pills{
+    display:flex;gap:24px;justify-content:center;align-items:center;flex-wrap:wrap;
+    margin-top:clamp(30px,5svh,56px);
+  }
+  .pill{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:56px;padding:0 32px;border:0;border-radius:999px;
+    color:var(--card);text-decoration:none;cursor:pointer;line-height:1.1;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 20px -10px rgba(22,36,28,.5);
+    transition:transform .18s cubic-bezier(.22,.7,.2,1),box-shadow .18s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .pill-red{
+    background-color:var(--pill-red);
+    font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:400;
+    font-variation-settings:"opsz" 72, "SOFT" 100, "WONK" 1;
+    font-size:clamp(22px,2.4vw,28px);
+  }
+  .pill-blue{
+    background-color:var(--pill-blue);
+    font-family:"IBM Plex Mono",monospace;font-weight:500;
+    font-size:clamp(15px,1.4vw,17px);letter-spacing:.02em;
+  }
+  @media (hover:hover){
+    .pill:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 12px 24px -10px rgba(22,36,28,.55);}
+  }
+  .pill:active{transform:scale(.98);}
+  .stub{
+    min-height:1.6em;margin:18px 0 0;
+    font-style:italic;color:var(--muted);font-size:clamp(17px,1.6vw,19px);
+  }
+  @media (max-width:559px){
+    .pills{flex-direction:column;gap:14px;}
+    .pill{width:100%;max-width:320px;min-height:52px;}
+  }
+
+  /* ================= idle nudge ================= */
+  .nudge{
+    position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:10;
+    transform:translate(-50%,16px);opacity:0;
+    display:inline-flex;align-items:center;gap:8px;
+    padding:10px 18px;border:1px solid var(--rule);border-radius:999px;
+    background-color:var(--card);color:var(--ink-soft);
+    font-family:"EB Garamond",Garamond,Georgia,serif;font-style:italic;font-size:18px;line-height:1.2;
+    cursor:pointer;white-space:nowrap;
+    transition:opacity .4s ease,transform .4s cubic-bezier(.22,.7,.2,1);
+  }
+  .nudge[hidden]{display:none;}
+  .nudge.is-shown{opacity:1;transform:translate(-50%,0);}
+  .nudge.is-leaving{opacity:0;transition-duration:.25s;}
+  .nudge .arrow{color:var(--moss);font-style:normal;display:inline-block;}
+
+  a:focus-visible,button:focus-visible{outline:2px solid var(--pine);outline-offset:3px;}
+
+  /* ================= motion: sticky stage, scenes layered ================= */
+  @media (prefers-reduced-motion:no-preference){
+    html.js .track{height:300svh;}
+    html.js .stage{position:sticky;top:0;height:100svh;overflow:clip;}
+    html.js .scene{position:absolute;inset:0;min-height:0;scroll-snap-align:none;}
+    html.js .scene-3{pointer-events:none;}
+    html.js .stage.is-live .scene-3{pointer-events:auto;}
+    html.js .snap{display:block;position:absolute;left:0;width:1px;height:0;scroll-snap-align:start;}
+    html.js .snap-1{top:0;}
+    html.js .snap-2{top:calc((100% - 100vh) / 2);}
+    html.js .snap-3{bottom:0;scroll-snap-align:end;}
+
+    .scene-1 .welcome{animation:intro-load .6s cubic-bezier(.22,.7,.2,1) both;}
+    .nudge .arrow{animation:bob 2s ease-in-out infinite;}
+
+    /* ---- scroll-driven scrub: keyframe % == scroll progress p (PRD section 3) ---- */
+    @supports (animation-timeline: scroll()){
+      html.js .scene-1{
+        animation:s1 linear both;
+        animation-timeline: scroll(root block);
+      }
+      html.js .scene-2{
+        animation:s2 linear both;
+        animation-timeline: scroll(root block);
+      }
+      html.js .logotype .dot{
+        animation:dot-pop linear both;
+        animation-timeline: scroll(root block);
+      }
+      html.js .scene-3{
+        animation:s3 linear both;
+        animation-timeline: scroll(root block);
+      }
+      html.js .ask{
+        animation:s3-ask linear both;
+        animation-timeline: scroll(root block);
+      }
+      html.js .or{
+        animation:s3-or linear both;
+        animation-timeline: scroll(root block);
+      }
+      html.js .pills,html.js .stub{
+        animation:s3-pills linear both;
+        animation-timeline: scroll(root block);
+      }
+    }
+
+    /* ---- fallback (no animation-timeline): discrete crossfade keyed on data-scene ---- */
+    html.fb .scene{opacity:0;transform:translateY(4svh);transition:opacity .5s ease,transform .5s cubic-bezier(.22,.7,.2,1);}
+    html.fb .stage[data-scene="1"] .scene-1,
+    html.fb .stage[data-scene="2"] .scene-2,
+    html.fb .stage[data-scene="3"] .scene-3{opacity:1;transform:none;}
+  }
+
+  @keyframes intro-load{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+
+  @keyframes s1{
+    0%,10%{opacity:1;transform:none;}
+    40%,100%{opacity:0;transform:translateY(-12svh) scale(.92);}
+  }
+  @keyframes s2{
+    0%,10%{opacity:0;transform:translateY(10svh);}
+    40%,60%{opacity:1;transform:none;}
+    90%,100%{opacity:0;transform:translateY(-12svh);}
+  }
+  @keyframes dot-pop{
+    0%,32%{transform:scale(0);}
+    40%,100%{transform:scale(1);}
+  }
+  @keyframes s3{
+    0%,60%{opacity:0;}
+    66%,100%{opacity:1;}
+  }
+  @keyframes s3-ask{
+    0%,60%{opacity:0;transform:translateY(8svh);}
+    80%,100%{opacity:1;transform:none;}
+  }
+  @keyframes s3-or{
+    0%,68%{opacity:0;transform:translateY(8svh);}
+    86%,100%{opacity:1;transform:none;}
+  }
+  @keyframes s3-pills{
+    0%,80%{opacity:0;transform:translateY(6svh);}
+    90%,100%{opacity:1;transform:none;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms !important;animation:none !important;}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="index.html">Skip intro, go to the site</a>
+
+<button type="button" class="nudge" id="nudge" hidden>pssst! scroll down <span class="arrow" aria-hidden="true">&darr;</span></button>
+
+<main class="track" id="track">
+  <div class="stage" id="stage" data-scene="1">
+    <section class="scene scene-1" aria-label="Welcome">
+      <p class="welcome">welcome<span class="dot">.</span></p>
+    </section>
+
+    <section class="scene scene-2" aria-label="Introduction">
+      <h1 class="meet">
+        <span class="line">Nice to meet you.</span>
+        <span class="line">I'm</span>
+        <span class="logotype">Nick<span class="dot">.</span></span>
+      </h1>
+    </section>
+
+    <section class="scene scene-3" aria-label="Choose a path">
+      <div class="choice">
+        <p class="ask">Allow me to introduce myself&hellip;</p>
+        <p class="or">Or we can get right to business.</p>
+        <div class="pills">
+          <button type="button" class="pill pill-red" id="pill-red">indulge me</button>
+          <a class="pill pill-blue" id="pill-blue" href="index.html">straight to business</a>
+        </div>
+        <p class="stub" id="stub" aria-live="polite"></p>
+      </div>
+    </section>
+  </div>
+  <i class="snap snap-1" aria-hidden="true"></i>
+  <i class="snap snap-2" aria-hidden="true"></i>
+  <i class="snap snap-3" aria-hidden="true"></i>
+</main>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var stage = document.getElementById('stage');
+  var nudge = document.getElementById('nudge');
+  var stub = document.getElementById('stub');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var behavior = function(){ return reduce.matches ? 'auto' : 'smooth'; };
+  var layered = function(){ return !reduce.matches; };   // sticky-stage layout active
+  var maxY = function(){ return Math.max(1, root.scrollHeight - window.innerHeight); };
+
+  /* ---- scene state: pointer gating (.is-live) + fallback data-scene ---- */
+  var ticking = false;
+  function update(){
+    ticking = false;
+    var p = window.scrollY / maxY();
+    stage.classList.toggle('is-live', p >= 0.9);
+    stage.dataset.scene = p < 0.25 ? '1' : (p < 0.75 ? '2' : '3');
+  }
+  function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+  update();
+
+  /* ---- idle nudge (PRD 3.2): 4000ms, cancelled by real interaction ---- */
+  var state = 'waiting';           // waiting -> shown -> gone | cancelled
+  var events = ['scroll','wheel','touchstart','pointerdown','keydown'];
+  function cancel(){ if(state === 'waiting'){ state = 'cancelled'; clearTimeout(timer); detach(); } }
+  function detach(){ events.forEach(function(e){ window.removeEventListener(e, cancel, true); }); }
+  events.forEach(function(e){ window.addEventListener(e, cancel, {capture:true, passive:true}); });
+
+  function show(){
+    if(state !== 'waiting' || window.scrollY > 0) { cancel(); return; }
+    state = 'shown'; detach();
+    nudge.hidden = false;
+    void nudge.offsetWidth;        // commit start state before transitioning
+    nudge.classList.add('is-shown');
+    window.addEventListener('scroll', dismissOnScroll, {passive:true});
+  }
+  function hide(){
+    if(state !== 'shown') return;
+    state = 'gone';
+    window.removeEventListener('scroll', dismissOnScroll);
+    nudge.classList.add('is-leaving');
+    setTimeout(function(){ nudge.hidden = true; }, reduce.matches ? 0 : 250);
+  }
+  function dismissOnScroll(){ if(window.scrollY > 8) hide(); }
+  nudge.addEventListener('click', function(){
+    hide();
+    window.scrollTo({top: maxY() * 0.5, behavior: behavior()});
+  });
+
+  var timer = null;
+  if(window.scrollY > 0) cancel();
+  else timer = setTimeout(show, 4000);
+
+  /* ---- focus never lands on something invisible (WCAG 2.4.11) ---- */
+  ['pill-red','pill-blue'].forEach(function(id){
+    document.getElementById(id).addEventListener('focus', function(){
+      if(layered() && !stage.classList.contains('is-live')){
+        window.scrollTo({top: maxY(), behavior: behavior()});
+      }
+    });
+  });
+
+  /* ---- red pill stub (R10) ---- */
+  document.getElementById('pill-red').addEventListener('click', function(){
+    var msg = 'Coming soon. Take the blue pill for now.';
+    if(stub.textContent !== msg) stub.textContent = msg;
+  });
+})();
+</script>
+</body>
+</html>
