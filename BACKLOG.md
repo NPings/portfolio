@@ -15,7 +15,7 @@ Open / In progress / Shipped. Never delete shipped rows; merge, never overwrite.
 ## In progress
 - Intro experience (scroll-driven walkthrough: welcome → idle nudge → "Nice to meet you. I'm Nick." → red pill/blue pill choice). PRD approved (`docs/intro-experience-PRD.md`, Crit-passed), building on branch `feature/intro-experience`.
 - Intro addendum (card t_4749555c): pill-scene prompt "What’ll it be? The choice is yours." + red-pill ember glow; "indulge me" now plays "I knew I liked you." on a red curtain that raises to the fork scene ("Where should we start?", pixel avatar, research/technology/passion stub prongs). Built in `intro.html` on `feature/intro-experience` per PRD sections 16-17; awaiting Crit and Nick's review. Not merged to main.
-- Passion branch intro beat (PRD card t_a8f81d69, build card t_593e8d60): the fork's **passion** prong wipes in from the right to "I'm. 👏 A. 👏 Nerd. 👏", and as the visitor scrolls, "Nerd." glitches, takes over the page (paper flips to ink) and branches into three stub links: techie, gamer, photographer. Spec'd in PRD sections 19-24 (R33-R49); build pending. The research and technology prongs stay stubs.
+- Passion branch intro beat (PRD card t_a8f81d69, build card t_593e8d60): the fork's **passion** prong wipes in from the right to "I'm. 👏 A. 👏 Nerd. 👏", and as the visitor scrolls, "Nerd." glitches, takes over the page (paper flips to ink) and branches into three stub links: techie, gamer, photographer. Spec'd in PRD sections 19-24 (R33-R49); built in `intro.html` on `feature/intro-experience` (card t_593e8d60), awaiting Crit and Nick's review. Not merged to main. The research and technology prongs stay stubs.
 
 ## Shipped
 (none yet)

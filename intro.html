@@ -387,6 +387,152 @@
     .prong{font-size:14px;padding:8px 10px;}
   }
 
+  /* ================= act three: passion, "I'm. A. Nerd." (PRD sections 20-23) ================= */
+  @property --g    { syntax:'<length>'; inherits:true; initial-value:0px; }
+  @property --g-on { syntax:'<number>'; inherits:true; initial-value:0; }
+  .act3{
+    position:fixed;inset:0;z-index:16;
+    background-color:var(--paper);overflow-y:auto;overscroll-behavior:contain;
+    scrollbar-width:none;scroll-timeline:--nerd block;
+  }
+  .act3::-webkit-scrollbar{display:none;}
+  .act3[hidden]{display:none;}
+  /* base = static layout (reduced motion): lines, then chips, then status, in flow */
+  .nerd-stage{
+    position:relative;min-height:100svh;display:grid;place-items:center;align-content:center;
+    text-align:center;padding:clamp(48px,8svh,96px) var(--pad);color:var(--ink);background-color:var(--paper);
+  }
+  .nerd-scan{
+    position:absolute;inset:0;pointer-events:none;opacity:0;
+    background:repeating-linear-gradient(0deg, rgba(248,250,244,.05) 0 1px, transparent 1px 3px);
+  }
+  .nerd-title{margin:0;font-weight:400;}
+  #nerd-title:focus{outline:none;}
+  .beats{display:grid;justify-items:center;gap:.04em;}
+  .beat{
+    display:block;white-space:nowrap;
+    font-family:"Fraunces",Georgia,serif;font-weight:600;font-variation-settings:"opsz" 144;
+    font-size:min(clamp(56px,16vw,128px),22svh);line-height:1;letter-spacing:-.02em;color:inherit;
+  }
+  .nerd-word{
+    display:inline-block;position:relative;font-weight:800;
+    font-variation-settings:"opsz" 144, "SOFT" 50, "WONK" 0;
+    letter-spacing:-.045em;transform-origin:50% 55%;
+  }
+  .clap{
+    display:inline-block;margin-left:.18em;font-size:.62em;vertical-align:.06em;font-style:normal;
+    font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+  }
+  .chips{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;padding:0 var(--pad);margin-top:clamp(28px,5svh,48px);}
+  .chip{display:inline-flex;align-items:center;text-decoration:none;}
+  .chip[data-passion="techie"]      {--prong-c:var(--leaf);}             /* terminal green */
+  .chip[data-passion="gamer"]       {--prong-c:rgb(var(--glow-ember));}  /* ember red */
+  .chip[data-passion="photographer"]{--prong-c:var(--rule);}             /* silver, like film */
+  .nerd-status{
+    margin:clamp(20px,3svh,32px) 0 0;padding:0 var(--pad);min-height:1.6em;
+    font-style:italic;font-size:clamp(17px,1.6vw,19px);color:var(--ink-soft);
+  }
+  .nerd-cue{
+    position:absolute;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);
+    min-height:44px;padding:8px 16px;border:1px solid var(--rule);border-radius:999px;
+    background-color:var(--card);color:var(--ink-soft);
+    font-family:"IBM Plex Mono",monospace;font-size:14px;white-space:nowrap;cursor:pointer;
+    opacity:0;transition:opacity .3s ease;
+  }
+  .nerd-cue.is-shown{opacity:1;}
+  .nerd-cue[hidden]{display:none;}
+  @media (max-width:559px){ .chips{gap:12px;} }
+
+  /* entry: a right-hand wipe, then the staccato reveal (time-based, PRD 20.2-20.3) */
+  .act3.is-entering{
+    animation:nerd-wipe 700ms cubic-bezier(.7,0,.2,1) 120ms both;
+    box-shadow:-18px 0 36px -12px rgba(22,36,28,.45);overflow-y:hidden;
+  }
+  .act3.is-entering .beat   {animation:beat-in 180ms cubic-bezier(.2,.9,.3,1.25) both;}
+  .act3.is-entering .beat-1 {animation-delay:1220ms;}
+  .act3.is-entering .beat-2 {animation-delay:1740ms;}
+  .act3.is-entering .beat-3 {animation:beat-in-big 240ms cubic-bezier(.2,.9,.3,1.25) 2260ms both;}
+  .act3.is-entering .clap   {animation:clap-in 200ms cubic-bezier(.2,.9,.3,1.4) both;}
+  .act3.is-entering .beat-1 .clap{animation-delay:1480ms;}
+  .act3.is-entering .beat-2 .clap{animation-delay:2000ms;}
+  .act3.is-entering .beat-3 .clap{animation-delay:2520ms;}
+  @keyframes nerd-wipe  {from{transform:translateX(calc(100% + 48px));}to{transform:none;}}
+  @keyframes beat-in    {from{opacity:0;transform:scale(1.35);}to{opacity:1;transform:none;}}
+  @keyframes beat-in-big{from{opacity:0;transform:scale(1.6);}to{opacity:1;transform:none;}}
+  @keyframes clap-in    {from{opacity:0;transform:scale(.4) rotate(-14deg);}to{opacity:1;transform:none;}}
+
+  /* motion allowed: a 300svh scroll track behind a sticky stage (PRD 21.1) */
+  @media (prefers-reduced-motion:no-preference){
+    .nerd-track{height:300svh;}
+    .nerd-stage{position:sticky;top:0;height:100svh;min-height:0;overflow:clip;padding:0 var(--pad);}
+    .chips{position:absolute;left:0;right:0;bottom:clamp(40px,14svh,140px);margin:0;pointer-events:none;}
+    .nerd-stage.is-live .chips{pointer-events:auto;}
+    .nerd-status{position:absolute;left:0;right:0;margin:0;color:var(--rule);
+      bottom:calc(clamp(8px,5svh,48px) + env(safe-area-inset-bottom));}
+    .chip:focus-visible{outline-color:var(--card);}
+    @media (max-width:359px){ .chips{bottom:clamp(64px,17svh,140px);} }   /* room for a 2-line status */
+    /* the glitch layers only exist when motion is allowed (PRD 21.3) */
+    .nerd-word::before,.nerd-word::after{
+      content:attr(data-text);content:attr(data-text) / "";   /* empty alt text: never read aloud */
+      position:absolute;inset:0;pointer-events:none;opacity:var(--g-on);
+    }
+    .nerd-word::before{color:rgb(var(--glow-ember));transform:translateX(calc(var(--g) * -1));
+      animation:slice-a 1.5s steps(1,end) infinite paused;}
+    .nerd-word::after{color:var(--leaf);transform:translateX(var(--g));
+      animation:slice-b 1.5s steps(1,end) infinite paused;}
+    .act3.is-scrolling .nerd-word::before,
+    .act3.is-scrolling .nerd-word::after{animation-play-state:running;}
+
+    @supports (animation-timeline: scroll()){
+      .nerd-stage{animation:nerd-bg linear both;animation-timeline:--nerd;}
+      .beat-1,.beat-2,.beats .clap{animation:nerd-drop linear both;animation-timeline:--nerd;}
+      .nerd-word{animation:nerd-takeover linear both;animation-timeline:--nerd;}
+      .nerd-scan{animation:nerd-scan linear both;animation-timeline:--nerd;}
+      /* individual translate/scale so the chip's hover/focus transform still stacks on top */
+      .chip[data-passion="techie"]      {animation:nerd-branch-1 linear both;animation-timeline:--nerd;}
+      .chip[data-passion="gamer"]       {animation:nerd-branch-2 linear both;animation-timeline:--nerd;}
+      .chip[data-passion="photographer"]{animation:nerd-branch-3 linear both;animation-timeline:--nerd;}
+    }
+
+    /* fallback (no animation-timeline): same scenes, stepped on data-q (PRD 21.6) */
+    html.fb .nerd-stage{transition:background-color .6s ease,color .6s ease;}
+    html.fb .nerd-word{transition:transform .6s cubic-bezier(.22,.7,.2,1),--g .4s,--g-on .4s;}
+    html.fb .beat-1,html.fb .beat-2,html.fb .beats .clap{transition:opacity .5s ease,transform .6s cubic-bezier(.22,.7,.2,1);}
+    html.fb .nerd-scan{transition:opacity .5s ease;}
+    html.fb .chip{opacity:0;translate:0 -40px;scale:.6;
+      transition:opacity .5s ease,translate .6s cubic-bezier(.22,.7,.2,1),scale .6s cubic-bezier(.22,.7,.2,1),transform .12s steps(2),box-shadow .12s steps(2);}
+    html.fb .nerd-stage:not([data-q="0"]) :is(.beat-1,.beat-2,.clap){opacity:0;transform:translateY(-4svh);}
+    html.fb .nerd-stage[data-q="1"] .nerd-word{--g:.03em;--g-on:.8;transform:translate(0,var(--dy)) scale(1.15);}
+    html.fb .nerd-stage:is([data-q="2"],[data-q="3"]){background-color:var(--ink);color:var(--card);}
+    html.fb .nerd-stage:is([data-q="2"],[data-q="3"]) .nerd-scan{opacity:1;}
+    html.fb .nerd-stage[data-q="2"] .nerd-word{--g:.06em;--g-on:1;transform:translate(0,var(--dy)) scale(var(--s-peak));}
+    html.fb .nerd-stage[data-q="3"] .nerd-word{transform:translate(0,var(--dy-rest)) scale(var(--s-rest));}
+    html.fb .nerd-stage[data-q="3"] .chip{opacity:1;translate:0 0;scale:1;}
+  }
+  @keyframes slice-a{
+    0%      {clip-path:inset(8% 0 72% 0);}   16.667% {clip-path:inset(55% 0 20% 0);}
+    33.333% {clip-path:inset(30% 0 52% 0);}  50%     {clip-path:inset(78% 0 6% 0);}
+    66.667% {clip-path:inset(15% 0 64% 0);}  83.333% {clip-path:inset(44% 0 38% 0);}
+  }
+  @keyframes slice-b{
+    0%      {clip-path:inset(62% 0 14% 0);}  16.667% {clip-path:inset(10% 0 70% 0);}
+    33.333% {clip-path:inset(70% 0 12% 0);}  50%     {clip-path:inset(22% 0 58% 0);}
+    66.667% {clip-path:inset(48% 0 30% 0);}  83.333% {clip-path:inset(4% 0 80% 0);}
+  }
+  @keyframes nerd-bg{0%,25%{background-color:var(--paper);color:var(--ink);}
+                     55%,100%{background-color:var(--ink);color:var(--card);}}
+  @keyframes nerd-drop{0%,5%{opacity:1;transform:none;}20%,100%{opacity:0;transform:translateY(-4svh);}}
+  @keyframes nerd-takeover{
+    0%,5%    {--g:0px;  --g-on:0; transform:none;}
+    20%      {--g:.03em;--g-on:.8;transform:translate(0,var(--dy)) scale(1.15);}
+    55%      {--g:.06em;--g-on:1; transform:translate(0,var(--dy)) scale(var(--s-peak));}
+    75%,100% {--g:0px;  --g-on:0; transform:translate(0,var(--dy-rest)) scale(var(--s-rest));}
+  }
+  @keyframes nerd-scan{0%,35%{opacity:0;}60%,100%{opacity:1;}}
+  @keyframes nerd-branch-1{0%,70%{opacity:0;translate:48px -40px;scale:.6;}84%,100%{opacity:1;translate:0 0;scale:1;}}
+  @keyframes nerd-branch-2{0%,72%{opacity:0;translate:0 -40px;scale:.6;}86%,100%{opacity:1;translate:0 0;scale:1;}}
+  @keyframes nerd-branch-3{0%,74%{opacity:0;translate:-48px -40px;scale:.6;}88%,100%{opacity:1;translate:0 0;scale:1;}}
+
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{transition-duration:.01ms !important;animation:none !important;}
   }
@@ -432,7 +578,7 @@
       <div class="prongs" role="group" aria-labelledby="where-title">
         <button type="button" class="prong" data-prong="research" aria-describedby="fork-soon">research</button>
         <button type="button" class="prong" data-prong="technology" aria-describedby="fork-soon">technology</button>
-        <button type="button" class="prong" data-prong="passion" aria-describedby="fork-soon">passion</button>
+        <button type="button" class="prong" data-prong="passion">passion</button>
       </div>
       <svg class="road" id="road" viewBox="0 0 120 80" shape-rendering="crispEdges"
            preserveAspectRatio="xMidYMax meet" role="img"
@@ -443,6 +589,30 @@
   </div>
   <div class="curtain" id="curtain">
     <p class="liked" tabindex="-1">I knew I liked you<span class="dot">.</span></p>
+  </div>
+</section>
+
+<section class="act3" id="nerd" aria-labelledby="nerd-title" hidden>
+  <div class="nerd-track">
+    <div class="nerd-stage" id="nerd-stage" data-q="0">
+      <div class="nerd-scan" aria-hidden="true"></div>
+      <h2 class="nerd-title" id="nerd-title" tabindex="-1">
+        <span class="vh">I'm a nerd.</span>
+        <span class="beats" aria-hidden="true">
+          <span class="beat beat-1">I'm.<span class="clap">&#x1F44F;</span></span>
+          <span class="beat beat-2">A.<span class="clap">&#x1F44F;</span></span>
+          <span class="beat beat-3"><span class="nerd-word" data-text="Nerd.">Nerd<span class="dot">.</span></span><span class="clap">&#x1F44F;</span></span>
+        </span>
+      </h2>
+      <div class="chips" role="group" aria-labelledby="nerd-title">
+        <a class="prong chip" data-passion="techie" href="#passions-techie" aria-describedby="nerd-soon">techie</a>
+        <a class="prong chip" data-passion="gamer" href="#passions-gamer" aria-describedby="nerd-soon">gamer</a>
+        <a class="prong chip" data-passion="photographer" href="#passions-photographer" aria-describedby="nerd-soon">photographer</a>
+      </div>
+      <p class="nerd-status" id="nerd-status" role="status" aria-live="polite"></p>
+      <span class="vh" id="nerd-soon">Coming soon.</span>
+      <button type="button" class="nerd-cue" id="nerd-cue" hidden>keep scrolling <span aria-hidden="true">&darr;</span></button>
+    </div>
   </div>
 </section>
 
@@ -625,13 +795,10 @@
   pillRed.addEventListener('click', start);
   curtain.addEventListener('pointerdown', skip);
   document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip();
+    if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' '){ skip(); nerdSkip(); }
   });
   curtain.addEventListener('animationend', function(e){
     if(e.animationName === 'curtain-raise') finish();
-  });
-  window.addEventListener('popstate', function(){
-    if(location.hash === '#where') openDirect(); else close();
   });
 
   /* ---- prongs: honest stubs (R26). No navigation, just an announced "coming soon". ---- */
@@ -645,13 +812,139 @@
     b.addEventListener('click', function(){
       last = n; look(n);
       status.textContent = '';                 // clear first so a repeat is re-announced
+      if(n === 'passion'){ nerdStart(); return; }
       requestAnimationFrame(function(){
         status.textContent = n.charAt(0).toUpperCase() + n.slice(1) + " is coming soon. I'm still paving that road.";
       });
     });
   });
 
-  if(location.hash === '#where') openDirect();
+  /* ================= act three: passion, "I'm. A. Nerd." (PRD sections 20-23) ================= */
+  var byId = function(id){ return document.getElementById(id); };
+  var act3 = byId('nerd'), stage3 = byId('nerd-stage'), nTitle = byId('nerd-title'), nStatus = byId('nerd-status'), cue = byId('nerd-cue');
+  var word = act3.querySelector('.nerd-word'), beats = act3.querySelector('.beats'), chips = act3.querySelector('.chips');
+  var passionProng = prongs.querySelector('[data-prong="passion"]');
+  var nst = 'closed', n0 = 0, nSkipped = false, nEnd = null, cueT = null, scT = null, cueDone = false, fades = [];
+  var range = function(){ return Math.max(1, act3.scrollHeight - act3.clientHeight); };
+  var qNow = function(){ return act3.scrollTop / range(); };
+
+  /* geometry once per open/resize, never per frame (PRD 21.2) */
+  function measure(){
+    if(act3.hidden) return;
+    var w = word.offsetWidth, h = word.offsetHeight, y = 0, el = word;
+    while(el && el !== stage3){ y += el.offsetTop; el = el.offsetParent; }
+    var W = window.innerWidth, H = window.innerHeight, cy = y + h / 2, s = stage3.style;
+    var pad = parseFloat(getComputedStyle(stage3).paddingLeft) || 0;
+    s.setProperty('--s-peak', (W * 1.3 / w).toFixed(3));
+    s.setProperty('--s-rest', Math.min((W - 2 * pad) * 0.92 / w, H * 0.38 / h).toFixed(3));
+    s.setProperty('--dy', (H * 0.5 - cy).toFixed(1) + 'px');
+    s.setProperty('--dy-rest', (H * 0.36 - cy).toFixed(1) + 'px');
+  }
+  function onScroll(){
+    var q = qNow();
+    stage3.classList.toggle('is-live', q >= 0.9);
+    stage3.dataset.q = q < 0.05 ? '0' : (q < 0.2 ? '1' : (q < 0.75 ? '2' : '3'));
+    if(q >= 0.04) cueOff();
+    act3.classList.add('is-scrolling');       // the glitch only moves while scrolling (PRD 21.3)
+    clearTimeout(scT);
+    scT = setTimeout(function(){ act3.classList.remove('is-scrolling'); }, 400);
+  }
+  function cueOff(){ clearTimeout(cueT); cueDone = true; cue.classList.remove('is-shown'); cue.hidden = true; }
+  function cueMaybe(){
+    if(nst !== 'open' || cueDone || reduce.matches || qNow() >= 0.04) return;
+    cue.hidden = false; void cue.offsetWidth; cue.classList.add('is-shown');
+  }
+  function announce(p){
+    nStatus.textContent = '';
+    requestAnimationFrame(function(){
+      nStatus.textContent = p.charAt(0).toUpperCase() + p.slice(1) + ' is coming soon. Still nerding out on it.';
+    });
+  }
+  function fadeIn(){                           // reduced motion: opacity-only WAAPI fades (PRD 23.2)
+    fades = [beats.animate([{opacity:0},{opacity:1}], {duration:400, easing:'ease-out'}),
+             chips.animate([{opacity:0},{opacity:1}], {duration:300, delay:300, fill:'backwards'})];
+  }
+  function nerdShow(){
+    act3.hidden = false; act3.scrollTop = 0; stage3.dataset.q = '0'; stage3.classList.remove('is-live');
+    forkScene.inert = true; nStatus.textContent = ''; cueDone = false; measure();
+  }
+  function nerdFinish(){
+    if(nst !== 'entering') return;
+    clearTimeout(nEnd); nst = 'open';
+    act3.classList.remove('is-entering'); chips.inert = false;
+    if(!act3.contains(document.activeElement)) nTitle.focus({preventScroll:true});
+    cueT = setTimeout(cueMaybe, 700);
+  }
+  function nerdStart(){
+    if(nst !== 'closed') return;
+    nst = 'entering'; n0 = performance.now(); nSkipped = false;
+    history.pushState({act:3}, '', '#nerd');
+    nerdShow();
+    if(reduce.matches){ nTitle.focus({preventScroll:true}); nerdFinish(); fadeIn(); return; }
+    chips.inert = true; act3.classList.add('is-entering');
+    nEnd = setTimeout(nerdFinish, 3200);       // safety net if animationend is lost
+  }
+  function nerdSkip(){
+    if(nst !== 'entering' || nSkipped || performance.now() - n0 < 400) return;
+    nSkipped = true;
+    act3.getAnimations({subtree:true}).forEach(function(a){
+      if(a.timeline === document.timeline && isFinite(a.effect.getComputedTiming().endTime)) a.finish();
+    });
+    setTimeout(nerdFinish, 0);   // after the key's default action, so Space doesn't also scroll the act
+  }
+  function nerdOpen(atEnd){                     // Back/Forward/direct link: no wipe, no reveal
+    if(nst !== 'closed') return;
+    nst = 'entering'; nerdShow(); nerdFinish();
+    if(atEnd){ act3.scrollTop = range(); onScroll(); cueOff(); }
+  }
+  function nerdClose(){
+    if(nst === 'closed') return;
+    clearTimeout(nEnd); clearTimeout(scT); cueOff(); nst = 'closed';
+    fades.forEach(function(a){ a.cancel(); }); fades = [];
+    act3.classList.remove('is-entering', 'is-scrolling'); act3.hidden = true;
+    chips.inert = false; nStatus.textContent = ''; forkScene.inert = false;
+    passionProng.focus({preventScroll:true});
+  }
+
+  act3.addEventListener('scroll', onScroll, {passive:true});
+  act3.addEventListener('pointerdown', nerdSkip);
+  act3.addEventListener('animationend', function(e){
+    if(e.target !== act3 && e.animationName === 'clap-in' && e.target.parentNode.classList.contains('beat-3')) nerdFinish();
+    if(e.target === act3 && e.animationName === 'nerd-wipe' && nst === 'entering') nTitle.focus({preventScroll:true});
+  });
+  window.addEventListener('resize', measure, {passive:true});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  reduce.addEventListener('change', function(){ if(reduce.matches) cueOff(); measure(); });
+  cue.addEventListener('click', function(){
+    cueOff(); nTitle.focus({preventScroll:true});
+    act3.scrollTo({top: range(), behavior: 'smooth'});
+  });
+  chips.addEventListener('focusin', function(){    // never focus an invisible chip (R13 rule)
+    if(nst === 'open' && !reduce.matches && qNow() < 0.9) act3.scrollTo({top: range(), behavior: behavior()});
+  });
+  Array.prototype.forEach.call(chips.querySelectorAll('.chip'), function(a){
+    a.addEventListener('click', function(e){
+      if(!(e.metaKey || e.ctrlKey || e.shiftKey)) announce(a.getAttribute('data-passion'));
+    });
+  });
+
+  /* ---- router: closed, #where, #nerd, #passions-* (R48); idempotent ---- */
+  function route(){
+    var h = location.hash, deep = h.indexOf('#passions-') === 0, p = h.slice(10);
+    if(h === '#nerd' || deep){
+      var wasClosed = nst === 'closed';
+      openDirect();   // stale line from another hash (Back/Forward) clears; a fresh click's line stays
+      if(!wasClosed){ fixFocus(); if(!(deep && p && nStatus.textContent.toLowerCase().indexOf(p + ' ') === 0)) nStatus.textContent = ''; return; }
+      nerdOpen(deep);
+      if(deep && chips.querySelector('[data-passion="' + p + '"]')) announce(p);
+      return;
+    }
+    nerdClose();
+    if(h === '#where') openDirect(); else close();
+  }
+  function fixFocus(){ if(document.activeElement === act3) nTitle.focus({preventScroll:true}); }   // browser focuses the #nerd scroller
+  window.addEventListener('popstate', route); window.addEventListener('hashchange', route); window.addEventListener('load', fixFocus);
+  route();
 })();
 </script>
 </body>
