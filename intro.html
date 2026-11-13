@@ -719,6 +719,124 @@
   .ph-fill{flex:1;min-height:0;overflow:hidden;background-color:var(--card);}
   .ph-fill img{display:block;width:100%;height:100%;object-fit:cover;}
 
+  /* === research branch (PRD 33-36) === */   /* ALL research CSS (34.1, 34.2, 34.3, 36.2) sits between this comment and the end marker */
+  .act-research{
+    position:fixed;inset:0;z-index:16;
+    background-color:var(--paper);overflow-y:auto;overscroll-behavior:contain;
+  }
+  .act-research[hidden]{display:none;}
+  .board{
+    position:relative;min-height:100svh;overflow:clip;
+    display:grid;grid-template-rows:auto auto auto;align-content:center;justify-items:center;
+    padding:max(env(safe-area-inset-top), clamp(28px,7svh,80px)) var(--pad) calc(clamp(20px,4svh,40px) + env(safe-area-inset-bottom));
+    background-image:radial-gradient(circle, rgba(22,36,28,.10) 1px, transparent 1.6px);
+    background-size:24px 24px;background-position:center;
+  }
+  .board-head{text-align:center;}
+  .board-meta{
+    display:block;margin:0 0 10px;
+    font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-soft);
+  }
+  #research-title{
+    margin:0;font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:clamp(30px,5vw,56px);line-height:1.08;letter-spacing:-.015em;
+    color:var(--ink);text-wrap:balance;
+  }
+  #research-title:focus{outline:none;}
+  .clusters{
+    width:100%;max-width:1056px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:clamp(24px,3.4vw,48px);margin:clamp(28px,5svh,56px) 0 0;
+  }
+  .board-status{
+    margin:16px 0 0;min-height:1.6em;text-align:center;
+    font-style:italic;font-size:clamp(17px,1.6vw,19px);color:var(--ink-soft);
+  }
+  /* clusters: one link each (header note + four data notes) */
+  .cluster{position:relative;display:block;color:inherit;text-decoration:none;
+    transition:transform .18s cubic-bezier(.22,.7,.2,1);-webkit-tap-highlight-color:transparent;}
+  .c-head{position:relative;display:block;padding:20px 16px 14px;background-color:var(--pine);color:var(--card);
+    box-shadow:0 1px 1px rgba(22,36,28,.12), 0 10px 18px -12px rgba(22,36,28,.5);transition:box-shadow .18s ease;}
+  .c-head::before{content:"";position:absolute;left:50%;top:-5px;width:12px;height:12px;margin-left:-6px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, rgba(248,250,244,.65) 0 1.5px, transparent 2.5px), var(--rec);
+    box-shadow:0 1px 2px rgba(22,36,28,.45);}                                   /* the brass pin */
+  .c-theme{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf);}
+  .c-label{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:4px;
+    font-family:"Fraunces",Georgia,serif;font-weight:600;font-variation-settings:"opsz" 72;
+    font-size:clamp(20px,2.1vw,28px);line-height:1.1;}
+  .c-arrow{display:inline-block;font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:.9em;color:var(--leaf);
+    transition:transform .18s cubic-bezier(.22,.7,.2,1);}
+  @media (hover:hover){
+    .cluster:hover{transform:translateY(-3px);}
+    .cluster:hover .c-head{box-shadow:0 1px 1px rgba(22,36,28,.12), 0 16px 24px -14px rgba(22,36,28,.6);}
+    .cluster:hover .c-arrow{transform:translateX(3px);}
+  }
+  .cluster:focus-visible{outline:2px solid var(--pine);outline-offset:6px;transform:translateY(-3px);}
+  .cluster:focus-visible .c-arrow{transform:translateX(3px);}
+  .cluster:active{transform:translateY(-1px);}
+  /* data notes: outer .note owns the sort, inner .note-face owns the drift; base styles = the final state */
+  .c-notes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+  .note{display:block;rotate:var(--r,0deg);}
+  .note-face{display:block;aspect-ratio:1/.82;padding:10px 12px;
+    font-style:italic;font-weight:500;font-size:clamp(14px,1.25vw,18px);line-height:1.2;color:var(--ink);
+    background-image:linear-gradient(to bottom, rgba(22,36,28,.06), rgba(22,36,28,0) 18%);
+    box-shadow:inset 0 0 0 1px rgba(22,36,28,.08), 0 1px 1px rgba(22,36,28,.10), 0 8px 14px -10px rgba(22,36,28,.40);}
+  .cluster[data-theme="education"] .note-face{background-color:var(--leaf);}
+  .cluster[data-theme="philosophy"] .note-face{background-color:var(--card);}
+  .cluster[data-theme="practice"] .note-face{background-color:var(--rule);}
+  /* the copper thread, pin to pin (34.4) */
+  .threads{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;overflow:visible;}
+  .threads path{fill:none;stroke:var(--rec);stroke-width:2;stroke-linecap:round;}
+  /* the assembly (34.3): time-based, all from the one click */
+  @media (prefers-reduced-motion:no-preference){
+    .act-research.is-entering{animation:research-wipe 700ms cubic-bezier(.7,0,.2,1) 120ms both;
+      box-shadow:18px 0 36px -12px rgba(22,36,28,.45);overflow-y:hidden;}               /* 33.2 */
+    .act-research.is-entering .clusters{pointer-events:none;}
+    .act-research.is-entering .note      {animation:note-sort 760ms cubic-bezier(.6,0,.25,1) var(--sd) both;}
+    .act-research.is-entering .note-face {animation:note-drift 800ms cubic-bezier(.16,.84,.3,1) var(--dd) both;}
+    .act-research.is-entering .c-head    {animation:head-stick 240ms cubic-bezier(.2,.8,.3,1.1) var(--hd) both;}
+    .act-research.is-entering .threads path{stroke-dasharray:1 2;stroke-dashoffset:1;stroke-linecap:butt;   /* "1 2" + butt: no stray sliver of the next dash at either end of the undrawn path */
+                              animation:thread-draw 400ms cubic-bezier(.35,.1,.25,1) var(--td) both;}
+    .act-research.is-entering .board-head{animation:board-title-in 400ms cubic-bezier(.22,.7,.2,1) 3700ms both;}
+  }
+  @keyframes research-wipe{from{transform:translateX(calc(-100% - 48px));}to{transform:none;}}
+  @keyframes note-drift{from{translate:var(--dx) var(--dy);rotate:var(--dr);opacity:0;}to{translate:0 0;rotate:0deg;opacity:1;}}
+  @keyframes note-sort {from{translate:var(--sx) var(--sy);rotate:var(--sr);}to{translate:0 0;rotate:var(--r);}}
+  @keyframes head-stick{from{opacity:0;scale:1.08;translate:0 -6px;}to{opacity:1;scale:1;translate:0 0;}}
+  @keyframes thread-draw{to{stroke-dashoffset:0;}}
+  @keyframes board-title-in{from{opacity:0;translate:0 8px;}to{opacity:1;translate:0 0;}}
+  /* responsive (36.2): stack below 700px wide, unless the screen is short */
+  @media (max-width:699px) and (min-height:501px){
+    .clusters{grid-template-columns:minmax(0,1fr);gap:18px;max-width:480px;}
+    .c-head{padding:14px 14px 10px;}
+    .c-head::before{left:0;top:0;margin-left:0;}
+    .c-label{font-size:22px;}
+    .c-notes{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px;}
+    .note-face{aspect-ratio:1/.85;padding:6px 7px;font-size:14px;}
+    .threads path{stroke-width:1.75;}
+  }
+  @media (max-width:699px) and (min-height:501px) and (max-height:700px){
+    .board{padding-top:max(env(safe-area-inset-top),24px);}
+    .board-meta{display:none;}
+    .clusters{gap:12px;margin-top:16px;}
+    .c-head{padding:10px 12px 8px;}
+  }
+  @media (max-width:359px){
+    .note-face{font-size:12px;padding:5px 6px;}
+    .board-status{font-size:16px;}
+  }
+  @media (max-height:500px){
+    .board{padding-top:max(env(safe-area-inset-top),16px);padding-bottom:calc(8px + env(safe-area-inset-bottom));}
+    #research-title{font-size:28px;}
+    .board-meta{margin-bottom:4px;}
+    .clusters{margin-top:12px;}
+    .c-head{padding:12px 12px 8px;}
+    .c-label{font-size:20px;}
+    .c-notes{gap:8px;margin-top:8px;}
+    .note-face{aspect-ratio:1/.56;padding:6px 8px;font-size:14px;}
+  }
+  /* === end research branch === */
+
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{transition-duration:.01ms !important;animation:none !important;}
   }
@@ -762,7 +880,7 @@
     <h2 id="where-title" tabindex="-1">Where should we start?</h2>
     <div class="fork">
       <div class="prongs" role="group" aria-labelledby="where-title">
-        <button type="button" class="prong" data-prong="research" aria-describedby="fork-soon">research</button>
+        <button type="button" class="prong" data-prong="research">research</button>
         <button type="button" class="prong" data-prong="technology" aria-describedby="fork-soon">technology</button>
         <button type="button" class="prong" data-prong="passion">passion</button>
       </div>
@@ -833,6 +951,47 @@
   </section>
   <!-- last in the DOM so Tab from any (programmatically focused) heading lands on it first; fixed, so placement is visual-neutral -->
   <button type="button" class="p-motion" id="passions-motion">Pause motion</button>
+</section>
+
+<section class="act-research" id="research" aria-labelledby="research-title" hidden>
+  <div class="board" id="board">
+    <div class="board-head">
+      <span class="board-meta" aria-hidden="true">Synthesis · 12 notes · 3 themes</span>
+      <h2 id="research-title" tabindex="-1">Research, sorted<span class="dot">.</span></h2>
+    </div>
+    <div class="clusters" role="group" aria-labelledby="research-title">
+      <a class="cluster" data-theme="education" href="#research-education" aria-describedby="board-soon">
+        <span class="c-head"><span class="c-theme" aria-hidden="true">Theme 01</span><span class="c-label">Education<span class="c-arrow" aria-hidden="true">&rarr;</span></span></span>
+        <span class="c-notes" aria-hidden="true">
+          <span class="note"><span class="note-face">coursework</span></span>
+          <span class="note"><span class="note-face">statistics</span></span>
+          <span class="note"><span class="note-face">reading list</span></span>
+          <span class="note"><span class="note-face">mentors</span></span>
+        </span>
+      </a>
+      <a class="cluster" data-theme="philosophy" href="#research-philosophy" aria-describedby="board-soon">
+        <span class="c-head"><span class="c-theme" aria-hidden="true">Theme 02</span><span class="c-label">Philosophy<span class="c-arrow" aria-hidden="true">&rarr;</span></span></span>
+        <span class="c-notes" aria-hidden="true">
+          <span class="note"><span class="note-face">ask why</span></span>
+          <span class="note"><span class="note-face">evidence first</span></span>
+          <span class="note"><span class="note-face">bias check</span></span>
+          <span class="note"><span class="note-face">plain words</span></span>
+        </span>
+      </a>
+      <a class="cluster" data-theme="practice" href="#research-practice" aria-describedby="board-soon">
+        <span class="c-head"><span class="c-theme" aria-hidden="true">Theme 03</span><span class="c-label">Practice<span class="c-arrow" aria-hidden="true">&rarr;</span></span></span>
+        <span class="c-notes" aria-hidden="true">
+          <span class="note"><span class="note-face">interviews</span></span>
+          <span class="note"><span class="note-face">usability tests</span></span>
+          <span class="note"><span class="note-face">surveys</span></span>
+          <span class="note"><span class="note-face">synthesis</span></span>
+        </span>
+      </a>
+    </div>
+    <p class="board-status" id="board-status" role="status" aria-live="polite"></p>
+    <span class="vh" id="board-soon">Coming soon.</span>
+    <svg class="threads" id="threads" aria-hidden="true" focusable="false"><path pathLength="1"/><path pathLength="1"/></svg>
+  </div>
 </section>
 
 <script>
@@ -1031,6 +1190,7 @@
     b.addEventListener('click', function(){
       last = n; look(n);
       status.textContent = '';                 // clear first so a repeat is re-announced
+      if(n === 'research') return;             // research-js starts the research beat (PRD 34.6)
       if(n === 'passion'){ nerdStart(); return; }
       requestAnimationFrame(function(){
         status.textContent = n.charAt(0).toUpperCase() + n.slice(1) + " is coming soon. I'm still paving that road.";
@@ -1147,7 +1307,7 @@
       return;
     }
     nerdClose();
-    if(h === '#where') openDirect(); else close();
+    if(h === '#where' || /^#research(-|$)/.test(h)) openDirect(); else close();
   }
   function fixFocus(){ if(document.activeElement === act3) nTitle.focus({preventScroll:true}); }   // browser focuses the #nerd scroller
   window.addEventListener('popstate', route); window.addEventListener('hashchange', route); window.addEventListener('load', fixFocus);
@@ -1410,6 +1570,155 @@
       layoutPhotos();
     }, 250);
   }, {passive:true});
+  window.addEventListener('popstate', route); window.addEventListener('hashchange', route);
+  window.addEventListener('load', fixFocus);
+  route();
+})();
+</script>
+<script id="research-js">
+/* ================= research branch: the affinity-map board (PRD 33-36) ================= */
+(function(){
+  var byId = function(id){ return document.getElementById(id); };
+  var L = byId('research'), board = byId('board'), threads = byId('threads'), title = byId('research-title'), status = byId('board-status');
+  var clusters = board.querySelector('.clusters'), act2 = byId('where'), forkScene = act2.querySelector('.fork-scene');
+  var prong = act2.querySelector('.prong[data-prong="research"]');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var STACK = window.matchMedia('(max-width:699px) and (min-height:501px)');
+  var R     = [-2, 1.5, -1, 2.5,  1, -2.5, 2, -1.5,  -1, 2, -2, 1];   // final tilt (deg) per note i = 0..11
+  var ORDER = [0, 5, 10, 3, 6, 9, 1, 8, 11, 4, 2, 7];                 // drift-in order: themes interleaved
+  var SHUF  = [13, 2, 8, 10, 0, 11, 6, 4, 9, 3, 14, 5];               // scatter cell per note (15 cells, 12 used)
+  var LABEL = {education:'Education', philosophy:'Philosophy', practice:'Practice'};
+  var st = 'closed', t0 = 0, skipped = false, endT = null, lastCluster = null, refocus = false;   // closed -> entering -> open
+
+  function rng(s){ return function(){ s|=0; s=s+0x6D2B79F5|0; var t=Math.imul(s^s>>>15,1|s);
+    t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }   // mulberry32 (same as 27.2)
+  function pos(el){ var x = 0, y = 0; while(el && el !== board){ x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return {x:x, y:y}; }
+
+  /* scatter + thread geometry from layout boxes, once per open/resize (PRD 34.5) */
+  function layout(){
+    if(L.hidden) return;
+    var W = board.clientWidth, H = board.clientHeight, stacked = STACK.matches, r = rng(5);
+    var cols = stacked ? 3 : 5, rows = stacked ? 5 : 3;
+    var padX = parseFloat(getComputedStyle(board).paddingLeft), cw = (W - 2*padX) / cols, ch = H * .76 / rows;
+    Array.prototype.forEach.call(board.querySelectorAll('.note'), function(n, i){
+      var p = pos(n), cx = p.x + n.offsetWidth/2, cy = p.y + n.offsetHeight/2, c = SHUF[i] % cols, rw = Math.floor(SHUF[i] / cols);
+      var tx = padX + cw*(c + .5) + (r() - .5)*.8*cw, ty = H*.12 + ch*(rw + .5) + (r() - .5)*.8*ch;   // scatter spot
+      var dx = tx - W/2, dy = ty - H/2, d = Math.max(1, Math.hypot(dx, dy)), k = .8 * Math.max(W, H);   // fly in along the ray from the center
+      var s = n.style, f = n.firstElementChild.style;
+      s.setProperty('--r',  R[i] + 'deg');
+      s.setProperty('--sx', (tx - cx).toFixed(1) + 'px'); s.setProperty('--sy', (ty - cy).toFixed(1) + 'px');
+      s.setProperty('--sr', (r()*16 - 8).toFixed(1) + 'deg');
+      s.setProperty('--sd', (2450 + Math.floor(i/4)*80 + (i%4)*25) + 'ms');
+      f.setProperty('--dx', (dx/d*k).toFixed(1) + 'px'); f.setProperty('--dy', (dy/d*k).toFixed(1) + 'px');
+      f.setProperty('--dr', (r()*24 - 12).toFixed(1) + 'deg');
+      f.setProperty('--dd', (900 + ORDER.indexOf(i)*60) + 'ms');
+    });
+    var heads = board.querySelectorAll('.c-head'), hp = heads.length ? parseFloat(getComputedStyle(heads[0]).paddingTop) : 20;
+    var P = Array.prototype.map.call(heads, function(h, c){
+      h.style.setProperty('--hd', (3000 + c*110) + 'ms');
+      var p = pos(h); return stacked ? {x: p.x + 6, y: p.y + 6} : {x: p.x + h.offsetWidth/2, y: p.y + 1};
+    });
+    threads.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    Array.prototype.forEach.call(threads.querySelectorAll('path'), function(path, i){
+      var a = P[i], b = P[i + 1], d;
+      if(!stacked){ var S = Math.min(28, .07 * Math.hypot(b.x - a.x, b.y - a.y), 2 * (hp - 6));   // sag cap keeps the dip above the theme line on short headers
+        d = 'M' + a.x + ',' + a.y + ' Q' + (a.x + b.x)/2 + ',' + (Math.max(a.y, b.y) + S) + ' ' + b.x + ',' + b.y; }
+      else { var t = (b.y - a.y) / 3;
+        d = 'M' + a.x + ',' + a.y + ' C' + (a.x - 32) + ',' + (a.y + t) + ' ' + (b.x - 32) + ',' + (b.y - t) + ' ' + b.x + ',' + b.y; }
+      path.setAttribute('d', d); path.style.setProperty('--td', (3400 + i*120) + 'ms');
+    });
+  }
+
+  function show(){
+    L.hidden = false; L.scrollTop = 0; forkScene.inert = true; status.textContent = ''; refocus = false;
+    layout();
+  }
+  function end(){                                   // the end step (34.3): board at rest, clusters live
+    if(st !== 'entering') return;
+    clearTimeout(endT); st = 'open';
+    L.classList.remove('is-entering'); clusters.inert = false;
+    if(!L.contains(document.activeElement) || document.activeElement === L) title.focus({preventScroll:true});
+  }
+  function start(){
+    if(st !== 'closed') return;
+    st = 'entering'; t0 = performance.now(); skipped = false;
+    history.pushState({act:'research'}, '', '#research');
+    show();
+    if(reduce.matches){ title.focus({preventScroll:true}); end(); return; }   // one cut, already assembled (36.3)
+    clusters.inert = true; L.classList.add('is-entering');
+    endT = setTimeout(end, 4700);                  // safety net if animationend is lost
+  }
+  function skip(){
+    if(st !== 'entering' || skipped || performance.now() - t0 < 400) return;
+    skipped = true;
+    L.getAnimations({subtree:true}).forEach(function(a){
+      if(a.timeline === document.timeline && isFinite(a.effect.getComputedTiming().endTime)) a.finish();
+    });
+    setTimeout(end, 0);                            // after the key's default action, so Space doesn't also scroll
+  }
+  function openRest(){                             // Back/Forward/direct link: no wipe, no assembly
+    if(st !== 'closed') return;
+    st = 'entering'; show(); end();
+    title.focus({preventScroll:true});
+  }
+  function close(){
+    if(st === 'closed') return;
+    clearTimeout(endT); st = 'closed';
+    L.classList.remove('is-entering'); L.hidden = true; clusters.inert = false; status.textContent = '';
+    forkScene.inert = false; refocus = true;
+    prong.focus({preventScroll:true});
+  }
+  function announce(label){
+    status.textContent = '';                       // clear first so a repeat is re-announced
+    requestAnimationFrame(function(){ status.textContent = label + ' is coming soon. Still synthesizing.'; });
+  }
+
+  prong.addEventListener('click', start);
+  L.addEventListener('pointerdown', skip);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip(); });
+  L.addEventListener('animationend', function(e){
+    if(e.target === L && e.animationName === 'research-wipe' && st === 'entering') title.focus({preventScroll:true});
+    if(e.animationName === 'board-title-in') end();
+  });
+  reduce.addEventListener('change', function(){ if(reduce.matches && st === 'entering'){ skipped = true; end(); } });
+  Array.prototype.forEach.call(clusters.querySelectorAll('.cluster'), function(a){
+    a.addEventListener('click', function(e){
+      if(e.metaKey || e.ctrlKey || e.shiftKey) return;   // opens in a new tab; that tab announces on load
+      lastCluster = a; announce(LABEL[a.getAttribute('data-theme')]);
+    });
+  });
+  var rzT = null;
+  window.addEventListener('resize', function(){ clearTimeout(rzT); rzT = setTimeout(layout, 150); }, {passive:true});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+
+  /* the browser's fragment step focuses the #research / #where scroller between popstate and hashchange and on load;
+     re-assert the right target every time (same fix as passions-js) */
+  function fixFocus(){
+    var f = document.activeElement;
+    if(st !== 'closed'){
+      if(f === L || f === document.body || !L.contains(f)) ((location.hash === '#research' && lastCluster) || title).focus({preventScroll:true});
+    } else if(refocus && location.hash === '#where' && (f === act2 || f === document.body || f === forkScene)) prong.focus({preventScroll:true});
+  }
+  /* router: #research and #research-* (R78); idempotent across a popstate + hashchange pair */
+  function route(e){
+    var h = location.hash;
+    if(!/^#research(-|$)/.test(h)){
+      if(st !== 'closed') close(); else fixFocus();
+      if(e && e.type === 'hashchange') refocus = false;
+      return;
+    }
+    var sub = h.slice(10), wasClosed = st === 'closed';
+    if(wasClosed){
+      openRest();
+      if(LABEL[sub]){ lastCluster = clusters.querySelector('[data-theme="' + sub + '"]'); announce(LABEL[sub]); }
+      return;
+    }
+    if(h === '#research'){
+      status.textContent = '';
+      var f = document.activeElement;
+      if(f === L || f === document.body || !L.contains(f)) (lastCluster || title).focus({preventScroll:true});
+    }
+  }
   window.addEventListener('popstate', route); window.addEventListener('hashchange', route);
   window.addEventListener('load', fixFocus);
   route();
