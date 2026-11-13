@@ -11,6 +11,7 @@
 - **Addendum 3 (2026-11-12):** sections 25 to 31 and requirements R50 to R65 add the passion deep-dive backgrounds: one `#passions` layer with three stacked subsections; techie (a circuit board that draws itself, buildable now), gamer (rotating gameplay clips with a disclaimer, buildable now, copyright risk flagged as C1) and photographer (collage mechanism with marked placeholders; real photos BLOCKED on Nick, R61). Card t_027c5838 (PRD addendum), build card t_24e05978 (assignee `design`). It replaces R42 with R50 and amends R31, R43, R49 and the 24.4 non-goal. See section 25.3.
 - **Addendum 4 (2026-11-12):** sections 32 to 37 and requirements R66 to R79 add the research branch intro beat: the research prong wipes in from the left to an affinity-map board where 12 sticky notes drift in, sort themselves into three pinned clusters (Education, Philosophy, Practice) joined by a self-drawing copper thread, under "Research, sorted." The clusters are stub links reserved for one future shared page (`#research-*`). Card t_b6a0515b (PRD addendum), build card t_f25a55e9 (assignee `design`). It narrows R26, R30 and R33 to technology, extends the router (R78) and allows a fourth inline script. See section 32.4.
 - **Addendum 5 (2026-11-12):** sections 38 and 39 and requirements R80 to R87 reconcile the PRD with the act-three scramble Nick asked for on card t_2f379858 ("Nerd." decrypts into "Nick."). Card t_ac53ecdb. It supersedes the 24.4 scramble-text non-goal for that one word, amends R35, R39 and R46 (screen readers now hear "I'm Nick."), extends R45 with an area-based flash test (R85, which the build currently fails at desktop size), and raises the main-script budget to 375 lines. See section 38.3.
+- **Addendum 6 (2026-11-12):** sections 40 to 46 and requirements R88 to R102 add the technology branch intro beat: the technology (center) prong wipes in from the top to a dark terminal where a short fake boot script runs (`boot technology`, ten output lines, about 3 seconds, skippable), then clears and paints a TUI window, "Technology, loaded.", with three stub links: AI in Research, Remote Practices, Knowledge Management. The links are reserved for one future shared page (`#technology-*`), my recommendation pending Nick (Flag T1). Card t_ed5e09e4 (PRD addendum); build card not cut yet. It retires R26 (no prong is a stub any more), extends the router (R101), allows a fifth inline script, and supersedes the typewriter non-goal for the one typed command. See section 40.4.
 
 ---
 
@@ -786,6 +787,8 @@ Labels are lowercase exactly as Nick wrote them: `research`, `technology`, `pass
 - **Resources:** `intro.html` CSS and markup.
 
 ### R26. Each prong is an honest stub: activating it announces that it is coming soon, and nothing navigates.
+> **Retired by addendum 6 (R88):** all three prongs now start their own beat; the stub line and `#fork-soon` are removed. See section 40.4.
+
 - **Source:** [Nick-B] "We will talk about each of the prongs after."; [Card2] "stub prongs must still be announced sensibly to screen readers… rather than silently doing nothing"; section 13.2.
 - **Acceptance:** for each prong: activate it (click, then separately `keydown`/`keyup` Enter and Space on the focused chip); within 300ms `#fork-status` (`role="status"`, `aria-live="polite"`) has `textContent === "<Label> is coming soon. I'm still paving that road."` with the label capitalized (`Research`, `Technology`, `Passion`); `location.href` is unchanged and `window.__stay === 1`; no new section or scene appears (`document.querySelectorAll('section').length` unchanged). Each chip has `aria-describedby="fork-soon"`, and `#fork-soon` `textContent === "Coming soon."` and is visually hidden (bounding width ≤ 1px). No chip has `aria-disabled` or `disabled`. No console errors during the whole act-two run (CDP `Runtime.exceptionThrown` and `console` error events: zero).
 - **Edge cases:** activating the same prong twice re-announces (the status is cleared, then refilled on the next frame); activating a different prong replaces the message (never two messages); the message wraps cleanly at 320px; the stub copy is placeholder text Nick can change (Flag A5).
@@ -810,6 +813,8 @@ Labels are lowercase exactly as Nick wrote them: `research`, `technology`, `pass
 - **Resources:** `intro.html` CSS and script.
 
 ### R30. Keyboard and screen-reader users get the whole sequence: announced line, announced headline, operable prongs, and no focus on hidden content.
+> **Amended by addendum 6 (R88):** no prong carries `aria-describedby="fork-soon"` any more, and `#fork-soon` no longer exists. See section 40.4.
+
 - **Source:** [Card2] item 6; section 17.5.
 - **Acceptance:** keyboard only, from a fresh load: Tab to the red pill (the R13 focus scroll brings scene 3 into view), press Enter; `document.activeElement` is `.liked` during the hold and `#where-title` after the end step; then `Tab` focuses `research`, `technology`, `passion` in that order, and `Shift+Tab` from `research` eventually reaches the skip link, which is visible and on top (`document.elementFromPoint` at its center returns the skip link while act two is open). While playing, `main.inert === true` and `.fork-scene.inert === true`; after the end step `.fork-scene.inert === false`. CDP `Accessibility.getFullAXTree` shows: a `region` named "Where should we start?", a `heading` level 2 with that name, a `group` containing three `button`s each with description "Coming soon.", one `image` with the road's label, and a `status` node.
 - **Edge cases:** no focusable element inside the curtain other than the `.liked` target; the hidden act two is not in the accessibility tree before the click; VoiceOver does not hear "dimmed" on the chips.
@@ -1292,6 +1297,8 @@ With `prefers-reduced-motion: reduce`:
 All requirements use the section 7 harness (local `python3 -m http.server 8000`, Chromium over CDP, the same desktop, mobile and reduced-motion emulation). "At the fork" means a direct load of `http://localhost:8000/intro.html#where`, wait 600ms. "Open act three" means at the fork, click `.prong[data-prong="passion"]`, wait 3400ms. "Set q" means `const a=document.getElementById('nerd'); a.scrollTop=(a.scrollHeight-a.clientHeight)*q`, then wait 400ms. Build/deployment for every requirement: **not Docker**, by the same justified exception as section 8 (static GitHub Pages site; nothing to containerize; deploy is a push to `main`, which stays forbidden).
 
 ### R33. Activating the passion prong starts act three in the same page: no navigation, the URL becomes `#nerd`, and research and technology are unchanged stubs.
+> **Amended by addendum 6 (R88):** the check that the other prongs keep `aria-describedby` and the stub line is replaced by R88. See section 40.4.
+
 - **Source:** [Nick-C] "Let's start with 'passion.' It opens to…"; [Card3] item 1; section 20.1, 19.4.
 - **Acceptance:** at the fork, set `window.__stay = 1`, click the passion prong; after 3400ms: `window.__stay === 1`, `location.pathname` ends in `/intro.html`, `location.hash === "#nerd"`, `document.getElementById('nerd').hidden === false`, `document.querySelector('#where .fork-scene').inert === true`, `document.querySelector('main').inert === true`, avatar `dataset.look === "passion"`. The passion prong has no `aria-describedby`; research and technology still have `aria-describedby="fork-soon"`, and clicking each still writes the R26 line to `#fork-status` with `location.hash` staying `#where`. `#nerd` comes after `#where` in the DOM, outside `main` (`document.querySelector('main #nerd') === null`).
 - **Edge cases:** double-click, or Enter then click, starts act three once (`document.getAnimations().filter(a => a.animationName === "nerd-wipe").length <= 1` at all times); Enter and Space on the focused passion prong both start it; activating passion while act two is still in its curtain sequence is impossible (`.fork-scene` is inert until act two's end step).
@@ -2513,12 +2520,16 @@ All requirements use the section 7 harness with the 32.4 server line (`python3 d
 Build and deployment for every requirement: **not Docker**, by the same justified exception as sections 8, 18.1, 24.1 and 31.1 (a static GitHub Pages site with nothing to containerize; production deploy is a push to `main`, which stays forbidden).
 
 ### R66. Activating the research prong starts the research beat in the same page: no navigation, the URL becomes `#research`, and technology stays a stub.
+> **Amended by addendum 6 (R88):** the technology-stub checks in this acceptance are replaced by R88; technology now starts its own beat. See section 40.4.
+
 - **Source:** [Nick-E] "For research, we will break it down into three sections"; [Pick-1]; [Card5] item 1; sections 33.1, 34.6.
 - **Acceptance:** at the fork, set `window.__stay = 1`, click the research prong; after 4600ms: `window.__stay === 1`, `location.pathname` ends in `/intro.html`, `location.hash === "#research"`, `L.hidden === false`, `document.querySelector('#where .fork-scene').inert === true`, `document.querySelector('main').inert === true`, avatar `.avatar` `dataset.look === "research"`, `#fork-status` is empty. The research prong has no `aria-describedby`; the technology prong still has `aria-describedby="fork-soon"` and clicking it still writes `Technology is coming soon. I'm still paving that road.` with `location.hash` staying `#where`. `#research` is outside `main` (`document.querySelector('main #research') === null`) and comes after `#passions` in the DOM. `getComputedStyle(L).zIndex === "16"`.
 - **Edge cases:** double-click, or Enter then click, starts it once (`document.getAnimations().filter(a => a.animationName === "research-wipe").length <= 1` at all times); Enter and Space on the focused prong both start it; the prong can't be activated during act two's curtain (`.fork-scene` is inert); with no JS nothing happens and nothing breaks.
 - **Resources:** `intro.html` markup, main script (two lines, 34.6), `research-js`.
 
 ### R67. The board wipes in from the left over 700ms after a 120ms beat, with the hem shadow on its right edge and a skip.
+> **Harness note, addendum 6 (F38):** read the easing in (a) with `a.effect.getKeyframes()[0].easing`; `getTiming().easing` reports `"linear"` for CSS animations in Chromium. See section 40.4.
+
 - **Source:** [Card5] item 1 "pick a consistent, directionally-appropriate transition (reuse the established wipe/curtain mechanics)"; section 33.2.
 - **Acceptance:** motion allowed, 1440×900, at the fork click research at t = 0: (a) a `research-wipe` animation exists on `L` with `getTiming()` `duration 700`, `delay 120`, `easing "cubic-bezier(0.7, 0, 0.2, 1)"`; (b) Seek 450: `L`'s computed transform `tx` strictly between `−innerWidth − 48` and 0 (negative: it comes from the left); Seek 900: `tx === 0`; (c) on a fresh run in real time, by t ≈ 1500ms `document.activeElement.id === "research-title"`; (d) while `is-entering`, `getComputedStyle(L).boxShadow` starts with `rgba(22, 36, 28, 0.45) 18px 0px 36px -12px` (positive x: right edge) and `overflowY === "hidden"`; after the end step (t ≈ 4600ms) `L.classList.contains('is-entering') === false`. **Skip:** fresh run, at t ≈ 900ms dispatch `keydown` Escape on `document`; within 150ms `is-entering` is gone, every `.note` and `.note-face` computed `translate` is `none` or `0px`, and every `.threads path` has `strokeDashoffset` 0 or no dash array. A `keydown` at t ≈ 100ms does **not** skip.
 - **Edge cases:** background tab during the entry: the 4700ms safety timeout runs the end step; resize mid-wipe still covers the screen; `document.documentElement.scrollWidth <= innerWidth` throughout (the off-screen start must not add page width); `grep -c "nerd-wipe" intro.html` is unchanged (passion's wipe is untouched).
@@ -2537,6 +2548,8 @@ Build and deployment for every requirement: **not Docker**, by the same justifie
 - **Resources:** `intro.html` markup and CSS.
 
 ### R70. The notes drift in unsorted, hold as a mixed scatter, then sort themselves into their three clusters, on the 34.3 timeline.
+> **Harness note, addendum 6 (F38):** read each easing with `a.effect.getKeyframes()[0].easing`, not `getTiming().easing`. See section 40.4.
+
 - **Source:** [Pick-1] "drift onto the screen and self-organize into three labeled clusters"; [Card5] item 2 "timing, physics-ish easing, stagger, how they cluster"; sections 34.3, 34.5.
 - **Acceptance:** motion allowed. Timing: right after the click, `L.getAnimations({subtree:true})` contains 12 `note-drift` (duration 800, easing `cubic-bezier(0.16, 0.84, 0.3, 1)`, delays exactly `{900 + 60·k : k = 0..11}`, and note `i`'s delay is `900 + 60·ORDER.indexOf(i)`), 12 `note-sort` (duration 760, easing `cubic-bezier(0.6, 0, 0.25, 1)`, note `i`'s delay `2450 + 80·floor(i/4) + 25·(i%4)`), 3 `head-stick` (240, delays 3000/3110/3220), 2 `thread-draw` (400, delays 3400/3520), 1 `board-title-in` (400, delay 3700), 1 `research-wipe`: 31 in total. Geometry, at 1440×900 and at 390×844: **Seek 600**: every `.note-face` computed opacity is 0. **Seek 2400** (scatter): all 12 note-face centers are inside the viewport; for each theme, the diagonal of the bounding box of its 4 note centers is ≥ 0.35 × `Math.hypot(innerWidth, innerHeight)` (spike: 0.46 to 0.70); `.c-head` opacity < 0.05 for all three. **Seek 4300** (rest): every note's center lies inside its own `.cluster`'s bounding box, and all three `.c-head` have opacity > 0.95.
 - **Edge cases:** reload at the same viewport gives identical `--sx/--sy/--dx/--dy` inline values on every note (seeded); resizing while open re-runs `layout()` and the board stays assembled; `B`'s `overflow` is `clip` so no note adds page or layer width at any seek time (`L.scrollWidth <= L.clientWidth`, `document.documentElement.scrollWidth <= innerWidth` at Seek 900, 1500, 2400, 3000); the outer/inner split uses individual properties (`grep -E "@keyframes note-(drift|sort)" -A1` shows `translate`/`rotate`, not `transform`).
@@ -2585,6 +2598,8 @@ Build and deployment for every requirement: **not Docker**, by the same justifie
 - **Resources:** `intro.html`.
 
 ### R78. Back, Forward and direct links work for `#research` and `#research-…`, and the passion branch's routing is unchanged.
+> **Extended by addendum 6 (R101):** the main router also keeps act two open for `#technology` and `#technology-…`, and opening any of them never shows the research layer. See section 41.3.
+
 - **Source:** sections 34.6, 32.4; extends R27, R48 and R50.
 - **Acceptance:** (a) after R66, `history.back()`, wait 500ms: `location.hash === "#where"`, `L.hidden === true`, `.fork-scene.inert === false`, `document.activeElement` is the research prong, the curtain stays hidden, and `document.getAnimations().filter(a => /research-wipe|note-|head-stick|thread-draw|board-title/.test(a.animationName)).length === 0`; (b) `history.forward()`: the board is open at rest within 300ms with no `research-wipe` animation; (c) direct load of `intro.html#research`: within 600ms the board is open at rest, act two is open underneath (`#where.hidden === false`), `main.inert === true`, and the R6 nudge stays hidden after 4500ms; (d) from `#research-education`, `history.back()` returns to `#research` with `#board-status` empty and focus on the Education cluster; (e) Back twice from `#research` reaches the pill scene with R27(b) passing; (f) R48 and R50 pass unchanged (passion's four states), and opening `#nerd` or `#passions-gamer` never shows the research layer (`L.hidden === true`).
 - **Edge cases:** Back during the entry aborts it cleanly (layer hidden, no orphaned research animations after 500ms); the router is idempotent across a `popstate` + `hashchange` pair; reloading on `#research` or any `#research-…` restores that state; `#researchfoo` (no hyphen) is not treated as research (act two closes per R27).
@@ -2592,6 +2607,7 @@ Build and deployment for every requirement: **not Docker**, by the same justifie
 
 ### R79. Palette, fonts, script budget and file footprint hold, and nothing earlier regresses.
 > **Amended by addendum 5 (R87):** the main inline script budget is now under 375 lines. See section 38.3.
+> **Amended by addendum 6 (R102):** the script count is now 5 (`tech-js`). See section 40.4.
 
 - **Source:** R31, R49, R65; section 32.4.
 - **Acceptance:** the R31 hex grep returns the same set as at 845f15a (**no new hex**); the Google Fonts URL is unchanged; `grep -c "<script" intro.html` = 4 and `grep -cE "<script[^>]+src=" intro.html` = 0; the main inline script is under 345 lines, `passions-js` under 280 lines, and `awk '/<script id="research-js">/,/<\/script>/' intro.html | wc -l` < 200; `grep -ci "preventDefault" intro.html` = 0; `git diff --name-only 845f15a..HEAD` lists only `intro.html`, `BACKLOG.md` and files under `docs/`; `git diff 845f15a..HEAD -- intro.html` touches the main script in at most the two places named in 34.6 (plus the research prong's `aria-describedby` removal in markup). All acceptance checks of R1 to R25, R27 to R41, R44 to R65 pass again, with the 32.4 amendments (R26 and R30 now apply to `technology` only; R33's describedby check applies to `technology` only; R65's script count is 4).
@@ -2779,6 +2795,8 @@ Build and deployment for every requirement: **not Docker**, by the same justifie
 - **Resources:** `intro.html` act-three markup (read-only for this requirement); this PRD.
 
 ### R87. Palette, fonts, files and script budget hold with the scramble in, and nothing earlier regresses.
+> **Amended by addendum 6 (R102):** `grep -c "<script" intro.html` is now 5 (`tech-js`). See section 40.4.
+
 - **Source:** R31, R49, R65, R79; section 38.3.
 - **Acceptance:** the R31 hex grep returns the same set as at 50e1b8c (`diff <(git show 50e1b8c:intro.html | grep -oiE "#[0-9a-f]{6}\b" | sort -u) <(grep -oiE "#[0-9a-f]{6}\b" intro.html | sort -u)` is empty; it is at dd90860); the Google Fonts URL is unchanged; `grep -c "<script" intro.html` = 4 and `grep -cE "<script[^>]+src=" intro.html` = 0; the main inline script block (the second `<script>` through its `</script>`, inclusive) is **under 375 lines** (359 at dd90860); `passions-js` under 280 lines and `research-js` under 200 lines (unchanged); `grep -ci "preventDefault" intro.html` = 0; `git diff --name-only 50e1b8c..HEAD` lists only `intro.html`, `BACKLOG.md`, files under `docs/` and files under `assets/passions/`. All acceptance checks of R1 to R34, R36 to R38, R40 to R44, R47 to R80 pass again, with the 32.4 amendments and with R35, R39, R45 and R46 read as amended by R81 to R85.
 - **Edge cases:** no new font, image, CSS or JS files; no third-party code; the passion prong still starts act three (R33) and the chips still reach `#passions` (R50).
@@ -2836,6 +2854,626 @@ Risks:
 
 ---
 
+# Addendum 6: technology branch, intro beat (dark terminal and TUI) (card t_ed5e09e4)
+
+Added 2026-11-12 by product. Builds on `intro.html` at commit 2bd86e9 on `feature/intro-experience` (passion branch complete, research board built, scramble reconciled). Same harness, tokens, fonts and conventions as sections 1 to 39 unless a line below says otherwise. Build card: not cut yet; PMO cuts it after Nick approves. This addendum is sections 40 to 46 and requirements R88 to R102. Spec only: this card changes no code.
+
+## 40. Source, scope and what it changes
+
+### 40.1 Source brief (Nick, verbatim, via card t_ed5e09e4)
+
+> Let's talk about technology from the fork. Let's have that one come up with a dark screen and a fake script running on the page and load to a command line-esque TUI with a few options 'AI in Research' 'Remote Practices' 'Knowledge Management'
+
+Citation shorthand added: **[Nick-G]** = Nick's words above. **[Card8]** = card t_ed5e09e4's body (scope, the eight required items, done-when). **[Spike6]** = the throwaway prototype I ran for this addendum; results in 46.3. **[WCAG-214]** = WCAG 2.2 Understanding 2.1.4, Character Key Shortcuts.
+
+### 40.2 Scope boundary: the three options are stubs
+
+This pass builds **from the technology prong up to the moment the three TUI options are visible and clickable**: the entry transition, the dark screen, the fake boot script, the TUI, and three stub links `AI in Research`, `Remote Practices`, `Knowledge Management`. **What is behind each option is out of scope.** No AI-in-research, remote-practices or knowledge-management content is specified or built here. Each option is an honest stub (R96), exactly as the research clusters (R73) and the passion chips before addendum 3 (R42). The content gets its own addendum and build card later.
+
+After this addendum, no fork prong is a stub: research, technology and passion each start their own beat.
+
+### 40.3 Do the three topics share one page? (decided here, flagged as T1)
+
+Nick said "contained on one page" for the passions (19.3). Research got one page on my recommendation (32.3, Flag D1). Nick has said nothing about this for technology. **My recommendation: one shared page, the same shape as `#passions` and the planned `#findings`.**
+
+| Option | Tradeoff |
+|---|---|
+| A. Three separate routes, files or layers | Three times the router, Back and focus code, three entry transitions to design, and a visitor who wants all three bounces back to the TUI twice. It would also make technology the only branch built differently. Rejected. |
+| B. One layer, one topic visible at a time (a TUI "screen" per option, Back returns to the menu) | The most literal terminal metaphor. But it is still one layer and one router branch, so it is a presentation choice inside option C, not a different structure. Left open for the deep-dive card. |
+| **C. One page, three subsections in Nick's order** | AI in Research, then Remote Practices, then Knowledge Management, on one scroll. Reuses the act-four mechanics two branches already use (one layer, one router branch, Back returns to the menu). One continuous scroll on a phone. **Chosen.** |
+
+Decided shape, so the links can be wired to their final targets today (same move as 19.3 and 32.3):
+
+| Thing | Decision |
+|---|---|
+| The page | One future `<section id="toolkit">` in `intro.html`, after `#technology`, using act four's fixed-layer pattern (z-index 17). Built by a later card, not this one. |
+| Its parts | Three subsections, ids `technology-ai`, `technology-remote`, `technology-knowledge`, in that order. |
+| The links | Real `<a>` elements with `href="#technology-ai"`, `#technology-remote`, `#technology-knowledge`. Set **now** and never changed by the next card. |
+| Routing | The `#technology-` hash prefix is reserved now. Today the router answers it with the stub (R96). The next card changes only that router branch, adds `#toolkit`, and deletes the stub line and the `aria-describedby`. |
+
+The hrefs are the same under option B, so if Nick prefers one-topic-at-a-time screens, only the future page changes, not this beat. If he wants three separate pages, it is a three-href change. That is Flag T1, not a requirement.
+
+### 40.4 What this changes in sections 1 to 39
+
+| Earlier decision | Change |
+|---|---|
+| R26 (prongs are honest stubs), narrowed by 32.4 to `technology` | **Retired.** `technology` now starts the technology beat (R88). No prong writes `… is coming soon. I'm still paving that road.` any more: the main script's stub branch and `<span id="fork-soon">` are removed (41.6), and the `technology` button loses `aria-describedby="fork-soon"`. |
+| R30 and R33 and R66: "technology still has `aria-describedby` and writes the R26 line" | **Replaced by R88.** Those checks now read "no prong has `aria-describedby`; `#fork-soon` does not exist". |
+| R27, R48, R50, R78: routers for `#where`, `#nerd`, `#passions-*`, `#research`, `#research-*` | Two more hash families: `#technology` and `#technology-*` (R101). Act two stays open underneath both. |
+| R79, R87: four inline scripts | A **fifth** block, `<script id="tech-js">`, under 160 lines, holds the technology beat. `grep -c "<script" intro.html` becomes **5**. Still no `src=` scripts, no libraries. The main script shrinks by about 3 lines (41.6). |
+| R31, R65, R79, R87: no new hex, same fonts | **Unchanged.** Every color in this beat is an existing token, `rgb(var(--glow-warm))`, or an `rgba()` of `--leaf` or `--ink`. IBM Plex Mono 400 and 500 only, both already in the font URL. |
+| 18.4, 24.4, 37.4 non-goals: "any change to the `technology` prong" | Narrowed: the technology prong's intro beat is in scope. Everything behind the three options stays a non-goal (46.4). |
+| 24.4, 37.4, 39.4 non-goals: no typewriter effect | **Superseded for one line only:** the boot script's command `boot technology` types itself (42.3), because Nick asked for "a fake script running on the page" [Nick-G]. Every other line of the boot log appears whole, as real program output does. No typewriter or scramble on the heading, the options, the status line or anything outside `.b-cmd`. |
+| Harness note for R67(a) and R70 (timing reads) | In Chromium, `Animation.effect.getTiming().easing` returns `"linear"` for **CSS** animations; the curve lives on the keyframes. Read `a.effect.getKeyframes()[0].easing` instead [Spike6, F38]. This addendum's checks do that. |
+| Section 7 harness server line | Unchanged from 32.4: `python3 docs/tools/serve.py 8000`. |
+
+### 40.5 Map to the card's eight required items
+
+| Card item | Decided in |
+|---|---|
+| 1. Entry transition for the center prong | 41.2, R88, R89 |
+| 2. Dark screen and fake script, exact timing | 42, R90, R91 |
+| 3. TUI landing screen, selection mechanic, states | 43, R93, R94, R95 |
+| 4. Stub behavior | 45.1, R96 |
+| 5. Accessibility | 45.4, R100 |
+| 6. Reduced motion | 45.3, R98 |
+| 7. One shared page question | 40.3, R97, Flag T1 |
+| 8. Typography and palette | 44, R92 |
+
+---
+
+## 41. Structure and entry
+
+### 41.1 Structure
+
+```html
+<!-- after </section> of #research, before the main inline script -->
+<section class="act-tech" id="technology" aria-labelledby="tech-title" hidden>
+  <div class="tty">
+<pre class="boot" aria-hidden="true"><span class="b-dim">nick@mac ~ % </span><span class="b-cmd">boot technology</span><span class="b-cur"></span>
+<span class="b-ln" style="--ld:1600ms">resolving dependencies...</span><span class="b-ln" style="--ld:1710ms">  + curiosity <span class="b-dim">.............</span> ok</span><span class="b-ln" style="--ld:1820ms">  + research-methods <span class="b-dim">......</span> ok</span><span class="b-ln" style="--ld:1930ms">  + eval-harness <span class="b-dim">..........</span> ok</span><span class="b-ln" style="--ld:2040ms">  + async-habits <span class="b-dim">..........</span> ok</span><span class="b-ln" style="--ld:2150ms">  + second-brain <span class="b-dim">..........</span> ok</span><span class="b-ln" style="--ld:2260ms">mounting ~/notes <span class="b-dim">..........</span> ok</span><span class="b-ln" style="--ld:2370ms">indexing knowledge base <span class="b-dim">...</span> ok</span><span class="b-ln" style="--ld:2480ms">checking for hype <span class="b-dim">.........</span> <span class="b-warn">none</span></span><span class="b-ln" style="--ld:2590ms">starting interface <span class="b-dim">........</span> ok</span></pre>
+    <div class="tui" id="tui">
+      <p class="tui-bar" aria-hidden="true">[ technology ]</p>
+      <h2 id="tech-title" tabindex="-1">Technology, loaded<span class="dot">.</span></h2>
+      <p class="tui-sub" aria-hidden="true">Select a topic:</p>
+      <div class="tui-menu" role="group" aria-labelledby="tech-title">
+        <a class="tui-opt" data-topic="ai" href="#technology-ai" aria-describedby="tech-soon"><span class="t-mark" aria-hidden="true"></span><span class="t-key" aria-hidden="true">[1]</span><span class="t-label">AI in Research</span><span class="t-arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="tui-opt" data-topic="remote" href="#technology-remote" aria-describedby="tech-soon"><span class="t-mark" aria-hidden="true"></span><span class="t-key" aria-hidden="true">[2]</span><span class="t-label">Remote Practices</span><span class="t-arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="tui-opt" data-topic="knowledge" href="#technology-knowledge" aria-describedby="tech-soon"><span class="t-mark" aria-hidden="true"></span><span class="t-key" aria-hidden="true">[3]</span><span class="t-label">Knowledge Management</span><span class="t-arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+      <p class="tui-status" id="tech-status" role="status" aria-live="polite"></p>
+      <p class="tui-keys" aria-hidden="true"><span class="k-keys">&uarr;&darr; move &middot; enter or 1-3 open</span><span class="k-touch">tap a topic to open it</span></p>
+      <span class="vh" id="tech-soon">Coming soon.</span>
+    </div>
+  </div>
+</section>
+```
+
+- **The `<pre>` is written exactly as above, with no line breaks between the `.b-ln` spans** (each is `display:block`). The only newline is after `.b-cur`. Dot leaders start every status at column 29, and no line is longer than 32 characters, so it fits a 320px phone (42.4).
+- **Each option is one link.** Its accessible name is only `.t-label` (`AI in Research`), because the marker, the `[1]` key and the arrow are `aria-hidden` (45.4).
+- **Layer:** `.act-tech { position:fixed; inset:0; z-index:16; background-color:var(--ink); color:var(--leaf); overflow-y:auto; overscroll-behavior:contain; }`, `.act-tech[hidden]{display:none}`. z-index 16 is the branch tier shared with act three and the research board: the three branches are siblings and are never open together. Above act two (15), below the skip link (20).
+- **While open:** `main.inert = true` (already, from act two), act two stays un-hidden underneath with `.fork-scene.inert = true`. The page never sets `overflow:hidden` on `html`/`body` (R3).
+- **State machine** (one variable in `tech-js`): `closed → entering → open`, plus `open|entering → closed` on Back.
+- **Names are new and collision-free.** `grep` on 2bd86e9 finds no existing `.act-tech`, `.tty`, `.boot`, `.tui`, `.tui-*`, `.t-*`, `.k-*` or `.b-*` rule, and no `id="technology"`, `tech-*` or `toolkit`. Keyframe names are new: `tech-wipe`, `tty-blink`, `tty-cur-off`, `tty-type`, `tty-line`, `tty-clear`, `tui-paint`. Do not reuse `caret`, `pop`, `trace` or `beat-in`.
+
+### 41.2 Entry: a wipe in from the top (card item 1)
+
+**Fork order, checked:** research is the left road, technology the **center road**, passion the right road (17.3.2; markup order on 2bd86e9). The center road is the straight one: `fill rect (55, 0, 10, 56)`, running from the avatar's feet **up to the top edge** of the road SVG (17.3.2). When technology is chosen the avatar already looks ahead and up: `translate(0,-1px)` (17.3.3).
+
+The established rule, read off the two built branches: **the new scene arrives from the end of the road you took.** Research's road ends at the left, its board comes in from the left (33.2). Passion's ends at the right, act three comes in from the right (20.2). Technology's road ends at the top.
+
+| Option | Tradeoff |
+|---|---|
+| **A. The same wipe, entering from the top** | Same single full-screen panel, same 700ms, same 120ms beat for the avatar's glance, same `cubic-bezier(.7,0,.2,1)` easing, same hem shadow, now on the bottom (leading) edge. Follows the rule above exactly and reuses the mechanic with one changed axis. It is not the curtain: the curtain fades in red with pleats, holds a line, then rises **out**; this is a plain dark panel that drops **in**, carrying a prompt. **Chosen.** |
+| B. Wipe up from the bottom | The bottom is where the avatar came from, so the scene would arrive from behind. Breaks the rule. Rejected. |
+| C. CRT power-on (a bright line that expands from the middle) | On theme, but a new technique, a CRT cliché, and the CRT look already belongs to passion's glitch (scanlines, 21.2). The bright line popping open is also a flash-like event. Rejected. |
+| D. Iris or zoom down the center road | New technique, and scaling the pixel road blurs its crisp edges. Rejected. |
+| E. Crossfade | Rejected for the same reason as 20.2: it reads as a content swap, not a branch. |
+
+Times are milliseconds from the technology prong's activation (click, tap, Enter or Space). The full beat timeline is in 42.2.
+
+| t (ms) | What happens | Technique |
+|---|---|---|
+| 0 | The main prong handler sets `last='technology'`, the avatar's `data-look="technology"`, clears `#fork-status`, then returns (41.6). `tech-js` takes over: state `entering`, `history.pushState({act:'technology'}, "", "#technology")`, `Lt.hidden = false`, `Lt.scrollTop = 0`, `.fork-scene.inert = true`, `#tech-status` cleared, `.tui-menu.inert = true`, class `is-entering` on `Lt`. | JS |
+| 120 to 820 | **The wipe.** `.act-tech.is-entering { animation: tech-wipe 700ms cubic-bezier(.7,0,.2,1) 120ms both; box-shadow: 0 18px 36px -12px rgba(22,36,28,.45); overflow-y:hidden; }` and `@keyframes tech-wipe { from{transform:translateY(calc(-100% - 48px));} to{transform:none;} }`. The panel arrives already showing the prompt and cursor (42.2), like a terminal window opening. The shadow is the curtain's "weight under the hem" value (17.2), on the bottom edge. | CSS |
+| 820 | On `animationend` of `tech-wipe`: focus moves to `#tech-title` (`focus({preventScroll:true})`), so a screen reader says "Technology, loaded., heading level 2" while the boot script plays for sighted visitors (R100). Same timing and reasoning as research (33.2): the heading is not yet painted, but it is not interactive and has no focus ring. | JS |
+
+- **No scrolling during the entry:** `overflow-y:hidden` on the layer while `is-entering` (not on `html`/`body`).
+- **Skip (impatient visitors):** same rules as 17.2, 20.2 and 33.2. From t = 400ms until the end step, a `pointerdown` on `Lt` or a `keydown` of Escape, Enter or Space calls `finish()` on every animation in `Lt.getAnimations({subtree:true})`, then runs the end step on the next task (`setTimeout(…, 0)`, so Space doesn't also scroll). The 400ms arming delay stops the key that activated the prong from also skipping. Skip fires once. **No animation in this beat may be infinite**, because `finish()` throws `InvalidStateError` on an infinite animation [Spike6, F34].
+
+### 41.3 Wiring into the existing scripts
+
+`tech-js` is a fifth inline block after `research-js`. It owns the layer, the state machine, the skip, the option handlers (click, arrows, number keys), its own `fixFocus()` (copy research-js's pattern: the browser's fragment step focuses the layer between `popstate` and `hashchange`) and its own `route()` on `popstate`, `hashchange` and `load`. The **main** inline script changes in exactly two places, and the act-two markup in two:
+
+1. **Prong click handler.** These five lines on 2bd86e9:
+   ```js
+   if(n === 'research') return;             // research-js starts the research beat (PRD 34.6)
+   if(n === 'passion'){ nerdStart(); return; }
+   requestAnimationFrame(function(){
+     status.textContent = n.charAt(0).toUpperCase() + n.slice(1) + " is coming soon. I'm still paving that road.";
+   });
+   ```
+   become these two:
+   ```js
+   if(n === 'research' || n === 'technology') return;   // research-js / tech-js start their beats (PRD 34.6, 41.3)
+   if(n === 'passion') nerdStart();
+   ```
+   The handler still sets `last`, the avatar look and clears `#fork-status`. `tech-js`'s own click listener on the technology button, registered later, starts the beat.
+2. **Router.** `if(h === '#where' || /^#research(-|$)/.test(h)) openDirect(); else close();` becomes `if(h === '#where' || /^#(research|technology)(-|$)/.test(h)) openDirect(); else close();`.
+3. **Markup.** The `technology` button loses `aria-describedby="fork-soon"`, and `<span class="vh" id="fork-soon">Coming soon.</span>` is deleted (nothing references it any more, and an orphaned visually hidden "Coming soon." would be read aloud as stray text on the fork).
+
+Router behavior in `tech-js` (idempotent, because one anchor click fires both `popstate` and `hashchange` [Spike2, F15]):
+
+| Hash | Technology layer |
+|---|---|
+| `#technology` | If closed: open at rest (no wipe, no boot, end-step state, focus `#tech-title`). If open: clear `#tech-status`, clear `.is-picked`, return focus to the last activated option if focus fell to `<body>` or the layer. |
+| `#technology-ai`, `-remote`, `-knowledge` | If closed (direct load, new tab, Forward): open at rest, mark that option `.is-picked`, announce its stub line once. If open (a click just happened): leave it, no second announcement. |
+| any other `#technology-…` | Open at rest, no announcement, nothing picked. |
+| anything else | If open: close (hidden, timers cleared, `is-entering` removed, `.fork-scene.inert = false`, status cleared, `.is-picked` cleared, focus to the `technology` prong). |
+
+`.is-picked` always follows the hash: exactly one option has it when the hash is one of the three option hrefs, none otherwise.
+
+---
+
+## 42. The dark screen and the fake script (card item 2)
+
+### 42.1 What it is, and what it is not
+
+A calm, modern shell on Nick's own machine: a zsh-style prompt (`nick@mac ~ %`, the macOS default prompt shape), one short command, and the kind of output a real installer prints. The joke is in the package names, which are Nick's working habits read as dependencies, and in one line: `checking for hype ... none`.
+
+What it deliberately is not: green-on-black "hacker" cinema. No matrix rain, no scrolling hex, no "ACCESS GRANTED", no progress bars racing, no CRT scanlines, curvature, flicker or text glow, no beeps. Every line appears once and stays put. The passion branch already owns the glitchy CRT take-over (21.2, 21.3); technology is the opposite register: clean, quiet, legible.
+
+### 42.2 The timeline (exact)
+
+| t (ms) | Movement | Spec |
+|---|---|---|
+| 0 to 820 | The dark panel arrives (41.2) already showing the prompt `nick@mac ~ % ` and a block cursor at the top-left. | `.boot` is `display:block` only while `is-entering` |
+| 0 to 2000 | **Cursor blinks** twice: on 500ms, off 500ms. | `.b-cur`: `tty-blink 1000ms steps(1,end) 0ms 2` |
+| 1000 to 1450 | **The command types itself:** `boot technology`, 15 characters, one every 30ms, cursor riding after the last character. | `.b-cmd`: `tty-type 450ms steps(15,end) 1000ms both` (width `0` to `15ch`) |
+| 1450 | "Enter": the cursor disappears while the command runs. | `.b-cur`: `tty-cur-off 1ms step-end 1450ms both` |
+| 1600 to 2590 | **Output, line by line:** the 10 lines appear whole, one every 110ms, line `k` (0 to 9) at `1600 + 110k`. | `.b-ln`: `tty-line 1ms step-end var(--ld) both` |
+| 2590 to 2800 | Hold on `starting interface ........ ok`. | none |
+| 2800 | **Clear.** The log disappears in one frame (a terminal app taking over the screen). | `.boot`: `tty-clear 1ms step-end 2800ms both` (opacity to 0) |
+| 2800 to 3040 | **The TUI paints itself top to bottom** in 8 steps, like a curses app drawing its screen. | `.tui`: `tui-paint 240ms steps(8,end) 2800ms both` |
+| 3040 | **End step** (on `animationend` of `tui-paint`, or a 3600ms safety timeout, or a skip): `is-entering` removed, state `open`, `.tui-menu.inert = false`, focus stays on the title (or is moved there if it is not inside `Lt`). | JS |
+
+The whole beat is about **3 seconds**, skippable from 0.4s (Flag T5): faster than research's 4.1s board, a little longer than passion's 2.7s reveal. Nothing moves, blinks or changes after the end step, so WCAG 2.2.2 needs no pause control.
+
+```css
+/* === technology branch (PRD 41-45) === */   /* ALL technology CSS (41.1, 42, 43, 44, 45.2) sits between this comment and the end marker */
+.act-tech{ position:fixed; inset:0; z-index:16; background-color:var(--ink); color:var(--leaf);
+  overflow-y:auto; overscroll-behavior:contain; }
+.act-tech[hidden]{ display:none; }
+.tty{ position:relative; min-height:100svh; box-sizing:border-box; display:grid; place-items:center;
+  padding:max(env(safe-area-inset-top), clamp(16px,5svh,64px)) clamp(16px,4vw,48px) calc(clamp(16px,4svh,40px) + env(safe-area-inset-bottom));
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:16px; line-height:1.5; }
+.boot{ display:none; position:absolute; top:max(env(safe-area-inset-top), clamp(16px,5svh,64px)); left:clamp(16px,4vw,48px); margin:0;
+  font:inherit; font-size:clamp(13px,1.2vw,16px); line-height:1.6; white-space:pre; color:var(--leaf); }
+.b-dim{ color:var(--moss); }
+.b-cmd{ display:inline-block; vertical-align:bottom; overflow:hidden; width:15ch; color:var(--card); }
+.b-cur{ display:inline-block; width:1ch; height:1.2em; vertical-align:text-bottom; background-color:var(--leaf); }
+.b-ln{ display:block; }
+.b-warn{ color:rgb(var(--glow-warm)); }
+@media (prefers-reduced-motion:no-preference){
+  .act-tech.is-entering{ animation:tech-wipe 700ms cubic-bezier(.7,0,.2,1) 120ms both;
+    box-shadow:0 18px 36px -12px rgba(22,36,28,.45); overflow-y:hidden; }                       /* 41.2 */
+  .act-tech.is-entering .tui-menu{ pointer-events:none; }
+  .act-tech.is-entering .boot{ display:block; animation:tty-clear 1ms step-end 2800ms both; }
+  .act-tech.is-entering .b-cur{ animation:tty-blink 1000ms steps(1,end) 0ms 2, tty-cur-off 1ms step-end 1450ms both; }
+  .act-tech.is-entering .b-cmd{ animation:tty-type 450ms steps(15,end) 1000ms both; }
+  .act-tech.is-entering .b-ln{ animation:tty-line 1ms step-end var(--ld) both; }
+  .act-tech.is-entering .tui{ animation:tui-paint 240ms steps(8,end) 2800ms both; }
+}
+@keyframes tech-wipe{ from{ transform:translateY(calc(-100% - 48px)); } to{ transform:none; } }
+@keyframes tty-blink{ 0%{ opacity:1; } 50%{ opacity:0; } }
+@keyframes tty-cur-off{ to{ visibility:hidden; } }
+@keyframes tty-type{ from{ width:0; } to{ width:15ch; } }
+@keyframes tty-line{ from{ visibility:hidden; } to{ visibility:visible; } }
+@keyframes tty-clear{ to{ opacity:0; } }
+@keyframes tui-paint{ from{ clip-path:inset(-1em -8px calc(100% + 1em) -8px); } to{ clip-path:inset(-1em -8px -8px -8px); } }
+/* (43.2's TUI rules, 44's notes and 45.2's responsive rules continue here) */
+/* === end technology branch === */
+```
+
+Three details the spike forced [Spike6]:
+
+- **The clear uses `opacity` on `.boot`, not `visibility`.** Each `.b-ln` holds `visibility:visible` through its own `both` fill, which beats an inherited `visibility:hidden` from the parent; with `visibility` the ten lines stayed on screen over the TUI (F35).
+- **`tui-paint` insets by `-1em` at the top and `calc(100% + 1em)` at the bottom.** The `[ technology ]` label sits on the top border, half outside the box. A plain `inset(0 0 100% 0)` clipped the label at the end and leaked half of it onto the screen during the boot (F36).
+- **The blink runs 2 iterations, not `infinite`** (41.2 skip, F34).
+
+**Base styles are the final state.** `.boot` is `display:none` and `.tui` has no clip outside `is-entering`. When `is-entering` is removed, under reduced motion, or after a skip, the base CSS shows the finished TUI and no log.
+
+### 42.3 The script text (exact)
+
+```
+nick@mac ~ % boot technology█
+resolving dependencies...
+  + curiosity ............. ok
+  + research-methods ...... ok
+  + eval-harness .......... ok
+  + async-habits .......... ok
+  + second-brain .......... ok
+mounting ~/notes .......... ok
+indexing knowledge base ... ok
+checking for hype ......... none
+starting interface ........ ok
+```
+
+| Part | Color | Contrast on `--ink` |
+|---|---|---|
+| Prompt `nick@mac ~ % ` and every dot leader | `--moss` `#7E9C60` | 5.23:1 |
+| The typed command `boot technology` | `--card` `#F8FAF4` | 15.32:1 |
+| Output text and every `ok` | `--leaf` `#CFE2A6` | 11.57:1 |
+| `none` (the one wink) | `rgb(var(--glow-warm))` `rgb(222,132,84)` | 5.78:1 |
+| Cursor block | `--leaf` background, `1ch × 1.2em`, a CSS box (no glyph) | n/a |
+
+The five "packages" loosely foreshadow the three options without naming them: `eval-harness` (AI in Research), `async-habits` (Remote Practices), `second-brain` (Knowledge Management), with `curiosity` and `research-methods` as the base. They are placeholder copy Nick can edit in the markup without touching the script, as long as each line keeps its status at column 29 and stays at or under 32 characters (Flag T3).
+
+### 42.4 Placement
+
+The log sits top-left, where a terminal's first line sits, at `clamp(13px,1.2vw,16px)` (13px on phones, 16px on desktop). Widest line 32 characters: at 13px Plex Mono that is about 250px, so it fits a 320px screen with 16px padding [Spike6, F32]. The TUI is centered (43). They never show together except during the one-frame clear.
+
+---
+
+## 43. The TUI landing screen (card item 3)
+
+### 43.1 Look
+
+A single bordered window, centered, like a `dialog`/`whiptail` or `fzf` menu, in the same dark palette:
+
+```
+ ╔═[ technology ]══════════════════════════╗
+ ║                                         ║
+ ║  Technology, loaded.                    ║
+ ║  Select a topic:                        ║
+ ║                                         ║
+ ║    [1] AI in Research                →  ║
+ ║  > [2] Remote Practices              →  ║   <- focused row, inverse video
+ ║    [3] Knowledge Management          →  ║
+ ║                                         ║
+ ║  Remote Practices is coming soon. ...   ║   <- status line
+ ║ ─────────────────────────────────────── ║
+ ║  ↑↓ move · enter or 1-3 open            ║
+ ╚═════════════════════════════════════════╝
+```
+
+The frame above is a sketch. **The border is CSS, not box-drawing characters:** `border:3px double var(--leaf)` draws the same double rule (═ ║), joins perfectly at every size, and does not depend on glyph coverage in the web-font subset or on `line-height:1`, which box-drawing characters need to join and which would cramp the menu rows. No box-drawing glyphs appear in the markup (R93).
+
+### 43.2 CSS (exact; continues the 42.2 block)
+
+```css
+.tui{ width:min(100%,40rem); box-sizing:border-box; position:relative; border:3px double var(--leaf);
+  padding:clamp(22px,3vw,34px) clamp(14px,3vw,32px) clamp(14px,2vw,20px); }
+.tui-bar{ position:absolute; top:0; left:clamp(10px,2vw,20px); translate:0 -50%; margin:0; padding:0 8px;
+  background-color:var(--ink); font-size:13px; letter-spacing:.08em; line-height:1.2; color:var(--leaf); }
+#tech-title{ margin:0; font-family:inherit; font-weight:500; font-size:clamp(22px,3.2vw,32px); line-height:1.2;
+  letter-spacing:-.01em; color:var(--card); }
+#tech-title:focus{ outline:none; }
+#tech-title .dot{ color:var(--moss); }
+.tui-sub{ margin:6px 0 clamp(14px,3svh,24px); font-size:14px; color:var(--moss); }
+.tui-menu{ display:grid; gap:4px; }
+.tui-opt{ display:grid; grid-template-columns:1ch auto 1fr auto; align-items:center; column-gap:1ch;
+  min-height:48px; box-sizing:border-box; padding:8px 10px;
+  font-size:clamp(16px,1.7vw,19px); font-weight:500; color:var(--leaf); text-decoration:none;
+  -webkit-tap-highlight-color:transparent; }
+.t-mark, .t-arrow{ color:var(--moss); }
+.t-mark{ visibility:hidden; }
+.t-mark::before{ content:">"; }
+.t-key{ color:var(--moss); font-weight:400; }
+@media (hover:hover){
+  .tui-opt:hover{ background-color:rgba(207,226,166,.12); color:var(--card); }
+  .tui-opt:hover .t-mark{ visibility:visible; color:var(--leaf); }
+  .tui-opt:hover .t-key, .tui-opt:hover .t-arrow{ color:var(--leaf); }
+}
+@media (hover:none){ .tui-opt{ background-color:rgba(207,226,166,.05); } }
+.tui-opt.is-picked:not(:focus-visible) .t-mark{ visibility:visible; color:rgb(var(--glow-warm)); }
+.tui-opt.is-picked:not(:focus-visible) .t-mark::before{ content:"*"; }
+.tui-opt:focus-visible{ outline:2px solid var(--card); outline-offset:2px; background-color:var(--leaf); color:var(--ink); }
+.tui-opt:focus-visible .t-mark{ visibility:visible; }
+.tui-opt:focus-visible .t-mark, .tui-opt:focus-visible .t-key, .tui-opt:focus-visible .t-arrow{ color:var(--ink); }
+.tui-opt:active{ background-color:rgb(var(--glow-warm)); color:var(--ink); }
+.tui-opt:active .t-mark, .tui-opt:active .t-key, .tui-opt:active .t-arrow{ color:var(--ink); }
+.tui-status{ margin:clamp(10px,2svh,16px) 0 0; min-height:1.5em; font-size:14px; color:var(--leaf); }
+.tui-keys{ margin:clamp(10px,2svh,16px) 0 0; padding-top:10px; border-top:1px solid rgba(207,226,166,.35); font-size:13px; color:var(--moss); }
+.k-touch{ display:none; }
+@media (hover:none) and (pointer:coarse){ .k-keys{ display:none; } .k-touch{ display:inline; } }
+```
+
+### 43.3 The four visual states (exact)
+
+| State | Trigger | Row | Marker column | Contrast |
+|---|---|---|---|---|
+| Rest | none | `--leaf` label on ink, `[n]` and `→` in `--moss` | empty (reserved, so nothing shifts) | label 11.57:1, key 5.23:1 |
+| Hover | pointer over the row, `(hover:hover)` only | faint leaf tint `rgba(207,226,166,.12)`, label `--card`, key and arrow `--leaf` | `>` in `--leaf` | label 11.28:1 on the tint |
+| Focus | keyboard focus (`:focus-visible`) | **inverse video**: `--leaf` bar, `--ink` text, plus a 2px `--card` outline 2px out | `>` in `--ink` | 11.57:1; outline 15.32:1 against ink |
+| Pressed | `:active` (mouse down, finger down) | `rgb(var(--glow-warm))` bar, `--ink` text | `>` in `--ink` | 5.78:1 |
+| Picked | `.is-picked`: the option whose href is the current hash (the one just opened) | as rest | `*` in warm amber (unless it also has focus, when focus wins) | 5.78:1 |
+
+`*` for "picked" follows `git branch`, which marks the current branch with `*`; `>` stays the cursor. In the spike, using `>` for both made an image check read the picked row as "a second cursor"; with `*` it read the two states as "clearly distinguished" [Spike6, F37]. Touch screens get the faint `.05` tint on every row at rest so the whole row reads as the tap target (`--moss` keys stay 4.62:1 on it).
+
+### 43.4 Selection mechanic: pointer, touch and keyboard (all supported)
+
+| Input | Behavior |
+|---|---|
+| Click or tap | Anywhere on the row (the row is the `<a>`, at least 44px tall, full menu width). Native link activation. |
+| Tab / Shift+Tab | Title is focused at 820ms; Tab goes `AI in Research`, `Remote Practices`, `Knowledge Management`. All three stay in the Tab order (no roving `tabindex`), so nothing about Tab changes from the other branches. |
+| ArrowDown / ArrowUp | On an option: focus the next / previous option, wrapping. On `#tech-title`: ArrowDown focuses option 1. |
+| Home / End | On an option: focus option 1 / option 3. |
+| Enter | On a focused option: native link activation. |
+| `1`, `2`, `3` (top row or numpad) | When focus is **inside `.tui`** (the title or any option) and the state is `open`: focus that option and activate it (`opt.focus(); opt.click();`, which follows the href natively). Ignored with Ctrl, Alt or Meta held, ignored while entering, and ignored anywhere outside `.tui`. |
+
+- **Why not the ARIA `menu` pattern:** `role="menu"` is for application menus; it hides the options from a screen reader's link list, demands arrow-only navigation, and announces them as "menu item", which overpromises. Three plain links in a labelled group are what the research and passion branches use, and they work in every screen reader. The arrows and number keys are an enhancement on top, for the TUI feel.
+- **Number keys and WCAG 2.1.4:** single-character shortcuts must be remappable, switchable off, or "only active when that component has focus" [WCAG-214]. Scoping them to focus inside the TUI meets the third condition, and they never fire on the fork, the other branches or the skip link. Screen readers in browse mode keep their own `1` to `6` heading keys, because they intercept those keys before the page sees them.
+- **No `preventDefault`** (R31 stays at 0). The layer fits one screen at every tested size (46.3, F32), so the arrow, Home and End keys have nothing to scroll; on a screen too short for the TUI, the native scroll plus `focus()` bringing the option into view is acceptable.
+- **The hint line** shows `↑↓ move · enter or 1-3 open` on devices with a fine pointer or hover, and `tap a topic to open it` on `(hover:none) and (pointer:coarse)`. It is `aria-hidden` (screen-reader users get the real controls; key hints would only be noise).
+
+---
+
+## 44. Typography and palette: a deliberate dark departure (card item 8)
+
+The site is light paper and greens. Research stayed on paper because Nick asked for "more professional" there. Technology goes dark because Nick asked for "a dark screen" [Nick-G], and a dark terminal is the honest image of the work: the place Nick actually runs evals, scripts and notes. The precedent for a dark take-over already exists: passion flips to `--ink` (21.2) and act four lives on `--ink` (26). So "dark" is part of the system; what changes is the register.
+
+| Dimension | Main site | Passion (dark, loud) | Technology (dark, calm, this spec) |
+|---|---|---|---|
+| Ground | `--paper` | paper that flips to `--ink`, with scanlines | `--ink` `#16241C` from the first frame: the site's own near-black, a deep green-black, not `#000`. No scanlines, no texture, no glow. |
+| Type | Fraunces display, EB Garamond body, Plex Mono labels | Fraunces 800, emoji, RGB-split ghosts | **IBM Plex Mono only**, 400 and 500. A terminal is monospace by definition, and Plex Mono is already the site's "technical voice" (fork chips, research eyebrows). No Fraunces or EB Garamond inside this beat. |
+| Text color | `--ink` on paper | `--card` on ink, ember and leaf ghosts | `--leaf` as the phosphor (the passion CSS already labels it "terminal green"), `--card` for what Nick types and the heading, `--moss` for the dim parts (prompt, dot leaders, keys). |
+| Accent | `--moss` period | ember red, pill red | one warm amber, `rgb(var(--glow-warm))`, used three times only: `none`, the pressed row, the picked `*`. Amber is the other classic terminal color, and this token is the red pill's glow, so the warmth Nick chose at the pill comes back here. |
+| Green-period signature | `welcome.`, `Nick.` | `Nerd.` resolving to `Nick.` | `Technology, loaded.`, with the moss period (5.23:1 on ink). |
+| Motion | eased | stepped slams, glitch | stepped, like a terminal (typing, line output, a stepped repaint), then still. No easing curves except the wipe. |
+
+**Colors used inside the layer, and only these:** `--ink`, `--leaf`, `--card`, `--moss`, `rgb(var(--glow-warm))`, `rgba(207,226,166,a)` (leaf tints), `rgba(22,36,28,a)` (the hem shadow), transparent. **Not used:** `--paper`, `--pill-red`, `--pill-blue`, ember `rgb(var(--glow-ember))` (3.59:1 on ink, fails AA for text), `--rec` copper (4.01:1, fails AA for text), `--pine` (2.07:1). No new hex.
+
+**Heading:** `Technology, loaded.` (mine, Flag T2) names what the visitor just watched, the same move as `Research, sorted.`. The window label `[ technology ]` uses the prong's lowercase word; the three options keep Nick's exact capitalization: `AI in Research`, `Remote Practices`, `Knowledge Management`.
+
+---
+
+## 45. Stubs, responsive, reduced motion and accessibility (card items 4 to 6)
+
+### 45.1 Stub behavior (card item 4): the research pattern, reused
+
+**Decision: the same stub convention the research clusters (36.1, R73) and passion chips (22.3, R42) use.** Real anchors wired to their final hrefs, so the next card only touches the router.
+
+When an option is activated (click, tap, Enter, or `1`/`2`/`3`):
+
+1. The browser follows the fragment natively. The URL becomes `intro.html#technology-remote` and a history entry is pushed. No element has that id, so nothing scrolls. **No `preventDefault`.**
+2. The option's own `click` handler clears `#tech-status`, then on the next animation frame writes `<Label> is coming soon. Still compiling.` (`AI in Research is…`, `Remote Practices is…`, `Knowledge Management is…`). Clearing first makes a repeat activation re-announce. Same "<Label> is coming soon. <one short line>" shape as the fork ("I'm still paving that road."), passion ("Still nerding out on it.") and research ("Still synthesizing."), and "compiling" is the build-it-yourself word for this branch. Placeholder copy, Flag T6.
+3. The router sees `#technology-…` with the layer open, marks that option `.is-picked`, and leaves the layer as it is.
+4. Direct load or new tab: open at rest, pick, announce once (41.3).
+
+Each option has `aria-describedby="tech-soon"` ("Coming soon."): real, enabled links, honestly described, no `aria-disabled` (17.3.4's reasoning). Back from `#technology-remote` returns to `#technology` with the status cleared, nothing picked, and focus on the Remote Practices option.
+
+### 45.2 Responsive
+
+One window, centered, `width:min(100%,40rem)`, everywhere. The three options stack in every layout (a menu is a list), so there is no row/stack switch like research's.
+
+| Concern | Desktop and tablet | Phone (portrait) | Landscape phone (`max-height:500px`) |
+|---|---|---|---|
+| Boot log | 13 to 16px, top-left | 13px, top-left | 13px, top-left |
+| Heading | `clamp(22px,3.2vw,32px)` | 22px | 22px |
+| Options | 16 to 19px, ≥ 48px tall | 16px, 48px tall | 16px, 44px tall |
+| Status / hint | 14px / 13px | same, status wraps | same |
+
+Extra rules (continue the 42.2 block):
+
+```css
+@media (max-width:359px){ .tui-opt{ font-size:15px; padding:8px 6px; column-gap:.75ch; } }
+@media (max-height:500px){
+  .tty{ padding-top:max(env(safe-area-inset-top),12px); padding-bottom:calc(8px + env(safe-area-inset-bottom)); }
+  .tui{ padding:18px 16px 10px; } #tech-title{ font-size:22px; } .tui-sub{ margin:2px 0 8px; }
+  .tui-opt{ min-height:44px; padding:4px 10px; font-size:16px; }
+  .tui-status{ margin-top:4px; } .tui-keys{ margin-top:4px; padding-top:4px; }
+}
+```
+
+`svh` only, never `dvh`. Safe-area insets on the `.tty` padding and the log's top. Under 360px `Knowledge Management` wraps to two lines inside its row (the row grows to about 61px); every other label stays on one line.
+
+Spike measurements (rest state, status line filled with the longest stub line, `Knowledge Management is coming soon. Still compiling.`) [Spike6, F32]:
+
+| Viewport | TUI box (left, top, right, bottom) | Status bottom | Layer overflow (v / h) | Boot log right edge |
+|---|---|---|---|---|
+| 1440×900 | 400, 262, 1040, 647 | 577 | 0 / 0 | 355 |
+| 1024×768 | 192, 198, 832, 578 | 509 | 0 / 0 | 291 |
+| 768×1024 | 64, 337, 704, 698 | 633 | 0 / 0 | 280 |
+| 390×844 | 16, 238, 374, 614 | 551 | 0 / 0 | 266 |
+| 375×667 | 16, 154, 359, 520 | 459 | 0 / 0 | 266 |
+| 320×568 | 16, 101, 304, 473 | 414 | 0 / 0 | 256 |
+| 844×390 | 102, 55, 742, 339 | 298 | 0 / 0 | 283 |
+| 667×375 | 27, 47, 640, 332 | 290 | 0 / 0 | 276 |
+
+### 45.3 Reduced motion (card item 6)
+
+With `prefers-reduced-motion: reduce`, consistent with act two (a cut), act three's static layout and the research board (one cut):
+
+- **No wipe, no boot script, no typing, no cursor, no repaint.** The TUI appears in one cut at t = 0, finished, with all three options live. The log is never rendered (`.boot` is `display:none` outside the motion query).
+- **Focus goes to `#tech-title` at once.** The end step runs immediately.
+- **How:** every animation rule is inside `@media (prefers-reduced-motion:no-preference)` (42.2), the page's global rule (`animation:none !important`) backs that up, and the base CSS is the final state. `tech-js` checks the media query before adding `is-entering`.
+- Hover, focus and pressed states still apply as instant state changes (the global rule shortens transitions; there are none here anyway).
+- **Toggling the setting mid-entry** (the `change` event on the media query) calls the skip path: the finished TUI at once.
+- **No flashing in any mode** (R91).
+- No-JS visitors: the layer is `hidden` and the technology prong is a plain button, so nothing happens. Accepted, as for act two (17.5).
+
+### 45.4 Screen readers and keyboard (card item 5)
+
+The terminal is decoration. Assistive tech should hear one heading and three choices, nothing else.
+
+- **Clean announcement:** the region is named by `#tech-title` ("Technology, loaded."). The group of links is labelled by the same heading. Each link's name is exactly `AI in Research`, `Remote Practices` or `Knowledge Management`, with the description "Coming soon.". A screen-reader user hears "Technology, loaded., heading level 2", then "AI in Research, link, Coming soon.", and so on.
+- **Nothing decorative leaks:** the whole boot log is one `<pre aria-hidden="true">` (and `display:none` at rest). The window label, the "Select a topic:" line, the `>`/`*` markers (CSS content inside `aria-hidden` spans), the `[1]` keys, the arrows and the key hint are all `aria-hidden`. No ASCII art exists to leak: the frame is a CSS border.
+- **Focus:** at 820ms to `#tech-title` (programmatic, `#tech-title:focus{outline:none}`, not interactive). While entering, `.tui-menu` is `inert` and has `pointer-events:none`, so neither Tab nor a tap can land on an option still being painted. After the end step, Tab and the arrows reach all three options. Focus ring: the inverse-video bar plus a 2px `--card` outline.
+- **Status:** `#tech-status` is `role="status"` `aria-live="polite"` and only speaks on an option activation.
+- **Inert underneath:** `main.inert` and `.fork-scene.inert` while the layer is open. The skip link stays on top (z-index 20); Shift+Tab reaches it.
+- **Back:** focus returns to the `technology` prong on the fork (from `#technology`), or to the last-used option (from `#technology-…`).
+
+---
+
+## 46. Requirements, deployment, flags, feasibility, non-goals
+
+All requirements use the section 7 harness with the 32.4 server line (`python3 docs/tools/serve.py 8000`), Chromium over CDP, desktop 1440×900, mobile 390×844 (DPR 3), and reduced-motion emulation. Definitions:
+
+- **"At the fork"**: load `http://localhost:8000/intro.html#where`, wait 600ms.
+- **`Lt`** is `document.getElementById('technology')`; **`tui`** is `document.getElementById('tui')`; **`opts`** is `Lt.querySelectorAll('.tui-opt')`.
+- **"Open the terminal"**: at the fork, click `.prong[data-prong="technology"]`, wait 3600ms.
+- **"Seek T"**: right after the click, `Lt.getAnimations({subtree:true}).forEach(a => { a.pause(); a.currentTime = T; })`, then wait two animation frames. Every technology animation is created by the click, so they share t = 0 and `currentTime` includes each delay. Use Seek for mid-sequence checks (37 definitions explain why).
+- **"Easing of `a`"** is `a.effect.getKeyframes()[0].easing` (40.4 harness note).
+- **"Visible lines"** is the count of `.b-ln` with computed `visibility === "visible"`.
+- **"Changed area" between two frames** is R85's method: mark every pixel where the two frames' WCAG relative luminances differ by ≥ 0.10 and the darker is < 0.80; `Awin` = the most marked pixels inside any `innerWidth/3 × innerHeight/3` window (sliding, step ≤ 12px); threshold `T = innerWidth × innerHeight / 36`.
+
+Build and deployment for every requirement: **not Docker**, by the same justified exception as sections 8, 18.1, 24.1, 31.1, 37.1 and 39.1 (a static GitHub Pages site with nothing to containerize; production deploy is a push to `main`, which stays forbidden).
+
+### R88. Activating the technology prong starts the technology beat in the same page: no navigation, the URL becomes `#technology`, and no prong is a stub any more.
+- **Source:** [Nick-G] "Let's talk about technology from the fork"; [Card8] item 1; sections 40.4, 41.1, 41.3.
+- **Acceptance:** at the fork, set `window.__stay = 1`, click the technology prong; after 3600ms: `window.__stay === 1`, `location.pathname` ends in `/intro.html`, `location.hash === "#technology"`, `Lt.hidden === false`, `document.querySelector('#where .fork-scene').inert === true`, `document.querySelector('main').inert === true`, `.avatar` `dataset.look === "technology"`, `#fork-status` is empty. No `.prongs .prong` (the three fork buttons) has `aria-describedby`; `document.getElementById('fork-soon') === null`; `grep -c "still paving that road" intro.html` = 0. `document.querySelector('main #technology') === null`, and `#technology` follows `#research` in the DOM (`document.getElementById('research').compareDocumentPosition(Lt) & Node.DOCUMENT_POSITION_FOLLOWING` is non-zero). `getComputedStyle(Lt).zIndex === "16"`. The research prong still starts the research beat (R66's hash, layer and focus checks) and the passion prong still starts act three (R33).
+- **Edge cases:** double-click, or Enter then click, starts it once (`document.getAnimations().filter(a => a.animationName === "tech-wipe").length <= 1` at all times); Enter and Space on the focused prong both start it; the prong can't be activated during act two's curtain (`.fork-scene` is inert); with no JS nothing happens and nothing breaks.
+- **Resources:** `intro.html` markup (act two), main script (two places, 41.3), `tech-js`.
+
+### R89. The dark panel wipes in from the top over 700ms after a 120ms beat, with the hem shadow on its bottom edge and a skip.
+- **Source:** [Card8] item 1 "decide and justify the appropriate transition direction/style for the center prong … reuse existing transition mechanics"; section 41.2.
+- **Acceptance:** motion allowed, 1440×900, at the fork click technology at t = 0: (a) a `tech-wipe` animation exists on `Lt` with `getTiming()` `duration 700`, `delay 120`, and easing `"cubic-bezier(0.7, 0, 0.2, 1)"`; (b) Seek 0: `Lt`'s computed transform `ty === −innerHeight − 48`; Seek 450: `ty` strictly between `−innerHeight − 48` and 0 (negative: it comes from the top) and `tx === 0`; Seek 900: `ty === 0`; (c) on a fresh run in real time, by t ≈ 1500ms `document.activeElement.id === "tech-title"`; (d) while `is-entering`, `getComputedStyle(Lt).boxShadow === "rgba(22, 36, 28, 0.45) 0px 18px 36px -12px"` (positive y: bottom edge) and `overflowY === "hidden"`; at t ≈ 3600ms `Lt.classList.contains('is-entering') === false`. **Skip:** fresh run, at t ≈ 900ms dispatch `keydown` Escape on `document`; within 150ms `is-entering` is gone, `getComputedStyle(Lt.querySelector('.boot')).display === "none"`, `getComputedStyle(tui).clipPath === "none"`, `Lt.getAnimations({subtree:true}).length === 0`, and the run has zero `Runtime.exceptionThrown`. A `keydown` at t ≈ 100ms does **not** skip; a `pointerdown` on `Lt` at t ≈ 1500ms does.
+- **Edge cases:** background tab during the entry: the 3600ms safety timeout runs the end step; resize mid-wipe still covers the screen; `document.documentElement.scrollWidth <= innerWidth` throughout; `grep -c "nerd-wipe" intro.html` and `grep -c "research-wipe" intro.html` are unchanged from 2bd86e9.
+- **Resources:** `intro.html` CSS (`tech-wipe`), `tech-js`.
+
+### R90. A fake boot script plays on the dark screen: the prompt, the command typing itself, then ten output lines with the exact 42.3 text and colors, on the 42.2 timeline, then the screen clears.
+- **Source:** [Nick-G] "come up with a dark screen and a fake script running on the page"; [Card8] item 2 "spec the concrete visual treatment … Specify exact timing/duration"; sections 42.2, 42.3.
+- **Acceptance:** markup: `Lt.querySelector('.boot')` is a `PRE` with `aria-hidden="true"`; its first `.b-dim` text is `"nick@mac ~ % "`; `.b-cmd` text is `"boot technology"`; there are exactly 10 `.b-ln`, whose `textContent` in order equals the 10 output lines of 42.3 exactly (dots included), each ≤ 32 characters, and whose `--ld` inline values are `1600ms + 110ms·k` for k = 0..9. Colors: `.b-dim` `rgb(126, 156, 96)`, `.b-cmd` `rgb(248, 250, 244)`, `.b-ln` `rgb(207, 226, 166)`, `.b-warn` text `none` in `rgb(222, 132, 84)`. Timing, right after the click: `tty-type` duration 450, delay 1000, easing matching `/^steps\(15(, ?end)?\)$/`; ten `tty-line` with delays exactly `{1600 + 110k}`; `tty-clear` on `.boot` with delay 2800; `tui-paint` duration 240, delay 2800, easing matching `/^steps\(8(, ?end)?\)$/`. Seek checks at 1440×900 and 390×844: **Seek 600**: `.boot` opacity `"1"`, visible lines 0, `.b-cmd` width 0. **Seek 1225**: `.b-cmd` width / (its rest width / 15) rounds to 7. **Seek 2000**: visible lines 4. **Seek 2700**: visible lines 10, `.boot` opacity `"1"`, `getComputedStyle(tui).clipPath` equals its value at Seek 0, and at 1440×900 (where the log and the window do not overlap) every screenshot pixel inside `tui`'s box, extended 16px upward for the label, is `rgb(22, 36, 28)` ± 2. **Seek 2850**: `.boot` opacity `"0"`. **Seek 2920**: `tui`'s computed `clipPath` differs from its value at Seek 2700 and at Seek 3100 (mid-paint). **Seek 3100**: the `[ technology ]` label, heading and all three options are visible in a screenshot (pixel check: each element's box contains `--leaf` or `--card` pixels).
+- **Edge cases:** the log's right edge stays ≤ `innerWidth − 8` at every R99 viewport at Seek 2700; only `.b-cmd` changes width over time (no other text in `Lt` is clipped or typed: `grep -c "tty-type" intro.html` = 2, the rule and the keyframes); the lines never re-type or scroll; cliché guard: `awk '/<section class="act-tech"/,/<\/section>/' intro.html | grep -ciE "access granted|hack|mainframe|password|decrypt|matrix"` = 0 (the markup), and the same `grep` on `awk '/=== technology branch \(PRD 41-45\) ===/,/=== end technology branch ===/' intro.html` = 0 (the CSS). Plex Mono blocked: the `ui-monospace, monospace` fallback keeps the columns aligned (still monospace) and `15ch` still matches the command.
+- **Resources:** `intro.html` markup (`.boot`), CSS keyframes.
+
+### R91. The cursor blinks only during the boot, nothing in the beat is infinite or moves after it, and nothing can flash more than three times a second.
+- **Source:** [Card8] item 2 "cursor blink", item 6 "no flashing"; [WCAG] 2.2.2 (blinking over 5 seconds needs a pause), 2.3.1 (three flashes); sections 41.2, 42.2; [Spike6] F34.
+- **Acceptance:** right after the click, `.b-cur` has a `tty-blink` animation with duration 1000 and `iterations === 2`, and a `tty-cur-off` animation with delay 1450. Seek 600: `.b-cur` visibility `visible`; Seek 1500: `hidden`. `Lt.getAnimations({subtree:true}).every(a => a.effect.getTiming().iterations !== Infinity)` right after the click, and `awk '/=== technology branch \(PRD 41-45\) ===/,/=== end technology branch ===/' intro.html | grep -c "infinite"` = 0. After the end step, `Lt.getAnimations({subtree:true}).length === 0` at t = 3700ms and t = 8000ms. Flash test at 1440×900 and 390×844 (DPR 1): Seek every 40ms from 900 to 3100 and screenshot each frame; between consecutive frames compute `Awin`. **Pass:** at most 2 consecutive pairs have `Awin >= T`, and every such pair lies inside 2760 to 3080 ms (the clear and the repaint, together at most one flash), so no 1-second window holds more than one flash.
+- **Edge cases:** the wipe itself (120 to 820ms) is one light-to-dark transition, not a flash, and is excluded by starting the sweep at 900; reduced motion has no blink at all (R98); the skip path never throws (R89).
+- **Resources:** `intro.html` CSS, `tech-js`.
+
+### R92. The beat reads as a calm, modern dark terminal in the site's own tokens: `--ink` ground, `--leaf` text, IBM Plex Mono only, no glow, scanlines or CRT effects.
+- **Source:** [Nick-G] "a dark screen"; [Card8] item 8 "consistent with the main site's existing design system … note that a dark terminal aesthetic is a deliberate departure … justify"; [Card8] item 2 "tasteful and on-brand, not a cliché hacker trope"; section 44.
+- **Acceptance:** open the terminal: `getComputedStyle(Lt).backgroundColor === "rgb(22, 36, 28)"`; every element inside `Lt` with text has computed `fontFamily` starting `"IBM Plex Mono"` and `fontWeight` `400` or `500`; no element inside `Lt` has `fontFamily` containing `Fraunces` or `EB Garamond`; `#tech-title` is an `H2`, `textContent === "Technology, loaded."`, `fontWeight === "500"`, `fontSize === "32px"` at 1440×900, `color === "rgb(248, 250, 244)"`, and its `.dot` color is `rgb(126, 156, 96)`. Palette check: for every element inside `Lt` (including `::before`), computed `color`, `backgroundColor`, `borderTopColor` (where a border exists) and `outlineColor` (on focus) are drawn only from `rgb(22, 36, 28)`, `rgb(207, 226, 166)`, `rgb(248, 250, 244)`, `rgb(126, 156, 96)`, `rgb(222, 132, 84)`, `rgba(207, 226, 166, a)`, `rgba(22, 36, 28, a)` or transparent; none is `rgb(234, 238, 228)`, `rgb(154, 59, 46)`, `rgb(46, 74, 107)`, `rgb(196, 84, 58)`, `rgb(176, 112, 58)` or `rgb(47, 91, 68)`. Every element inside `Lt` has `textShadow === "none"`, and `Lt`, `.tty` and `tui` have `backgroundImage === "none"`. The ink ground holds at Seek 0, 1500, 2700 and 3100.
+- **Edge cases:** Plex Mono blocked: fallback monospace, no layout overflow (R99's checks still pass with the font request blocked); dark-mode OS setting changes nothing (the layer sets its own colors); the R31 hex grep is unchanged (R102).
+- **Resources:** `intro.html` CSS.
+
+### R93. The TUI lands as one double-bordered window with the `[ technology ]` label, the heading, "Select a topic:", exactly three options in Nick's words and order, a status line and a key hint.
+- **Source:** [Nick-G] "load to a command line-esque TUI with a few options 'AI in Research' 'Remote Practices' 'Knowledge Management'"; [Card8] item 3; sections 43.1, 43.2.
+- **Acceptance:** open the terminal: `tui` computed `borderTopStyle === "double"`, `borderTopWidth === "3px"`, `borderTopColor === "rgb(207, 226, 166)"`, `clipPath === "none"`, width ≤ 640px; `.tui-bar` text `[ technology ]`, `aria-hidden="true"`, and its vertical center is within 3px of `tui`'s top border; `.tui-sub` text `Select a topic:` with `aria-hidden="true"`; `.tui-menu` has `role="group"` and `aria-labelledby="tech-title"` and contains exactly three `a.tui-opt` with `data-topic` `ai`, `remote`, `knowledge` in DOM order, whose `.t-label` texts are exactly `AI in Research`, `Remote Practices`, `Knowledge Management`, `.t-key` texts `[1]`, `[2]`, `[3]`, `.t-arrow` text `→`, all three markers `aria-hidden`; the options sit top to bottom (`top` strictly increasing, `left` equal within 1px); `#tech-status` exists with `role="status"`; `.tui-keys` has `aria-hidden="true"` and its visible text is `↑↓ move · enter or 1-3 open` (fine pointer) or `tap a topic to open it` (touch emulation with `hover:none, pointer:coarse`). No box-drawing characters: `awk '/<section class="act-tech"/,/<\/section>/' intro.html | perl -CSD -ne '$n++ if /[\x{2500}-\x{257F}]/; END{print $n+0}'` prints 0.
+- **Edge cases:** a long status line wraps inside the window (never widens it); the label never overlaps the heading (`.tui-bar` bottom < `#tech-title` top); the window is horizontally centered within 1px at 1440×900.
+- **Resources:** `intro.html` markup and CSS.
+
+### R94. Each option has distinct rest, hover, focus, pressed and picked states, exactly as 43.3, and touch screens show the whole row as the target.
+- **Source:** [Card8] item 3 "Specify hover/focus/selected visual states"; section 43.3; [Spike6] F37.
+- **Acceptance:** open the terminal, 1440×900. **Rest:** each option `backgroundColor` transparent, `color === "rgb(207, 226, 166)"`, `.t-mark` `visibility === "hidden"`. **Hover** (CDP `mouseMoved` to option 2's center): option 2 `backgroundColor === "rgba(207, 226, 166, 0.12)"`, `color === "rgb(248, 250, 244)"`, `.t-mark` visible with `::before` content `">"`, `.t-key` color `rgb(207, 226, 166)`. **Focus** (keyboard: Tab from the title to option 1): `:focus-visible` matches, `backgroundColor === "rgb(207, 226, 166)"`, `color === "rgb(22, 36, 28)"`, `outlineStyle === "solid"`, `outlineWidth === "2px"`, `outlineColor === "rgb(248, 250, 244)"`, `outlineOffset === "2px"`, `.t-mark` visible. **Pressed** (CDP `mousePressed` held on option 3): `backgroundColor === "rgb(222, 132, 84)"`, `color === "rgb(22, 36, 28)"`. **Picked:** click option 1, then Tab to option 2: option 1 `.t-mark` visible, `::before` content `"*"`, color `rgb(222, 132, 84)`; option 2 shows the focus state; exactly one option has `.is-picked`. **Touch** (touch emulation, `hover:none`): no hover style on `mouseMoved`, and every option's rest `backgroundColor === "rgba(207, 226, 166, 0.05)"`.
+- **Edge cases:** a focused option that is also picked shows `>` in ink, not `*` in amber; pressing then dragging off a row cancels without activating (native link behavior); hover styles exist only under `@media (hover:hover)`; contrast of every text state per 43.3 (≥ 4.5:1).
+- **Resources:** `intro.html` CSS, `tech-js` (`.is-picked`).
+
+### R95. Every option can be chosen by click, tap, Tab and Enter, the arrow keys, Home and End, and the number keys 1 to 3, which only work while focus is inside the TUI.
+- **Source:** [Card8] item 3 "arrow keys + enter, number keys, and/or click/tap — must support both keyboard and pointer/touch"; [Card8] item 5 "keyboard-only users must be able to reach and activate all 3 options"; [WCAG-214]; section 43.4.
+- **Acceptance:** open the terminal (focus on `#tech-title`). Tab → option 1, Tab → option 2, Tab → option 3. From the title, ArrowDown → option 1; on option 3, ArrowDown → option 1 (wrap); on option 1, ArrowUp → option 3; End → option 3; Home → option 1. Enter on option 2: `location.hash === "#technology-remote"` within 300ms. With focus on the title, press `3`: within 300ms `document.activeElement === opts[2]` and `location.hash === "#technology-knowledge"`; numpad `1` (`code: "Numpad1"`, `key: "1"`) on option 3: hash `#technology-ai`. **Scope:** with focus on the skip link, pressing `2` changes nothing (hash and focus unchanged); `Ctrl+2` and `Meta+2` inside the TUI do nothing; on a fresh run in real time, pressing `1` at t ≈ 1500ms (still entering) neither activates an option nor skips (only Escape, Enter and Space skip), and the hash stays `#technology`. Pointer: CDP click at three points of option 2 (left padding, label, arrow) each sets `#technology-remote`. Touch: CDP `touchStart`/`touchEnd` on option 3 sets `#technology-knowledge`. Every option is ≥ 44px tall and spans the menu's full width (`width` equals `.tui-menu` width within 1px). `grep -ci "preventDefault" intro.html` = 0.
+- **Edge cases:** keys are read from `event.key`, so non-US layouts that type digits on the top row work; holding a number key does not activate repeatedly (`event.repeat` ignored); with the layer closed, pressing `1` on the fork does nothing; while `.tui-menu` is inert, no option takes focus.
+- **Resources:** `tech-js` (key handlers), `intro.html` markup.
+
+### R96. Each option is an honest stub: it goes to its final `#technology-…` hash, announces "coming soon", and shows nothing else.
+- **Source:** [Card8] item 4 "the same honest 'coming soon' stub pattern already established on research/passion"; [Card8] scope "Do NOT design what is behind …"; section 45.1.
+- **Acceptance:** open the terminal, set `window.__stay = 1`; option hrefs are `#technology-ai`, `#technology-remote`, `#technology-knowledge`; for each, click it: within 300ms `location.hash` equals the href, `#tech-status` (`role="status"`, `aria-live="polite"`) `textContent === "<Label> is coming soon. Still compiling."` with `<Label>` = `AI in Research`, `Remote Practices`, `Knowledge Management`, that option has `.is-picked`, `Lt.hidden === false`, `window.__stay === 1`, `document.getElementById('toolkit') === null`, and `document.querySelectorAll('section').length` is unchanged. Clicking the same option twice re-announces (status empty on the frame after the click, then refilled). Each option has `aria-describedby="tech-soon"`; `#tech-soon` `textContent === "Coming soon."` and is visually hidden (bounding width ≤ 1px); no option has `aria-disabled`. Zero console errors and zero `Runtime.exceptionThrown` across the run.
+- **Edge cases:** a direct load of `intro.html#technology-remote` opens the layer at rest (no wipe, `is-entering` never set, no boot), picks option 2 and announces `Remote Practices is coming soon. Still compiling.` once; an unknown `#technology-foo` opens at rest with no announcement and nothing picked; Cmd-click opens the direct-load case in a new tab; the longest line wraps inside the window at 320 wide (R99).
+- **Resources:** `intro.html` markup, option handlers and router in `tech-js`.
+
+### R97. The future one-page shape is wired in now: all three links point into one page, never three routes, and the recommendation is recorded for Nick.
+- **Source:** [Card8] item 7 "Decide and make an explicit recommendation either way, flagged clearly … don't assume"; section 40.3 (product recommendation, Flag T1).
+- **Acceptance:** `grep -oE 'href="#technology-[a-z]+"' intro.html | sort -u` returns exactly the three hrefs in R96; `grep -cE 'href="[^"#]*(ai-in-research|remote|knowledge)' intro.html` = 0; `git ls-files | grep -ciE "technology|toolkit|remote|knowledge"` = 0 (no new files); `grep -c "technology-knowledge" docs/intro-experience-PRD.md` ≥ 1 and `grep -c "Flag T1" docs/intro-experience-PRD.md` ≥ 1 (the 40.3 table and flag exist); `BACKLOG.md` has an Open row for the technology deep-dives containing `one page` and `#technology-`.
+- **Edge cases:** the router treats every `#technology-` hash in one branch (not three); no element with id `toolkit` exists yet; if Nick chooses option B or three pages (T1), only the future page and router change, verified on that card.
+- **Resources:** `intro.html`, `BACKLOG.md`, this PRD.
+
+### R98. With reduced motion, the TUI appears finished in one cut, the boot script never shows, nothing animates, and focus lands on the title.
+- **Source:** [Card8] item 6 "no scrolling/typing animation, no flashing — the TUI should just appear with the 3 options, consistent with how passion/research already handle reduced motion"; section 45.3.
+- **Acceptance:** with `prefers-reduced-motion: reduce` emulated, at the fork click technology: within 100ms `Lt.hidden === false`, `Lt.classList.contains('is-entering') === false`, `document.activeElement.id === "tech-title"`; at t = 50, 500 and 2000ms `Lt.getAnimations({subtree:true}).length === 0`, `getComputedStyle(Lt.querySelector('.boot')).display === "none"`, `getComputedStyle(tui).clipPath === "none"`, and the three options are visible and focusable (Tab from the title reaches option 1); R96's click check passes immediately. Switching emulation from no-preference to reduce at t ≈ 1500ms (mid-boot) lands the finished TUI within 200ms with no `CSSAnimation` left in `Lt` and `.boot` `display:none`.
+- **Edge cases:** hover, focus, pressed and picked states still apply as instant changes; skip link, Back, and R29, R45, R62, R75 still pass; `tech-js` creates no WAAPI animation in any mode (`awk '/<script id="tech-js">/,/<\/script>/' intro.html | grep -c "\.animate("` = 0).
+- **Resources:** `intro.html` CSS, `tech-js`.
+
+### R99. The boot log and the TUI fit one screen with no horizontal overflow at desktop, tablet, phone and landscape-phone sizes.
+- **Source:** [Card8] item 3 "must support … mobile"; [Nick] original brief "desktop and mobile friendly"; section 45.2; [Spike6] F32.
+- **Acceptance:** at 1440×900, 1024×768, 768×1024, 390×844, 375×667, 320×568, 844×390 and 667×375, layer open at rest, with `#tech-status` showing the longest stub line (`Knowledge Management is coming soon. Still compiling.`): `document.documentElement.scrollWidth <= innerWidth`, `Lt.scrollWidth <= Lt.clientWidth`, `Lt.scrollHeight - Lt.clientHeight <= 1`, and the window (label included), heading, all three options, status line and hint are inside the viewport. Each option is ≥ 44px tall; at widths ≥ 360px each option is a single line (height < 56px). At Seek 2700 on a fresh run at each viewport, the boot log is inside the viewport (`right <= innerWidth`, `bottom <= innerHeight`). `grep -c "dvh" intro.html` stays 0; `env(safe-area-inset-top)` and `env(safe-area-inset-bottom)` appear in the `.tty` rule.
+- **Edge cases:** rotating a phone with the layer open keeps it fitted (no script layout needed; pure CSS); iOS URL-bar changes don't shift it (`svh`); text zoom to 200% at 1440×900 may make the layer scroll vertically but never horizontally.
+- **Resources:** `intro.html` CSS.
+
+### R100. Screen-reader and keyboard users get one clean heading and three clean links, with no boot-script or ASCII noise and no focus on moving or hidden content.
+- **Source:** [Card8] item 5 "screen readers must get the 3 options as clean, properly labeled interactive elements … with 'Coming soon' description, NOT the fake terminal scroll text or ASCII art noise … The fake script/boot sequence must be aria-hidden"; section 45.4.
+- **Acceptance:** keyboard only, at the fork: Tab to `technology`, press Enter; by t ≈ 1500ms `document.activeElement.id === "tech-title"`; while `is-entering`, `.tui-menu.inert === true` and its `pointerEvents === "none"`; after the end step, Tab focuses the three options in order; Shift+Tab from option 1 eventually focuses the skip link, which `elementFromPoint` confirms is on top. While open, `main.inert === true` and `.fork-scene.inert === true`. CDP `Accessibility.getFullAXTree`, both at Seek 2000 (log on screen) and at rest: a `region` named `Technology, loaded.`; a `heading` level 2 with that name; a `group` with exactly three `link` nodes named exactly `AI in Research`, `Remote Practices`, `Knowledge Management`, each with description `Coming soon.`; a `status` node; and **no** unignored AX node whose name contains `nick@mac`, `boot technology`, any of the 10 boot lines' words (`resolving`, `curiosity`, `research-methods`, `eval-harness`, `async-habits`, `second-brain`, `mounting`, `indexing`, `hype`, `starting interface`), `[ technology ]`, `Select a topic`, `[1]`, `[2]`, `[3]`, `→`, `↑`, `tap a topic`, `*` or `>`.
+- **Edge cases:** before the click `#technology` is `hidden` and absent from the AX tree; VoiceOver hears no "dimmed"; the visible focus indicator shows on every option (`outlineStyle` not `none` on `:focus-visible`); the heading has no focus ring (`#tech-title:focus` `outlineStyle === "none"`); the number-key handler never moves focus out of `Lt`.
+- **Resources:** `intro.html`.
+
+### R101. Back, Forward and direct links work for `#technology` and `#technology-…`, and the research and passion routing is unchanged.
+- **Source:** sections 41.3, 40.4; extends R27, R48, R50 and R78.
+- **Acceptance:** (a) after R88, `history.back()`, wait 500ms: `location.hash === "#where"`, `Lt.hidden === true`, `.fork-scene.inert === false`, `document.activeElement` is the technology prong, the curtain stays hidden, and `document.getAnimations().filter(a => /tech-wipe|tty-|tui-paint/.test(a.animationName)).length === 0`; (b) `history.forward()`: the layer is open at rest within 300ms with no `tech-wipe` animation; (c) direct load of `intro.html#technology`: within 600ms the layer is open at rest, act two is open underneath (`#where.hidden === false`), `main.inert === true`, and the R6 nudge stays hidden after 4500ms; (d) from `#technology-ai`, `history.back()` returns to `#technology` with `#tech-status` empty, no `.is-picked`, and focus on the AI in Research option; (e) Back twice from `#technology` reaches the pill scene with R27(b) passing; (f) R48, R50 and R78 pass unchanged, opening `#nerd`, `#passions-gamer` or `#research` never shows the technology layer (`Lt.hidden === true`), and opening `#technology` never shows the research layer or act three.
+- **Edge cases:** Back during the entry aborts it cleanly (layer hidden, no orphaned technology animations after 500ms, no exception); the router is idempotent across a `popstate` + `hashchange` pair; reloading on `#technology` or any `#technology-…` restores that state; `#technologyfoo` (no hyphen) is not treated as technology (act two closes per R27).
+- **Resources:** main script router line, `tech-js` router.
+
+### R102. Palette, fonts, script budget and file footprint hold, and nothing earlier regresses.
+- **Source:** R31, R49, R65, R79, R87; section 40.4.
+- **Acceptance:** the R31 hex grep returns the same set as at 2bd86e9 (`diff <(git show 2bd86e9:intro.html | grep -oiE "#[0-9a-f]{6}\b" | sort -u) <(grep -oiE "#[0-9a-f]{6}\b" intro.html | sort -u)` is empty); the Google Fonts URL is unchanged; `grep -c "<script" intro.html` = 5 and `grep -cE "<script[^>]+src=" intro.html` = 0; the main inline script block (the second `<script>` through its `</script>`, inclusive) is under 375 lines; `passions-js` under 280 lines; `research-js` under 200 lines; `awk '/<script id="tech-js">/,/<\/script>/' intro.html | wc -l` < 160; `grep -ci "preventDefault" intro.html` = 0; `git diff --name-only 2bd86e9..HEAD` lists only `intro.html`, `BACKLOG.md` and files under `docs/` (plus `assets/passions/` only if a parallel passions card lands, never by this build); `git diff 2bd86e9..HEAD -- intro.html` touches the main script only in the two places named in 41.3 and the act-two markup only in the two places named there. All acceptance checks of R1 to R25, R27 to R84 and R86 to R101 pass again, with the 32.4, 38.3 and 40.4 amendments (R26 retired; R30, R33 and R66's technology-stub checks replaced by R88; the script count is 5). R85 keeps the status it has at 2bd86e9 (open in addendum 5).
+- **Edge cases:** no new font, image, CSS or JS files; no third-party code; the research board and act three behave exactly as before; R85's status (open flash fix from addendum 5) is neither fixed nor made worse by this build.
+- **Resources:** `intro.html`; `index.html` (read-only).
+
+### 46.1 Deployment and build
+
+Unchanged from sections 8, 18.1, 24.1, 31.1, 37.1 and 39.1: **not Docker**, by the same justified exception (static GitHub Pages site, nothing to containerize, production deploy is a push to `main`, which stays forbidden). Local preview `python3 docs/tools/serve.py 8000` from the repo root on `feature/intro-experience` (reuse the server on :8000 if it is already running). Demo URLs: `http://localhost:8000/intro.html#where` (then tap technology) and `http://localhost:8000/intro.html#technology` (the TUI at rest). No build step. The build card may push `feature/intro-experience` to origin. No ADR: one self-contained beat inside one file, cheap to reverse (section 4's reasoning).
+
+### 46.2 Flags for Nick (addendum 6)
+
+1. **T1, one shared page for the three topics (my recommendation, please confirm).** You haven't said whether AI in Research, Remote Practices and Knowledge Management live on one page or three. I recommend one page, three sections in your order, same as passions and research: one pattern across all three branches, and one scroll on a phone. The links are set up so that if you'd rather have three separate pages, or one topic per "screen" inside the terminal, only the future page changes.
+2. **T2, the words on the screen are mine.** Heading "Technology, loaded." with the green period, a small `[ technology ]` label on the window, and "Select a topic:". Change freely.
+3. **T3, the fake script is placeholder.** A zsh prompt `nick@mac ~ %`, the command `boot technology`, then "installing" curiosity, research-methods, eval-harness, async-habits and second-brain, mounting your notes, indexing a knowledge base, and one joke: "checking for hype ... none". Swap any line in the markup; keep each under 32 characters so it fits a phone.
+4. **T4, it drops in from the top.** Research comes in from the left and passion from the right, because each scene arrives from the end of its road. Technology's road goes straight up the screen, so the dark screen slides down from the top.
+5. **T5, timing.** About 3 seconds: the dark screen arrives, the command types itself, ten lines print, the screen clears and the menu draws itself. Tap or press a key to skip.
+6. **T6, stub copy.** "Remote Practices is coming soon. Still compiling." is placeholder text.
+7. **T7, real-device check.** Worth a minute on your phone: the menu rows as tap targets, and the "tap a topic" hint.
+
+No new cost, services, infrastructure or recurring manual steps.
+
+### 46.3 Feasibility (spike method) and risks
+
+I ran a throwaway spike: one HTML page with the layer, the boot log, the TUI, every CSS rule in 42.2, 43.2 and 45.2 and a minimal open/rest script, loaded in Chromium over CDP at eight viewports, with animations seeked to exact times and nine screenshots image-checked. It lived in my scratch folder and is not in the repo. Every value it validated is written into sections 41 to 45.
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| F32 | Given the 41.1 markup and 42 to 45 CSS, when laid out at 8 sizes from 1440×900 to 320×568 and 667×375 with the longest status line, then the TUI fits one screen and the log fits horizontally. | VALIDATED | Layer overflow 0 / 0 at all eight; numbers in 45.2. Every option 48px tall (44px in landscape); `Knowledge Management` wraps only at 320 (61px row). |
+| F33 | Given `.b-cmd` animating `width` 0 to `15ch` with `steps(15,end)`, when seeked, then the command types one whole character at a time. | VALIDATED | Seek 1225: 67px at 1440 (7 × 9.6px) and 55px at 390 (7 × 7.8px); Seek 1450: full width. Wipe: `ty` −948 at Seek 0, −441 at 450, 0 at 1000 (1440×900). |
+| F34 | Given the skip path (`finish()` on every animation), when the cursor blink is `infinite`, then the skip works. | INVALIDATED, then fixed | `InvalidStateError: Cannot finish Animation with an infinite target effect end`. With `iterations: 2`, `finish()` completes with 0 unfinished animations and no exception. Hence R91's "nothing infinite". |
+| F35 | Given the log cleared with `visibility:hidden` on `.boot`, when the lines carry their own `visibility` fills, then the log disappears at 2800. | INVALIDATED, then fixed | The ten lines stayed on screen under the painted TUI (image check at Seek 3045). With `opacity:0` on `.boot`: opacity `"1"` at Seek 2700, `"0"` at 2920, and the image check found "no boot log is visible". |
+| F36 | Given `tui-paint` from `inset(0 0 100% 0)`, when painting, then the label on the border is drawn correctly. | INVALIDATED, then fixed | The end state clipped the top of `[ technology ]`, and during the boot the label's overhang leaked onto the screen. With `inset(-1em -8px calc(100% + 1em) -8px)`: Seek 1225 image check, "nothing else is visible" but the prompt; rest, label "fully visible". |
+| F37 | Given the finished TUI, when image-checked, then it reads as a tasteful TUI and the states are distinguishable. | VALIDATED (after one fix) | Boot frame: "a restrained, thoughtfully styled terminal rather than a movie-hacker screen". TUI: "strongly as a TUI". With `>` for both focus and picked, "the amber `>` does not independently communicate 'previously picked'"; with `*`, "clearly distinguished". Mid-paint: "a deliberate reveal rather than random rendering corruption". |
+| F38 | Given a CSS animation, when read with `getTiming().easing`, then it reports its curve. | INVALIDATED | `tech-wipe` `getTiming().easing` was `"linear"`; `getKeyframes()[0].easing` was `"cubic-bezier(0.7, 0, 0.2, 1)"`. Harness note in 40.4. |
+| F39 | Given the AX tree at rest, when read, then only the heading, the group, three named links with "Coming soon." and the status are exposed. | VALIDATED | Region, heading and group named `Technology, loaded.`; links `AI in Research`, `Remote Practices`, `Knowledge Management`, each described `Coming soon.`; no boot, label, key or arrow text. |
+
+Risks:
+
+- **Cliché.** A boot sequence is itself a familiar portfolio move. Mitigated by restraint (no glow, scanlines, hex or "access granted", R90's guard, R92), by copy about Nick's habits rather than "hacking", and by keeping it to 3 seconds with a skip.
+- **Reading as passion again.** Both are dark. Mitigated by register: passion is a loud CRT glitch that flips paper to ink; technology is a calm modern shell that is dark from the first frame, enters from a different side, and never glitches.
+- **Number-key shortcuts** could surprise speech-input users. Mitigated by scoping them to focus inside the TUI (WCAG 2.1.4's "active only on focus" condition) and ignoring modifiers and repeats.
+- **Focus on a heading that isn't painted yet** (820 to 3040ms). Same as research's accepted pattern (36.4); the heading is not interactive and screen-reader users get the announcement on time.
+- **Four scripts already share one router.** The main router gains one alternation and `tech-js` owns the rest, as `research-js` does; R101(f) re-checks every other branch.
+- **Scope creep into the three topics:** the biggest practical risk for an AI builder. Sections 40.2, 40.3 and 46.4 rule it out.
+
+### 46.4 Non-goals for addendum 6 (do not build)
+
+- **Anything behind AI in Research, Remote Practices or Knowledge Management:** no `#toolkit` section, no content, no subsections, panels, modals, drawers, pagers, man pages, or "screens" behind an option. An option only goes to its hash and announces "coming soon" (R96).
+- Three separate routes, files or layers for the topics (40.3).
+- A real or interactive shell: no typing commands, no command history, no `help`, `ls` or `clear` easter eggs, no input field, no `q`-to-quit or Escape-to-exit after the end step.
+- More boot lines than the ten in 42.3, typing on any text other than `.b-cmd`, progress bars, spinners, ASCII art, box-drawing glyphs, matrix rain, hex dumps, scanlines, CRT curvature, flicker, text glow, sound, canvas, WebGL, SVG filters, or any looping or idle animation after the end step.
+- The ARIA `menu`/`menuitem` pattern or a roving `tabindex` (43.4).
+- A visible exit or "straight to business" link in the terminal (same open question as Flag A6), a replay control, or persisting anything (cookies, storage) or analytics.
+- New tokens or hex values, new font families or weights, Fraunces or EB Garamond inside this beat, the passion palette (`--pill-red`, `--pill-blue`, ember), `--rec` or `--pine` text on ink.
+- Any change to act two's curtain or timings, the passion branch (acts three and four), the research board, the scroll intro, the nudge or the blue pill, beyond the two main-script places and two markup places in 41.3.
+- Any change to `index.html`, the case-study pages, `resume.html`, `README.md`, `CNAME`, `AGENTS.md`, or new HTML, CSS, JS, image or font files. No JS libraries, CDN scripts or build tooling. No push to or merge into `main`, and no PR.
+
+**Authorized boundaries (for the build card PMO cuts after Nick approves):** edit `intro.html` on `feature/intro-experience` in `~/Documents/github/portfolio` (the new `#technology` markup and CSS, the new `tech-js` block, the two main-script places and the two act-two markup places in 41.3); update `BACKLOG.md` rows for this work; commit and `git push origin feature/intro-experience`; run or reuse the preview server on port 8000.
+
+**Forbidden actions:** editing any other site file or any other part of `intro.html`; pushing any other branch; committing to or merging into `main`; adding dependencies, files or services beyond the preview server.
+
+### 46.5 Follow-ups (logged in BACKLOG.md, not requirements)
+
+- **Technology deep-dives:** build AI in Research, Remote Practices and Knowledge Management as **one page** (`#toolkit`, subsections `#technology-ai`, `#technology-remote`, `#technology-knowledge`), per 40.3, once Nick confirms T1 and says what goes in each. Only the router branch and the stub lines change in the TUI.
+- **Boot-script lines in Nick's own words** (Flag T3).
+- **Harness note:** re-read R67(a) and R70's easing checks with `getKeyframes()[0].easing` (40.4, F38) the next time the research beat is verified.
+
+---
+
 ## Research sources
 
 - Josh W. Comeau, "Scroll-Driven Animations": https://www.joshwcomeau.com/animation/scroll-driven-animations/
@@ -2852,4 +3490,7 @@ Risks:
 - web.dev, "Replace animated GIFs with video for faster page loads" (3.7 MB GIF to 551 KB MP4; `autoplay loop muted playsinline`) [web.dev-video]: https://web.dev/articles/replace-gifs-with-videos
 - Chrome for Developers, Lighthouse "Use video formats for animated content": https://developer.chrome.com/docs/lighthouse/performance/efficient-animated-content
 - MDN, individual transform properties `translate`, `rotate`, `scale` (they compose with `transform`; used for the note drift and sort): https://developer.mozilla.org/en-US/docs/Web/CSS/translate
+- WCAG 2.2 Understanding 2.1.4, Character Key Shortcuts (single-key shortcuts must be remappable, switchable off, or active only on focus) [WCAG-214]: https://www.w3.org/WAI/WCAG22/Understanding/character-key-shortcuts.html
+- MDN, `Animation.finish()` (throws `InvalidStateError` when the effect end is infinite): https://developer.mozilla.org/en-US/docs/Web/API/Animation/finish
+- MDN, `KeyframeEffect.getKeyframes()` (per-keyframe `easing`, where CSS animation timing functions live): https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/getKeyframes
 - Skill: `tech-viability-and-platform-choice` (cheapest-first platform order: responsive web is sufficient here, no native app question; ADR proportionality; non-goals and edge cases).
