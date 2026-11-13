@@ -850,6 +850,80 @@
     .note-face{aspect-ratio:1/.56;padding:6px 8px;font-size:14px;}
   }
   /* === end research branch === */
+  /* === technology branch (PRD 41-45) === */   /* ALL technology CSS (41.1, 42, 43, 44, 45.2) sits between this comment and the end marker */
+  .act-tech{position:fixed;inset:0;z-index:16;background-color:var(--ink);color:var(--leaf);
+    overflow-y:auto;overscroll-behavior:contain;}
+  .act-tech[hidden]{display:none;}
+  .tty{position:relative;min-height:100svh;box-sizing:border-box;display:grid;place-items:center;
+    padding:max(env(safe-area-inset-top), clamp(16px,5svh,64px)) clamp(16px,4vw,48px) calc(clamp(16px,4svh,40px) + env(safe-area-inset-bottom));
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:16px;line-height:1.5;}
+  .boot{display:none;position:absolute;top:max(env(safe-area-inset-top), clamp(16px,5svh,64px));left:clamp(16px,4vw,48px);margin:0;
+    font:inherit;font-size:clamp(13px,1.2vw,16px);line-height:1.6;white-space:pre;color:var(--leaf);}
+  .b-dim{color:var(--moss);}
+  .b-cmd{display:inline-block;vertical-align:bottom;overflow:hidden;width:15ch;color:var(--card);}
+  .b-cur{display:inline-block;width:1ch;height:1.2em;vertical-align:text-bottom;background-color:var(--leaf);}
+  .b-ln{display:block;}
+  .b-warn{color:rgb(var(--glow-warm));}
+  @media (prefers-reduced-motion:no-preference){
+    .act-tech.is-entering{animation:tech-wipe 700ms cubic-bezier(.7,0,.2,1) 120ms both;
+      box-shadow:0 18px 36px -12px rgba(22,36,28,.45);overflow-y:hidden;}
+    .act-tech.is-entering .tui-menu{pointer-events:none;}
+    .act-tech.is-entering .boot{display:block;animation:tty-clear 1ms step-end 2800ms both;}
+    .act-tech.is-entering .b-cur{animation:tty-blink 1000ms steps(1,end) 0ms 2, tty-cur-off 1ms step-end 1450ms both;}
+    .act-tech.is-entering .b-cmd{animation:tty-type 450ms steps(15,end) 1000ms both;}
+    .act-tech.is-entering .b-ln{animation:tty-line 1ms step-end var(--ld) both;}
+    .act-tech.is-entering .tui{animation:tui-paint 240ms steps(8,end) 2800ms both;}
+  }
+  @keyframes tech-wipe{from{transform:translateY(calc(-100% - 48px));}to{transform:none;}}
+  @keyframes tty-blink{0%{opacity:1;}50%{opacity:0;}}
+  @keyframes tty-cur-off{to{visibility:hidden;}}
+  @keyframes tty-type{from{width:0;}to{width:15ch;}}
+  @keyframes tty-line{from{visibility:hidden;}to{visibility:visible;}}
+  @keyframes tty-clear{to{opacity:0;}}
+  @keyframes tui-paint{from{clip-path:inset(-1em -8px calc(100% + 1em) -8px);}to{clip-path:inset(-1em -8px -8px -8px);}}
+  .tui{width:min(100%,40rem);box-sizing:border-box;position:relative;border:3px double var(--leaf);
+    padding:clamp(22px,3vw,34px) clamp(14px,3vw,32px) clamp(14px,2vw,20px);}
+  .tui-bar{position:absolute;top:0;left:clamp(10px,2vw,20px);translate:0 -50%;margin:0;padding:0 8px;
+    background-color:var(--ink);font-size:13px;letter-spacing:.08em;line-height:1.2;color:var(--leaf);}
+  #tech-title{margin:0;font-family:inherit;font-weight:500;font-size:clamp(22px,3.2vw,32px);line-height:1.2;
+    letter-spacing:-.01em;color:var(--card);}
+  #tech-title:focus{outline:none;}
+  #tech-title .dot{color:var(--moss);}
+  .tui-sub{margin:6px 0 clamp(14px,3svh,24px);font-size:14px;color:var(--moss);}
+  .tui-menu{display:grid;gap:4px;}
+  .tui-opt{display:grid;grid-template-columns:1ch auto 1fr auto;align-items:center;column-gap:1ch;
+    min-height:48px;box-sizing:border-box;padding:8px 10px;
+    font-size:clamp(16px,1.7vw,19px);font-weight:500;color:var(--leaf);text-decoration:none;
+    -webkit-tap-highlight-color:transparent;}
+  .t-mark,.t-arrow{color:var(--moss);}
+  .t-mark{visibility:hidden;}
+  .t-mark::before{content:">";}
+  .t-key{color:var(--moss);font-weight:400;}
+  @media (hover:hover){
+    .tui-opt:hover{background-color:rgba(207,226,166,.12);color:var(--card);}
+    .tui-opt:hover .t-mark{visibility:visible;color:var(--leaf);}
+    .tui-opt:hover .t-key,.tui-opt:hover .t-arrow{color:var(--leaf);}
+  }
+  @media (hover:none){.tui-opt{background-color:rgba(207,226,166,.05);}}
+  .tui-opt.is-picked:not(:focus-visible) .t-mark{visibility:visible;color:rgb(var(--glow-warm));}
+  .tui-opt.is-picked:not(:focus-visible) .t-mark::before{content:"*";}
+  .tui-opt:focus-visible{outline:2px solid var(--card);outline-offset:2px;background-color:var(--leaf);color:var(--ink);}
+  .tui-opt:focus-visible .t-mark{visibility:visible;}
+  .tui-opt:focus-visible .t-mark,.tui-opt:focus-visible .t-key,.tui-opt:focus-visible .t-arrow{color:var(--ink);}
+  .tui-opt:active{background-color:rgb(var(--glow-warm));color:var(--ink);}
+  .tui-opt:active .t-mark,.tui-opt:active .t-key,.tui-opt:active .t-arrow{color:var(--ink);}
+  .tui-status{margin:clamp(10px,2svh,16px) 0 0;min-height:1.5em;font-size:14px;color:var(--leaf);}
+  .tui-keys{margin:clamp(10px,2svh,16px) 0 0;padding-top:10px;border-top:1px solid rgba(207,226,166,.35);font-size:13px;color:var(--moss);}
+  .k-touch{display:none;}
+  @media (hover:none) and (pointer:coarse){.k-keys{display:none;}.k-touch{display:inline;}}
+  @media (max-width:359px){.tui-opt{font-size:15px;padding:8px 6px;column-gap:.75ch;}}
+  @media (max-height:500px){
+    .tty{padding-top:max(env(safe-area-inset-top),12px);padding-bottom:calc(8px + env(safe-area-inset-bottom));}
+    .tui{padding:18px 16px 10px;} #tech-title{font-size:22px;} .tui-sub{margin:2px 0 8px;}
+    .tui-opt{min-height:44px;padding:4px 10px;font-size:16px;}
+    .tui-status{margin-top:4px;} .tui-keys{margin-top:4px;padding-top:4px;}
+  }
+  /* === end technology branch === */
 
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{transition-duration:.01ms !important;animation:none !important;}
@@ -895,7 +969,7 @@
     <div class="fork">
       <div class="prongs" role="group" aria-labelledby="where-title">
         <button type="button" class="prong" data-prong="research">research</button>
-        <button type="button" class="prong" data-prong="technology" aria-describedby="fork-soon">technology</button>
+        <button type="button" class="prong" data-prong="technology">technology</button>
         <button type="button" class="prong" data-prong="passion">passion</button>
       </div>
       <svg class="road" id="road" viewBox="0 0 120 80" shape-rendering="crispEdges"
@@ -903,7 +977,6 @@
            aria-label="A pixel-art figure, seen from behind, standing where a road splits three ways."></svg>
     </div>
     <p class="fork-status" id="fork-status" role="status" aria-live="polite"></p>
-    <span class="vh" id="fork-soon">Coming soon.</span>
   </div>
   <div class="curtain" id="curtain">
     <p class="liked" tabindex="-1">I knew I liked you<span class="dot">.</span></p>
@@ -1005,6 +1078,26 @@
     <p class="board-status" id="board-status" role="status" aria-live="polite"></p>
     <span class="vh" id="board-soon">Coming soon.</span>
     <svg class="threads" id="threads" aria-hidden="true" focusable="false"><path pathLength="1"/><path pathLength="1"/></svg>
+  </div>
+</section>
+
+<section class="act-tech" id="technology" aria-labelledby="tech-title" hidden>
+  <div class="tty">
+<pre class="boot" aria-hidden="true"><span class="b-dim">nick@mac ~ % </span><span class="b-cmd">boot technology</span><span class="b-cur"></span>
+<span class="b-ln" style="--ld:1600ms">resolving dependencies...</span><span class="b-ln" style="--ld:1710ms">  + curiosity <span class="b-dim">.............</span> ok</span><span class="b-ln" style="--ld:1820ms">  + research-methods <span class="b-dim">......</span> ok</span><span class="b-ln" style="--ld:1930ms">  + eval-harness <span class="b-dim">..........</span> ok</span><span class="b-ln" style="--ld:2040ms">  + async-habits <span class="b-dim">..........</span> ok</span><span class="b-ln" style="--ld:2150ms">  + second-brain <span class="b-dim">..........</span> ok</span><span class="b-ln" style="--ld:2260ms">mounting ~/notes <span class="b-dim">..........</span> ok</span><span class="b-ln" style="--ld:2370ms">indexing knowledge base <span class="b-dim">...</span> ok</span><span class="b-ln" style="--ld:2480ms">checking for hype <span class="b-dim">.........</span> <span class="b-warn">none</span></span><span class="b-ln" style="--ld:2590ms">starting interface <span class="b-dim">........</span> ok</span></pre>
+    <div class="tui" id="tui">
+      <p class="tui-bar" aria-hidden="true">[ technology ]</p>
+      <h2 id="tech-title" tabindex="-1">Technology, loaded<span class="dot">.</span></h2>
+      <p class="tui-sub" aria-hidden="true">Select a topic:</p>
+      <div class="tui-menu" role="group" aria-labelledby="tech-title">
+        <a class="tui-opt" data-topic="ai" href="#technology-ai" aria-describedby="tech-soon"><span class="t-mark" aria-hidden="true"></span><span class="t-key" aria-hidden="true">[1]</span><span class="t-label">AI in Research</span><span class="t-arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="tui-opt" data-topic="remote" href="#technology-remote" aria-describedby="tech-soon"><span class="t-mark" aria-hidden="true"></span><span class="t-key" aria-hidden="true">[2]</span><span class="t-label">Remote Practices</span><span class="t-arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="tui-opt" data-topic="knowledge" href="#technology-knowledge" aria-describedby="tech-soon"><span class="t-mark" aria-hidden="true"></span><span class="t-key" aria-hidden="true">[3]</span><span class="t-label">Knowledge Management</span><span class="t-arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+      <p class="tui-status" id="tech-status" role="status" aria-live="polite"></p>
+      <p class="tui-keys" aria-hidden="true"><span class="k-keys">&uarr;&darr; move &middot; enter or 1-3 open</span><span class="k-touch">tap a topic to open it</span></p>
+      <span class="vh" id="tech-soon">Coming soon.</span>
+    </div>
   </div>
 </section>
 
@@ -1204,11 +1297,8 @@
     b.addEventListener('click', function(){
       last = n; look(n);
       status.textContent = '';                 // clear first so a repeat is re-announced
-      if(n === 'research') return;             // research-js starts the research beat (PRD 34.6)
-      if(n === 'passion'){ nerdStart(); return; }
-      requestAnimationFrame(function(){
-        status.textContent = n.charAt(0).toUpperCase() + n.slice(1) + " is coming soon. I'm still paving that road.";
-      });
+      if(n === 'research' || n === 'technology') return;   // research-js / tech-js start their beats (PRD 34.6, 41.3)
+      if(n === 'passion') nerdStart();
     });
   });
 
@@ -1360,7 +1450,7 @@
       return;
     }
     nerdClose();
-    if(h === '#where' || /^#research(-|$)/.test(h)) openDirect(); else close();
+    if(h === '#where' || /^#(research|technology)(-|$)/.test(h)) openDirect(); else close();
   }
   function fixFocus(){ if(document.activeElement === act3) nTitle.focus({preventScroll:true}); }   // browser focuses the #nerd scroller
   window.addEventListener('popstate', route); window.addEventListener('hashchange', route); window.addEventListener('load', fixFocus);
@@ -1770,6 +1860,132 @@
       status.textContent = '';
       var f = document.activeElement;
       if(f === L || f === document.body || !L.contains(f)) (lastCluster || title).focus({preventScroll:true});
+    }
+  }
+  window.addEventListener('popstate', route); window.addEventListener('hashchange', route);
+  window.addEventListener('load', fixFocus);
+  route();
+})();
+</script>
+<script id="tech-js">
+/* ================= technology branch: dark terminal and TUI (PRD 40-45) ================= */
+(function(){
+  var byId = function(id){ return document.getElementById(id); };
+  var L = byId('technology'), tui = byId('tui'), title = byId('tech-title'), status = byId('tech-status');
+  var menu = tui.querySelector('.tui-menu'), opts = Array.prototype.slice.call(menu.querySelectorAll('.tui-opt'));
+  var act2 = byId('where'), forkScene = act2.querySelector('.fork-scene'), research = byId('research');
+  var prong = act2.querySelector('.prong[data-prong="technology"]');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var LABEL = {ai:'AI in Research', remote:'Remote Practices', knowledge:'Knowledge Management'};
+  var st = 'closed', t0 = 0, skipped = false, endT = null, lastOpt = null, refocus = false;   // closed -> entering -> open
+
+  function pick(){                                 // .is-picked follows the hash (41.3)
+    var h = location.hash;
+    opts.forEach(function(o){ o.classList.toggle('is-picked', o.getAttribute('href') === h); });
+  }
+  function show(){
+    L.hidden = false; L.scrollTop = 0; forkScene.inert = true; status.textContent = ''; refocus = false;
+    pick();
+  }
+  function end(){                                  // the end step (42.2): TUI at rest, options live
+    if(st !== 'entering') return;
+    clearTimeout(endT); st = 'open';
+    L.classList.remove('is-entering'); menu.inert = false;
+    if(!L.contains(document.activeElement) || document.activeElement === L) title.focus({preventScroll:true});
+  }
+  function start(){
+    if(st !== 'closed') return;
+    st = 'entering'; t0 = performance.now(); skipped = false;
+    history.pushState({act:'technology'}, '', '#technology');
+    show();
+    if(reduce.matches){ title.focus({preventScroll:true}); end(); return; }   // one cut, TUI finished (45.3)
+    menu.inert = true; L.classList.add('is-entering');
+    endT = setTimeout(end, 3600);                  // safety net if animationend is lost
+  }
+  function skip(){
+    if(st !== 'entering' || skipped || performance.now() - t0 < 400) return;
+    skipped = true;
+    L.getAnimations({subtree:true}).forEach(function(a){
+      if(isFinite(a.effect.getComputedTiming().endTime)) a.finish();
+    });
+    setTimeout(end, 0);                            // after the key's default action, so Space doesn't also scroll
+  }
+  function openRest(){                             // Back/Forward/direct link: no wipe, no boot
+    if(st !== 'closed') return;
+    st = 'entering'; show(); end();
+    title.focus({preventScroll:true});
+  }
+  function close(){
+    if(st === 'closed') return;
+    clearTimeout(endT); st = 'closed';
+    L.classList.remove('is-entering'); L.hidden = true; menu.inert = false; status.textContent = '';
+    opts.forEach(function(o){ o.classList.remove('is-picked'); });
+    if(research.hidden) forkScene.inert = false;
+    refocus = true;
+    prong.focus({preventScroll:true});
+  }
+  function announce(label){
+    status.textContent = '';                       // clear first so a repeat is re-announced
+    requestAnimationFrame(function(){ status.textContent = label + ' is coming soon. Still compiling.'; });
+  }
+
+  prong.addEventListener('click', start);
+  L.addEventListener('pointerdown', skip);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip(); });
+  L.addEventListener('animationend', function(e){
+    if(e.target === L && e.animationName === 'tech-wipe' && st === 'entering') title.focus({preventScroll:true});
+    if(e.target === tui && e.animationName === 'tui-paint') end();
+  });
+  reduce.addEventListener('change', function(){ if(reduce.matches && st === 'entering'){ skipped = true; end(); } });
+  opts.forEach(function(a){
+    a.addEventListener('click', function(e){
+      if(e.metaKey || e.ctrlKey || e.shiftKey) return;   // opens in a new tab; that tab announces on load
+      lastOpt = a; announce(LABEL[a.getAttribute('data-topic')]);
+    });
+  });
+  /* keyboard (43.4): arrows, Home/End, and 1-3 only while focus is inside the TUI (WCAG 2.1.4) */
+  tui.addEventListener('keydown', function(e){
+    if(st !== 'open' || e.ctrlKey || e.altKey || e.metaKey) return;
+    var k = e.key, i = opts.indexOf(document.activeElement), n = null;
+    if(k === '1' || k === '2' || k === '3'){
+      if(e.repeat) return;
+      n = opts[k - 1]; n.focus(); n.click(); return;
+    }
+    if(k === 'ArrowDown') n = i < 0 ? (e.target === title ? opts[0] : null) : opts[(i + 1) % opts.length];
+    else if(i < 0) return;
+    else if(k === 'ArrowUp') n = opts[(i + opts.length - 1) % opts.length];
+    else if(k === 'Home') n = opts[0];
+    else if(k === 'End') n = opts[opts.length - 1];
+    if(n) n.focus();
+  });
+
+  /* the browser's fragment step focuses the #technology / #where scroller between popstate and hashchange and on load;
+     re-assert the right target every time (same fix as research-js) */
+  function fixFocus(){
+    var f = document.activeElement;
+    if(st !== 'closed'){
+      if(f === L || f === document.body || !L.contains(f)) ((location.hash === '#technology' && lastOpt) || title).focus({preventScroll:true});
+    } else if(refocus && location.hash === '#where' && (f === act2 || f === document.body || f === forkScene)) prong.focus({preventScroll:true});
+  }
+  /* router: #technology and #technology-* (R101); idempotent across a popstate + hashchange pair */
+  function route(e){
+    var h = location.hash;
+    if(!/^#technology(-|$)/.test(h)){
+      if(st !== 'closed') close(); else fixFocus();
+      if(e && e.type === 'hashchange') refocus = false;
+      return;
+    }
+    var sub = h.slice(12);
+    if(st === 'closed'){
+      openRest();
+      if(LABEL[sub]){ lastOpt = menu.querySelector('[data-topic="' + sub + '"]'); announce(LABEL[sub]); }
+      return;
+    }
+    pick();
+    if(LABEL[sub] && (!lastOpt || lastOpt.getAttribute('data-topic') !== sub)) status.textContent = '';   // Back/Forward between options: drop the other option's line
+    if(h === '#technology'){
+      status.textContent = '';
+      fixFocus();
     }
   }
   window.addEventListener('popstate', route); window.addEventListener('hashchange', route);
