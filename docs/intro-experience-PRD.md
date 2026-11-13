@@ -10,6 +10,7 @@
 - **Addendum 2 (2026-11-12):** sections 19 to 24 and requirements R33 to R49 add the passion branch intro beat ("I'm. 👏 A. 👏 Nerd. 👏", the scroll-driven "nerd" glitch and takeover, and three stub links: techie, gamer, photographer). Card t_a8f81d69 (PRD addendum), build card t_593e8d60 (assignee `design`). It narrows R26 and R30 to research and technology, raises the R31 script budget to 330 lines, and fixes the one-page constraint for the future passion deep-dives (section 19.3). See section 19.4.
 - **Addendum 3 (2026-11-12):** sections 25 to 31 and requirements R50 to R65 add the passion deep-dive backgrounds: one `#passions` layer with three stacked subsections; techie (a circuit board that draws itself, buildable now), gamer (rotating gameplay clips with a disclaimer, buildable now, copyright risk flagged as C1) and photographer (collage mechanism with marked placeholders; real photos BLOCKED on Nick, R61). Card t_027c5838 (PRD addendum), build card t_24e05978 (assignee `design`). It replaces R42 with R50 and amends R31, R43, R49 and the 24.4 non-goal. See section 25.3.
 - **Addendum 4 (2026-11-12):** sections 32 to 37 and requirements R66 to R79 add the research branch intro beat: the research prong wipes in from the left to an affinity-map board where 12 sticky notes drift in, sort themselves into three pinned clusters (Education, Philosophy, Practice) joined by a self-drawing copper thread, under "Research, sorted." The clusters are stub links reserved for one future shared page (`#research-*`). Card t_b6a0515b (PRD addendum), build card t_f25a55e9 (assignee `design`). It narrows R26, R30 and R33 to technology, extends the router (R78) and allows a fourth inline script. See section 32.4.
+- **Addendum 5 (2026-11-12):** sections 38 and 39 and requirements R80 to R87 reconcile the PRD with the act-three scramble Nick asked for on card t_2f379858 ("Nerd." decrypts into "Nick."). Card t_ac53ecdb. It supersedes the 24.4 scramble-text non-goal for that one word, amends R35, R39 and R46 (screen readers now hear "I'm Nick."), extends R45 with an area-based flash test (R85, which the build currently fails at desktop size), and raises the main-script budget to 375 lines. See section 38.3.
 
 ---
 
@@ -1303,6 +1304,8 @@ All requirements use the section 7 harness (local `python3 -m http.server 8000`,
 - **Resources:** `intro.html` CSS (`nerd-wipe`), script.
 
 ### R35. The reveal shows "I'm. 👏", "A. 👏", "Nerd. 👏" on three centered lines, and assistive tech gets exactly "I'm a nerd."
+> **Amended by addendum 5 (R81, R86):** the accessible name is now `I'm Nick.`, and "Nerd." resolves into "Nick." on scroll. See section 38.3.
+
 - **Source:** [Nick-C] "'I'm. 👏 A. 👏 Nerd.👏'"; [Card3] item 2; sections 20.1, 20.3.
 - **Acceptance:** after the end step: the three `.beat` elements' `textContent` are `"I'm.👏"`, `"A.👏"`, `"Nerd.👏"` (U+0027 apostrophe, U+1F44F); each `.clap` contains exactly `👏`; `.beats` has `aria-hidden="true"`; `#nerd-title` is an `H2` containing a `.vh` span whose `textContent === "I'm a nerd."`. CDP `Accessibility.getFullAXTree`: the heading node's name is exactly `I'm a nerd.` and no AX node's name contains `👏`, `clapping` or `Nerd.Nerd`. The three `.beat` boxes are stacked (`beat1.bottom <= beat2.top + 2`, `beat2.bottom <= beat3.top + 2`) and each box's horizontal center is within 4px of `innerWidth/2` at 1440 and 390.
 - **Edge cases:** no line wraps (`white-space:nowrap`) and no horizontal overflow at 320 wide; a missing emoji font only affects the hidden visual; the `.vh` text stays out of view (bounding width ≤ 1px).
@@ -1327,6 +1330,8 @@ All requirements use the section 7 harness (local `python3 -m http.server 8000`,
 - **Resources:** `intro.html` CSS and script.
 
 ### R39. "Nerd." glitches with two offset, sliced color copies whose strength follows the scroll, and the slices move only while the visitor is scrolling.
+> **Amended by addendum 5 (R82):** the ghost copies mirror the word's current text ("Nerd." only at q < 0.08). See section 38.3.
+
 - **Source:** [Nick-C] "the word 'nerd' should start to 'glitch out'"; [Card3] item 3; section 21.3.
 - **Acceptance:** motion allowed, act three open: the registered property scrubs: `getComputedStyle(nerdWord).getPropertyValue('--g')` is `0px` at q = 0 and ≥ `6px` at q = 0.55 (1440×900); `getComputedStyle(nerdWord,'::before').content` contains `Nerd.` and its `color === "rgb(196, 84, 58)"`; `::after` `color === "rgb(207, 226, 166)"`; at q = 0.55 `::before` opacity ≥ 0.95 and its transform `tx` ≤ −6. Animations named `slice-a` and `slice-b` exist with `duration 1500`, `iterations Infinity`, `easing "steps(1, end)"`, and equal `delay` (0). With no scroll for 600ms, both have `playState === "paused"`; during a scroll (dispatch a scroll by `scrollBy(0,40)` every 100ms for 600ms) at least one check sees `playState === "running"` and `#nerd.classList.contains('is-scrolling')`. **Rendered check:** screenshot at q = 0.55, 1440×900, while paused: at least one pixel inside the word's box matches ember (`R ≥ 170, G ≤ 110, B ≤ 90`) and at least one matches leaf (`R ≥ 190, G ≥ 210, B ≥ 140`).
 - **Edge cases:** no `<canvas>`, SVG filter or external script is used (`grep -cE "<canvas|feTurbulence|feDisplacementMap" intro.html` = 0); the glitch copies never change the word's accessible name (R46); the word stays sharp at peak (no `will-change`, R37).
@@ -1363,12 +1368,16 @@ All requirements use the section 7 harness (local `python3 -m http.server 8000`,
 - **Resources:** `intro.html` CSS (`html.fb` rules) and script.
 
 ### R45. Nothing in act three can flash more than 2 times a second, nothing changes on its own after the reveal, and reduced motion gets a clean fade with no glitch at all.
+> **Extended by addendum 5 (R83, R84, R85):** the scramble's glyph re-rolls are counted too. See section 38.3.
+
 - **Source:** [Card3] item 6 "treat it as a real accessibility requirement"; [WCAG] 2.3.1 and 2.2.2; sections 21.4 and 23.2.
 - **Acceptance:** **(a) Motion allowed:** `slice-a` and `slice-b` each have exactly 6 keyframes, `duration 1500`, `steps(1, end)`, the same `delay`, so changes per second = 6 / 1.5 = 4 (≤ 6, the 3-flash limit); after the end step and 600ms with no input, `document.getAnimations().filter(a => a.effect && a.effect.target && document.getElementById('nerd').contains(a.effect.target) && a.playState === "running" && !(a.timeline && a.timeline.constructor.name === "ScrollTimeline")).length === 0` (nothing time-based runs inside act three while still; the avatar idle and pill ember underneath are outside it and out of scope); `grep -ciE "filter: *invert|animation:[^;]*blink" intro.html` = 0. **(b) Reduced motion emulated:** open act three: `#nerd.hidden === false` and focus on `#nerd-title` within 100ms (no wipe); `document.getAnimations()` contains no `CSSAnimation` and nothing on a `ScrollTimeline` at t = 50, 500 and 2000ms; every script-made animation (`a.constructor.name === "Animation"`) animates only `opacity` (`a.effect.getKeyframes()` keys limited to `opacity`, `offset`, `easing`, `composite`, `computedOffset`); ignore `CSSTransition`s, which the global rule shortens to 0.01ms; at t ≈ 150ms `.beats` opacity strictly between 0.05 and 0.95 (it fades), at t ≈ 800ms both `.beats` and `.chips` opacity "1"; `getComputedStyle(nerdWord,'::before').content === "none"`; `#nerd-stage` background `rgb(234, 238, 228)` and `position` not `sticky`; chips are clickable at once (R42 passes without scrolling); `#nerd-cue` stays hidden.
 - **Edge cases:** toggling reduced motion while act three is open switches to the static layout without a reload; skip still works; R29's act-two checks still pass.
 - **Resources:** `intro.html` CSS and script.
 
 ### R46. Keyboard and screen-reader users get the whole beat: the clean heading, operable links, and no focus on hidden content.
+> **Amended by addendum 5 (R81):** the region, heading and chips group are named `I'm Nick.`. See section 38.3.
+
 - **Source:** [Card3] item 6; section 23.3.
 - **Acceptance:** keyboard only, at the fork: Tab to `passion`, press Enter; at t ≈ 1000ms `document.activeElement.id === "nerd-title"`; after the end step, Tab reaches `techie`, `gamer`, `photographer` in order (the cue first if it is showing); focusing `techie` at q = 0 brings q ≥ 0.95 within 1500ms (motion) or immediately (reduced) and the chip is fully inside the viewport. While act three is open, `main.inert === true` and `.fork-scene.inert === true`. Shift+Tab from `techie` eventually focuses the skip link, which `elementFromPoint` confirms is on top. CDP `Accessibility.getFullAXTree`: a `region` named `I'm a nerd.`, a `heading` level 2 with that name, a `group` with three `link`s named `techie`, `gamer`, `photographer`, each with description `Coming soon.`, a `status` node, and no node whose name contains `👏` or a doubled `Nerd.`.
 - **Edge cases:** before the click, act three is `hidden` and absent from the AX tree; VoiceOver hears no "dimmed"; the visible focus outline shows on every chip (`outline-style` not `none` on `:focus-visible`).
@@ -1436,6 +1445,7 @@ Risks:
 - **Three separate routes, files or layers for the passions, ever.** The future deep-dive is one page (19.3).
 - Any change to the `research` or `technology` prongs, act two's curtain or timings, the scroll intro, the nudge, or the blue pill.
 - Tiling or repeating "nerd" across the screen, typewriter or scramble-text effects, sound, particles, canvas, WebGL, SVG filters, CRT bulge or a moving scanline.
+  - **Amended by addendum 5 (R80):** a scramble on the act-three word `.nerd-word` that resolves "Nerd" into "Nick" is now in scope, by Nick's direct request (card t_2f379858). The rest of this bullet still stands. See section 38.3.
 - A glitch that runs on its own when the visitor isn't scrolling, a glitch on chip hover, or any flicker above the R45 rate.
 - Drawn "branch" lines or SVG paths connecting the word to the chips, and any avatar appearance in act three.
 - A visible exit or "straight to business" link in act three (same open question as Flag A6), a replay control, or persisting anything (cookies, storage) or analytics.
@@ -2581,6 +2591,8 @@ Build and deployment for every requirement: **not Docker**, by the same justifie
 - **Resources:** main script router line, `research-js` router.
 
 ### R79. Palette, fonts, script budget and file footprint hold, and nothing earlier regresses.
+> **Amended by addendum 5 (R87):** the main inline script budget is now under 375 lines. See section 38.3.
+
 - **Source:** R31, R49, R65; section 32.4.
 - **Acceptance:** the R31 hex grep returns the same set as at 845f15a (**no new hex**); the Google Fonts URL is unchanged; `grep -c "<script" intro.html` = 4 and `grep -cE "<script[^>]+src=" intro.html` = 0; the main inline script is under 345 lines, `passions-js` under 280 lines, and `awk '/<script id="research-js">/,/<\/script>/' intro.html | wc -l` < 200; `grep -ci "preventDefault" intro.html` = 0; `git diff --name-only 845f15a..HEAD` lists only `intro.html`, `BACKLOG.md` and files under `docs/`; `git diff 845f15a..HEAD -- intro.html` touches the main script in at most the two places named in 34.6 (plus the research prong's `aria-describedby` removal in markup). All acceptance checks of R1 to R25, R27 to R41, R44 to R65 pass again, with the 32.4 amendments (R26 and R30 now apply to `technology` only; R33's describedby check applies to `technology` only; R65's script count is 4).
 - **Edge cases:** no new font, image, CSS or JS files; no third-party code; act three's glitch and act four's backgrounds behave exactly as before; the passion prong still starts act three (R33).
@@ -2642,6 +2654,185 @@ Risks:
 - **Research deep-dives:** build Education, Philosophy and Practice as **one page** (`#findings`, subsections `#research-education`, `#research-philosophy`, `#research-practice`), per 32.3, once Nick says what goes in each. Only the router branch and the stub lines change on the board.
 - **Note fragments in Nick's words** (Flag D3).
 - The **technology** prong (already logged).
+
+---
+
+# Addendum 5: "Nerd." resolves into "Nick." (scramble reveal) (card t_ac53ecdb)
+
+Added 2026-11-12 by product. A governance reconciliation, not a new feature: the scramble already exists in `intro.html` on `feature/intro-experience` (commit b095df3, attributed by the empty commit dd90860; card t_2f379858, Crit PASS). This addendum makes the PRD agree with what Nick asked for and what was built, so the next worker does not read sections 20 to 24 and "fix" it back. It is sections 38 and 39 and requirements R80 to R87. Spec only: this card changes no code.
+
+## 38. Source, scope and what it changes
+
+### 38.1 Source (Nick, verbatim, via card t_2f379858)
+
+> During the 'Nerd.' glitch. It should switch to 'Nick.' Before landing. The characters should switch around to random characters until eventually it lands in its spot as my name.
+
+Citation shorthand added: **[Nick-F]** = Nick's words above. **[Card6]** = card t_2f379858's body (it also asks for a clean reduced-motion fallback reading "Nick.", screen-reader text "I'm Nick." "or similar", and a flag on the surrounding "nerd" copy). **[Card7]** = this card, t_ac53ecdb, opened by Crit. **[Crit6]** = Crit's PASS evidence on t_2f379858 (scramble progression, final state, reduced motion, AX tree). **[Spike5]** = my own measurements of the built page for this addendum; results in 39.3.
+
+### 38.2 Scope
+
+This addendum only covers the act-three word (`.nerd-word`), its screen-reader text and its reduced-motion fallback. The glitch itself, the takeover, the chips, act four and the research branch are unchanged. The **only** behavior this addendum asks to change in the built page is the flash rate in R85, because the build measures over the WCAG limit in one band at desktop size (39.3 F29). Everything else is written to match the build at dd90860.
+
+### 38.3 What this changes in sections 1 to 37
+
+| Earlier text | Change |
+|---|---|
+| 24.4 non-goal: "Tiling or repeating 'nerd' across the screen, typewriter or scramble-text effects, …" | **Superseded for this one beat only.** A scramble on `.nerd-word` that resolves "Nerd" into "Nick" is in scope (R80), by Nick's direct request [Nick-F]. Every other part of that bullet still stands: no tiling or repeating "nerd", no typewriter effect, no scramble on any other text (the beats "I'm." and "A.", the `.vh` text, the chips, the status line, any other act), no sound, particles, canvas, WebGL, SVG filters, CRT bulge or moving scanline. |
+| R35: `.vh` `textContent === "I'm a nerd."`; AX heading name exactly `I'm a nerd.`; the beat stack check | **Amended by R81.** The accessible name is `I'm Nick.`. The three-line stack and `"Nerd.👏"` text checks now apply with motion allowed at q < 0.08 only; at q ≥ 0.68 the third beat reads `"Nick.👏"`; under reduced motion the stack is two lines (R83). |
+| R39: `::before` content contains `Nerd.` | **Amended by R82.** The ghost copies always mirror the word's current text, so `Nerd.` only at q < 0.08 and `Nick.` at q ≥ 0.68. Every other R39 check is unchanged. |
+| R45: "Nothing in act three can flash more than 2 times a second"; (a) counts slice keyframes; (b) reduced motion | **Extended by R84 and R85.** The glyph re-rolls are a new change source the R45 acceptance never counted. R84 adds them to the "nothing changes while still" check; R85 adds an area-based flash test for them. R45(b) gains R83's reduced-motion checks. |
+| R46: AX `region` and `heading` named `I'm a nerd.` | **Amended by R81:** both named `I'm Nick.`; the chips `group` is labelled by the same heading, so it is also `I'm Nick.`. Focus on open announces "I'm Nick., heading level 2". |
+| 20.3, 23.3, 24.3 prose ("assistive tech reads only … `I'm a nerd.`") | Read as `I'm Nick.` from now on. The reasoning (the visual line is `aria-hidden`, assistive tech hears one clean sentence) is unchanged. |
+| R79: main inline script under 345 lines | **Raised to under 375 lines (R87).** At dd90860 the main script block is 359 lines including its tags (it was 320 at 50e1b8c), so R79 currently fails by about 12 lines. The scramble adds about 35 lines; the rest is headroom for the R85 fix. |
+| R49, R65, R79 "all earlier acceptance checks pass again" | Read with the amendments in this table. |
+
+### 38.4 The visible copy: does "I'm. 👏 A. 👏 Nerd. 👏" change? (card item 3, Flag E1)
+
+Design kept the visible setup and let the glitch turn the joke word into the name. Crit passed it. Nick has not confirmed yet. The options:
+
+| Option | What the visitor sees | Tradeoff |
+|---|---|---|
+| **A. Keep the setup, reveal the name (built, my recommendation)** | "I'm. 👏 A. 👏 Nerd. 👏", then on scroll "I'm." and "A." fall away, "Nerd." breaks up and locks in as "Nick." | The joke lands first and the reveal pays it off, and it rhymes with "I'm Nick." two scenes earlier. With motion, "A." is gone before "Nick." appears, so nobody reads "A. Nick." The chips (techie, gamer, photographer) now read as "kinds of Nick" rather than "kinds of nerd", which still works. No code change. |
+| B. Change the setup to set up the name | e.g. "I'm. 👏 A. 👏 Nerd. 👏" becomes something like "I'm. 👏 Actually. 👏 Nick. 👏" | Loses the nerd joke Nick wrote in his original brief (section 19.1) and makes the scramble start from the answer. Needs new copy from Nick and a code change. |
+| C. Drop the reveal | Back to "Nerd." | Contradicts [Nick-F]. Listed only for completeness. |
+
+R86 writes option A as the requirement. If Nick picks B, a later addendum replaces R86 before anyone edits the copy.
+
+Two smaller copy calls design flagged, also left for Nick (Flag E2):
+
+- **Screen-reader text.** Built and specified as `I'm Nick.` (R81). Screen-reader users never get the "nerd" joke. The alternative is `I'm a nerd. I'm Nick.`, which keeps both beats at the cost of a longer heading and region name. I recommend keeping `I'm Nick.`: short headings are easier to navigate by, and it matches what sighted visitors are left looking at.
+- **Reduced motion.** Built and specified as "I'm. 👏 Nick. 👏" with the "A." beat hidden (R83), so reduced-motion visitors also never see "Nerd.". The alternative is an opacity-only crossfade from "Nerd." to "Nick." (allowed by R45(b), which permits opacity-only fades), which would keep the joke without motion. That is a small code change. I recommend keeping the built version unless Nick wants the joke for everyone.
+
+### 38.5 The scramble as built (spec reconciled to dd90860)
+
+All values come from the `scramble()` block in the main inline script and were confirmed live by [Crit6] and [Spike5]. `q` is act three's scroll progress (section 21.1).
+
+| Thing | Value |
+|---|---|
+| Source and target | `FROM = "Nerd"`, `TO = "Nick"`. The period is a separate `<span class="dot">` and never scrambles; it stays `--moss` `#7E9C60`. |
+| When each letter breaks | Each of the 4 letters starts scrambling at one of q = 0.08, 0.13, 0.18, 0.24, in a random order per visit. |
+| Peak | By q = 0.24 all four letters are noise, while the page flips to ink and the word grows past the edges (21.2). |
+| Lock | Left to right: N at q ≥ 0.50, i at ≥ 0.56, c at ≥ 0.62, k at ≥ 0.68. The word reads "Nick." before the glitch clears at q = 0.75. |
+| Glyph set | `ABCDEFGHKLNPRSTXYZabdeghknpqrsuxyz0123456789#$&*?!/<>=+`; a cell never re-rolls to the glyph it already shows. |
+| Re-roll rate (built) | Each scrambling cell re-rolls every 45 to 90ms while the word's width / 5 is at most 12% of the viewport width, else every 340 to 480ms. R85 replaces this rule's test with an area-based one. |
+| Only while scrolling | The re-roll timer (30ms) starts on a scroll event and stops 400ms after the last one, the same rule as the slices (21.3, Flag B5). |
+| Reversible | Scrolling back up un-locks letters and returns to "Nerd" at q < 0.08. |
+| Ghost copies | `.nerd-word` `data-text` and `.nerd-tear` `data-text` are set to the current text + "." on every change, so the `::before`/`::after` copies and tear text follow it. Their pseudo content has empty alt text (`/ ""`). |
+| Takeover geometry | `measure()` sizes `--s-peak`, `--s-rest`, `--dy`, `--dy-rest` to "Nick", the word it lands on (section 21.2's math, unchanged). |
+| Reduced motion | No timer, no re-roll: the word is set to "Nick" on open and on any change to the preference. `.beat-2` is `display:none`. |
+| Screen readers | `.vh` reads `I'm Nick.`; `.beats` is `aria-hidden`; scrambled glyphs never enter the accessibility tree. |
+
+---
+
+## 39. Requirements, deployment, flags, feasibility, non-goals
+
+All requirements use the section 7 harness with the 32.4 server line (`python3 docs/tools/serve.py 8000`), Chromium over CDP, desktop 1440×900 and mobile 390×844, and reduced-motion emulation as in R45. Definitions, extending section 24's:
+
+- **`A`** is `document.getElementById('nerd')`; **`w`** is `document.querySelector('.nerd-word')`; **`txt()`** is `w.firstChild.nodeValue`.
+- **"Open act three"**: direct load of `http://localhost:8000/intro.html#nerd`, wait 1500ms (R48(c) opens it at rest).
+- **"Set q"**: `A.scrollTop = (A.scrollHeight - A.clientHeight) * q; A.dispatchEvent(new Event('scroll'))`, then wait 150ms.
+- **"Scroll for 1s"**: dispatch `scroll` on `A` every 30ms for 1000ms without changing `scrollTop`, while a `MutationObserver` on `w` (`characterData`, `childList`, `subtree`) counts changes of `txt()` per character position (`c[0..3]`) and for the whole word (`cw`).
+- **"Freeze glitch"**: `document.getAnimations().forEach(a => { const t = a.effect && a.effect.target; if (t && A.contains(t) && !(a.timeline && a.timeline.constructor.name === "ScrollTimeline")) a.pause(); })`. This stops the time-based glitch layers (slices, tear bars, jolts, static) so a screenshot diff sees only the glyph change.
+
+Build and deployment for every requirement: **not Docker**, by the same justified exception as sections 8, 18.1, 24.1, 31.1 and 37.1 (a static GitHub Pages site with nothing to containerize; production deploy is a push to `main`, which stays forbidden).
+
+### R80. While the visitor scrolls, "Nerd." decrypts through random glyphs and locks in, left to right, as "Nick." before the glitch clears.
+- **Source:** [Nick-F]; [Card6] "cycle each character position through random characters … landing on 'Nick.'"; section 38.5. Supersedes the 24.4 scramble non-goal for this word only (38.3).
+- **Acceptance:** motion allowed, open act three, at 1440×900 and 390×844: Set q 0.04: `txt() === "Nerd"`. Set q 0.30, Scroll for 1s: every `c[i] >= 1` (all four cells are scrambling). Set q 0.53: `txt()[0] === "N"`; q 0.59: `txt().slice(0,2) === "Ni"`; q 0.65: `txt().slice(0,3) === "Nic"`; q 0.70, 0.80 and 1: `txt() === "Nick"` and `w.dataset.text === "Nick."`. At every one of those q values `w.querySelector('.dot').textContent === "."` and its computed `color === "rgb(126, 156, 96)"`. Reversal: from q 1, Set q 0.04: `txt() === "Nerd"`. Scope: a `MutationObserver` on `A` that ignores mutations inside `w` records 0 `characterData`/`childList` mutations to the `.beat-1`, `.beat-2`, `.vh`, `.chips` and `#nerd-status` subtrees during a sweep q 0 → 1 → 0 (no scramble on any other text); `grep -c "FROM = 'Nerd', TO = 'Nick'" intro.html` = 1.
+- **Edge cases:** every visit randomizes which letter breaks first (two fresh opens rarely produce the same `txt()` sequence at q 0.10 to 0.24, not tested); the glyph set contains no emoji or combining marks (`/^[\x21-\x7E]{4}$/.test(txt())` at every sampled q); a resize mid-scramble does not change which letters are locked at a given q; the fallback (`html.fb`, R44) path still ends on "Nick" at `data-q="3"`.
+- **Resources:** `intro.html` main inline script (`scramble()`, `setWord()`, `scrReset()`), act-three markup.
+
+### R81. Screen readers get exactly "I'm Nick." for the act-three heading at all times, and none of the scramble.
+- **Source:** [Card6] "'I'm a nerd.' becomes 'I'm Nick.' (or similar) … no scrambled-character noise should ever reach assistive tech"; [Crit6]; amends R35 and R46 (38.3). Copy pending Nick, Flag E2.
+- **Acceptance:** open act three; `document.querySelector('#nerd-title .vh').textContent === "I'm Nick."`, with motion allowed at q 0, 0.30, 0.60 and 1, and with reduced motion at q 0 and 1. CDP `Accessibility.getFullAXTree` at the same points: a `heading` level 2, a `region` and a `group` (the chips) are each named exactly `I'm Nick.`; no AX node in act three has a name containing `Nerd`, `nerd.`, `👏`, `clapping`, or any of `#$&*?!/<>=+`. Focus check: keyboard open from the fork (R46) lands on `#nerd-title` and its AX name is `I'm Nick.`. R35's other checks hold with these readings: at q < 0.08 with motion, the three `.beat` `textContent` are `"I'm.👏"`, `"A.👏"`, `"Nerd.👏"`, stacked and centered as R35 says; at q ≥ 0.70, `.beat-3` `textContent === "Nick.👏"`.
+- **Edge cases:** the `.vh` text never changes during a sweep (R80's observer); `.beats` keeps `aria-hidden="true"`; the `::before`/`::after`/tear pseudo content keeps empty alt text (`grep -c 'attr(data-text) / ""' intro.html` ≥ 2) so glyphs are never read even if `aria-hidden` were lost.
+- **Resources:** `intro.html` act-three markup.
+
+### R82. The glitch's ghost copies and tear text always show the same text as the word.
+- **Source:** section 38.5 "Ghost copies"; amends R39 (38.3).
+- **Acceptance:** motion allowed, open act three; at q 0, 0.15, 0.30, 0.55, 0.65 and 1 (after Set q): `w.dataset.text === txt() + "."`, `w.querySelector('.nerd-tear').dataset.text === txt() + "."`, and `getComputedStyle(w, '::before').content` contains `txt() + "."`. So `::before` content contains `Nerd.` at q 0 and `Nick.` at q 1. All of R39's other checks pass unchanged (ember and leaf colors, `--g` scrub, slice timing and pause, rendered pixel check at q 0.55).
+- **Edge cases:** the ghost copies never show a glyph the word is not showing (same check at 20 random q values in 0.08 to 0.68); a missing `CSS.registerProperty` (R44 edge) does not affect this.
+- **Resources:** `intro.html` main script (`setWord()`), CSS pseudo content.
+
+### R83. With reduced motion, the word is "Nick." at once, nothing ever scrambles, and the line reads "I'm. 👏 Nick. 👏".
+- **Source:** [Card6] "the reduced-motion fallback … should NOT scramble … just show the final 'Nick.' cleanly"; [Crit6]; section 38.5. Copy pending Nick, Flag E2.
+- **Acceptance:** with `prefers-reduced-motion: reduce` emulated, open act three: `txt() === "Nick"` at t = 50, 500 and 2000ms; a `MutationObserver` on `w` started at t = 50 records 0 changes through t = 2000 and through Set q 0.30, 0.60 and 1 each followed by Scroll for 1s; `getComputedStyle(document.querySelector('.beat-2')).display === "none"`; the visible beats' text (`.beat-1` + `.beat-3` `textContent`) is `"I'm.👏"` + `"Nick.👏"`; `.nerd-word .dot` color is `rgb(126, 156, 96)`. R45(b) passes unchanged. Toggle: with motion allowed at q 0.30 mid-scramble, switching emulation to reduce sets `txt() === "Nick"` within 200ms; switching back and Scroll for 1s at q 0.30 resumes the scramble (every `c[i] >= 1`).
+- **Edge cases:** the fallback `html.fb` path with reduced motion also shows "Nick" (it runs the same `scramble()` guard); the static layout stays centered with two lines and no gap where "A." was (`beat3.top - beat1.bottom <= 2 * parseFloat(getComputedStyle(beat1).fontSize)`).
+- **Resources:** `intro.html` CSS (`@media (prefers-reduced-motion:reduce){ .beat-2{display:none;} }`), main script.
+
+### R84. The glyphs only change while the visitor is scrolling; when the scroll stops, the word freezes.
+- **Source:** section 38.5 "Only while scrolling"; Flag B5 and R45 "nothing changes on its own"; [WCAG] 2.2.2. Extends R45(a).
+- **Acceptance:** motion allowed, open act three, Set q 0.30, Scroll for 1s, then stop: `txt()` read at 500ms, 1000ms and 2000ms after the last scroll event is identical at all three reads; same at q 0.55 and 0.65. R45(a)'s check (no time-based animation running in act three 600ms after input stops) still passes.
+- **Edge cases:** a background tab or a closed act (Back to `#where`) leaves no re-roll timer running (after `history.back()`, `txt()` is unchanged over 1000ms and no script error is thrown); reopening act three starts from "Nerd" at q 0 with a new break order.
+- **Resources:** `intro.html` main script (`onScroll`, `scrStop`).
+
+### R85. The scramble never flashes more than three times a second over an area large enough to matter (WCAG 2.3.1), at any size.
+- **Source:** R45 "Nothing in act three can flash more than … a second"; [WCAG] 2.3.1 general flash threshold (no more than 3 flashes in any 1 second where the combined flashing area is at least 25% of a 10° visual field, which WCAG equates to 341×256 px on a 1024×768 screen); [Spike5] F28, F29. **Status at dd90860: FAILS at 1440×900 for q ≈ 0.26 to 0.30** (39.3 F29). This is the one behavior change this addendum asks for.
+- **Acceptance:** at 1440×900 and 390×844 (device scale factor 1), motion allowed, open act three. Let the threshold be `T = innerWidth * innerHeight / 36` (25% of a W/3 × H/3 window: 36,000 px² at 1440×900, 9,143 at 390×844, 21,845 at 1024×768). For each q in 0.10, 0.14, 0.18, … 0.70: Set q, wait 500ms; (1) dispatch one `scroll`, Freeze glitch, wait 100ms, screenshot; wait 500ms; dispatch one `scroll`, Freeze glitch, wait 100ms, screenshot; (2) mark every pixel where the two frames' WCAG relative luminances differ by ≥ 0.10 and the darker is < 0.80; `Awin` = the largest count of marked pixels inside any `innerWidth/3 × innerHeight/3` window (sliding, step ≤ 12px); (3) Scroll for 1s and read `cw`. **Pass:** for every q where `Awin >= T`, `cw <= 6` (at most 6 glyph changes, so at most 3 flashes, in 1 second). Sanity: at q 0.72 (all letters locked) the same diff gives `Awin === 0`, which proves the method sees only the glyph change.
+- **Edge cases:** the test also holds at 768×1024 and 844×390; the ember ghost copy (`#C4543A`) is counted like any other pixel (the luminance rule is stricter than WCAG's separate red-flash rule for this hue); a visitor who scrolls fast through the band is covered, since the cap is per second of scrolling, not per q. Implementation is the builder's choice; the cheapest fix is to make the slow-rate test area-based (for example, a cell's on-screen area against `T`) instead of width-based, and to cap the whole word at 6 changes a second whenever the slow rate applies.
+- **Resources:** `intro.html` main script (`scramble()` rate rule only); a throwaway measurement script outside the repo.
+
+### R86. The visible setup stays "I'm. 👏 A. 👏 Nerd. 👏" and resolves into "Nick." (option A), until Nick says otherwise.
+- **Source:** [Card7] item 3; [Card6] "use judgment … flag it rather than guessing"; section 38.4 (design's judgment call, my recommendation, pending Nick as Flag E1).
+- **Acceptance:** motion allowed, open act three: at q 0 the three beats read `"I'm.👏"`, `"A.👏"`, `"Nerd.👏"` (R81); at q 1 `.beat-1`, `.beat-2` and their claps have opacity < 0.05 and `.beat-3` reads `"Nick.👏"`, so the only visible words above the chips are "Nick." and its clap. `grep -c "I'm. 👏 A. 👏 Nerd. 👏" docs/intro-experience-PRD.md` ≥ 1 and section 38.4 lists Nick's choice as pending or answered (`grep -c "Flag E1" docs/intro-experience-PRD.md` ≥ 1).
+- **Edge cases:** if Nick picks option B or C, no copy is edited until a later addendum replaces this requirement; at no q with motion allowed are "A." and "Nick." both visible (opacity > 0.05) at the same time, so the screen never reads "A. Nick.".
+- **Resources:** `intro.html` act-three markup (read-only for this requirement); this PRD.
+
+### R87. Palette, fonts, files and script budget hold with the scramble in, and nothing earlier regresses.
+- **Source:** R31, R49, R65, R79; section 38.3.
+- **Acceptance:** the R31 hex grep returns the same set as at 50e1b8c (`diff <(git show 50e1b8c:intro.html | grep -oiE "#[0-9a-f]{6}\b" | sort -u) <(grep -oiE "#[0-9a-f]{6}\b" intro.html | sort -u)` is empty; it is at dd90860); the Google Fonts URL is unchanged; `grep -c "<script" intro.html` = 4 and `grep -cE "<script[^>]+src=" intro.html` = 0; the main inline script block (the second `<script>` through its `</script>`, inclusive) is **under 375 lines** (359 at dd90860); `passions-js` under 280 lines and `research-js` under 200 lines (unchanged); `grep -ci "preventDefault" intro.html` = 0; `git diff --name-only 50e1b8c..HEAD` lists only `intro.html`, `BACKLOG.md`, files under `docs/` and files under `assets/passions/`. All acceptance checks of R1 to R34, R36 to R38, R40 to R44, R47 to R80 pass again, with the 32.4 amendments and with R35, R39, R45 and R46 read as amended by R81 to R85.
+- **Edge cases:** no new font, image, CSS or JS files; no third-party code; the passion prong still starts act three (R33) and the chips still reach `#passions` (R50).
+- **Resources:** `intro.html`; `index.html` (read-only).
+
+### 39.1 Deployment and build
+
+Unchanged from sections 8, 18.1, 24.1, 31.1 and 37.1: **not Docker**, by the same justified exception (static GitHub Pages site, nothing to containerize, production deploy is a push to `main`, which stays forbidden). Local preview `python3 docs/tools/serve.py 8000` from the repo root on `feature/intro-experience` (reuse the server on :8000 if it is running). Demo: `http://localhost:8000/intro.html#nerd`, scroll slowly through the black takeover. No build step. No ADR: one function in one file, cheap to reverse.
+
+### 39.2 Flags for Nick (addendum 5)
+
+1. **E1, the visible copy.** "I'm. 👏 A. 👏 Nerd. 👏" stays as the setup and the glitch turns "Nerd." into "Nick." (option A, built, my recommendation). Say if you'd rather rewrite the setup around the name instead (option B, 38.4).
+2. **E2, two smaller copy calls.** Screen readers hear "I'm Nick." (not "I'm a nerd. I'm Nick."), and reduced-motion visitors see "I'm. 👏 Nick. 👏" with no "A." and no "Nerd.". Both mean those visitors miss the nerd joke. I'd keep both; the fix for either is small if you want the joke for everyone.
+3. **E3, a flashing problem in the build.** On a desktop screen, while you scroll through about the first third of the black takeover, the scrambling letters are already big and change 10 to 13 times a second. I measured the changing area at 1.3 to 2 times WCAG's flash limit there (39.3 F29). Phones and the peak of the takeover are fine. It's a one-function fix (R85), but it needs a build card, which this card can't create. Until it's fixed, R85 fails.
+4. **E4, script budget.** The main script is 359 lines; the last budget was under 345. I raised it to under 375 (R87) rather than ask for a trim, since the overrun is the scramble you asked for.
+
+No new cost, services, infrastructure or recurring manual steps.
+
+### 39.3 Feasibility (spike method) and risks
+
+The feature is already built and Crit-verified [Crit6], so feasibility is settled; I only measured the two questions the PRD had not covered. I drove the running demo on :8000 in Chromium over CDP at 1440×900 and 390×844 (device scale factor 1), read `txt()` and the word's box at sampled q values, counted glyph changes with a `MutationObserver`, and diffed screenshot pairs with the time-based glitch layers paused (Freeze glitch) so only the glyph change showed. Nothing was saved to the repo.
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| F28 | Given the built page, when the screenshot-pair diff is taken with the glitch frozen and all letters locked, then it measures only the glyph change. | VALIDATED | At q 0.70 and 0.73 (`txt()` "Nick"), qualifying changed area = 0 px². At q 0 ("Nerd"), 0 px². |
+| F29 | Given the 12%-of-width rate rule, when the visitor scrolls through the scramble at 1440×900, then the re-roll stays under the WCAG general-flash limit. | INVALIDATED | Windowed qualifying area per re-roll (threshold 36,000 px²): q 0.22 30,303; **q 0.26 47,862 with 22 word changes/s (cells 11 to 12/s); q 0.30 70,407 with 18/s; q 0.34 78,741 with 7/s**; q 0.46 to 0.64 77,211 to 99,135 with 3 to 6/s. So q ≈ 0.26 to 0.34 is over the limit (0.26 and 0.30 clearly; 0.34 by one change). Cause: cell width only crosses 12% of 1440 (173px) at q ≈ 0.33, but the cell is already 140 to 156px wide and 281 to 369px tall, far bigger in area than the rule assumes. |
+| F30 | Same rule at 390×844. | VALIDATED (mostly) | Threshold 9,143 px². Full-frame changed area 4,307 (q 0.15), 6,170 (0.22), 9,134 (0.28, cells already in slow mode at 3/s), then slow mode for the rest. The width rule happens to fit phone proportions. R85's sweep should still confirm it, since slow mode allows up to 12 word changes/s across four cells. |
+| F31 | Given dd90860, when the main script block is measured, then it fits R79's budget. | INVALIDATED | 359 lines including tags (320 at 50e1b8c). Budget raised in R87. |
+
+Risks:
+
+- **Photosensitivity (F29).** The real risk in this addendum. Mitigated by R85, which makes the limit testable by area instead of by letter width. Until a build card fixes it, the act-three scramble should not be merged to `main`.
+- **Copy whiplash.** If Nick picks option B in E1, the setup copy, `.vh` text and R81 to R86 all change together. Mitigated by R86 saying no copy is edited without a later addendum.
+- **Parallel edits to `intro.html`.** The scramble reached the branch inside another card's commit (b095df3) because two workers shared the working tree. Not a spec problem; noted for PMO as a collision hotspot (design flagged the same on t_2f379858).
+- **The intensified glitch is still unspecified.** Commit 560f493 (tear bars, jolts, static, rolling bar) predates this card and is not described anywhere in this PRD; R45(a) only counts the two slice animations. R85's sweep freezes those layers, so it does not test them. Logged as a follow-up (39.5), not in scope here.
+
+### 39.4 Non-goals for addendum 5 (do not build)
+
+- Any scramble, decrypt or typewriter effect on text other than `.nerd-word`: not on "I'm." or "A.", the `.vh` text, the chips, the status line, the cue, the fork scene, act four, the research board, or `index.html`.
+- Scrambling the green period, or changing its color.
+- Any change to the visible setup copy, the screen-reader text or the reduced-motion layout beyond what R80 to R86 describe, until Nick answers E1 and E2.
+- Re-rolls that run when the visitor is not scrolling, or after act three closes.
+- Changes to the glitch layers, the takeover math, the chips, the router or act four as part of the R85 fix. The fix touches the re-roll rate rule only.
+- Sound, canvas, WebGL, SVG filters, new colors, new fonts, new files, libraries, or a push to or merge into `main`.
+
+**Authorized boundaries (for the build card that implements R85, once Nick approves this addendum):** edit the `scramble()` rate rule in the main inline script of `intro.html` on `feature/intro-experience` in `~/Documents/github/portfolio`; update the matching `BACKLOG.md` row; commit and `git push origin feature/intro-experience`; run or reuse the preview server on :8000.
+
+**Forbidden actions:** editing any other part of `intro.html` or any other site file; pushing any other branch; committing to or merging into `main`; adding dependencies, files or services beyond the preview server.
+
+### 39.5 Follow-ups (logged in BACKLOG.md, not requirements)
+
+- **Spec the intensified glitch (560f493)** in the PRD (tear bars, jolts, static, rolling bar, `--j` scale) and give it its own area-based flash check, like R85.
+- If Nick picks E1 option B, or changes either E2 call, a short addendum before any copy edit.
+- Optional: an opacity-only "Nerd." to "Nick." crossfade for reduced motion (E2), if Nick wants the joke for everyone.
 
 ---
 
