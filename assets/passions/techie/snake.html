@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>snake · pcb rev 21</title>
+<!--
+  PCB SNAKE — single-file, self-contained, embeddable.
+
+  Structure:
+    1. style block — palette + layout (container-query based, so it plays nicely
+                     in a ~400-600px iframe as well as a large standalone viewport).
+    2. markup      — header (title + score readouts), board (canvas + overlay),
+                     footer (key legend + restart/pause buttons).
+    3. script block — game module: fixed-tick simulation on requestAnimationFrame,
+                     canvas renderer with a cached background layer.
+
+  No network, no external assets, no frameworks. Works from file:// and in an iframe.
+-->
+<style>
+  /* ---------- palette (mirrored in JS below) ---------- */
+  :root{
+    --ink:       #16241C;  /* board backdrop / page background */
+    --ink-deep:  #0E1913;  /* inside the board, under the solder mask */
+    --leaf:      #CFE2A6;  /* pale green: copper trace lit up */
+    --moss:      #7E9C60;  /* mid green: solder pads, borders, accents */
+    --card:      #F8FAF4;  /* off-white: text / UI */
+    --copper:    #E3B877;  /* warm accent: the powered solder joint (food) */
+    --dead:      #5A6B48;  /* de-energised trace (game over) */
+  }
+
+  *, *::before, *::after{ box-sizing: border-box; }
+
+  html, body{
+    margin: 0;
+    padding: 0;
+    background: var(--ink);
+    /* faint PCB dot pattern — quiet, non-distracting */
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(126,156,96,.20) 1px, transparent 1.6px);
+    background-size: 14px 14px;
+    color: var(--card);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- layout ---------------------------------------------------------
+     .stage is the container-query container; .pcb sizes its root font from the
+     width it is *given*, so every child (in em) scales with the embed size.
+     The vw fallback comes first so browsers without container-query support
+     still scale sanely.                                                        */
+  .stage{
+    container-type: inline-size;
+    width: 100%;
+  }
+  .pcb{
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 8px;
+    padding: clamp(6px, 2vw, 18px);
+    /* vw fallback, then cqw override where supported */
+    font-size: clamp(11px, 2.4vw, 15px);
+    font-size: clamp(11px, 2.4cqw, 15px);
+    line-height: 1.35;
+  }
+
+  /* ---------- header --------------------------------------------------------- */
+  .bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .8em;
+    flex-wrap: wrap;
+  }
+  .title{
+    display: flex;
+    align-items: baseline;
+    gap: .5em;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    font-weight: 600;
+    color: var(--card);
+  }
+  .title .mark{
+    display: inline-block;
+    width: .7em; height: .7em;
+    border: 1px solid var(--moss);
+    background: var(--leaf);
+    box-shadow: 0 0 .5em rgba(207,226,166,.55);
+  }
+  .title .sub{
+    font-size: .72em;
+    letter-spacing: .18em;
+    color: var(--moss);
+    font-weight: 400;
+  }
+
+  .readouts{ display: flex; gap: .5em; }
+  .readout{
+    min-width: 5.2em;
+    padding: .35em .6em;
+    border: 1px solid rgba(126,156,96,.45);
+    background: rgba(14,25,19,.65);
+    text-align: right;
+  }
+  .readout .label{
+    display: block;
+    font-size: .68em;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--moss);
+  }
+  .readout .val{
+    display: block;
+    font-size: 1.15em;
+    letter-spacing: .12em;
+    font-variant-numeric: tabular-nums;
+    color: var(--card);
+  }
+  .readout.hot{ border-color: var(--leaf); box-shadow: 0 0 .8em rgba(207,226,166,.35) inset; }
+  .readout.hot .val{ color: var(--leaf); }
+
+  /* ---------- board ---------------------------------------------------------- */
+  .board{
+    position: relative;
+    margin-top: .9em;
+    padding: 6px;                       /* fallback for no container-query support */
+    padding: clamp(5px, 1.4cqw, 10px);
+    border: 1px solid rgba(126,156,96,.5);
+    background: var(--ink-deep);
+    box-shadow:
+      0 0 0 1px rgba(207,226,166,.06),
+      inset 0 0 2em rgba(0,0,0,.55),
+      0 1.2em 2.4em -1.4em rgba(0,0,0,.85);
+  }
+  .board::before{
+    /* corner mounting pads (silkscreen) */
+    content: "";
+    position: absolute; inset: 3px;
+    border: 1px solid rgba(126,156,96,.18);
+    pointer-events: none;
+  }
+  canvas{
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--ink-deep);
+    outline: none;
+    touch-action: none;
+    cursor: pointer;
+  }
+  canvas:focus-visible{ box-shadow: 0 0 0 2px rgba(207,226,166,.5); }
+
+  /* silkscreen labels in the board padding */
+  .silk{
+    position: absolute;
+    font-size: .6em;
+    letter-spacing: .18em;
+    color: rgba(126,156,96,.65);
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .silk.tl{ top: .15em; left: .5em; }
+  .silk.tr{ top: .15em; right: .5em; }
+  .silk.bl{ bottom: .15em; left: .5em; }
+  .silk.br{ bottom: .15em; right: .5em; }
+
+  /* fault flash on game over */
+  .board.fault{ animation: fault .45s ease-out 1; }
+  @keyframes fault{
+    0%   { box-shadow: 0 0 0 1px rgba(248,250,244,.55), inset 0 0 1.4em rgba(248,250,244,.25); }
+    100% { box-shadow: 0 0 0 1px rgba(207,226,166,.06), inset 0 0 2em rgba(0,0,0,.55), 0 1.2em 2.4em -1.4em rgba(0,0,0,.85); }
+  }
+
+  /* ---------- overlay -------------------------------------------------------- */
+  .overlay{
+    position: absolute; inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1.4em;
+    text-align: center;
+    background: rgba(14,25,19,.82);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease;
+  }
+  .overlay.on{ opacity: 1; pointer-events: auto; }
+  .panel{ display: grid; gap: .55em; justify-items: center; max-width: 22em; }
+  .kicker{
+    font-size: .68em; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--moss);
+  }
+  .ovTitle{
+    margin: 0;
+    font-size: 1.7em;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--leaf);
+    text-shadow: 0 0 .7em rgba(207,226,166,.45);
+  }
+  .ovTitle.bad{ color: var(--card); text-shadow: 0 0 .7em rgba(248,250,244,.3); }
+  .ovMsg{
+    margin: 0;
+    font-size: .82em;
+    letter-spacing: .1em;
+    color: rgba(248,250,244,.75);
+  }
+  .ovMsg b{ color: var(--leaf); font-weight: 600; }
+
+  /* ---------- buttons / footer ---------------------------------------------- */
+  .btn{
+    font: inherit;
+    font-size: .8em;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--card);
+    background: rgba(126,156,96,.14);
+    border: 1px solid rgba(126,156,96,.6);
+    padding: .55em 1em;
+    cursor: pointer;
+    transition: background .15s ease, box-shadow .15s ease, color .15s ease, transform .05s ease;
+  }
+  .btn:hover{ background: rgba(207,226,166,.16); border-color: var(--leaf); color: var(--leaf); box-shadow: 0 0 .8em rgba(207,226,166,.3); }
+  .btn:active{ transform: translateY(1px); }
+  .btn:focus-visible{ outline: 2px solid var(--leaf); outline-offset: 2px; }
+  .btn.primary{ border-color: var(--leaf); background: rgba(207,226,166,.14); color: var(--leaf); }
+
+  .actions{ display: flex; gap: .5em; }
+  .legend{
+    font-size: .7em;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(126,156,96,.9);
+  }
+  .legend kbd{
+    font: inherit;
+    color: var(--card);
+    border: 1px solid rgba(126,156,96,.5);
+    padding: .1em .4em;
+    background: rgba(14,25,19,.6);
+  }
+  .foot{ margin-top: .8em; }
+  .foot .bar{ gap: .6em; }
+
+  @media (prefers-reduced-motion: reduce){
+    .overlay{ transition: none; }
+    .board.fault{ animation: none; }
+    .btn{ transition: none; }
+  }
+
+  /* ---------- embed additions for nickpings.com (design card t_24928e8b) ----------
+     Not part of Strata's output: a transparent page so the host panel shows through,
+     fixed chrome sizes so the host can size the iframe from its width alone, and a
+     touch pad for phones. See SOURCES.md next to this file.                          */
+  html, body{ background: transparent; }
+  .pcb{ max-width: none; padding: 10px; font-size: 12px; }
+  .board{ padding: 7px; }
+  .overlay{ cursor: pointer; }
+  canvas{ touch-action: pan-y; }              /* the page still scrolls under a finger until a run starts */
+  .playing canvas{ touch-action: none; }
+  .pad{ display: none; grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(3, 44px); gap: 0; }
+  .pad .btn{ padding: 0; font-size: 18px; letter-spacing: 0; touch-action: manipulation;
+             -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .pad .up{ grid-area: 1 / 2; } .pad .left{ grid-area: 2 / 1; } .pad .right{ grid-area: 2 / 3; } .pad .down{ grid-area: 3 / 2; }
+  .pad .btn.hit{ background: rgba(207,226,166,.3); color: var(--leaf); border-color: var(--leaf); }
+  .touch .legend{ display: none; }
+  .touch .pad{ display: grid; }
+  .touch .foot .actions{ flex-direction: column; }
+  .bar{ flex-wrap: nowrap; }
+  .legend{ min-width: 0; }
+  .legend .opt{ display: none; }
+  .title .sub{ display: none; }
+  /* phone held sideways: the host adds .side, and the pad sits beside the board */
+  .touch.side .pcb{ display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; }
+  .touch.side .pcb > header{ grid-column: 1 / -1; }
+  .touch.side .foot{ margin-top: .9em; flex-direction: column; justify-content: center; gap: 12px; }
+  .touch.side .foot .actions{ flex-direction: row; }
+  @container (max-width: 300px){ .readouts{ gap: .35em; } .readout{ min-width: 4em; padding: .3em .4em; } .title{ letter-spacing: .12em; } .actions .btn{ padding: .55em .7em; } }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <main class="pcb">
+      <header class="bar">
+        <h1 class="title"><span class="mark" aria-hidden="true"></span>snake<span class="sub">/ pcb rev 21</span></h1>
+        <div class="readouts">
+          <div class="readout" id="scoreBox">
+            <span class="label">score</span>
+            <span class="val" id="score" aria-live="polite">0000</span>
+          </div>
+          <div class="readout" id="checkBox">
+            <span class="label">best</span>
+            <span class="val" id="best">0000</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="board" id="board">
+        <span class="silk tl">U1 · snake</span>
+        <span class="silk tr" id="silkGrid">21×21</span>
+        <span class="silk bl">GND</span>
+        <span class="silk br">+3V3</span>
+        <canvas id="screen" width="600" height="600" tabindex="0"
+                role="img" aria-label="Snake game board. Arrow keys or WASD to steer."></canvas>
+        <div class="overlay on" id="overlay">
+          <div class="panel">
+            <div class="kicker" id="ovKicker">board powered</div>
+            <div class="ovTitle" id="ovTitle">ready</div>
+            <p class="ovMsg" id="ovMsg">press <b>space</b> or any steer key to start</p>
+            <button class="btn primary" id="ovBtn" type="button">start</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="bar foot">
+        <div class="legend">
+          <kbd>↑↓←→</kbd><span class="opt"> / <kbd>wasd</kbd></span> steer<span class="opt"> · <kbd>p</kbd> pause</span> · <kbd>space</kbd> restart
+        </div>
+        <div class="pad" id="pad" role="group" aria-label="Steer">
+          <button class="btn up" type="button" data-dir="up" aria-label="Up">&#9650;&#xFE0E;</button>
+          <button class="btn left" type="button" data-dir="left" aria-label="Left">&#9664;&#xFE0E;</button>
+          <button class="btn right" type="button" data-dir="right" aria-label="Right">&#9654;&#xFE0E;</button>
+          <button class="btn down" type="button" data-dir="down" aria-label="Down">&#9660;&#xFE0E;</button>
+        </div>
+        <div class="actions">
+          <button class="btn" id="pauseBtn" type="button">pause</button>
+          <button class="btn" id="restartBtn" type="button">restart</button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+<script>
+/* =========================================================================
+   PCB SNAKE — game module
+   -------------------------------------------------------------------------
+   Simulation is a fixed tick (default 115ms ≈ 8.7 moves/s, accelerating down
+   to 84ms ≈ 11.9 moves/s) driven by requestAnimationFrame with a time
+   accumulator; rendering happens every frame (needed for the pad pulse/glow).
+
+   Direction input is buffered as AT MOST ONE pending turn per tick, validated
+   against the direction actually applied on the current tick. That makes
+   "right then up then left inside one tick" safe: only one turn lands, and a
+   180° reversal can never slip through.
+   ========================================================================= */
+(function () {
+  'use strict';
+
+  /* ---------- config ---------- */
+  var COLS = 21, ROWS = 21, CELLS = COLS * ROWS;
+  var BASE_TICK = 115,   /* ms per move at start */
+      MIN_TICK  = 84,    /* fastest move interval (≈11.9 moves/s) */
+      SPEEDUP   = 3;     /* ms shaved off per pellet eaten */
+  var POINTS = 10;       /* score per pellet */
+  var STORE_KEY = 'pcb-snake-best';
+
+  /* palette (kept in sync with the CSS custom properties above) */
+  var C = {
+    ink: '#16241C', inkDeep: '#0E1913',
+    leaf: '#CFE2A6', moss: '#7E9C60', card: '#F8FAF4',
+    copper: '#E3B877', dead: '#5A6B48'
+  };
+
+  /* ---------- dom ---------- */
+  var board   = document.getElementById('board');
+  var canvas  = document.getElementById('screen');
+  var ctx     = canvas.getContext('2d');
+  var scoreEl = document.getElementById('score');
+  var bestEl  = document.getElementById('best');
+  var scoreBox= document.getElementById('scoreBox');
+  var checkBox= document.getElementById('checkBox');
+  var overlay = document.getElementById('overlay');
+  var ovTitle = document.getElementById('ovTitle');
+  var ovMsg   = document.getElementById('ovMsg');
+  var ovBtn   = document.getElementById('ovBtn');
+  var ovKicker= document.getElementById('ovKicker');
+  var pauseBtn= document.getElementById('pauseBtn');
+  var restartBtn = document.getElementById('restartBtn');
+  var silkGrid = document.getElementById('silkGrid');
+
+  var reduceMotion = false;
+  try {
+    var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reduceMotion = mq.matches;
+    if (mq.addEventListener) mq.addEventListener('change', function (e) { reduceMotion = e.matches; });
+    else if (mq.addListener) mq.addListener(function (e) { reduceMotion = e.matches; });
+  } catch (e) { /* matchMedia unsupported — motion on */ }
+
+  /* embed addition: touch UI (pad + tap wording) on touch-first devices, or ?pad=1 */
+  var touchUI = /[?&]pad=1/.test(location.search);
+  try { touchUI = touchUI || window.matchMedia('(hover: none) and (pointer: coarse)').matches; } catch (e) {}
+  if (touchUI) document.documentElement.classList.add('touch');
+
+  /* localStorage is unavailable in sandboxed iframes / file:// edge cases, so
+     every access is guarded and the session best still works without it. */
+  var store = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  /* ---------- game state ---------- */
+  var STATE = { READY: 'ready', RUNNING: 'running', PAUSED: 'paused', OVER: 'over', WON: 'won' };
+  var state = STATE.READY;
+
+  var snake = [];            /* [{x,y}], head first */
+  var dir = { x: 1, y: 0 };  /* direction applied on the last tick */
+  var pending = null;        /* at most one queued turn, consumed next tick */
+  var grow = false;          /* tail stays put on the next tick */
+  var food = null;           /* {x,y} */
+  var eaten = 0;
+  var score = 0;
+  var best = 0;
+  var tickMs = BASE_TICK;
+  var sparks = [];           /* short-lived ring particles (eat / fault) */
+
+  var storedBest = parseInt(store.get(STORE_KEY), 10);
+  best = (storedBest && storedBest > 0) ? storedBest : 0;
+
+  /* ---------- rendering geometry ---------- */
+  var cell = 0;      /* backing-store px per cell */
+  var bg = null;     /* cached static background layer */
+  var dpr = 1;
+
+  function fit() {
+    /* size the backing store from the *rendered* canvas width, so the board
+       follows whatever container/iframe it was dropped into */
+    var cssW = canvas.clientWidth || 480;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    var px = Math.max(160, Math.round(cssW * dpr));
+    if (canvas.width !== px || canvas.height !== px) {
+      canvas.width = px;
+      canvas.height = px;
+    }
+    cell = canvas.width / COLS;
+    buildBackground();
+  }
+
+  /* Grid + vias are static, so they get drawn once into an offscreen layer. */
+  function buildBackground() {
+    bg = document.createElement('canvas');
+    bg.width = canvas.width;
+    bg.height = canvas.height;
+    var b = bg.getContext('2d');
+
+    b.fillStyle = C.inkDeep;
+    b.fillRect(0, 0, bg.width, bg.height);
+
+    var lw = Math.max(1, cell * 0.03);
+
+    /* etched grid, aligned to cell boundaries */
+    b.lineWidth = lw;
+    b.strokeStyle = 'rgba(207,226,166,0.055)';
+    b.beginPath();
+    for (var i = 1; i < COLS; i++) {
+      var p = Math.round(i * cell) + 0.5;
+      b.moveTo(p, 0); b.lineTo(p, bg.height);
+      b.moveTo(0, p); b.lineTo(bg.width, p);
+    }
+    b.stroke();
+
+    /* via dots at the intersections — PCB texture, kept faint */
+    b.fillStyle = 'rgba(126,156,96,0.16)';
+    var r = Math.max(0.8, cell * 0.055);
+    for (var x = 1; x < COLS; x++) {
+      for (var y = 1; y < ROWS; y++) {
+        b.beginPath();
+        b.arc(x * cell, y * cell, r, 0, Math.PI * 2);
+        b.fill();
+      }
+    }
+
+    /* inner keep-out border */
+    b.strokeStyle = 'rgba(126,156,96,0.35)';
+    b.lineWidth = Math.max(1, cell * 0.05);
+    b.strokeRect(lw, lw, bg.width - lw * 2, bg.height - lw * 2);
+  }
+
+  /* glow helper: halved when the user asked for reduced motion */
+  function glow(px) { return reduceMotion ? px * 0.45 : px; }
+  function cx(c) { return (c.x + 0.5) * cell; }
+  function cy(c) { return (c.y + 0.5) * cell; }
+
+  /* ---------- simulation ---------- */
+  function newGame() {
+    var sx = Math.floor(COLS / 2), sy = Math.floor(ROWS / 2);
+    snake = [{ x: sx, y: sy }, { x: sx - 1, y: sy }, { x: sx - 2, y: sy }];
+    dir = { x: 1, y: 0 };
+    pending = null;
+    grow = false;
+    eaten = 0;
+    score = 0;
+    tickMs = BASE_TICK;
+    sparks.length = 0;
+    food = spawnFood();
+    state = STATE.READY;
+    syncHud();
+    showOverlay();
+  }
+
+  /* Begin running without resetting — the READY preview becomes the live game. */
+  function start() {
+    if (state === STATE.RUNNING) return;
+    state = STATE.RUNNING;
+    acc = 0;
+    hideOverlay();
+    syncHud();
+  }
+
+  /* Start from a steer key, but only from the READY preview: a finished run is
+     restarted deliberately (space/enter/click), never by a stray arrow press. */
+  function startWithTurn(d) {
+    if (state === STATE.RUNNING) { queueTurn(d); return; }
+    if (state === STATE.OVER || state === STATE.WON || state === STATE.PAUSED) return;
+    start();
+    queueTurn(d);
+  }
+
+  function queueTurn(d) {
+    /* validated against the CURRENT heading (not the pending one) — this is
+       what stops a same-tick double turn from folding the snake into itself */
+    if (d.x === -dir.x && d.y === -dir.y) return;   /* 180° — ignored */
+    pending = d;                                     /* one slot, latest wins */
+  }
+
+  function occupied(x, y) {
+    for (var i = 0; i < snake.length; i++) {
+      if (snake[i].x === x && snake[i].y === y) return true;
+    }
+    return false;
+  }
+
+  function spawnFood() {
+    var free = [];
+    for (var x = 0; x < COLS; x++) {
+      for (var y = 0; y < ROWS; y++) {
+        if (!occupied(x, y)) free.push({ x: x, y: y });
+      }
+    }
+    if (!free.length) return null;                   /* board fully saturated */
+    return free[Math.floor(Math.random() * free.length)];
+  }
+
+  /* one simulation step; returns false if the run ended */
+  function step() {
+    if (pending) { dir = pending; pending = null; }
+
+    var head = snake[0];
+    var nx = head.x + dir.x;
+    var ny = head.y + dir.y;
+
+    /* wall collision */
+    if (nx < 0 || ny < 0 || nx >= COLS || ny >= ROWS) {
+      fault(head, true);
+      return false;
+    }
+
+    /* self collision — the tail cell vacates this tick unless we are growing,
+       so moving into it is only fatal when grow is set */
+    var tailIdx = snake.length - 1;
+    for (var i = 0; i < snake.length; i++) {
+      if (snake[i].x !== nx || snake[i].y !== ny) continue;
+      if (i === tailIdx && !grow) continue;          /* tail is leaving */
+      fault(snake[i], true);
+      return false;
+    }
+
+    snake.unshift({ x: nx, y: ny });
+
+    if (grow) {
+      grow = false;                                  /* tail kept → +1 segment */
+    } else {
+      snake.pop();
+    }
+
+    if (food && nx === food.x && ny === food.y) {
+      eaten++;
+      score += POINTS;
+      if (score > best) { best = score; store.set(STORE_KEY, String(best)); }
+      tickMs = Math.max(MIN_TICK, BASE_TICK - eaten * SPEEDUP);
+      sparks.push({ x: nx, y: ny, t: 0, kind: 'eat' });
+      grow = true;                                   /* grow on the NEXT move */
+      food = spawnFood();                            /* re-target, never on body */
+      syncHud();
+      if (!food) return win();
+    }
+    return true;
+  }
+
+  function fault(where, isDeath) {
+    state = STATE.OVER;
+    sparks.push({ x: where.x, y: where.y, t: 0, kind: 'fault' });
+    if (score > best) { best = score; store.set(STORE_KEY, String(best)); }
+    syncHud();
+    showOverlay();
+    if (isDeath && !reduceMotion) {
+      board.classList.add('fault');
+      setTimeout(function () { board.classList.remove('fault'); }, 480);
+    }
+  }
+
+  function win() {
+    state = STATE.WON;
+    if (score > best) { best = score; store.set(STORE_KEY, String(best)); }
+    syncHud();
+    showOverlay();
+    return false;
+  }
+
+  function togglePause() {
+    if (state === STATE.RUNNING) { state = STATE.PAUSED; showOverlay(); }
+    else if (state === STATE.PAUSED) { state = STATE.RUNNING; acc = 0; hideOverlay(); }
+    syncPauseBtn();
+  }
+
+  /* ---------- hud ---------- */
+  function pad(n) { return String(n).padStart(4, '0'); }
+
+  function syncHud() {
+    scoreEl.textContent = pad(score);
+    bestEl.textContent = pad(best);
+    var beating = score > 0 && score >= best;
+    scoreBox.classList.toggle('hot', beating);
+    checkBox.classList.toggle('hot', beating);
+    syncPauseBtn();
+  }
+
+  function syncPauseBtn() {
+    pauseBtn.textContent = (state === STATE.PAUSED) ? 'resume' : 'pause';
+    document.documentElement.classList.toggle('playing', state === STATE.RUNNING);   /* embed addition */
+  }
+
+  function showOverlay() {
+    overlay.classList.add('on');
+    if (state === STATE.READY) {
+      ovKicker.textContent = 'board powered';
+      ovTitle.textContent = 'ready';
+      ovTitle.classList.remove('bad');
+      ovMsg.innerHTML = touchUI ? '<b>tap</b> the board or the pad to start' : 'press <b>space</b> or any steer key to start';
+      ovBtn.textContent = 'start';
+    } else if (state === STATE.PAUSED) {
+      ovKicker.textContent = 'clock halted';
+      ovTitle.textContent = 'paused';
+      ovTitle.classList.remove('bad');
+      ovMsg.innerHTML = touchUI ? '<b>tap</b> to resume' : 'press <b>p</b> to resume';
+      ovBtn.textContent = 'resume';
+    } else if (state === STATE.OVER) {
+      ovKicker.textContent = 'trace broken';
+      ovTitle.textContent = 'game over';
+      ovTitle.classList.add('bad');
+      ovMsg.innerHTML = 'score <b>' + score + '</b> · best <b>' + best + '</b> · len <b>' + snake.length +
+                        '</b> · ' + (touchUI ? '<b>tap</b>' : 'press <b>space</b>') + ' to restart';
+      ovBtn.textContent = 'restart';
+    } else if (state === STATE.WON) {
+      ovKicker.textContent = 'all nets routed';
+      ovTitle.textContent = 'board full';
+      ovTitle.classList.remove('bad');
+      ovMsg.innerHTML = 'perfect run · score <b>' + score + '</b>';
+      ovBtn.textContent = 'restart';
+    }
+  }
+
+  function hideOverlay() {
+    overlay.classList.remove('on');
+    syncPauseBtn();
+  }
+
+  /* ---------- renderer ---------- */
+  function strokePath(pts, width, style, blur, blurColor) {
+    ctx.beginPath();
+    ctx.moveTo(cx(pts[0]), cy(pts[0]));
+    for (var i = 1; i < pts.length; i++) ctx.lineTo(cx(pts[i]), cy(pts[i]));
+    if (pts.length === 1) ctx.lineTo(cx(pts[0]), cy(pts[0]));
+    ctx.lineWidth = width;
+    ctx.strokeStyle = style;
+    ctx.shadowBlur = blur || 0;
+    ctx.shadowColor = blurColor || 'transparent';
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  /* the snake is drawn as an etched copper trace: a dark solder-mask clearance
+     underneath, then the lit trace, then a hairline highlight down the middle */
+  function drawSnake(alive) {
+    var pts = [];
+    for (var i = snake.length - 1; i >= 0; i--) pts.push(snake[i]);
+
+    ctx.save();
+    ctx.lineJoin = 'miter';
+    ctx.miterLimit = 2;
+    ctx.lineCap = 'butt';
+
+    strokePath(pts, cell * 0.94, 'rgba(14,25,19,0.95)', 0);
+    strokePath(pts, cell * 0.62,
+      alive ? C.leaf : C.dead,
+      glow(cell * 0.7),
+      alive ? 'rgba(207,226,166,0.5)' : 'rgba(90,107,72,0.25)');
+    strokePath(pts, cell * 0.3,
+      alive ? 'rgba(248,250,244,0.25)' : 'rgba(248,250,244,0.07)', 0);
+
+    /* terminal pad at the tail */
+    var tail = snake[snake.length - 1];
+    ctx.fillStyle = alive ? C.moss : C.dead;
+    var tp = cell * 0.34;
+    ctx.fillRect(cx(tail) - tp / 2, cy(tail) - tp / 2, tp, tp);
+
+    /* head: bright pad with a moss keep-out ring and a via hole */
+    var head = snake[0];
+    var s = cell * 0.78;
+    ctx.shadowColor = alive ? 'rgba(207,226,166,0.7)' : 'rgba(90,107,72,0.35)';
+    ctx.shadowBlur = glow(cell * 0.9);
+    ctx.fillStyle = alive ? C.card : C.dead;
+    ctx.fillRect(cx(head) - s / 2, cy(head) - s / 2, s, s);
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = C.moss;
+    ctx.lineWidth = Math.max(1, cell * 0.08);
+    ctx.strokeRect(cx(head) - s / 2, cy(head) - s / 2, s, s);
+    var v = cell * 0.24;
+    ctx.fillStyle = C.inkDeep;
+    ctx.fillRect(cx(head) - v / 2, cy(head) - v / 2, v, v);
+    ctx.restore();
+  }
+
+  /* food: a powered solder joint / LED pad, pulsing gently */
+  function drawFood(now) {
+    if (!food) return;
+    var pulse = reduceMotion ? 0 : Math.sin(now / 260) * 0.5 + 0.5;
+    var r = cell * (0.20 + 0.05 * pulse);
+
+    ctx.save();
+    /* pad ring + crosshair ticks, moss */
+    ctx.strokeStyle = C.moss;
+    ctx.lineWidth = Math.max(1, cell * 0.07);
+    ctx.beginPath();
+    ctx.arc(cx(food), cy(food), cell * 0.36, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(126,156,96,0.55)';
+    ctx.lineWidth = Math.max(1, cell * 0.05);
+    ctx.beginPath();
+    var t = cell * 0.46, k = cell * 0.12;
+    ctx.moveTo(cx(food) - t, cy(food)); ctx.lineTo(cx(food) - t + k, cy(food));
+    ctx.moveTo(cx(food) + t - k, cy(food)); ctx.lineTo(cx(food) + t, cy(food));
+    ctx.moveTo(cx(food), cy(food) - t); ctx.lineTo(cx(food), cy(food) - t + k);
+    ctx.moveTo(cx(food), cy(food) + t - k); ctx.lineTo(cx(food), cy(food) + t);
+    ctx.stroke();
+
+    /* the joint itself */
+    ctx.shadowColor = 'rgba(227,184,119,' + (0.55 + 0.35 * pulse) + ')';
+    ctx.shadowBlur = glow(cell * (0.8 + 0.5 * pulse));
+    ctx.fillStyle = C.copper;
+    ctx.beginPath();
+    ctx.arc(cx(food), cy(food), r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawSparks(dt) {
+    for (var i = sparks.length - 1; i >= 0; i--) {
+      var p = sparks[i];
+      p.t += dt;
+      var life = p.kind === 'eat' ? 260 : 420;
+      var k = p.t / life;
+      if (k >= 1) { sparks.splice(i, 1); continue; }
+      var rr = cell * (0.3 + k * (p.kind === 'eat' ? 1.0 : 1.6));
+      ctx.save();
+      ctx.globalAlpha = (1 - k) * (p.kind === 'eat' ? 0.85 : 0.7);
+      ctx.strokeStyle = p.kind === 'eat' ? C.copper : C.card;
+      ctx.lineWidth = Math.max(1, cell * 0.07 * (1 - k));
+      ctx.shadowColor = ctx.strokeStyle;
+      ctx.shadowBlur = glow(cell * 0.5);
+      ctx.beginPath();
+      ctx.arc(cx(p), cy(p), rr, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  function render(now, dt) {
+    if (!bg) buildBackground();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(bg, 0, 0);
+    drawFood(now);
+    drawSnake(state !== STATE.OVER && state !== STATE.WON);
+    drawSparks(dt);
+  }
+
+  /* ---------- main loop ---------- */
+  var acc = 0, last = 0, raf = 0;
+
+  function frame(ts) {
+    raf = window.requestAnimationFrame(frame);
+    if (!last) last = ts;
+    var dt = ts - last;
+    last = ts;
+    if (dt < 0) dt = 0;
+    if (dt > 250) dt = 250;          /* clamp after tab throttling / resize */
+
+    if (state === STATE.RUNNING) {
+      acc += dt;
+      /* fixed tick; at most a handful of catch-up steps per frame */
+      var guard = 0;
+      while (acc >= tickMs && guard++ < 5) {
+        acc -= tickMs;
+        if (!step()) break;          /* run ended mid-catch-up */
+      }
+    }
+    render(ts, dt);
+  }
+
+  /* ---------- input ---------- */
+  var DIRS = {
+    arrowup: { x: 0, y: -1 }, arrowdown: { x: 0, y: 1 },
+    arrowleft: { x: -1, y: 0 }, arrowright: { x: 1, y: 0 },
+    w: { x: 0, y: -1 }, s: { x: 0, y: 1 }, a: { x: -1, y: 0 }, d: { x: 1, y: 0 },
+    /* azerty-friendly */
+    z: { x: 0, y: -1 }, q: { x: -1, y: 0 }
+  };
+
+  function onKeyDown(e) {
+    var k = (e.key || '').toLowerCase();
+    var d = DIRS[k];
+
+    if (d) {
+      e.preventDefault();
+      if (state === STATE.PAUSED) return;
+      startWithTurn(d);
+      return;
+    }
+
+    if (k === ' ' || k === 'spacebar' || k === 'enter') {
+      e.preventDefault();
+      if (state === STATE.PAUSED) { togglePause(); return; }   /* resume in place */
+      if (state === STATE.READY) start();                       /* launch the preview */
+      else restart();                                          /* over / won / running -> fresh */
+      return;
+    }
+
+    if (k === 'r') { e.preventDefault(); restart(); return; }
+
+    if (k === 'p' || k === 'escape') {
+      e.preventDefault();
+      togglePause();
+      return;
+    }
+  }
+
+  function restart() {
+    newGame();
+    start();
+    canvas.focus();
+  }
+
+  window.addEventListener('keydown', onKeyDown, false);
+
+  ovBtn.addEventListener('click', function () {
+    if (state === STATE.PAUSED) togglePause();
+    else restart();
+    canvas.focus();
+  });
+  pauseBtn.addEventListener('click', function () { togglePause(); canvas.focus(); });
+  restartBtn.addEventListener('click', function () { restart(); canvas.focus(); });
+
+  /* pointer: click the board to start / resume (useful inside an iframe where
+     the user has to click to give the frame keyboard focus anyway) */
+  /* embed change: 'click', not 'pointerdown', so a finger that starts a page scroll on the board doesn't start a run */
+  canvas.addEventListener('click', function () {
+    if (state === STATE.READY || state === STATE.OVER || state === STATE.WON) restart();
+    else if (state === STATE.PAUSED) togglePause();
+    canvas.focus();
+  });
+
+  /* swipe steering for touch embeds (a plain tap is handled by pointerdown) */
+  var touchStart = null;
+  canvas.addEventListener('touchstart', function (e) {
+    if (!e.touches || !e.touches.length) return;
+    touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, { passive: true });
+  canvas.addEventListener('touchmove', function (e) {
+    if (state === STATE.RUNNING && e.cancelable) e.preventDefault();  /* no page scroll */
+  }, { passive: false });
+  canvas.addEventListener('touchend', function (e) {
+    var s = touchStart; touchStart = null;
+    if (!s || !e.changedTouches || !e.changedTouches.length) return;
+    var pt = e.changedTouches[0];
+    var dx = pt.clientX - s.x, dy = pt.clientY - s.y;
+    if (Math.abs(dx) < 12 && Math.abs(dy) < 12) return;               /* treat as tap */
+    var d = Math.abs(dx) > Math.abs(dy)
+      ? { x: dx > 0 ? 1 : -1, y: 0 }
+      : { x: 0, y: dy > 0 ? 1 : -1 };
+    if (state === STATE.OVER || state === STATE.WON) restart();
+    else if (state !== STATE.PAUSED) start();
+    queueTurn(d);
+  }, { passive: true });
+
+  /* embed addition: tapping the dimmed overlay acts like tapping the board */
+  overlay.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('button')) return;
+    if (state === STATE.PAUSED) togglePause(); else restart();
+    canvas.focus();
+  });
+
+  /* embed addition: on-screen pad. One press = one turn, same rules as a key. */
+  var PAD = { up: DIRS.arrowup, down: DIRS.arrowdown, left: DIRS.arrowleft, right: DIRS.arrowright };
+  function steer(d) {
+    if (state === STATE.OVER || state === STATE.WON) restart();
+    else if (state === STATE.PAUSED) togglePause();
+    else if (state === STATE.READY) start();
+    queueTurn(d);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#pad [data-dir]'), function (b) {
+    var d = PAD[b.getAttribute('data-dir')];
+    b.addEventListener('pointerdown', function (e) {
+      e.preventDefault();                       /* no focus ring, no double-tap zoom */
+      steer(d);
+      b.classList.add('hit'); setTimeout(function () { b.classList.remove('hit'); }, 120);
+    });
+    b.addEventListener('click', function (e) { if (e.detail === 0) steer(d); });   /* keyboard activation */
+  });
+
+  /* resize: re-measure the canvas backing store */
+  window.addEventListener('resize', fit, false);
+  if (window.ResizeObserver) {
+    try { new window.ResizeObserver(fit).observe(board); } catch (e) {}
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && state === STATE.RUNNING) togglePause();
+  });
+  window.addEventListener('blur', function () {
+    if (state === STATE.RUNNING) togglePause();
+  });
+
+  /* ---------- small embedder API (handy for iframe hosts) ---------- */
+  window.snake = {
+    restart: restart,
+    pause: function () { if (state === STATE.RUNNING) togglePause(); },
+    resume: function () {
+      if (state === STATE.PAUSED) togglePause();
+      else if (state === STATE.READY) start();
+      else restart();                       /* over / won / running -> fresh run */
+    },
+    steer: function (k) { if (PAD[k]) steer(PAD[k]); },
+    getState: function () {
+      return { state: state, score: score, best: best, length: snake.length, tickMs: tickMs };
+    }
+  };
+
+  /* ---------- boot ---------- */
+  if (silkGrid) silkGrid.textContent = COLS + '\u00d7' + ROWS;   /* keep the silkscreen honest */
+  fit();
+  newGame();
+  raf = window.requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
