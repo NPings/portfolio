@@ -761,6 +761,36 @@
     color:var(--card);background-color:rgba(22,36,28,.86);
   }
   .g-credit{display:block;color:var(--rule);}
+  /* gamer: Rift Tactics, Nick's own game (card t_e7a41e17). A boxed demo beside the panel, the pair to techie's Snake
+     box: same panel fill and caption type, but an ember frame and an opaque backing so it never reads as one of the
+     borrowed background clips. The clip is portrait (720x1562), so the box is sized by the video's height (--mh). */
+  .gamer{--fp:16px;--mh:min(62svh, 560px);row-gap:24px;padding-bottom:calc(clamp(72px,10svh,120px) + 56px);}
+  .g-demo{
+    position:relative;z-index:2;margin:0;padding:var(--fp);width:min(400px, calc(100% - 2*var(--pad)));
+    background-color:rgba(22,36,28,.94);border:1px solid rgba(var(--glow-ember),.8);
+    box-shadow:0 0 0 1px rgba(22,36,28,.6), 0 0 28px rgba(var(--glow-ember),.22);
+  }
+  .g-cap{font-family:"EB Garamond",Garamond,Georgia,serif;font-size:17px;line-height:1.45;color:var(--card);margin:0;text-wrap:pretty;}
+  .g-kick{display:block;margin-bottom:4px;font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#F2A994;}
+  .g-meta{display:block;margin-top:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;line-height:1.45;color:var(--rule);}
+  .g-screen{display:block;height:var(--mh);width:calc(var(--mh) * 720 / 1562);margin:12px auto 0;background-color:#000;border:1px solid rgba(200,211,190,.25);box-sizing:content-box;}
+  .g-mine{display:block;width:100%;height:100%;object-fit:contain;}
+  @media (max-width:559px){ .gamer{--fp:10px;padding-bottom:calc(clamp(72px,10svh,120px) + 88px);} }
+  /* wide or sideways: caption left (kicker + copy on top, mission line on the bottom edge), phone-shaped clip right */
+  @media (min-width:640px) and (orientation:landscape), (min-width:900px) and (min-height:600px){
+    .g-demo{display:grid;grid-template-columns:15rem max-content;column-gap:20px;align-items:stretch;width:max-content;max-width:calc(100% - 2*var(--pad));}
+    .g-cap{display:flex;flex-direction:column;}
+    .g-meta{margin-top:auto;padding-top:12px;}
+    .g-screen{margin:0;--mh:max(220px, min(640px, calc(100svh - 2*clamp(72px,10svh,120px) - 2*var(--fp) - 4px)));}
+  }
+  @media (orientation:landscape) and (max-height:560px){   /* phone held sideways: let the clip use most of the screen height */
+    .g-screen{--mh:calc(100svh - 2*var(--fp) - 28px);}
+  }
+  @media (min-width:900px) and (min-height:600px){
+    .gamer .p-fore{max-width:min(40rem, 30vw);}
+    .gamer .g-demo{max-width:none;}   /* its own column; a % cap here would shrink it against itself */
+    .gamer{grid-template-columns:max-content max-content;justify-content:center;column-gap:clamp(32px,5vw,72px);}
+  }
 
   /* photographer: Nick's photos as polaroids on a jittered grid, idle swaps (PRD 29) */
   .ph-box{position:absolute;inset:0;}
@@ -1071,6 +1101,12 @@
       <h2 class="p-title" id="pg-title" tabindex="-1">gamer</h2>
       <p class="p-copy" data-placeholder-copy>More on this soon.</p>
     </div>
+    <!-- Rift Tactics, Nick's own game: one real mission (m02, Seal the Anchor) captured from the current build by card t_a34fb333,
+         embedded by card t_e7a41e17. Caption copy is a draft for Nick. Provenance in assets/passions/gamer/rift-tactics/SOURCES.md. -->
+    <figure class="g-demo" aria-labelledby="g-cap">
+      <figcaption class="g-cap" id="g-cap"><span class="g-kick">my own game, in progress<span class="vh">.</span></span> The clips behind this box are from games I love. This one is mine. Rift Tactics is a turn-based tactics game I'm building on the side, and I'm aiming to put it on the App Store before the end of the year. What you're watching is one real mission from the current build, start to finish.<span class="g-meta">Mission 02 &middot; Seal the Anchor &middot; won in 9 turns</span></figcaption>
+      <div class="g-screen"><video class="g-mine" id="g-mine" muted loop playsinline preload="none" disablepictureinpicture poster="assets/passions/gamer/rift-tactics/poster.jpg" aria-label="Rift Tactics gameplay, silent"></video></div>
+    </figure>
     <p class="g-note" id="g-note">Game footage shown for fun. I don't own any of it. All rights belong to the games' developers and publishers.<span class="g-credit" id="g-credit" aria-hidden="true"></span><span class="vh" id="g-credits"></span></p>
   </section>
 
@@ -1593,6 +1629,12 @@
 
   /* ---------- gamer: A/B video rotation over a poster, 7s per game (PRD 28.2-28.3) ---------- */
   var cur = 0, on = null, gPrepT = null, gSwapT = null, blocked = false, alive = CLIPS.map(function(){ return true; });
+  /* Rift Tactics box (card t_e7a41e17): Nick's own clip rides the same switches as the rotation. It loads when gamer is
+     near, plays while gamer is active in 'video' mode, shows its poster in 'grid'/'posters' mode, goes through play()
+     (so a blocked autoplay flips the whole section to posters) and through gUnlock (so one gesture brings it back). */
+  var mine = $('g-mine'), MINE = 'assets/passions/gamer/rift-tactics/mission.mp4';
+  function mLoad(){ if(!mine.getAttribute('src')) mine.src = MINE; }
+  function mPlay(){ if(gMode() !== 'video') return; mLoad(); mine.preload = 'auto'; play(mine); }
   var tiles = CLIPS.map(function(c){ var d = document.createElement('div'); d.className = 'g-tile'; posters.appendChild(d); return d; });
   $('g-credits').textContent = 'Clips from: ' + CLIPS.map(function(c){ return c.title + ' (' + c.credit + ')'; }).join(', ') + '.';
   function gMode(){ return (reduce.matches && !optIn) ? 'grid' : ((saveData || blocked) ? 'posters' : 'video'); }
@@ -1608,10 +1650,10 @@
     var grid = gMode() === 'grid';
     posters.classList.toggle('is-grid', grid);
     if(grid){ tiles.forEach(function(t, i){ t.style.backgroundImage = 'url("' + DIR + CLIPS[i].slug + '.jpg")'; }); }
-    if(gMode() !== 'video'){ for(var k = 0; k < vids.length; k++){ vids[k].classList.remove('is-on'); vids[k].pause(); } on = null; }
+    if(gMode() !== 'video'){ for(var k = 0; k < vids.length; k++){ vids[k].classList.remove('is-on'); vids[k].pause(); } on = null; mine.pause(); }
     setPoster(cur); setCredit(cur);
   }
-  function gNear(){ gShow(); if(gMode() === 'video' && alive[cur]) setSrc(on || vids[0], cur); }
+  function gNear(){ gShow(); if(gMode() === 'video'){ if(alive[cur]) setSrc(on || vids[0], cur); mine.preload = 'metadata'; mLoad(); } }
   /* The 7s clock never waits on a video. iOS WebKit (Safari and Firefox iOS) will not buffer a paused, never-played
      <video> past HAVE_METADATA (readyState 1), so the old "swap only when the next clip reports readyState >= 3"
      gate never opened on iPhone and the rotation sat on Borderlands forever. Now: the next clip is started muted and
@@ -1633,6 +1675,7 @@
   function gStart(){
     if(!open || paused || !active.gamer) return;
     gShow(); if(gMode() === 'grid') return;
+    mPlay();
     if(!alive[cur]){ var a = nextAlive(cur); if(a < 0){ posters.style.backgroundImage = 'none'; return; } cur = a; gShow(); }
     if(gMode() === 'video'){ on = on || vids[0]; setSrc(on, cur); play(on); reveal(on); }
     gSchedule();
@@ -1648,10 +1691,11 @@
     }
     cur = n; setPoster(n); setCredit(n); gSchedule();
   }
-  function gStop(){ clearTimeout(gPrepT); clearTimeout(gSwapT); for(var k = 0; k < vids.length; k++) vids[k].pause(); }
+  function gStop(){ clearTimeout(gPrepT); clearTimeout(gSwapT); for(var k = 0; k < vids.length; k++) vids[k].pause(); mine.pause(); }
   function gEmpty(){
     gStop(); on = null; cur = nextAlive(-1) < 0 ? 0 : nextAlive(-1);
     for(var k = 0; k < vids.length; k++){ var v = vids[k]; v.classList.remove('is-on'); v.removeAttribute('src'); v.removeAttribute('data-i'); v.load(); }
+    mine.removeAttribute('src'); mine.preload = 'none'; mine.load();   // back to its poster
   }
   Array.prototype.forEach.call(vids, function(v){
     v.addEventListener('playing', function(){ reveal(v); });
@@ -1667,8 +1711,8 @@
      both clips get play() inside the gesture (iOS unlocks per element), and video takes over again if that worked. */
   function gUnlock(){
     if(!blocked || !open || gMode() === 'grid' || saveData) return;
-    var tries = Array.prototype.map.call(vids, function(v, k){
-      if(!v.getAttribute('src')) setSrc(v, k ? Math.max(nextAlive(cur), 0) : cur);
+    var tries = Array.prototype.slice.call(vids).concat(mine).map(function(v, k){   // both rotation clips + the Rift Tactics box
+      if(v === mine) mLoad(); else if(!v.getAttribute('src')) setSrc(v, k ? Math.max(nextAlive(cur), 0) : cur);
       var p = v.play(); return p && p.then ? p.then(function(){ v.pause(); }) : Promise.resolve();
     });
     Promise.all(tries).then(function(){ if(!blocked) return; blocked = false; on = null; gStop(); gShow(); if(active.gamer && !paused) gStart(); }, function(){});
