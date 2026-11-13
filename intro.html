@@ -415,6 +415,17 @@
     position:relative;min-height:100svh;display:grid;place-items:center;align-content:center;
     text-align:center;padding:clamp(48px,8svh,96px) var(--pad);color:var(--ink);background-color:var(--paper);
   }
+  /* word wall (card t_4acadff4): words about Nick fill the stage behind "Nick." and the chips. Decorative only
+     (aria-hidden), static, serif only so the mono, boxed chips are the only things that read as buttons.
+     Spans are built in JS once per stage size; a mask dims the words under the title and around the chips. */
+  .nerd-stage{isolation:isolate;}
+  .nerd-wall{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;user-select:none;
+    -webkit-mask-composite:source-in;mask-composite:intersect;}
+  .nerd-wall > div{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.1em .55em;
+    margin:-.2em -3em 0;font-size:clamp(15px,1.45vw,22px);line-height:1.08;color:inherit;}
+  .nerd-wall span{white-space:nowrap;font-family:"EB Garamond",Garamond,Georgia,serif;}
+  .nerd-wall .w-f{font-family:"Fraunces",Georgia,serif;font-weight:600;letter-spacing:-.01em;}
+  .nerd-wall .w-i{font-style:italic;}
   .nerd-scan{
     position:absolute;inset:0;pointer-events:none;opacity:0;
     background:repeating-linear-gradient(0deg, rgba(248,250,244,.05) 0 1px, transparent 1px 3px);
@@ -438,7 +449,8 @@
     font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
   }
   .chips{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;padding:0 var(--pad);margin-top:clamp(28px,5svh,48px);}
-  .chip{display:inline-flex;align-items:center;text-decoration:none;}
+  .chip{display:inline-flex;align-items:center;text-decoration:none;font-size:17px;padding:12px 20px;}
+  @media (max-width:559px){ .chip{font-size:16px;padding:11px 14px;} }
   .chip[data-passion="techie"]      {--prong-c:var(--leaf);}             /* terminal green */
   .chip[data-passion="gamer"]       {--prong-c:rgb(var(--glow-ember));}  /* ember red */
   .chip[data-passion="photographer"]{--prong-c:var(--rule);}             /* silver, like film */
@@ -534,6 +546,7 @@
       .nerd-word{animation:nerd-takeover linear both,word-jolt 1.3s steps(1,end) infinite paused;animation-timeline:--nerd,auto;}
       .act3.is-scrolling .nerd-word{animation-play-state:running,running;}
       .nerd-scan{animation:nerd-scan linear both;animation-timeline:--nerd;}
+      .nerd-wall{animation:nerd-wall linear both;animation-timeline:--nerd;}
       /* individual translate/scale so the chip's hover/focus transform still stacks on top */
       .chip[data-passion="techie"]      {animation:nerd-branch-1 linear both;animation-timeline:--nerd;}
       .chip[data-passion="gamer"]       {animation:nerd-branch-2 linear both;animation-timeline:--nerd;}
@@ -547,6 +560,8 @@
     html.fb .nerd-word{transition:transform .6s cubic-bezier(.22,.7,.2,1),--g .4s,--g-on .4s;}
     html.fb .beat-1,html.fb .beat-2,html.fb .beats .clap{transition:opacity .5s ease,transform .6s cubic-bezier(.22,.7,.2,1);}
     html.fb .nerd-scan{transition:opacity .5s ease;}
+    html.fb .nerd-wall{opacity:0;transition:opacity .6s ease;}
+    html.fb .nerd-stage[data-q="3"] .nerd-wall{opacity:1;}
     html.fb .chip{opacity:0;translate:0 -40px;scale:.6;
       transition:opacity .5s ease,translate .6s cubic-bezier(.22,.7,.2,1),scale .6s cubic-bezier(.22,.7,.2,1),transform .12s steps(2),box-shadow .12s steps(2);}
     html.fb .nerd-stage:not([data-q="0"]) :is(.beat-1,.beat-2,.clap){opacity:0;transform:translateY(-4svh);}
@@ -654,6 +669,7 @@
     75%,100% {--g:0px;  --g-on:0; transform:translate(0,var(--dy-rest)) scale(var(--s-rest));}
   }
   @keyframes nerd-scan{0%,35%{opacity:0;}60%,100%{opacity:1;}}
+  @keyframes nerd-wall{0%,66%{opacity:0;}86%,100%{opacity:1;}}
   @keyframes nerd-branch-1{0%,70%{opacity:0;translate:48px -40px;scale:.6;}84%,100%{opacity:1;translate:0 0;scale:1;}}
   @keyframes nerd-branch-2{0%,72%{opacity:0;translate:0 -40px;scale:.6;}86%,100%{opacity:1;translate:0 0;scale:1;}}
   @keyframes nerd-branch-3{0%,74%{opacity:0;translate:-48px -40px;scale:.6;}88%,100%{opacity:1;translate:0 0;scale:1;}}
@@ -986,6 +1002,7 @@
 <section class="act3" id="nerd" aria-labelledby="nerd-title" hidden>
   <div class="nerd-track">
     <div class="nerd-stage" id="nerd-stage" data-q="0">
+      <div class="nerd-wall" id="nerd-wall" aria-hidden="true"><div></div></div>
       <div class="nerd-scan" aria-hidden="true"></div>
       <h2 class="nerd-title" id="nerd-title" tabindex="-1">
         <span class="vh">I'm Nick.</span>
@@ -1360,6 +1377,26 @@
     s.setProperty('--s-rest', Math.min((W - 2 * pad) * 0.92 / w, H * 0.38 / h).toFixed(3));
     s.setProperty('--dy', (H * 0.5 - cy).toFixed(1) + 'px');
     s.setProperty('--dy-rest', (H * 0.36 - cy).toFixed(1) + 'px');
+    var sr = parseFloat(s.getPropertyValue('--s-rest')), mo = !reduce.matches, ex = [], ey = [];
+    wallBuild(); [].forEach.call(chips.children, function(c){ var x = 0, y = 0, e = c;
+      while(e && e !== stage3){ x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; } ex.push(x, x + c.offsetWidth); ey.push(y, y + c.offsetHeight); });
+    var x0 = Math.min.apply(0, ex), x1 = Math.max.apply(0, ex), y0 = Math.min.apply(0, ey), y1 = Math.max.apply(0, ey);
+    wall.style.webkitMaskImage = wall.style.maskImage = hole(W / 2, mo ? H * 0.36 : nTitle.offsetTop + nTitle.offsetHeight / 2,
+      (mo ? w * sr : nTitle.offsetWidth) / 2 + 40, (mo ? h * sr : nTitle.offsetHeight) / 2 + 24) + ',' + hole((x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2 + 96, (y1 - y0) / 2 + 64, .04);
+  }
+  /* word wall (card t_4acadff4): seeded, built once per stage size, never per frame; hole() dims words under "Nick." and the chips */
+  var wall = byId('nerd-wall'), wallIn = wall.firstChild, wallKey = '';
+  var WORDS = "father|husband|baker|home chef|grill master|sourdough nerd|recipe hoarder|taco enthusiast|coffee snob|reader|writer|storyteller|worldbuilder|lore nerd|bookworm|note-taker|overthinker|tabletop gamer|dice goblin|speedrunner|completionist|comic relief|overexplainer|devil's advocate|optimist|skeptic|planner|pun enthusiast|backyard birder|amateur academic|astronomy nerd|engineering enthusiast|tinkerer|snack connoisseur".split('|');
+  function hole(X, Y, RX, RY, A){ return 'radial-gradient(' + [RX, RY].map(Math.round).join('px ') + 'px at ' + Math.round(X) + 'px ' + Math.round(Y) + 'px,rgba(0,0,0,' + (A || .12) + ') 58%,#000 100%)'; }
+  function wallBuild(){
+    var k = wall.clientWidth + 'x' + wall.clientHeight, seed = 20261112, SZ = [.85,.95,1,1,1.1,1.25,1.45,1.8,2.3];
+    if(!wall.clientWidth || k === wallKey) return; wallKey = k; wallIn.textContent = '';
+    var rnd = function(){ seed = seed * 16807 % 2147483647; return seed / 2147483647; };
+    for(var c = 0; c < 40 && wallIn.offsetHeight < wall.clientHeight + 90; c++) WORDS.slice().sort(function(){ return rnd() - 0.5; }).forEach(function(t){
+      var e = wallIn.appendChild(document.createElement('span')), z = SZ[Math.floor(rnd() * SZ.length)], r = rnd();
+      e.textContent = t; e.className = r < 0.4 ? 'w-f' : (r < 0.7 ? 'w-i' : '');
+      e.style.cssText = 'font-size:' + z + 'em;opacity:' + ((z > 1.4 ? 0.13 : 0.2) + rnd() * 0.16).toFixed(2) + (rnd() < 0.3 ? ';rotate:' + (rnd() * 6 - 3).toFixed(1) + 'deg' : '');
+    });
   }
   function onScroll(){
     var q = qNow();
@@ -1429,7 +1466,7 @@
     if(e.target === act3 && e.animationName === 'nerd-wipe' && nst === 'entering') nTitle.focus({preventScroll:true});
   });
   window.addEventListener('resize', measure, {passive:true});
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ wallKey = ''; measure(); });
   reduce.addEventListener('change', function(){ if(reduce.matches){ cueOff(); scrStop(); } scramble(); measure(); });
   cue.addEventListener('click', function(){
     cueOff(); nTitle.focus({preventScroll:true});
