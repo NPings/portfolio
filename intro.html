@@ -313,6 +313,18 @@
     padding:max(env(safe-area-inset-top), clamp(28px,7svh,80px)) var(--pad)
             calc(clamp(20px,4svh,40px) + env(safe-area-inset-bottom));
   }
+  /* The fork scene must not paint at all while the curtain plays: curtain-in fades the
+     curtain up from opacity 0 (fork showed through for ~280ms) and curtain-raise uncovers
+     the fork bottom-up from ~2.3s. Hidden until finish() drops .is-playing, then it fades in. */
+  .act2.is-playing .fork-scene{opacity:0;}
+  .fork-scene{transition-property:opacity;}
+  /* visibility only with motion on: the reduced-motion rule forces a .01ms transition on every
+     element, so descendants would briefly inherit-transition 'hidden' and finish() could not
+     focus #where-title. Reduced motion has no fade or raise anyway: the opaque curtain cuts. */
+  @media (prefers-reduced-motion:no-preference){
+    .act2.is-playing .fork-scene{visibility:hidden;}
+    .fork-scene{transition:opacity 320ms ease-out;}
+  }
   #where-title{
     margin:0;font-family:"Fraunces",Georgia,serif;font-weight:500;
     font-size:clamp(30px,5vw,56px);line-height:1.08;letter-spacing:-.015em;
@@ -444,6 +456,8 @@
   .nerd-cue.is-shown{opacity:1;}
   .nerd-cue[hidden]{display:none;}
   @media (max-width:559px){ .chips{gap:12px;} }
+  /* reduced motion: no scramble, the word is already "Nick." (set in JS), so the line reads "I'm. Nick." without the "A." */
+  @media (prefers-reduced-motion:reduce){ .beat-2{display:none;} }
 
   /* entry: a right-hand wipe, then the staccato reveal (time-based, PRD 20.2-20.3) */
   .act3.is-entering{
@@ -487,7 +501,7 @@
     .nerd-tear{display:block;position:absolute;inset:0;pointer-events:none;opacity:var(--g-on);}
     .nerd-tear::before,.nerd-tear::after{position:absolute;inset:0;clip-path:inset(0 0 100% 0);}
     .nerd-tear::before{content:"";background-color:var(--ink);animation:tear-bar 1s steps(1,end) infinite paused;}
-    .nerd-tear::after{content:"Nerd.";content:"Nerd." / "";color:var(--card);animation:tear-txt 1s steps(1,end) infinite paused;}
+    .nerd-tear::after{content:attr(data-text);content:attr(data-text) / "";color:var(--card);animation:tear-txt 1s steps(1,end) infinite paused;}
     /* static: SVG fractal noise riding over the scanlines, strength follows --j */
     .nerd-scan::before{
       content:"";position:absolute;inset:-60px;opacity:calc(var(--j) * .85);mix-blend-mode:screen;
@@ -901,11 +915,11 @@
     <div class="nerd-stage" id="nerd-stage" data-q="0">
       <div class="nerd-scan" aria-hidden="true"></div>
       <h2 class="nerd-title" id="nerd-title" tabindex="-1">
-        <span class="vh">I'm a nerd.</span>
+        <span class="vh">I'm Nick.</span>
         <span class="beats" aria-hidden="true">
           <span class="beat beat-1">I'm.<span class="clap">&#x1F44F;</span></span>
           <span class="beat beat-2">A.<span class="clap">&#x1F44F;</span></span>
-          <span class="beat beat-3"><span class="nerd-word" data-text="Nerd.">Nerd<span class="dot">.</span><span class="nerd-tear" aria-hidden="true"></span></span><span class="clap">&#x1F44F;</span></span>
+          <span class="beat beat-3"><span class="nerd-word" data-text="Nerd.">Nerd<span class="dot">.</span><span class="nerd-tear" data-text="Nerd." aria-hidden="true"></span></span><span class="clap">&#x1F44F;</span></span>
         </span>
       </h2>
       <div class="chips" role="group" aria-labelledby="nerd-title">
@@ -1136,8 +1150,8 @@
     history.pushState({act:2}, '', '#where');
     cancel();
     track.inert = true; forkScene.inert = true;
+    act2.classList.add('is-playing');                        // before unhiding, so the fork scene is never styled visible
     curtain.hidden = false; act2.hidden = false; act2.scrollTop = 0;
-    act2.classList.add('is-playing');
     liked.focus({preventScroll:true});
     // reduced motion: a 1.5s cut. Otherwise a safety net if animationend is lost.
     endTimer = setTimeout(finish, reduce.matches ? 1500 : 3600);
@@ -1207,10 +1221,48 @@
   var range = function(){ return Math.max(1, act3.scrollHeight - act3.clientHeight); };
   var qNow = function(){ return act3.scrollTop / range(); };
 
+  /* the scramble: as the glitch builds, "Nerd" decrypts through random glyphs and locks in as "Nick".
+     Scroll-driven and reversible like the rest of act three: corruption spreads letter by letter (random order)
+     while the page flips to ink, the word is pure noise at the peak, then N, i, c, k lock left to right and the
+     word is clean before the glitch settles (q .75). The green period never scrambles. Glyphs only re-roll while
+     scrolling. Flash cap (WCAG 2.3.1): once a letter cell is wider than 12% of the viewport, each cell re-rolls
+     under 3x/s, staggered. Screen readers get the .vh text only; the visible word and data-text are aria-hidden. */
+  var wordTxt = word.firstChild, tear = word.querySelector('.nerd-tear');
+  var FROM = 'Nerd', TO = 'Nick', GLYPHS = 'ABCDEFGHKLNPRSTXYZabdeghknpqrsuxyz0123456789#$&*?!/<>=+';
+  var LOCK = [0.50, 0.56, 0.62, 0.68], scrOn = [0.08, 0.13, 0.18, 0.24], scrCh = [], scrNext = [], scrI = null;
+  function setWord(str){
+    if(wordTxt.nodeValue === str) return;
+    wordTxt.nodeValue = str; word.dataset.text = tear.dataset.text = str + '.';
+  }
+  function glyph(not){ var g; do { g = GLYPHS.charAt(Math.floor(Math.random() * GLYPHS.length)); } while(g === not); return g; }
+  function scrReset(){
+    var on = [0.08, 0.13, 0.18, 0.24];                       // which letter breaks first changes every visit
+    scrOn = [0, 1, 2, 3].sort(function(){ return Math.random() - 0.5; }).map(function(i){ return on[i]; });
+    scrCh = [null, null, null, null]; scrNext = [0, 0, 0, 0];
+  }
+  function scramble(){
+    if(reduce.matches){ setWord(TO); return; }
+    var q = qNow(), now = performance.now(), out = '', big = null;
+    for(var i = 0; i < 4; i++){
+      if(q >= LOCK[i]){ out += TO.charAt(i); scrCh[i] = null; continue; }
+      if(q < scrOn[i]){ out += FROM.charAt(i); scrCh[i] = null; continue; }
+      if(scrCh[i] === null || now >= scrNext[i]){
+        if(big === null) big = word.getBoundingClientRect().width / 5 > window.innerWidth * 0.12;
+        scrCh[i] = glyph(scrCh[i]);
+        scrNext[i] = now + (big ? 340 + Math.random() * 140 : 45 + Math.random() * 45);
+      }
+      out += scrCh[i];
+    }
+    setWord(out);
+  }
+  function scrStop(){ clearInterval(scrI); scrI = null; }
+
   /* geometry once per open/resize, never per frame (PRD 21.2) */
   function measure(){
     if(act3.hidden) return;
+    var keep = wordTxt.nodeValue; wordTxt.nodeValue = TO;   // size the takeover to the word it lands on
     var w = word.offsetWidth, h = word.offsetHeight, y = 0, el = word;
+    wordTxt.nodeValue = keep;
     while(el && el !== stage3){ y += el.offsetTop; el = el.offsetParent; }
     var W = window.innerWidth, H = window.innerHeight, cy = y + h / 2, s = stage3.style;
     var pad = parseFloat(getComputedStyle(stage3).paddingLeft) || 0;
@@ -1225,8 +1277,9 @@
     stage3.dataset.q = q < 0.05 ? '0' : (q < 0.2 ? '1' : (q < 0.75 ? '2' : '3'));
     if(q >= 0.04) cueOff();
     act3.classList.add('is-scrolling');       // the glitch only moves while scrolling (PRD 21.3)
+    scramble(); if(!scrI && !reduce.matches) scrI = setInterval(scramble, 30);
     clearTimeout(scT);
-    scT = setTimeout(function(){ act3.classList.remove('is-scrolling'); }, 400);
+    scT = setTimeout(function(){ act3.classList.remove('is-scrolling'); scrStop(); }, 400);
   }
   function cueOff(){ clearTimeout(cueT); cueDone = true; cue.classList.remove('is-shown'); cue.hidden = true; }
   function cueMaybe(){
@@ -1239,7 +1292,7 @@
   }
   function nerdShow(){
     act3.hidden = false; act3.scrollTop = 0; stage3.dataset.q = '0'; stage3.classList.remove('is-live');
-    forkScene.inert = true; nStatus.textContent = ''; cueDone = false; measure();
+    forkScene.inert = true; nStatus.textContent = ''; cueDone = false; scrReset(); scramble(); measure();
   }
   function nerdFinish(){
     if(nst !== 'entering') return;
@@ -1272,7 +1325,7 @@
   }
   function nerdClose(){
     if(nst === 'closed') return;
-    clearTimeout(nEnd); clearTimeout(scT); cueOff(); nst = 'closed';
+    clearTimeout(nEnd); clearTimeout(scT); scrStop(); cueOff(); nst = 'closed';
     fades.forEach(function(a){ a.cancel(); }); fades = [];
     act3.classList.remove('is-entering', 'is-scrolling'); act3.hidden = true;
     chips.inert = false; nStatus.textContent = ''; forkScene.inert = false;
@@ -1287,7 +1340,7 @@
   });
   window.addEventListener('resize', measure, {passive:true});
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
-  reduce.addEventListener('change', function(){ if(reduce.matches) cueOff(); measure(); });
+  reduce.addEventListener('change', function(){ if(reduce.matches){ cueOff(); scrStop(); } scramble(); measure(); });
   cue.addEventListener('click', function(){
     cueOff(); nTitle.focus({preventScroll:true});
     act3.scrollTo({top: range(), behavior: 'smooth'});
