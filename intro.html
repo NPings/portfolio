@@ -1634,6 +1634,18 @@
       if(v === on){ v.classList.remove('is-on'); on = null; var n = nextAlive(i); if(n >= 0){ cur = n; gStart(); } else { gStop(); posters.style.backgroundImage = 'none'; } }
     });
   });
+  /* Autoplay blocked (Firefox "Block Audio and Video", iOS Low Power Mode, a cold load straight onto #passions-gamer)
+     used to mean posters for good. A real tap/click/key is what those browsers wait for, so on the visitor's next one
+     both clips get play() inside the gesture (iOS unlocks per element), and video takes over again if that worked. */
+  function gUnlock(){
+    if(!blocked || !open || gMode() === 'grid' || saveData) return;
+    var tries = Array.prototype.map.call(vids, function(v, k){
+      if(!v.getAttribute('src')) setSrc(v, k ? Math.max(nextAlive(cur), 0) : cur);
+      var p = v.play(); return p && p.then ? p.then(function(){ v.pause(); }) : Promise.resolve();
+    });
+    Promise.all(tries).then(function(){ if(!blocked) return; blocked = false; on = null; gStop(); gShow(); if(active.gamer && !paused) gStart(); }, function(){});
+  }
+  ['click', 'touchend', 'keydown'].forEach(function(t){ document.addEventListener(t, gUnlock, true); });
 
   /* ---------- photographer: Nick's photos as polaroids, jittered grid, idle swaps (PRD 29) ---------- */
   var frames = [], cellOf = [], cols = 0, rows = 0, cw = 0, ch = 0, fw = 0, z = 1, pr = rng(11), shufT = null;
