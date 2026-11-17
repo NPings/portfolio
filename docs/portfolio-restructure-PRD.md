@@ -8,7 +8,7 @@
 - **ADR:** `docs/adr/0001-discipline-page-urls.md` (the URL scheme, because shared job-application links are expensive to change later)
 - **davinci-prd skill:** not installed on this Mac. Sections written by hand to the same structure as `docs/intro-experience-PRD.md`.
 - **This card changed no existing file.** It adds only this PRD and the ADR under `docs/`.
-- **Addendum A (2026-11-17):** sections 17 to 26 and requirements R20 to R28 lock Nick's O1 to O9 decisions, make the one shared `resume.html` read for all three disciplines, and give each landing page its own session-notes voice (exact copy in 20.5). It also puts Nick's new `evaluating-my-agent.html` (on `main` at 9d55508) on the AI Evaluations page and adds link-preview images. Card t_48ff0069 (PRD addendum), build card t_2e68d7bf (assignee `design`). Where it changes R2, R4, R8 to R10, R12 to R17 or the section 13 non-goals, section 17.3 says how, and the addendum wins.
+- **Addendum A (2026-11-17):** sections 17 to 26 and requirements R20 to R28 lock Nick's O1 to O9 decisions, make the one shared `resume.html` read for all three disciplines, and give each landing page its own session-notes voice (exact copy in 20.5). It also puts Nick's new `evaluating-my-agent.html` (on `main` at 3d25fb4) on the AI Evaluations page and adds link-preview images. Card t_48ff0069 (PRD addendum), build card t_2e68d7bf (assignee `design`). Where it changes R2, R4, R8 to R10, R12 to R17 or the section 13 non-goals, section 17.3 says how, and the addendum wins.
 
 ---
 
@@ -488,11 +488,11 @@ From the card body (t_48ff0069), quoting Nick:
 
 The card also records Nick accepting Maestro's proposed defaults on O1 to O9 (section 18) and Maestro's three creative directions for the session notes, which Nick did not object to (section 20).
 
-Citation shorthand added: **[Nick-R]** and **[Nick-S]** = the two quotes above. **[Card-A]** = card t_48ff0069's body. **[case:evaluating-my-agent.html]** = the case study on `main` at commit 9d55508. **[Probe A-n]** = a check I ran for this addendum, results in section 24.2.
+Citation shorthand added: **[Nick-R]** and **[Nick-S]** = the two quotes above. **[Card-A]** = card t_48ff0069's body. **[case:evaluating-my-agent.html]** = the case study on `main` at commit 3d25fb4. **[Probe A-n]** = a check I ran for this addendum, results in section 24.2.
 
 ### 17.2 One new fact since the base PRD
 
-On 2026-11-17 at 10:48, after the base PRD was written, Nick committed `evaluating-my-agent.html` to `main` (commit 9d55508, "Add case study: Evaluating My Own Agent (AI evals practice project)"). It is a complete case study of his `ai-evals-reps` work: eyebrow "AI evaluation practice · Independent project", facts row "Context: Independent, not employer work", zero `[Nick to` markers, real numbers (11/14 first regression pass, 2/2 routing scenarios fixed, 0 secrets reached the trace), and named tools (Promptfoo, LangSmith). It is live on nickpings.com and not linked from `index.html`. `feature/portfolio-restructure` was cut before it and does not contain it [Probe A1].
+On 2026-11-17 at 10:48, after the base PRD was written, Nick committed `evaluating-my-agent.html` to `main` (commit 9d55508, "Add case study: Evaluating My Own Agent (AI evals practice project)"), and at 10:59 reframed it (commit 3d25fb4, "drop pivot/reps framing, add real design+product examples"). This addendum cites the 3d25fb4 version. It is a complete case study of his `ai-evals-reps` work: eyebrow "AI evaluation & agent observability · Independent project", facts row "Project: Independent, ongoing", "Subject: My own multi-agent operations team", "Methods: Promptfoo, LangSmith, LLM-as-judge", zero `[Nick to` markers, real numbers (11/14 first regression pass, 2/2 routing scenarios fixed, 0 secrets reached the trace). Nick's reframe dropped the "practice" and "pivot" language on purpose, so this addendum calls it an independent project, not a practice project. It is live on nickpings.com and not linked from `index.html`. `feature/portfolio-restructure` was cut before it and does not contain it [Probe A1].
 
 This is the trigger Nick set in O1 ("build ai-evals-reps into the AI Evals case study eventually, labeled as a personal project") and O4/O5 ("once there's something concrete to cite"). It is concrete and on the site, so section 21 and R20/R21 put it on the AI Evaluations page now, clearly labeled as independent work. If Nick would rather keep it off until later, dropping R20 and R21 (and the `Independent` block in R23) restores the base PRD's AI Evaluations page exactly; nothing else depends on them (Flag A1).
 
@@ -554,7 +554,7 @@ Diagnosis: the resume is credible for consumer research, half-credible for resea
 1. **Headline names all three, in the site's fixed order.** The real job titles stay below it, so a keyword search for "UX Researcher" still hits.
 2. **Lede in three sentences, one per discipline,** consumer research first because it is the longest record.
 3. **Experian bullets get short bold lead-ins** (`Consumer research.`, `Generative AI research.`, `AI evaluation.`, `Research operations.`, `Applied AI.`). Each reader scans to their label. Still five bullets, still one role.
-4. **A new `Independent` block** for the agent-evaluation project, explicitly labeled personal, not employer work.
+4. **A new `Independent` block** for the agent-evaluation project, labeled independent so it is never read as employer work, and using Nick's reframed wording (an ongoing independent project, not "practice").
 5. **Methods gains an `AI evaluation` group; Operations gains recruiting and onboarding terms.** Tools splits into four labeled lines.
 6. **No numbers are added that are not tied to a role in a source.** The `index.html` stats (24+, 2.3K+, 30+, 1.5K+) are not attributed to a specific role anywhere, so they stay off the resume (Flag A3). The one exception is "weeks to hours", which the knowledge-base case study attributes directly.
 
@@ -588,9 +588,9 @@ Sources: [resume.html] current lede (sentences 1 and 2); [index.html L499] "set 
 
 - `.block-label`: `Independent`
 - `.job-title`: `Evaluating My Own Agent` · `.job-when`: `2026`
-- `.job-org`: `AI evaluation practice project <span>&middot; Personal, not employer work</span>`
+- `.job-org`: `Independent project <span>&middot; Ongoing</span>`
 - Bullets, in order:
-  - I1 `Built a Promptfoo regression suite for the AI agent that runs my daily workflow, mixing deterministic checks with model-graded rubrics, run against fresh sessions.`
+  - I1 `Evaluate the multi-agent team I run my day-to-day work through, with a Promptfoo regression suite that mixes deterministic checks and model-graded rubrics, run against fresh sessions.`
   - I2 `Moved from grading replies to inspecting tool-call traces. Turned a vague sense that routing was off into three testable scenarios, confirmed the defect, had it fixed, and reran the same suite as a before/after check (2 of 2 routing scenarios fixed).`
   - I3 `Built an on-demand LangSmith tracing tool with a secret-scanning gate, tested against a probe designed to slip past redaction (0 secrets reached the trace).`
   - I4 `Case study: <a href="evaluating-my-agent.html">nickpings.com/evaluating-my-agent</a>`
@@ -628,7 +628,7 @@ Sources: [resume.html] current lede (sentences 1 and 2); [index.html L499] "set 
 
 ### 20.2 The three directions
 
-- **AI Evaluations: the page grades itself.** A rubric-style readout of the page, never the visitor: consistency, factuality, hallucination risk, rage clicks counted as the page's bugs. The joke: once you start writing evals, you can't stop scoring things, including your own website. (Maestro's "I built eval pipelines for a living" line is softened to "Once you start writing evals", because Nick's eval work is one employer pipeline plus a personal practice project, and the resume should not be contradicted by its own website.)
+- **AI Evaluations: the page grades itself.** A rubric-style readout of the page, never the visitor: consistency, factuality, hallucination risk, rage clicks counted as the page's bugs. The joke: once you start writing evals, you can't stop scoring things, including your own website. (Maestro's "I built eval pipelines for a living" line is softened to "Once you start writing evals", because Nick's eval work is one employer pipeline plus an independent project, and the resume should not be contradicted by its own website.)
 - **Research Operations: the visit is fielded.** Recruitment, quota, no-shows, scheduling, incentives, panel health, repository hygiene. The joke: I run studies for a living, and now I'm fielding you.
 - **Consumer Research: today's `index.html` notes, nearly unchanged.** Only the lines that could read as judging a visitor who didn't click are softened (20.4).
 
@@ -1120,7 +1120,7 @@ Read as a session, AI Evaluations (a visitor who opens nothing and scrolls to th
 
 | # | Card title (`h3`) | href | Blurb | Source |
 |---|---|---|---|---|
-| 1 | `Evaluating My Own Agent` | `evaluating-my-agent.html?from=ai-evaluations` | `Independent project. I evaluated the AI agent that runs my own daily workflow: a Promptfoo regression suite, tool-call traces instead of grading how replies sounded, and a routing bug found, fixed, and confirmed with the same suite.` (draft) | [case:evaluating-my-agent.html] summary, Approach, What I built |
+| 1 | `Evaluating My Own Agent` | `evaluating-my-agent.html?from=ai-evaluations` | `Independent project. I evaluate the multi-agent team I run my own work through: rubric scoring, tool-call traces instead of grading how replies sounded, and a routing bug found, fixed, and confirmed with the same suite.` (draft) | [case:evaluating-my-agent.html] summary, Approach, What I built |
 | 2 | `Research Knowledge Base` | `research-knowledge-base.html?from=ai-evaluations` | as in 5.3, unchanged | 5.3 |
 | 3 | `Experian Virtual Assistant` | `experian-eva.html?from=ai-evaluations` | as in 5.3, unchanged | 5.3 |
 
@@ -1142,7 +1142,7 @@ AI Evaluations clusters: Evaluation (7), Evaluative (6), Quantitative (6), Opera
 
 ### 21.4 Still omitted
 
-Impact (S-04) stays omitted on AI Evaluations. 11/14 and 2/2 are pass rates from a personal practice run; next to employer stats in an "Impact" strip they would read as business impact, which they are not (Flag A2).
+Impact (S-04) stays omitted on AI Evaluations. 11/14 and 2/2 are pass rates from an independent evaluation run; next to employer stats in an "Impact" strip they would read as business impact, which they are not (Flag A2).
 
 ## 22. Link-preview images (O8)
 
@@ -1163,15 +1163,15 @@ Harness: section 10's (local `python3 docs/tools/serve.py 8000` on `feature/port
 Build/deployment for **every** addendum requirement: **not Docker**, same justified exception as section 11 (static GitHub Pages site, nothing to containerize). The OG render uses the existing Chromium-over-CDP harness once at build time; no service, container or dependency is added.
 
 ### R20. The branch carries Nick's AI evals case study, and it is treated like every other case page.
-- **Source:** 17.2; [case:evaluating-my-agent.html] at `main` 9d55508; O1; [Probe A1].
-- **Acceptance:** `git merge-base --is-ancestor 9d55508 feature/portfolio-restructure && echo yes` prints `yes` (bring it in with `git merge origin/main` on the feature branch; never the other direction). `git diff 9d55508 -- evaluating-my-agent.html | grep '^-[^-]'` shows only the old colophon line (`UX Research &amp; AI Research Operations`). R10's checks (a) to (f) pass for `evaluating-my-agent.html`, including `?from=ai-evaluations` turning both back links into `← Back to AI Evaluations`, and its `.colophon` reading `Nicholas Pings Rodriguez · Research`. `grep -c "\[Nick to" evaluating-my-agent.html` prints `0`. R4's identical-switcher check passes over `$PAGES $CASES` with the new member.
+- **Source:** 17.2; [case:evaluating-my-agent.html] at `main` 3d25fb4; O1; [Probe A1].
+- **Acceptance:** `git merge-base --is-ancestor 3d25fb4 feature/portfolio-restructure && echo yes` prints `yes` (bring it in with `git merge origin/main` on the feature branch; never the other direction). `git diff 3d25fb4 -- evaluating-my-agent.html | grep '^-[^-]'` shows only the old colophon line (`UX Research &amp; AI Research Operations`). R10's checks (a) to (f) pass for `evaluating-my-agent.html`, including `?from=ai-evaluations` turning both back links into `← Back to AI Evaluations`, and its `.colophon` reading `Nicholas Pings Rodriguez · Research`. `grep -c "\[Nick to" evaluating-my-agent.html` prints `0`. R4's identical-switcher check passes over `$PAGES $CASES` with the new member.
 - **Edge cases:** the merge must be a clean merge with no conflicts (the branch only adds files under `docs/` so far); if `main` has moved again by build time, merge the latest `origin/main` and re-run R17 against it; the case page keeps its own inline CSS and Fraunces font (only the switcher, back-link script and colophon change, like the others); its back link with no `?from=` still goes to `index.html`, which does not link back to it (expected until the homepage card).
 - **Resources:** `evaluating-my-agent.html` (merged from `main`, then R10 edits); `assets/js/back-link.js`; `assets/css/disc-nav.css`.
 
 ### R21. The AI Evaluations page shows the new case study, the three new chips and the Tools section, and still no Impact strip.
 - **Source:** section 21 and its cited sources; O1, O4, O5.
 - **Acceptance:** JS check on ai-evaluations: section ids equal `["top","philosophy","practice","selected-work","work","methods","tools","debrief"]` and `.sec-code` texts equal `S-01` to `S-07`; `[...document.querySelectorAll('#selected-work a.case-card')].map(a => [a.querySelector('h3').textContent, a.getAttribute('href')])` equals the three 21.1 rows in order, and card 1's `p` text equals the 21.1 blurb exactly (starts `Independent project.`); the Evaluation cluster's `.n` is `7` and its chip names are the 5.6 four followed by `Model-graded rubrics`, `Tool-call trace review`, `Regression suites`, with the 21.2 descriptions verbatim; total `details.chip` is `25`; `#impact` is `null`; static-HTML tools list (curl and parse before the marquee duplicates it) equals `["Promptfoo","LangSmith","Python"]`. `#dMethods` reads `0 / 25` on load.
-- **Edge cases:** no chip, tool or number from the private `ai-evals-reps` repo that is not on the site (`grep -ciE "golden|pairwise|red-team|MT-Bench" ai-evaluations.html` prints `0`); with JS off the 3-card grid and 3-item tools list are readable; a 3-item marquee shows no visible gap at 1440px.
+- **Edge cases:** no chip, tool or number from the private `ai-evals-reps` repo that is not on the site (`grep -ciE "golden|pairwise|MT-Bench" ai-evaluations.html` prints `0`); with JS off the 3-card grid and 3-item tools list are readable; a 3-item marquee shows no visible gap at 1440px.
 - **Resources:** `ai-evaluations.html`; `assets/js/site.js` (no change needed beyond R15/R24).
 
 ### R22. resume.html's masthead, lede and Experian bullets read for all three disciplines, with the real titles and dates unchanged.
@@ -1226,7 +1226,7 @@ Unchanged from section 11: **not Docker**, static GitHub Pages, no build step, p
 
 | # | Given / When / Then | Verdict | Evidence |
 |---|---|---|---|
-| A1 | Given Nick's new case study, when I check the feature branch, then it is missing and mergeable. | VALIDATED | `git log --oneline da0d2b3..origin/main` shows only 9d55508 (adds `evaluating-my-agent.html`, 1 file); the feature branch's only commit adds files under `docs/`, so the merge cannot conflict. `grep -c "\[Nick to"` on the case = 0. |
+| A1 | Given Nick's new case study, when I check the feature branch, then it is missing and mergeable. | VALIDATED | `git log --oneline da0d2b3..origin/main` shows only 9d55508 (adds `evaluating-my-agent.html`) and 3d25fb4 (reframes it), both touching that one file; the feature branch's only commit adds files under `docs/`, so the merge cannot conflict. `grep -c "\[Nick to"` on the case = 0. |
 | A2 | Given today's `resume.html`, when printed to letter at 100%, then it fits on one page. | INVALIDATED | CDP `Page.printToPDF` (letter, preferCSSPageSize): 2 pages. Print-media sheet height 1150px against a 1056px page. R23 holds the line at 2 pages instead (Flag A4). |
 | A3 | Given the 19.3 changes applied to a scratch copy (not the repo), when printed and shown on a phone, then it stays at 2 pages with no overflow. | VALIDATED | Scratch prototype: `Page.printToPDF` 2 pages; at 390x844 `scrollWidth` 390 = `innerWidth`; Methods grid lands as Generative/Evaluative, Quantitative/AI evaluation, Operations full width; Tools as Research & recruiting full width, Analysis/AI evaluation, Collaboration full width. |
 | A4 | Given the 20.5 copy block, when checked mechanically, then every voice has the same keys, known placeholders, no dashes, no banned grading words, and no "intro". | VALIDATED | `python3 docs/tools/voicecheck.py` on the committed PRD: `OK: 3 voices, 116 strings`. |
@@ -1258,8 +1258,8 @@ No AI/LLM component is built, so the AI three-dimension check does not apply.
 
 ## 25. Flags for Nick (addendum)
 
-1. **A1. Your new case study is on the AI Evaluations page, first.** You committed `evaluating-my-agent.html` this morning, which is exactly the O1/O4 trigger, so I put it on the page as card 1, labeled "Independent project", plus 3 chips and 3 tools it backs up. Say the word and I drop it back to "later", or move it below the two Experian cards.
-2. **A2. No Impact strip on AI Evaluations.** 11/14 and 2/2 are practice-run pass rates, not business impact. They stay on the case page and resume.
+1. **A1. Your new case study is on the AI Evaluations page, first.** You committed `evaluating-my-agent.html` this morning (and reframed it at 10:59; I cite the reframed version), which is exactly the O1/O4 trigger, so I put it on the page as card 1, labeled "Independent project", plus 3 chips and 3 tools it backs up. Say the word and I drop it back to "later", or move it below the two Experian cards.
+2. **A2. No Impact strip on AI Evaluations.** 11/14 and 2/2 are pass rates from an independent evaluation run, not business impact. They stay on the case page and resume.
 3. **A3. The resume has almost no numbers.** The homepage stats (24+ products, 2.3K+ findings, 30+ teams, 1.5K+ voices) aren't tied to a role anywhere I can cite. If you tell me which role each belongs to, they'd strengthen X1 and X4.
 4. **A4. The resume already prints on 2 pages.** True today too, at 100% scale. The update keeps it at 2. Getting to 1 page would mean cutting content, which is a separate call.
 5. **A5. One manual step after merge:** run each of the three URLs through LinkedIn's Post Inspector once so LinkedIn picks up the new preview images.
