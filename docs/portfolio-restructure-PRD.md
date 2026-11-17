@@ -9,6 +9,7 @@
 - **davinci-prd skill:** not installed on this Mac. Sections written by hand to the same structure as `docs/intro-experience-PRD.md`.
 - **This card changed no existing file.** It adds only this PRD and the ADR under `docs/`.
 - **Addendum A (2026-11-17):** sections 17 to 26 and requirements R20 to R28 lock Nick's O1 to O9 decisions, make the one shared `resume.html` read for all three disciplines, and give each landing page its own session-notes voice (exact copy in 20.5). It also puts Nick's new `evaluating-my-agent.html` (on `main` at 3d25fb4) on the AI Evaluations page and adds link-preview images. Card t_48ff0069 (PRD addendum), build card t_2e68d7bf (assignee `design`). Where it changes R2, R4, R8 to R10, R12 to R17 or the section 13 non-goals, section 17.3 says how, and the addendum wins.
+- **Addendum B (2026-11-17):** sections 27 to 32 and requirements R29 to R32 fix the positioning story (consumer research is the root and ongoing; AI evaluation of consumer AI products and internal AI systems runs alongside it), give exact copy for the homepage disciplines intro, the three hero ledes and the resume masthead, and replace R6 (section 29). Card t_7e1550e9. Copy only; it follows the design prototype from card t_de460a73.
 
 ---
 
@@ -1125,3 +1126,192 @@ No ongoing cost, no new services, no new recurring steps beyond A5 (once).
 - Resume: attribute the homepage stats to roles so they can go on the resume (Flag A3).
 - Resume: a one-page cut, if Nick wants one (Flag A4).
 - LinkedIn Post Inspector pass after merge (Flag A5).
+
+
+---
+
+# Addendum B: one story across every page, consumer research and AI evaluation both ongoing (card t_7e1550e9)
+
+Added 2026-11-17 by product. Builds on sections 1 to 26 and R1 to R28 above and on the design prototype from card t_de460a73 (`~/.hermes/profiles/design/prototypes/t_de460a73/`, built from this branch at 9079db5). Same harness and conventions as section 10 and section 23. Sections 1 to 26 are not edited; where this addendum changes them, section 27.3 says exactly how, and the addendum wins. **Copy and positioning only.** No site file changes on this card. All copy below is approved-pending-Nick: the build ships it word for word once Nick signs off, and any later edit goes into the section 28 block, not the HTML.
+
+## 27. Source, the story, and what this changes
+
+### 27.1 Source
+
+From card t_7e1550e9, quoting Nick. The quote is the true story to work from and is **not** to appear on the site:
+
+> My research roots are in consumer research. In recent years I've been pivoting to research on AI systems, both consumer and internal. I evaluate/test AI products for our consumers, and evaluate internal AI systems for reliability and scalability to ensure blockers don't arise.
+
+(The card renders the second sentence's break with a dash; it is shown here with a period because this doc avoids dashes.)
+
+The card's two hard constraints: (1) translate it into site copy, don't transcribe it; (2) don't insinuate Nick has left consumer research. He is both, now and ongoing. Consumer research is the root and an active practice; AI evaluation is the newer, growing practice layered alongside it, not a replacement.
+
+Citation shorthand added: **[Nick-N]** = the quote above. **[Card-B]** = card t_7e1550e9's body. **[Proto]** = the design prototype's `README.md` and `build_proto.py` (t_de460a73). **[Probe B-n]** = a check I ran for this addendum, results in section 31.2.
+
+### 27.2 The story, in one paragraph (for the builder and Crit, not for the site)
+
+There is one researcher with one root. Consumer research is where the work started and where it still sits at the center. AI evaluation grew out of it and runs next to it, in two directions: AI products that consumers use (tested with those consumers, as in `experian-eva.html` and `evaluating-my-agent.html`), and internal AI systems that teams depend on (checked so they hold up at scale, as in `research-knowledge-base.html`'s LLM-as-a-judge gate and the Applied AI pilots). Research operations is how all of that research gets done and reaches people. Every page tells this same story from a different door, so a visitor who lands on any one page learns the other two exist and that they share one root.
+
+The words that would break constraint 2, and are banned from all section 28 copy by `docs/tools/narrativecheck.py`: pivot, transition, used to, no longer, former, previously, in recent years, recently, now, moved into, shift, switch, away from, left, beyond, rather than, anymore. Any line that names an origin ("started", "grew out of") must also carry a present-tense continuity marker ("still", "alongside", "and counting").
+
+### 27.3 What this addendum changes in sections 1 to 26 (the addendum wins)
+
+| Base text | Change | Why |
+|---|---|---|
+| Section 4 device 3 (shared Philosophy, verbatim) and R6 | Replaced. The "same researcher" signal is now carried by the narrative copy itself (section 29), backed by the switcher (R4) and footer (R5), which stay identical. R6 is restated in section 29. | [Proto] flag 2; [Card-B] |
+| R3 (hero has name, pill, eyebrow, thesis) | Each discipline hero also has one `p.lede` directly after `.thesis`, with the exact text in section 28. | [Proto] change 1; R30 |
+| R22 (resume `.lede` equals the 19.3 lede) | The `.lede` now equals `resume.lede` in section 28. The headline (`.role`) is unchanged and confirmed. Everything else in R22 stands. | R31 |
+| Section 5.1 meta descriptions | Unchanged. Read for the new story: none implies a pivot, and none contradicts it (section 30). | [Probe B3] |
+
+Not changed by this addendum, and still owed by the structural spec for the prototype (see Flag B4): R2's section-id lists and S-codes, R7 (Practice), R15/R21's section lists, R17's "index.html untouched", and the dead Philosophy/Practice lines in the 20.5 voices plus `voicecheck.py`'s `SECTIONS` list. This addendum only fixes copy and R6, as the card asks.
+
+## 28. The copy (exact, approved-pending-Nick, the single source)
+
+Format: one `key: text` per line. Square brackets mark the `.mark` highlight span. The middot in `resume.headline` is written `&middot;` and the ampersand `&amp;` in the HTML, as today. `python3 docs/tools/narrativecheck.py` checks this block mechanically (section 28.2).
+
+```narrative
+homepage.intro: Consumer research is where my work started, and it's still at the center of it. Alongside it, I evaluate AI: the AI products consumers use, and the internal AI systems teams depend on, so they hold up at scale. I've also rebuilt how the research itself gets done. Same researcher, three angles, each with its own case studies and methods.
+homepage.row.ai-evaluations: Testing AI products with the consumers who use them, and testing the internal AI systems teams depend on so they hold up at scale. Deciding where a model is trusted and where a person decides.
+homepage.row.research-operations: Research that goes further than the readout: self-service access, research standards, onboarding, mentoring, and an AI research knowledge base.
+homepage.row.consumer-research: Eight years of mixed-methods research turning consumer behavior into product decisions, from generative discovery to diary studies.
+lede.ai-evaluations: I test AI products with the consumers who use them, and test the internal AI systems teams depend on so they hold up at scale. Both grow out of the consumer research I've done for eight years and still do.
+lede.research-operations: Alongside my own consumer research and AI evaluation work, I've rebuilt how research gets done at Experian: self-service access, research standards, onboarding, mentoring, and an AI research knowledge base.
+lede.consumer-research: I've done mixed-methods consumer research for eight years, from generative discovery to diary studies, and it's at the center of my work. It's also how I test AI products: with the consumers who use them.
+resume.headline: Senior Researcher · AI Evaluation, Research Operations & Consumer Research
+resume.lede: Eight years and counting of mixed-methods consumer research, turning consumer behavior into product decisions across Experian's full consumer portfolio, [at every stage of the product life cycle]. Alongside that work, I evaluate AI to the same standard of evidence: AI products, tested with the consumers who use them, and the internal AI systems teams depend on, tested so they hold up at scale. For the last two years I've also rebuilt how research gets done, so findings reach the people making decisions instead of stopping at a readout.
+switcher.label: Research disciplines:
+footer.cross: Same research, other angles:
+```
+
+### 28.1 Where each line goes, and what it replaces
+
+| Key | Location | Today / in the prototype | Decision | Sources |
+|---|---|---|---|---|
+| `homepage.intro` | `index.html`, `#disciplines p.disc-intro` (the new section from the prototype, replacing Selected work) | [Proto] draft: "Same researcher, three angles. Each page has its own case studies, impact, and methods." | **Revised.** Sets up the root, the two AI directions and research ops before the visitor picks a door. Keeps "Same researcher, three angles" (it pairs with the footer line). Drops "impact" because AI Evaluations has no Impact strip (O5). | [Nick-N]; [Proto]; [resume.html] lede sentence 2; section 18 O5 |
+| `homepage.row.ai-evaluations` | `index.html`, the AI Evaluations row's description `p` | [Proto] draft: "Deciding where a model is trusted and where a person decides, and evaluating generative AI with the people who use it." | **Revised.** The draft only covered consumer-facing AI; it now names internal systems too. Not one of the four required locations; changed because it states the story. | [Nick-N]; [index.html L499]; [case:research-knowledge-base.html] |
+| `homepage.row.research-operations` | same, Research Operations row | [Proto] draft, same text | **Confirmed**, no change. | [Proto]; section 5.1 thesis and meta |
+| `homepage.row.consumer-research` | same, Consumer Research row | [Proto] draft, same text | **Confirmed**, no change. Present participle ("turning"), no past framing. | [Proto]; [resume.html] |
+| `lede.ai-evaluations` | `ai-evaluations.html`, `p.lede` right after `.thesis` | [Proto] draft: "Researcher who evaluates generative AI with the people who use it, and with rubric scoring and tool-call traces when the thing being tested is an agent." | **Revised.** Names both AI directions and ties them back to consumer research as ongoing. Rubric and trace detail stays in the case study and Methods, where it already is. | [Nick-N]; [case:experian-eva.html]; [case:evaluating-my-agent.html]; [case:research-knowledge-base.html] section 03 |
+| `lede.research-operations` | `research-operations.html`, `p.lede` | [Proto]: the page's meta description verbatim ("Researcher who rebuilt how research gets done at Experian: ...") | **Revised.** Same list, now opening with "Alongside my own consumer research and AI evaluation work", so the ops page shows the researcher still does the research. The meta description stays as is. | [Nick-N]; section 5.1 meta; [index.html L497] E1 |
+| `lede.consumer-research` | `consumer-research.html`, `p.lede` | [Proto] draft: "Mixed-methods consumer researcher with eight years in the field, from generative discovery to diary studies." | **Revised.** Present perfect ("I've done ... for eight years") plus "at the center of my work" says ongoing; the second sentence shows the same methods now also test AI products, so the page connects to AI Evaluations instead of reading as a separate practice. | [Nick-N]; section 5.1; [case:experian-eva.html] |
+| `resume.headline` | `resume.html`, `.role` | `Senior Researcher · AI Evaluation, Research Operations & Consumer Research` (19.3, shipped) | **Confirmed**, no change. Three present-tense practices in the site's fixed order (section 3); order is navigation order, not chronology, and nothing in a three-item headline reads as "used to". The real titles below it stay "User Experience Researcher". | section 3; 19.3; R22 |
+| `resume.lede` | `resume.html`, `p.lede` | 19.3 lede: consumer research, then research ops, then "And I hold AI to the same standard of evidence: setting where a model is trusted ... not how they sound." | **Revised.** Sentence 1 gains "and counting" and names consumer research outright. AI moves to sentence 2, right next to consumer research, and names both directions (consumer AI products, internal AI systems). The ops sentence is kept word for word and moves to third. "Where a model is trusted" stays on the resume in Experian bullet X3. | [Nick-N]; 19.3; [resume.html] at 9079db5 |
+| `switcher.label` | `nav.disc-nav .disc-label` on all 9 switcher pages | `Research disciplines:` (shipped at 1101bdc) | **Confirmed**, no change. A neutral label for three parallel options; it doesn't rank or date them. No supporting tagline is added: the switcher stays one line (R4). | R4; commit 1101bdc |
+| `footer.cross` | `footer .foot-cross` lead-in on the 3 landing pages | `Same research, other angles:` | **Confirmed**, no change. It is now one of the three carriers of the same-researcher signal (section 29). | R5 |
+
+### 28.2 How the copy meets the two hard constraints
+
+**Constraint 1, translated not verbatim.** No line repeats Nick's sentences. The quote's frame ("my roots are", "in recent years I've been pivoting", "to ensure blockers don't arise") does not appear anywhere. The internal-systems point is restated in plain outcome terms ("the internal AI systems teams depend on, so they hold up at scale") instead of "reliability and scalability to ensure blockers don't arise". Mechanical check: `narrativecheck.py` fails any line that shares a run of 5 or more words with the quote; the longest shared run across all 11 lines is 3 words ("internal AI systems"), which is the name of the thing, not a transcript [Probe B1].
+
+**Constraint 2, no "used to".** Three devices, in every line that names both practices:
+
+1. **Present tense for consumer research, everywhere.** "it's still at the center of it", "I've done ... for eight years and still do", "it's at the center of my work", "Eight years and counting". Nothing about consumer research is in the simple past.
+2. **"Alongside", never "instead" or "now".** AI evaluation is introduced with "Alongside it" or "Both grow out of", which layers it on top of consumer research. The banned list in 27.2 (pivot, transition, used to, no longer, previously, now, moved into, shift, beyond, rather than) is enforced by the checker.
+3. **Every door names both.** The homepage intro, all three hero ledes and the resume lede each name consumer research and AI (checked mechanically). So the consumer research page says it also tests AI products, and the AI evaluations page says it grows out of consumer research that continues. No page reads as a standalone practice, and no page reads as the "after" of another.
+
+What was deliberately avoided: "From consumer research to AI evaluation" (a journey), "now focused on" (a replacement), "beyond UX research" (Nick's own brief says "move out of just UXR", but on the site it would read as leaving), and "still" repeated in every line (three uses read as defensive, so the consumer research lede uses "at the center of my work" instead).
+
+## 29. R6, restated: what carries the "same researcher" signal now
+
+**The decision.** Shared Philosophy (base section 4 device 3) is gone from the discipline pages in the prototype, and with it the old R6 mechanism. The prototype's own note says the switcher and the footer line carry the signal now [Proto flag 2]. Those two say the pages are connected, but not why. A recruiter who opens only `/consumer-research` needs to read, in the hero, that this researcher also evaluates AI, and one who opens only `/ai-evaluations` needs to read that the AI work rests on ongoing consumer research. So the signal now has three carriers, in order of weight:
+
+1. **The narrative copy (new, primary).** The homepage intro and every hero lede tell the one story of 27.2 and name consumer research and AI together (section 28). This replaces Philosophy as the main "same researcher" device. It is the thing a visitor actually reads first.
+2. **The switcher (unchanged, R4).** Identical markup on all 9 pages, `Research disciplines:` label, three links in fixed order.
+3. **The footer cross-link (unchanged, R5).** `Same research, other angles:` plus the other two disciplines, and the homepage intro's `Same researcher, three angles` echoes it.
+
+Base section 4 devices 1, 2, 4, 5 and 6 are unchanged.
+
+**If Nick keeps Philosophy on the discipline pages** (he can still reject that part of the prototype), the old R6 check runs as well and this R6 still applies: the ledes add to Philosophy, they don't compete with it.
+
+### R6 (restated, replaces the base R6). The same-researcher signal is carried by the narrative copy, the identical switcher and the identical footer, and every carrier matches section 28.
+- **Source:** [Card-B] ("resolve the design prototype's open flag #2 ... update PRD R6"); [Proto] README flag 2; [Nick-N]; base section 4 and [Nick] "The common thread among all of these fields is that they are fundamentally research disciplines."
+- **Acceptance:** `python3 docs/tools/narrativecheck.py` prints a line starting `OK: 11 strings`. JS check per page in `$PAGES`: `document.querySelector('.hero .thesis + p.lede')` is not null and its text, whitespace-normalized, equals that page's `lede.<slug>` line; on `index.html`, `#disciplines .disc-intro` text equals `homepage.intro`. R4's identical-switcher command prints `1` over `$PAGES $CASES`, and every `.disc-label` text equals `switcher.label`. R5's identical-footer command prints `1`, and every `.foot-cross` text starts with `footer.cross`. If the prototype's Philosophy removal ships: `document.getElementById('philosophy') === null` on each of `$PAGES`; if it doesn't, the base R6 command also prints `1`.
+- **Edge cases:** with JS off the lede and intro are present (static HTML, not injected); the prototype's `data-proto="lede"` toggle and `assets/proto/*` never ship (`grep -rc "data-proto" $PAGES.html index.html` is 0 for every file); a page opened with no referrer still gets the full story from its own lede (no copy depends on where the visitor came from); case pages carry only the switcher, not a lede (they have their own heroes, R10 unchanged).
+- **Resources:** `index.html`, the 3 landing pages, `assets/css/disc-nav.css` (read), `docs/tools/narrativecheck.py`.
+
+## 30. Everything else checked for the story (no change)
+
+Read on this branch at 9079db5 for pivot wording [Probe B2, B3]:
+
+- All four `<meta name="description">` texts (index and the three landing pages): present tense, no past framing. Unchanged. The AI Evaluations one doesn't mention internal systems; it doesn't have to (it's a search snippet, and the lede now says it). Optional tweak in Flag B3.
+- `index.html` hero (eyebrow `Mixed-methods research · Research operations · AI in research`, thesis "Adaptive research to support a consistently shifting landscape."): the word "shifting" describes the landscape, not Nick, so it doesn't imply a pivot. Unchanged (the homepage hero is the homepage card's call).
+- Experience role body on `index.html` and the landing pages ("I research across the full consumer product portfolio ..."): present tense. Unchanged.
+- `evaluating-my-agent.html`: Nick's own 3d25fb4 reframe already removed the "pivot" language. Unchanged.
+- Session-notes voices (20.5): no positioning claims. Unchanged.
+
+## 31. Requirements, feasibility, deployment
+
+Harness as section 23. Build/deployment for **every** Addendum B requirement: **not Docker**, same justified exception as section 11 (static GitHub Pages site, nothing to containerize). No service, container, dependency or recurring step is added.
+
+### R29. The homepage's Research disciplines section opens with the section 28 intro and its three rows carry the section 28 descriptions.
+- **Source:** [Card-B] location 1; [Proto] change 2; section 28.1.
+- **Acceptance:** JS check on `index.html`: `#disciplines .disc-intro` text, whitespace-normalized, equals `homepage.intro`; `[...document.querySelectorAll('#disciplines .disc-card')].map(a => [a.getAttribute('href'), a.querySelector('.disc-body > p').textContent.trim()])` equals `[["ai-evaluations.html", homepage.row.ai-evaluations], ["research-operations.html", homepage.row.research-operations], ["consumer-research.html", homepage.row.consumer-research]]`; `python3 docs/tools/narrativecheck.py` prints `OK`.
+- **Edge cases:** the intro wraps without horizontal overflow at 320x568 (`scrollWidth <= innerWidth`); it is a `p`, not a heading, so the heading outline stays `Research disciplines`; it renders with JS off; in the prototype's Layout B (Columns) the same text is used, so the layout choice can't change the story; the words "impact" and "case studies, impact" do not appear in the intro.
+- **Resources:** `index.html` (the homepage card's build, not this card).
+
+### R30. Each discipline page's hero has exactly one lede, right after the thesis, with its section 28 text.
+- **Source:** [Card-B] location 2; [Proto] change 1 ("Why add a lede"); section 28.1.
+- **Acceptance:** JS check per page in `$PAGES`: `document.querySelectorAll('.hero p.lede').length === 1`; `document.querySelector('.hero .thesis').nextElementSibling.matches('p.lede')`; its text, whitespace-normalized, equals `lede.<slug>`; it contains no `.mark` span (the thesis keeps the only highlight); `.hero .eyebrow` and `.thesis` still equal section 5.1 (R3).
+- **Edge cases:** at 390x844 the lede is at most 6 lines and Selected work's heading is still reached within two screen heights (prototype measured 676px on Research Ops with the old lede); at 320x568 no overflow; reduced motion shows it without animation (it uses the existing `.rise` classes); with JS off it is visible; the meta descriptions and link previews are not changed to match the lede (section 30).
+- **Resources:** `ai-evaluations.html`, `research-operations.html`, `consumer-research.html`; `assets/css/site.css` (the prototype's `.lede` rule, tokens only).
+
+### R31. resume.html keeps its headline and replaces its lede with the section 28 text, and still prints within two pages.
+- **Source:** [Card-B] location 3; 19.3; R22, R23; section 28.1.
+- **Acceptance:** JS check on `resume.html`: `.role` text equals `resume.headline` (unchanged from 19.3); `.lede` text, whitespace-normalized, equals `resume.lede` without brackets; `.lede .mark` text equals `at every stage of the product life cycle`; every other R22 and R23 check still passes, including `Page.printToPDF` (letter, `preferCSSPageSize: true`) producing at most 2 pages and `grep -c "—" resume.html` printing `0`.
+- **Edge cases:** the new lede is about 20 words longer than the 19.3 lede; if that pushes the print to 3 pages, the build shortens nothing on its own and stops for a PRD amendment (Flag B2), because the copy is fixed here; job titles, dates and bullets X1 to X5 are untouched; no new number appears ("eight years" is already on the resume).
+- **Resources:** `resume.html`.
+
+### R32. The switcher label and footer lead-in stay as shipped, and no new tagline is added.
+- **Source:** [Card-B] location 4; commit 1101bdc; R4, R5; section 28.1.
+- **Acceptance:** `grep -l 'class="disc-label">Research disciplines:</span>' *.html | wc -l` prints `9` (the 3 landing pages plus the 6 case pages); `grep -c 'class="disc-tagline\|class="disc-sub' *.html` prints `0` for every file; JS check on `$PAGES`: `.foot-cross` text starts with `Same research, other angles:`; R4 and R5 commands still print `1`.
+- **Edge cases:** if the homepage gains the switcher in the homepage card, it uses the same label and the count becomes 10, not a new wording; the label never takes a qualifier like "current" or "past", which would date the disciplines.
+- **Resources:** the 3 landing pages, the 6 case pages (read only).
+
+### 31.1 Deployment and build
+
+Unchanged from section 11 and 24.1: not Docker, static GitHub Pages, no build step, preview with `python3 docs/tools/serve.py 8000`. Production is still a merge to `main` after Nick's explicit approval. This card adds only text to this PRD and the checker `docs/tools/narrativecheck.py`.
+
+### 31.2 Feasibility probes (spike method)
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| B1 | Given the section 28 block, when checked mechanically, then every line is dash-free, free of pivot wording, shares no 5-word run with [Nick-N], and the five story lines name both consumer research and AI. | VALIDATED | `python3 docs/tools/narrativecheck.py` on the committed PRD: `OK: 11 strings, longest run shared with the quote = 3 words`. Negative control (scratch copy, not committed): with [Nick-N] pasted in as `lede.consumer-research` and "My work started in consumer research and I moved into AI evaluation." as `homepage.intro`, it exits 1 with five errors: pivot wording "In recent years" and "moved into", an origin with no continuity marker on both lines, and a 44-word run shared with the quote. |
+| B2 | Given the live site copy at 9079db5, when searched for pivot wording, then nothing implies Nick left consumer research. | VALIDATED | `grep -iE "pivot|used to|no longer|formerly|transition|moving (in)?to|moved (in)?to|shift(ed|ing)? (to|from|away)|away from|these days|in recent years|beyond (ux|consumer)|move out"` over the 3 landing pages, `index.html`, `resume.html`, `evaluating-my-agent.html`: only CSS `transition` properties match, no copy. |
+| B3 | Given the meta descriptions and the shipped switcher/footer copy, when read against 27.2, then none contradicts the story. | VALIDATED (by reading) | Section 30. |
+| B4 | Given the resume lede grows by about 20 words, when printed, then it stays at 2 pages. | PARTIAL | Not printed on this card (copy only). Addendum A measured the print sheet at 1150px against a 1056px page, i.e. well inside page 2, so a few extra lines are very likely fine; R31 makes the build prove it. |
+
+No AI/LLM component is built, so the AI three-dimension check does not apply. No platform choice is made, so no ADR.
+
+### 31.3 Risks
+
+- **Biggest risk: the internal-AI-systems claim has thin public evidence.** The site shows the LLM-as-a-judge gate and the Applied AI pilots, but no case study is about testing an internal AI system for reliability at scale. The copy says it because Nick says it [Nick-N]; a recruiter who clicks through finds supporting but not direct evidence (Flag B1).
+- **"Still" read as defensive.** Used twice in the 11 lines (homepage intro, AI lede), never in the consumer research lede. Nick's read decides.
+- **Copy drift.** The build could tweak a lede in HTML. Mitigation: R29 to R31 compare against the section 28 block, and `narrativecheck.py` guards the block itself.
+- **The structural spec isn't written yet** (Flag B4). If PMO cuts build cards from this addendum alone, R2, R7, R15, R17 and the 20.5 voices would still describe pages with Philosophy and Practice.
+
+### 31.4 Non-goals (in addition to sections 13 and 24.4)
+
+- Removing Philosophy/Practice, building the homepage disciplines section, or any other structural change from the prototype (a separate spec, Flag B4).
+- Changing the eyebrows, theses, meta descriptions, OG images or case-study copy.
+- A tagline or sub-label under the switcher.
+- Rewording job titles to "AI Evaluation" or anything not on Nick's real record.
+- A new case study about internal AI reliability work (BACKLOG follow-up, Flag B1), or putting Experian-internal system names or details on the site.
+
+**Authorized boundaries (this card):** append this addendum and the header line to `docs/portfolio-restructure-PRD.md`; add `docs/tools/narrativecheck.py`; commit and push `feature/portfolio-restructure`.
+
+**Forbidden actions (this card):** any site file (`*.html`, `assets/`), `BACKLOG.md`, and anything on `main`. Never commit to, push to, or merge into `main`.
+
+## 32. Flags for Nick (Addendum B) and follow-ups
+
+1. **B1. The internal AI systems claim.** The copy says you test the internal AI systems teams depend on so they hold up at scale, because that's what you told me. The site backs it only indirectly (the knowledge-base judge gate, the Applied AI pilots). If there's a reliability or scale evaluation you can describe without Experian specifics, it would make a strong second AI Evaluations case. Otherwise the copy still stands.
+2. **B2. Resume lede is about 20 words longer.** Should still print on 2 pages; the build checks. If it spills, I'd cut from the ops sentence, but that's your call.
+3. **B3. Optional:** the AI Evaluations meta description (search/preview snippet) only names consumer-facing AI. I left it alone; say if you want it to mention internal systems too.
+4. **B4. The structural spec for the prototype still needs writing** before PMO cuts build cards: dropping Philosophy/Practice changes R2, R7, R15, R17 and the 20.5 voices. The prototype's flag 1 (keep Philosophy/Practice on the homepage?) is also still open. This card fixed the copy and R6 only.
+5. **B5. Read the 11 lines in section 28 out loud once.** That block is what ships, word for word.
+
+No cost, no infrastructure, no recurring manual step.
+
+**Follow-ups (for BACKLOG.md when the build lands, not requirements):**
+- A case study on evaluating an internal AI system for reliability at scale, if Nick can share one (B1).
+- AI Evaluations meta description mentioning internal systems, if Nick wants it (B3).
+- Structural spec for the prototype's Philosophy/Practice removal and homepage section (B4).
