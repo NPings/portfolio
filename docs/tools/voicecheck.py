@@ -12,11 +12,11 @@ as `var VOICES = {...};`. Prints OK and exits 0, or prints each problem and exit
 import json, re, sys
 
 PRD = "docs/portfolio-restructure-PRD.md"
-SLUGS = ["ai-evaluations", "research-operations", "consumer-research"]
+SLUGS = ["research-operations", "consumer-research"]
 SECTIONS = ["Philosophy", "Practice", "Selected Work", "Impact", "Experience", "Methods", "Tools", "Debrief"]
 EVENTS = ["open", "hero", "sections", "sectionFallback", "depth50", "method1", "method5",
           "methodAll", "role", "idle", "return"]
-OPTIONAL_EVENTS = {"rage": ["ai-evaluations"]}
+OPTIONAL_EVENTS = {}
 CONDS = {"always", "long", "full", "methods5", "methodsAny", "rolesAny", "pausesAny", "clickedAny", "rageAny"}
 PLACEHOLDERS = {"cards", "name", "label", "role", "time", "seen", "total", "mN", "mNames", "mTotal",
                 "rN", "rNames", "rTotal", "pN", "rage"}

@@ -6,156 +6,6 @@
      Check with: python3 docs/tools/voicecheck.py assets/js/site.js */
 /*VOICES-BEGIN*/
 var VOICES = {
-  "ai-evaluations": {
-    "panelTitle": "Self-eval · Grading this page",
-    "panelTitleDone": "Self-eval · Page Scorecard",
-    "debriefLabel": "Page scorecard",
-    "debriefNote": "I write evals, and it turns out you can't switch that off. So this page grades itself while you read. Every score is about the page, never about you. Everything above was measured in this tab alone, is stored nowhere, and disappears when you leave.",
-    "events": {
-      "open": "Eval run starts. Subject: this page. You are not the one being graded.",
-      "hero": "Check: the hero says what this page is about. PASS.",
-      "sections": {
-        "Philosophy": "Philosophy in view. Same words as the other two pages. Consistency: PASS.",
-        "Practice": "Practice in view. Four principles. Each has to hold up in the case studies.",
-        "Selected Work": "Case studies in view. {cards} to choose from. Hallucination risk: LOW. They all happened.",
-        "Impact": "Impact in view. Every number checked against its source.",
-        "Experience": "Experience in view. Titles and dates match the resume. Factuality: PASS.",
-        "Methods": "Methods board in view. It sorted itself the same way it always does. Determinism: PASS.",
-        "Tools": "Tools in view. Short list, and every one of them actually used.",
-        "Debrief": "Scorecard in view. Grading the page, not the reader."
-      },
-      "sectionFallback": "{name} in view. Rendered as expected.",
-      "depth50": "Halfway down. The page is holding up so far. Provisional PASS.",
-      "method1": "Method opened: \"{label}\". Retrieval works. PASS.",
-      "method5": "Five methods opened. Plenty of test coverage. Thanks for the extra cases.",
-      "methodAll": "All {mTotal} methods opened. Full coverage. Best QA pass this page has had.",
-      "role": "{role} expanded. Details loaded on request. PASS.",
-      "rage": "Rapid clicks detected. That one is on the page, not you. Logged as a bug.",
-      "idle": "Quiet for 30 seconds. Probably reading. Reading time is not a defect.",
-      "return": "Tab back in focus. Nothing timed out. Welcome back."
-    },
-    "debrief": [
-      {
-        "cls": "note-head",
-        "cases": [
-          [
-            "always",
-            "Scorecard. The page grades itself, as promised."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "long",
-            "Time on page: {time}. Long read. Coherence held up."
-          ],
-          [
-            "always",
-            "Time on page: {time}. Quick read. The headings did their job."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "full",
-            "Scroll depth: PASS. {seen} of {total} sections came into view. Nothing broke on the way down."
-          ],
-          [
-            "always",
-            "Scroll depth: PASS. {seen} of {total} sections came into view. Some went by fast. Skimmable is a feature."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "methodsAny",
-            "Methods board: {mN} of {mTotal} opened ({mNames}). Every description loaded. PASS."
-          ],
-          [
-            "always",
-            "Methods board: sorted itself on cue. PASS. Opening chips is optional."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "rolesAny",
-            "Experience: {rN} of {rTotal} expanded ({rNames}). Content matched the headline. PASS."
-          ],
-          [
-            "always",
-            "Experience: headlines readable without expanding. PASS."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "rageAny",
-            "Rage-click events: {rage}. Those are page bugs, not user errors."
-          ],
-          [
-            "always",
-            "Rage-click events: 0. Grading myself here, not you."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "always",
-            "Hallucination risk: LOW. Every claim on this page traces to real work."
-          ]
-        ]
-      },
-      {
-        "cls": "",
-        "cases": [
-          [
-            "always",
-            "Overall: PASS. Sample size of one page, so read with caution."
-          ]
-        ]
-      },
-      {
-        "cls": "",
-        "cases": [
-          [
-            "always",
-            "Finding: Once you start writing evals, you start grading everything. Including your own website."
-          ]
-        ]
-      },
-      {
-        "cls": "",
-        "cases": [
-          [
-            "always",
-            "Recommendation: Get in touch. The details are just above this panel."
-          ]
-        ]
-      },
-      {
-        "cls": "note-head",
-        "cases": [
-          [
-            "always",
-            "Run closed. Nothing about you was scored, stored, or sent."
-          ]
-        ]
-      }
-    ]
-  },
   "research-operations": {
     "panelTitle": "Study #1 · Field Notes",
     "panelTitleDone": "Study #1 · Field Report",
@@ -451,8 +301,7 @@ var VOICES = {
 };
 /*VOICES-END*/
 
-  var VOICE = VOICES[document.body.dataset.voice] || VOICES['consumer-research'];
-  var EV = VOICE.events;
+  var VOICE = VOICES[document.body.dataset.voice];
   document.body.classList.add('loaded');
 
   /* ---------- small helpers ---------- */
@@ -520,6 +369,8 @@ var VOICES = {
   setText('dMethods', '0 / ' + chipTotal);
   setText('dRoles', '0 / ' + roleTotal);
 
+  if (VOICE) {
+  var EV = VOICE.events;
   /* ================================================================
      THE OBSERVER: the page runs a small, fully local usability
      session on its reader. Nothing is stored; nothing leaves the tab.
@@ -715,4 +566,5 @@ var VOICES = {
 
   /* time on page ticker */
   setInterval(function () { setText('dTime', stamp()); }, 1000);
+  }
 })();
