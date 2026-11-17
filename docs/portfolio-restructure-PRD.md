@@ -8,6 +8,7 @@
 - **ADR:** `docs/adr/0001-discipline-page-urls.md` (the URL scheme, because shared job-application links are expensive to change later)
 - **davinci-prd skill:** not installed on this Mac. Sections written by hand to the same structure as `docs/intro-experience-PRD.md`.
 - **This card changed no existing file.** It adds only this PRD and the ADR under `docs/`.
+- **Addendum A (2026-11-17):** sections 17 to 26 and requirements R20 to R28 lock Nick's O1 to O9 decisions, make the one shared `resume.html` read for all three disciplines, and give each landing page its own session-notes voice (exact copy in 20.5). It also puts Nick's new `evaluating-my-agent.html` (on `main` at 9d55508) on the AI Evaluations page and adds link-preview images. Card t_48ff0069 (PRD addendum), build card t_2e68d7bf (assignee `design`). Where it changes R2, R4, R8 to R10, R12 to R17 or the section 13 non-goals, section 17.3 says how, and the addendum wins.
 
 ---
 
@@ -468,3 +469,809 @@ This card was told not to touch existing files, so these rows go into `BACKLOG.m
 - Case study for the two-year research-ops rebuild (standards, onboarding, mentoring).
 - Move `index.html` onto `assets/css/site.css` and `assets/js/site.js` (homepage card).
 - Optional: per-discipline resumes (O7), share image (O8).
+
+---
+
+# Addendum A: locked decisions, a resume that reads for all three disciplines, and per-page session notes (card t_48ff0069)
+
+Added 2026-11-17 by product. Builds on sections 1 to 16 and R1 to R19 above (Crit-passed at da0d2b3). Same harness, tokens, fonts and conventions unless a line below says otherwise. Build card: t_2e68d7bf (assignee `design`), which builds R1 to R19 and R20 to R28 together. Sections 1 to 16 are not edited; where this addendum changes them, section 17.3 says exactly how, and the addendum wins.
+
+## 17. Addendum source, scope and what it changes
+
+### 17.1 Source (verbatim)
+
+From the card body (t_48ff0069), quoting Nick:
+
+> we need to make sure resume.html supports each of the 3 things.
+
+> The 'session notes' gag will need to be adjusted for each discipline... Need to keep that light hearted though. Don't want to seem like we are judging people for not clicking into things.
+
+The card also records Nick accepting Maestro's proposed defaults on O1 to O9 (section 18) and Maestro's three creative directions for the session notes, which Nick did not object to (section 20).
+
+Citation shorthand added: **[Nick-R]** and **[Nick-S]** = the two quotes above. **[Card-A]** = card t_48ff0069's body. **[case:evaluating-my-agent.html]** = the case study on `main` at commit 9d55508. **[Probe A-n]** = a check I ran for this addendum, results in section 24.2.
+
+### 17.2 One new fact since the base PRD
+
+On 2026-11-17 at 10:48, after the base PRD was written, Nick committed `evaluating-my-agent.html` to `main` (commit 9d55508, "Add case study: Evaluating My Own Agent (AI evals practice project)"). It is a complete case study of his `ai-evals-reps` work: eyebrow "AI evaluation practice · Independent project", facts row "Context: Independent, not employer work", zero `[Nick to` markers, real numbers (11/14 first regression pass, 2/2 routing scenarios fixed, 0 secrets reached the trace), and named tools (Promptfoo, LangSmith). It is live on nickpings.com and not linked from `index.html`. `feature/portfolio-restructure` was cut before it and does not contain it [Probe A1].
+
+This is the trigger Nick set in O1 ("build ai-evals-reps into the AI Evals case study eventually, labeled as a personal project") and O4/O5 ("once there's something concrete to cite"). It is concrete and on the site, so section 21 and R20/R21 put it on the AI Evaluations page now, clearly labeled as independent work. If Nick would rather keep it off until later, dropping R20 and R21 (and the `Independent` block in R23) restores the base PRD's AI Evaluations page exactly; nothing else depends on them (Flag A1).
+
+### 17.3 What this addendum changes in sections 1 to 16 (the addendum wins)
+
+| Base text | Change | Why |
+|---|---|---|
+| Section 6.2 and R8: AI Evaluations has 2 cards and "no case study of a structured model evaluation" | AI Evaluations has 3 cards; card 1 is `evaluating-my-agent.html` (section 21.1). The gap is closed for launch. | 17.2, O1 |
+| `$CASES` (section 10 preamble), R4, R9, R10 | `$CASES` gains `evaluating-my-agent`, so it gets the switcher, `back-link.js`, the `?from=` back links and the neutral colophon like the other five case pages. | R20 |
+| R2 (ai-evaluations section ids) | `["top","philosophy","practice","selected-work","work","methods","tools","debrief"]`, section codes `S-01` to `S-07`. | Tools added, R21 |
+| R12 / section 5.6 (Evaluation cluster) | Evaluation cluster has 7 chips (the 4 in 5.6 plus 3 in section 21.2). ai-evaluations chip total is 25, not 22. | R21 |
+| R13 / section 5.7 (AI Evaluations tools omitted) | AI Evaluations has a Tools section: `Promptfoo`, `LangSmith`, `Python`. Impact stays omitted. | R21, Flag A2 |
+| R14: `git diff main --stat -- index.html intro.html resume.html` is empty | Drop `resume.html` from that command. `index.html` and `intro.html` stay untouched. | R22, R23 |
+| R15: the hard-coded observer lines it checks (`Two to choose from.`, `Coverage: N of 7`, `0 / 22`) and the `Four principles` literal in its grep | Observer copy now comes from the per-page voice (section 20, R24, R25). ai-evaluations expects `0 / 25` and the line `Case studies in view. Three to choose from. Hallucination risk: LOW. They all happened.`; research-operations expects `Participant reaches the case studies. One to choose from. Scheduling is flexible.` Coverage totals are read from the DOM (7 on ai-evaluations, 8 on the other two). Remove `Four principles` from the R15 grep pattern: R7 fixes every page at exactly four facets, so the word is copy, not a count. All other R15 checks stand. | R24, R25 |
+| R16 edge case "no `og:image`" | Superseded by R27: each landing page gets its own preview image and Twitter card tags. | O8 |
+| R17 changed-file list | Also allowed: `resume.html`, `evaluating-my-agent.html` (R10 edits only), `assets/og/*.png`, `docs/tools/og-card.html`, `docs/tools/voicecheck.py`. The "must be empty" diff drops `resume.html`. | R20, R22, R23, R27 |
+| Section 4 device 4 ("the same usability-session conceit ... unchanged") and section 2 row "Observer ... Shared" | The mechanism (pill, observer panel, debrief cells, local-only, nothing stored) stays shared. The words are per page (section 20). | [Nick-S] |
+| Section 13 non-goals: "Per-discipline resumes, or any edit to `resume.html`" | Per-discipline resumes stay a non-goal (O7). Editing `resume.html` is allowed, only as R22 and R23 specify. | O7, [Nick-R] |
+| Section 13 non-goals: "`og:image` or social-card artwork" | Allowed as R27 specifies (three PNGs and the template). Favicon, sitemap, `robots.txt`, `404.html` stay non-goals. | O8 |
+| Section 13 forbidden actions: editing `resume.html` | Removed from the forbidden list. `index.html`, `intro.html`, `research-self-service.html`, `CNAME`, `AGENTS.md`, `assets/passions/` stay forbidden. | R22, R23 |
+| Section 14 flags O1 to O9 | Closed. See section 18. | [Card-A] |
+
+## 18. Decisions O1 to O9: confirmed and locked
+
+Nick accepted Maestro's proposed default on every open question [Card-A]. The build card must not re-ask any of these.
+
+| # | Question (section 14) | Locked decision | Effect on the build |
+|---|---|---|---|
+| O1 | Write up `ai-evals-reps` as an AI evals case study? | Yes, labeled as a personal project. Do not gate the AI Evaluations page on it. | Already written by Nick (`evaluating-my-agent.html`, 17.2). R20 and R21 link it as card 1, labeled "Independent project". |
+| O2 | Temporary link from `index.html` to the new pages? | No. Wait for the homepage card. | `index.html` stays byte-identical (R17). |
+| O3 | Slugs | Keep `ai-evaluations`, `research-operations`, `consumer-research`. Not `ux-research`. | Section 3 and ADR 0001 stand as written. |
+| O4 | More evaluation methods and tools? | Yes, once there is something concrete to cite. Don't invent. | The concrete source now exists on the site (17.2). R21 adds 3 chips and 3 tools, each traced to `evaluating-my-agent.html` or `resume.html`. Nothing from the private repo that is not on the site. |
+| O5 | AI evals impact numbers? | Same as O4: only real, cited numbers. | The Impact strip stays omitted on AI Evaluations. The case study's numbers are practice-run results, not impact, and stay on the case page and resume (Flag A2). |
+| O6 | Fate of `intro.html` | Confirmed: live at `/intro`, unlinked from the discipline pages. | R18 stands. |
+| O7 | One resume or three? | One shared `resume.html`. | Still one file, but it now has to read credibly for all three disciplines (section 19, R22, R23). |
+| O8 | Link-preview image? | Yes. | R27: one preview image per landing page. |
+| O9 | Draft copy | Acknowledged: draft copy in section 5 (and in this addendum) is editable by Nick. | The build ships the copy as written. A later edit is a PRD amendment to the relevant table, not a direct HTML edit. |
+
+## 19. resume.html: audit and the fix
+
+### 19.1 What the current resume says (read on `feature/portfolio-restructure` at da0d2b3, 257 lines)
+
+| Element | Current text | How it reads to each reader |
+|---|---|---|
+| `<title>` | `Nicholas Pings Rodriguez — Resume` | Neutral. Has an em dash, which the site voice avoids. |
+| Headline (`.role`) | `Senior UX Researcher · Consumer Products & Research Operations` | Consumer research: strong. Research ops: present. AI evaluation: absent. This is the line every recruiter reads first. |
+| Lede | Consumer behavior and the full consumer portfolio, then two years rebuilding how research gets done. | AI evaluation: absent. Nothing about models, judges or evaluation. |
+| Experian bullets (5) | Portfolio partner; partner with teams; generative AI research; AI-assisted automation and "where a model is trusted"; self-service and mentoring. | AI evaluation evidence is one clause in bullet 4. The LLM-as-a-judge pipeline Nick designed and built (`research-knowledge-base.html`, "Role: Designed & built") is missing. The Applied AI pilots bullet that is on `index.html` (E4: knowledge base, PMO agent, skill kits, PII stripping, competitor monitoring) is missing. Ops work is split across two bullets and never says "rebuilt research operations". |
+| HP, Freelance | Launch-aligned studies, workshops, needs mapping; scoped, recruited and ran end-to-end research. | Consumer research and ops both covered ("recruited"). Fine as is. |
+| Independent work | none | The one structured model-evaluation project Nick has is not on the resume at all. |
+| Methods | Generative, Evaluative, Quantitative, Operations | No AI evaluation group. Operations has no recruiting or fielding term, which is the core of many research ops roles. |
+| Tools | One run-on line of 23 tools | Reads as a UXR tool list. Promptfoo and LangSmith are missing. An ops reader can't see the recruiting stack; an eval reader can't see any eval tooling. |
+| Job titles and dates | `Sr. User Experience Researcher`, `User Experience Researcher`, `Principal User Experience Researcher` | These are the real titles. They stay (base non-goal: never reword titles, employers or dates). |
+
+Diagnosis: the resume is credible for consumer research, half-credible for research operations, and nearly silent on AI evaluation, while the evidence for all three already exists on the site. It doesn't need splitting. It needs the masthead to name all three, the Experian bullets to be sorted by discipline instead of by history, the missing evidence put back, and the Methods and Tools blocks grouped so each reader finds their own vocabulary in one glance. Nothing gets vaguer: every new line is a specific claim with a source.
+
+### 19.2 The approach: one resume, three entry points
+
+1. **Headline names all three, in the site's fixed order.** The real job titles stay below it, so a keyword search for "UX Researcher" still hits.
+2. **Lede in three sentences, one per discipline,** consumer research first because it is the longest record.
+3. **Experian bullets get short bold lead-ins** (`Consumer research.`, `Generative AI research.`, `AI evaluation.`, `Research operations.`, `Applied AI.`). Each reader scans to their label. Still five bullets, still one role.
+4. **A new `Independent` block** for the agent-evaluation project, explicitly labeled personal, not employer work.
+5. **Methods gains an `AI evaluation` group; Operations gains recruiting and onboarding terms.** Tools splits into four labeled lines.
+6. **No numbers are added that are not tied to a role in a source.** The `index.html` stats (24+, 2.3K+, 30+, 1.5K+) are not attributed to a specific role anywhere, so they stay off the resume (Flag A3). The one exception is "weeks to hours", which the knowledge-base case study attributes directly.
+
+Tested as a throwaway prototype in scratch (not in the repo): prints to 2 letter pages, same as today, and has no horizontal overflow at 390px [Probe A2, A3].
+
+### 19.3 Exact new copy
+
+Everything not listed here stays byte-identical: contact block, job titles, dates, org lines, HP and Freelance bullets, Education, the first three Methods groups, CSS tokens.
+
+**`<title>`:** `Nicholas Pings Rodriguez &middot; Resume`
+
+**Headline (`.role`):** `Senior Researcher &middot; AI Evaluation, Research Operations &amp; Consumer Research`
+
+**Lede (`p.lede`, the `.mark` span in brackets):**
+
+> Eight years of mixed-methods research, turning consumer behavior into product decisions across Experian's full consumer portfolio, [at every stage of the product life cycle]. For the last two years I've also rebuilt how that research gets done, so findings reach the people making decisions instead of stopping at a readout. And I hold AI to the same standard of evidence: setting where a model is trusted and where a person decides, and evaluating AI systems on what they actually do, not how they sound.
+
+Sources: [resume.html] current lede (sentences 1 and 2); [index.html L499] "set the standards for where a model is trusted and where a person decides"; [case:evaluating-my-agent.html] "Grading the final answer only tells you whether it sounds right" and "The standard of proof didn't [change]".
+
+**Experian bullets (replace all five, in this order; `<b class="pt-k">` holds the lead-in):**
+
+| # | Bullet text (the lead-in is the bold label) | Sources |
+|---|---|---|
+| X1 | **Consumer research.** Research partner across the full consumer product portfolio, from flagship experiences to narrow edge cases, matching method and rigor to each stage of the life cycle, and translating findings into roadmaps and design decisions with design, engineering, and product teams. | [resume.html] current bullets 1 and 2, merged |
+| X2 | **Generative AI research.** Led research on integrating generative AI into the consumer experience, including usability studies of Experian's virtual assistant across live builds, competitor products, and prototypes; recommendations shaped Experian's educational tools. | [index.html L498] E2; [case:experian-eva.html] section 02 "usability studies across live builds, competitor products, and prototypes" |
+| X3 | **AI evaluation.** Designed and built an LLM-as-a-judge gate for the research knowledge base, with fixed researcher sign-off and manager approval and a person stepping in whenever the judge can't make a safe call. Set the standards for where a model is trusted and where a person decides across AI-assisted screening, analysis, and synthesis. | [case:research-knowledge-base.html] "Role: Designed & built", section 03; [resume.html] current bullet 4 |
+| X4 | **Research operations.** Rebuilt research operations over about two years: self-service access to insight for stakeholders, research standards, onboarding, and mentoring through study design review. The research knowledge base cut cross-team topic review from weeks to hours. | [index.html L497] E1; [resume.html] current bullet 5; [case:research-knowledge-base.html] "went from weeks to hours" |
+| X5 | **Applied AI.** Helped define Experian's internal Applied AI practices and work with the Applied AI team on pilots: a research knowledge base, a PMO agent, and skill kits. Also built PII-stripping preprocessing tools and competitor monitoring. | [index.html L500] E4 |
+
+**New block after Experience, before Education** (same `section.block` / `article.job` markup as the jobs):
+
+- `.block-label`: `Independent`
+- `.job-title`: `Evaluating My Own Agent` · `.job-when`: `2026`
+- `.job-org`: `AI evaluation practice project <span>&middot; Personal, not employer work</span>`
+- Bullets, in order:
+  - I1 `Built a Promptfoo regression suite for the AI agent that runs my daily workflow, mixing deterministic checks with model-graded rubrics, run against fresh sessions.`
+  - I2 `Moved from grading replies to inspecting tool-call traces. Turned a vague sense that routing was off into three testable scenarios, confirmed the defect, had it fixed, and reran the same suite as a before/after check (2 of 2 routing scenarios fixed).`
+  - I3 `Built an on-demand LangSmith tracing tool with a secret-scanning gate, tested against a probe designed to slip past redaction (0 secrets reached the trace).`
+  - I4 `Case study: <a href="evaluating-my-agent.html">nickpings.com/evaluating-my-agent</a>`
+- Sources: [case:evaluating-my-agent.html] Approach, What I built, Outcomes (2/2, 0), facts row; [evals-reps] git log, first commit 2026-11-15 (the year).
+
+**Methods block:** keep Generative, Evaluative, Quantitative byte-identical, then:
+
+- `AI evaluation`: `LLM-as-a-judge &middot; Model-graded &amp; deterministic rubrics &middot; Regression suites &middot; Tool-call trace review &middot; Human-in-the-loop review &middot; Model trust standards` (sources: research-knowledge-base.html section 03; evaluating-my-agent.html Approach and What I built; index.html L499)
+- `Operations` (full width, `.m-wide`): `Participant recruitment &middot; Research repositories &middot; Self-service enablement &middot; Research standards &middot; Onboarding &amp; mentorship &middot; AI-assisted synthesis &middot; Stakeholder management` (sources: current Operations group; Freelance bullet "Scoped, recruited, and ran"; index.html E1 "onboarding, and mentoring")
+
+**Tools block:** same `.methods` / `.m-group` markup as Methods, replacing the inline-styled paragraph. Every one of today's 23 tools kept, plus Promptfoo and LangSmith (25, no duplicates):
+
+- `Research &amp; recruiting` (full width): `Condens · Dovetail · Great Question · User Interviews · Lyssna · Outset · UserTesting · dscout · LookBack · Optimal Workshop · Maze · Sprig · Ethnio · UserZoom`
+- `Analysis`: `Qualtrics · SPSS · Tableau · Python`
+- `AI evaluation`: `Promptfoo · LangSmith`
+- `Collaboration` (full width): `TheyDo · Figma · FigJam · Miro · Jira`
+
+(`·` is written `&middot;` in the HTML, as today.)
+
+**CSS added (3 rules, existing tokens only):** `.pt-k{font-weight:600;color:var(--pine);}` · `.m-wide{grid-column:1/-1;}` · `.job,.m-group{break-inside:avoid;}`
+
+## 20. Session notes: one voice per discipline
+
+### 20.1 The hard constraint (applies to every line on every page)
+
+**The notes never judge the visitor.** [Nick-S] Concretely:
+
+1. A line may describe what the visitor did, or grade the page, never grade the visitor.
+2. Every "zero" outcome (no methods opened, no roles opened, sections scrolled past, a short visit) is written as a valid way to read the page. No line may imply the visitor missed, skipped, failed or should have done anything.
+3. Lighthearted and self-deprecating: the joke is on Nick and the page, never on the reader.
+4. Site voice: plain, first person where it speaks as Nick, no marketing words, no em dashes or en dashes.
+5. Same mechanism everywhere: same triggers, same local-only measuring, nothing stored or sent. Only the words change.
+
+`docs/tools/voicecheck.py` (committed with this addendum) enforces the mechanical part: a banned-word guard for grading or doubting language (`apparently`, `presumably`, `didn't`, `failed`, `skipped`, `ignored`, `missed`, `should have`, and others; "No judgment." is the one allowed use of "judg"), no dashes, no "intro" (R18), the same event keys in every voice, known placeholders only. Points 1 to 3 also need a human read, which is Crit's job on this PRD and on the build.
+
+### 20.2 The three directions
+
+- **AI Evaluations: the page grades itself.** A rubric-style readout of the page, never the visitor: consistency, factuality, hallucination risk, rage clicks counted as the page's bugs. The joke: once you start writing evals, you can't stop scoring things, including your own website. (Maestro's "I built eval pipelines for a living" line is softened to "Once you start writing evals", because Nick's eval work is one employer pipeline plus a personal practice project, and the resume should not be contradicted by its own website.)
+- **Research Operations: the visit is fielded.** Recruitment, quota, no-shows, scheduling, incentives, panel health, repository hygiene. The joke: I run studies for a living, and now I'm fielding you.
+- **Consumer Research: today's `index.html` notes, nearly unchanged.** Only the lines that could read as judging a visitor who didn't click are softened (20.4).
+
+### 20.3 How the build wires it (mechanism)
+
+- Each landing page's `<body>` carries `data-voice="<slug>"` (its own slug).
+- `assets/js/site.js` holds all three voices as one object, pasted verbatim from the JSON block in 20.5, between the markers `/*VOICES-BEGIN*/` and `/*VOICES-END*/`, written as `var VOICES = {...};`. `python3 docs/tools/voicecheck.py assets/js/site.js` proves it matches.
+- The voice is `VOICES[document.body.dataset.voice]`; a missing or unknown value falls back to `consumer-research`.
+- What each key drives, using the same triggers as [index.html L692-877]:
+  - `panelTitle`: the observer button title on load; `panelTitleDone`: the title after the debrief starts.
+  - `debriefLabel`: the `#debrief .sec-head .label` text; `debriefNote`: the `.debrief-note` paragraph. Both written in the HTML (not by JS) so they render with JS off; the JSON is the source.
+  - `events.open`: first note on load; `events.hero`: after 6s if no debrief yet; `events.sections[<data-obs>]`: first time each section is 30% visible, `sectionFallback` for any other name; `depth50`: first time scroll depth reaches 50%; `method1`, `method5`, `methodAll`: the 1st, 5th and last distinct chip opened (last = the page's chip count); `role`: each distinct role opened; `idle`: after 30s without input, once per idle stretch; `return`: tab becomes visible again; `rage` (AI Evaluations only, R26): the first rage-click burst.
+  - `debrief`: the lines written at 98% depth, in order, 650ms apart as today. Each item has a CSS class (`note-head`, `note-key` or none) and `cases`, a list of `[condition, text]`; the first true condition wins and the last is always `always`.
+- Conditions: `long` = at least 2 minutes on page; `full` = sections reached equals sections on the page; `methodsAny` / `methods5` = at least 1 / at least 5 chips opened; `rolesAny` = at least 1 role opened; `pausesAny` = at least 1 idle stretch; `clickedAny` = methodsAny or rolesAny; `rageAny` = at least 1 rage-click burst.
+- Placeholders, all computed from the DOM or the session: `{cards}` case-card count as a capitalized word (One to Four); `{name}` the section's `data-obs`; `{label}` the chip name; `{role}` the role's `data-role`; `{time}` m:ss on page; `{seen}` / `{total}` sections reached / `[data-obs]` count; `{mN}`, `{mNames}`, `{mTotal}` chips opened, first three names joined as today (", and N more"), chip count; `{rN}`, `{rNames}`, `{rTotal}` the same for roles; `{pN}` idle stretches; `{rage}` rage-click bursts.
+- The hero pill (`Session in progress`), the debrief cells (`#dTime`, `#dDepth`, `#dMethods`, `#dRoles` and their labels) and the observer's `aria-label` stay shared and unchanged.
+
+### 20.4 Consumer Research: what changes from `index.html`
+
+All other lines are verbatim from [index.html L736-860] (with the hard-coded counts replaced by placeholders, which R15 already required).
+
+| Trigger | `index.html` today | Consumer Research | Why |
+|---|---|---|---|
+| Impact in view | `Impact numbers in view. Noticed, presumably.` | `Impact numbers in view. No need to catch them all.` | "presumably" doubts the reader |
+| Experience in view | `Participant reaches Experience. The rows are waiting for a first click.` | `Participant reaches Experience. The rows open if you want the details.` | pressure to click |
+| Debrief coverage, all reached | `Complete. No skipped tasks.` | `Complete. Every task attempted.` | "skipped" frames the other case as a failure |
+| Debrief coverage, some missed | `A few were scrolled past. Noted without judgment.` | `A few went by quickly. Skimming counts.` | "noted" is still a mark against |
+| Debrief, no methods opened | `Methods opened: none. The board was admired from a respectful distance.` | `Methods opened: none. The board reads fine sorted, too.` | a joke about not clicking, the exact thing Nick flagged |
+| Debrief, no roles opened | `Roles expanded: none. The headlines were enough, apparently.` | `Roles expanded: none. The headlines cover the basics.` | "apparently" is a judgment about not clicking |
+
+`index.html` itself keeps its current lines (it is forbidden to edit until the homepage card); BACKLOG row in R28.
+
+### 20.5 The copy (exact, ship-ready, the single source)
+
+Ship these strings exactly. Typographic note: `·` is U+00B7, quotes are straight `"` and `'` as in today's script. Changing any line is a PRD amendment to this block, re-checked with `python3 docs/tools/voicecheck.py`.
+
+```json
+{
+  "ai-evaluations": {
+    "panelTitle": "Self-eval · Grading this page",
+    "panelTitleDone": "Self-eval · Page Scorecard",
+    "debriefLabel": "Page scorecard",
+    "debriefNote": "I write evals, and it turns out you can't switch that off. So this page grades itself while you read. Every score is about the page, never about you. Everything above was measured in this tab alone, is stored nowhere, and disappears when you leave.",
+    "events": {
+      "open": "Eval run starts. Subject: this page. You are not the one being graded.",
+      "hero": "Check: the hero says what this page is about. PASS.",
+      "sections": {
+        "Philosophy": "Philosophy in view. Same words as the other two pages. Consistency: PASS.",
+        "Practice": "Practice in view. Four principles. Each has to hold up in the case studies.",
+        "Selected Work": "Case studies in view. {cards} to choose from. Hallucination risk: LOW. They all happened.",
+        "Impact": "Impact in view. Every number checked against its source.",
+        "Experience": "Experience in view. Titles and dates match the resume. Factuality: PASS.",
+        "Methods": "Methods board in view. It sorted itself the same way it always does. Determinism: PASS.",
+        "Tools": "Tools in view. Short list, and every one of them actually used.",
+        "Debrief": "Scorecard in view. Grading the page, not the reader."
+      },
+      "sectionFallback": "{name} in view. Rendered as expected.",
+      "depth50": "Halfway down. The page is holding up so far. Provisional PASS.",
+      "method1": "Method opened: \"{label}\". Retrieval works. PASS.",
+      "method5": "Five methods opened. Plenty of test coverage. Thanks for the extra cases.",
+      "methodAll": "All {mTotal} methods opened. Full coverage. Best QA pass this page has had.",
+      "role": "{role} expanded. Details loaded on request. PASS.",
+      "rage": "Rapid clicks detected. That one is on the page, not you. Logged as a bug.",
+      "idle": "Quiet for 30 seconds. Probably reading. Reading time is not a defect.",
+      "return": "Tab back in focus. Nothing timed out. Welcome back."
+    },
+    "debrief": [
+      {
+        "cls": "note-head",
+        "cases": [
+          [
+            "always",
+            "Scorecard. The page grades itself, as promised."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "long",
+            "Time on page: {time}. Long read. Coherence held up."
+          ],
+          [
+            "always",
+            "Time on page: {time}. Quick read. The headings did their job."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "full",
+            "Scroll depth: PASS. {seen} of {total} sections came into view. Nothing broke on the way down."
+          ],
+          [
+            "always",
+            "Scroll depth: PASS. {seen} of {total} sections came into view. Some went by fast. Skimmable is a feature."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "methodsAny",
+            "Methods board: {mN} of {mTotal} opened ({mNames}). Every description loaded. PASS."
+          ],
+          [
+            "always",
+            "Methods board: sorted itself on cue. PASS. Opening chips is optional."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "rolesAny",
+            "Experience: {rN} of {rTotal} expanded ({rNames}). Content matched the headline. PASS."
+          ],
+          [
+            "always",
+            "Experience: headlines readable without expanding. PASS."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "rageAny",
+            "Rage-click events: {rage}. Those are page bugs, not user errors."
+          ],
+          [
+            "always",
+            "Rage-click events: 0. Grading myself here, not you."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "always",
+            "Hallucination risk: LOW. Every claim on this page traces to real work."
+          ]
+        ]
+      },
+      {
+        "cls": "",
+        "cases": [
+          [
+            "always",
+            "Overall: PASS. Sample size of one page, so read with caution."
+          ]
+        ]
+      },
+      {
+        "cls": "",
+        "cases": [
+          [
+            "always",
+            "Finding: Once you start writing evals, you start grading everything. Including your own website."
+          ]
+        ]
+      },
+      {
+        "cls": "",
+        "cases": [
+          [
+            "always",
+            "Recommendation: Get in touch. The details are just above this panel."
+          ]
+        ]
+      },
+      {
+        "cls": "note-head",
+        "cases": [
+          [
+            "always",
+            "Run closed. Nothing about you was scored, stored, or sent."
+          ]
+        ]
+      }
+    ]
+  },
+  "research-operations": {
+    "panelTitle": "Study #1 · Field Notes",
+    "panelTitleDone": "Study #1 · Field Report",
+    "debriefLabel": "Field status",
+    "debriefNote": "I run studies for a living, so this visit got fielded like one: recruited, scheduled, and thanked. Nothing above is about how well you did. It was measured in this tab alone, is stored nowhere, and disappears when you leave.",
+    "events": {
+      "open": "Field status: live. Recruitment: 1 of 1, quota met.",
+      "hero": "Participant arrived on time. No-show rate: 0%.",
+      "sections": {
+        "Philosophy": "Participant reaches Philosophy. No consent form needed. Nothing here is recorded.",
+        "Practice": "Participant reaches Practice. Four principles, straight from the research playbook.",
+        "Selected Work": "Participant reaches the case studies. {cards} to choose from. Scheduling is flexible.",
+        "Impact": "Impact numbers in view. Coded, tagged, and filed in the repository.",
+        "Experience": "Participant reaches Experience. Rows open on request. No booking link required.",
+        "Methods": "Methods board in view. Every card tagged and filed. Repository hygiene: excellent.",
+        "Tools": "Tools marquee in view. Every one of these has sent me a renewal notice.",
+        "Debrief": "Participant reaches the debrief. Session wrapped, right on schedule."
+      },
+      "sectionFallback": "Participant reaches {name}. Right on schedule.",
+      "depth50": "Halfway through the session. Running on time.",
+      "method1": "First method opened: \"{label}\". Logged to the repository.",
+      "method5": "Five methods opened. This participant would be great for the panel.",
+      "methodAll": "All {mTotal} methods opened. Somebody get this participant an incentive.",
+      "role": "Participant opens {role}. Task completed, no facilitator needed.",
+      "idle": "Participant pauses. Bio break, probably. The session will wait.",
+      "return": "Participant is back. No need to reschedule."
+    },
+    "debrief": [
+      {
+        "cls": "note-head",
+        "cases": [
+          [
+            "always",
+            "Field report. Closing out the study."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "long",
+            "Session length: {time}. Ran long. Good sessions usually do."
+          ],
+          [
+            "always",
+            "Session length: {time}. Wrapped early. The calendar appreciates it."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "full",
+            "Protocol coverage: {seen} of {total} sections. Full protocol, no deviations."
+          ],
+          [
+            "always",
+            "Protocol coverage: {seen} of {total} sections. A few went by quickly. Unmoderated sessions are like that."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "methods5",
+            "Methods opened: {mN} of {mTotal} ({mNames}). Rich data."
+          ],
+          [
+            "methodsAny",
+            "Methods opened: {mN} of {mTotal} ({mNames}). Useful data."
+          ],
+          [
+            "always",
+            "Methods opened: none. Observation-only is a valid study design."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "rolesAny",
+            "Roles opened: {rN} of {rTotal} ({rNames}). Follow-up questions welcome."
+          ],
+          [
+            "always",
+            "Roles opened: none. The summary was enough to go on."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "pausesAny",
+            "Breaks taken: {pN}. Participant wellbeing comes first."
+          ],
+          [
+            "always",
+            "Breaks taken: 0. Powered straight through."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "always",
+            "No-show rate: 0%. Panel health: n=1, feeling great about it."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "always",
+            "Incentive: good vibes only. The budget request is still pending."
+          ]
+        ]
+      },
+      {
+        "cls": "",
+        "cases": [
+          [
+            "always",
+            "Recommendation: Get in touch to schedule a follow-up. The details are just above this panel."
+          ]
+        ]
+      },
+      {
+        "cls": "note-head",
+        "cases": [
+          [
+            "always",
+            "Study closed. Thank you for participating. Nothing was recorded, and nothing leaves this tab."
+          ]
+        ]
+      }
+    ]
+  },
+  "consumer-research": {
+    "panelTitle": "Participant #1 · Session Notes",
+    "panelTitleDone": "Participant #1 · Session Debrief",
+    "debriefLabel": "Your session",
+    "debriefNote": "Every visit here is a small usability session. I observe it the way I'd observe any study, with the same respect for the participant. Everything above was measured in this tab alone, is stored nowhere, and disappears when you leave.",
+    "events": {
+      "open": "Session begins. One participant, unmoderated.",
+      "hero": "Participant reads the hero. Or skims it. No judgment.",
+      "sections": {
+        "Philosophy": "Participant reaches Philosophy. Reading pattern assumed F-shaped.",
+        "Practice": "Participant reaches Practice. Four principles, no pop quiz.",
+        "Selected Work": "Participant reaches the case studies. {cards} to choose from.",
+        "Impact": "Impact numbers in view. No need to catch them all.",
+        "Experience": "Participant reaches Experience. The rows open if you want the details.",
+        "Methods": "Methods board in view. The cards sorted themselves.",
+        "Tools": "Tools marquee observed. It doesn't stop. Neither does research.",
+        "Debrief": "Participant reaches the debrief. Full scroll achieved."
+      },
+      "sectionFallback": "Participant reaches {name}.",
+      "depth50": "Halfway down the page. Engagement looks healthy.",
+      "method1": "First method opened: \"{label}\". Curiosity confirmed.",
+      "method5": "Five methods explored. A thorough participant.",
+      "methodAll": "All {mTotal} methods opened. Above and beyond.",
+      "role": "Participant expands {role}. Task success.",
+      "idle": "Participant pauses. Thinking, or getting coffee.",
+      "return": "Participant returns. Welcome back."
+    },
+    "debrief": [
+      {
+        "cls": "note-head",
+        "cases": [
+          [
+            "always",
+            "Debrief. Synthesizing the session while it is still fresh."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "long",
+            "Duration: {time}. A considered read. Coffee may have been involved."
+          ],
+          [
+            "always",
+            "Duration: {time}. Brisk. The participant knows what they came for."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "full",
+            "Coverage: {seen} of {total} sections reached. Complete. Every task attempted."
+          ],
+          [
+            "always",
+            "Coverage: {seen} of {total} sections reached. A few went by quickly. Skimming counts."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "methods5",
+            "Methods opened: {mN} of {mTotal} ({mNames}). A hands-on participant."
+          ],
+          [
+            "methodsAny",
+            "Methods opened: {mN} of {mTotal} ({mNames}). Selective. Respect."
+          ],
+          [
+            "always",
+            "Methods opened: none. The board reads fine sorted, too."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "rolesAny",
+            "Roles expanded: {rN} of {rTotal} ({rNames}). The details were wanted."
+          ],
+          [
+            "always",
+            "Roles expanded: none. The headlines cover the basics."
+          ]
+        ]
+      },
+      {
+        "cls": "note-key",
+        "cases": [
+          [
+            "pausesAny",
+            "Pauses observed: {pN}. Reflection, or a second tab. Both are valid."
+          ],
+          [
+            "always",
+            "Pauses observed: 0. Momentum held the whole way."
+          ]
+        ]
+      },
+      {
+        "cls": "",
+        "cases": [
+          [
+            "always",
+            "Finding 1: The participant made it to the end. Content held attention, which is the whole point."
+          ]
+        ]
+      },
+      {
+        "cls": "",
+        "cases": [
+          [
+            "clickedAny",
+            "Finding 2: The participant clicked things. Interest moved from passive to active."
+          ],
+          [
+            "always",
+            "Finding 2: The participant read rather than clicked. A reader, not a clicker."
+          ]
+        ]
+      },
+      {
+        "cls": "",
+        "cases": [
+          [
+            "always",
+            "Recommendation: Get in touch. The details are just above this panel."
+          ]
+        ]
+      },
+      {
+        "cls": "note-head",
+        "cases": [
+          [
+            "always",
+            "Session closed. Thank you for participating. Nothing was recorded, and nothing leaves this tab."
+          ]
+        ]
+      }
+    ]
+  }
+}
+```
+
+Read as a session, AI Evaluations (a visitor who opens nothing and scrolls to the end in under 2 minutes) produces: "Eval run starts. Subject: this page. You are not the one being graded." … "Scroll depth: PASS. 7 of 7 sections came into view. Nothing broke on the way down." "Methods board: sorted itself on cue. PASS. Opening chips is optional." "Experience: headlines readable without expanding. PASS." "Rage-click events: 0. Grading myself here, not you." "Hallucination risk: LOW. Every claim on this page traces to real work." "Overall: PASS. Sample size of one page, so read with caution." "Finding: Once you start writing evals, you start grading everything. Including your own website." The same visitor on Research Operations gets "Field status: live. Recruitment: 1 of 1, quota met." … "Methods opened: none. Observation-only is a valid study design." "No-show rate: 0%. Panel health: n=1, feeling great about it." "Incentive: good vibes only. The budget request is still pending." Neither page holds the visitor's choices against them.
+
+## 21. AI Evaluations page: using the new case study
+
+### 21.1 Selected work (replaces the AI Evaluations rows of the 5.3 table)
+
+| # | Card title (`h3`) | href | Blurb | Source |
+|---|---|---|---|---|
+| 1 | `Evaluating My Own Agent` | `evaluating-my-agent.html?from=ai-evaluations` | `Independent project. I evaluated the AI agent that runs my own daily workflow: a Promptfoo regression suite, tool-call traces instead of grading how replies sounded, and a routing bug found, fixed, and confirmed with the same suite.` (draft) | [case:evaluating-my-agent.html] summary, Approach, What I built |
+| 2 | `Research Knowledge Base` | `research-knowledge-base.html?from=ai-evaluations` | as in 5.3, unchanged | 5.3 |
+| 3 | `Experian Virtual Assistant` | `experian-eva.html?from=ai-evaluations` | as in 5.3, unchanged | 5.3 |
+
+Order: the one structured model evaluation first, because it is the evidence an eval hiring manager screens for (base section 12, biggest risk). The blurb opens with "Independent project." so it can't be mistaken for employer work (O1).
+
+### 21.2 Methods: three more Evaluation chips (appended after the four in 5.6)
+
+| Chip | Description | Source |
+|---|---|---|
+| `Model-graded rubrics` | `Deterministic checks for what can be checked exactly, and a model-graded rubric for what can't.` | [case:evaluating-my-agent.html] Approach ("mixing deterministic checks with model-graded rubrics") and Outcomes (when a rubric "earns its keep over a keyword match") |
+| `Tool-call trace review` | `Grading what an agent actually called, not just whether its reply sounded right.` | [case:evaluating-my-agent.html] Approach, What I learned |
+| `Regression suites` | `The same eval rerun before and after a fix, to prove the fix held.` | [case:evaluating-my-agent.html] What I built, How it works |
+
+AI Evaluations clusters: Evaluation (7), Evaluative (6), Quantitative (6), Operations (6), 25 chips.
+
+### 21.3 Tools (new S-07 on AI Evaluations)
+
+`Promptfoo`, `LangSmith`, `Python`, in that order. Sources: [case:evaluating-my-agent.html] (Promptfoo, LangSmith); [resume.html] Tools (Python). The three-item marquee uses the existing repeat-until-wide logic (R13 edge case).
+
+### 21.4 Still omitted
+
+Impact (S-04) stays omitted on AI Evaluations. 11/14 and 2/2 are pass rates from a personal practice run; next to employer stats in an "Impact" strip they would read as business impact, which they are not (Flag A2).
+
+## 22. Link-preview images (O8)
+
+One 1200x630 PNG per landing page, so a link pasted into an application or LinkedIn shows which discipline it is. Rendered once from a committed HTML template and committed as files; there is no build step at serve time.
+
+- **Template:** `docs/tools/og-card.html?d=<slug>`. Static HTML, inline CSS, `<meta name="robots" content="noindex">`, the same Google Fonts link as `index.html`. Body is exactly 1200x630.
+- **Content per card:** the name `Nicholas Pings Rodriguez.` (Young Serif, moss period), a small-caps label `Research in`, the discipline display name (section 3) as the largest text, the section 5.1 thesis with its `.mark` highlight, and `nickpings.com/<slug>` in muted ink. Colors only from the `index.html` `:root` tokens: `--paper` background, `--ink`, `--pine`, `--moss`, `--leaf`, `--muted`.
+- **Render:** Chromium over CDP, viewport 1200x630, deviceScaleFactor 1, after `document.fonts.ready`, `Page.captureScreenshot` PNG, saved to `assets/og/<slug>.png`.
+- **Tags on each landing page** (in addition to R16): `og:image` = `https://nickpings.com/assets/og/<slug>.png`, `og:image:width` `1200`, `og:image:height` `630`, `og:image:alt` = `Nicholas Pings Rodriguez. Research in <Display name>.`, `twitter:card` `summary_large_image`, `twitter:title` = the page title, `twitter:description` = the page description, `twitter:image` = the og:image URL.
+- Case pages and `resume.html` get no preview image (non-goal, 24.4).
+
+---
+
+## 23. Addendum requirements (R20 to R28)
+
+Harness: section 10's (local `python3 docs/tools/serve.py 8000` on `feature/portfolio-restructure`, Chromium over CDP, the same viewports, reduced-motion and no-JS emulation). "JS check" means `js(...)` on `http://localhost:8000/<file>`. `$PAGES` as in section 10; `$CASES` now also includes `evaluating-my-agent`. "Session script" means: load the page fresh, wait 7s, scroll each `[data-obs]` section into view in order with 400ms between, then scroll to the bottom and wait 8s; read `#observerLog li span:last-child` texts in order.
+
+Build/deployment for **every** addendum requirement: **not Docker**, same justified exception as section 11 (static GitHub Pages site, nothing to containerize). The OG render uses the existing Chromium-over-CDP harness once at build time; no service, container or dependency is added.
+
+### R20. The branch carries Nick's AI evals case study, and it is treated like every other case page.
+- **Source:** 17.2; [case:evaluating-my-agent.html] at `main` 9d55508; O1; [Probe A1].
+- **Acceptance:** `git merge-base --is-ancestor 9d55508 feature/portfolio-restructure && echo yes` prints `yes` (bring it in with `git merge origin/main` on the feature branch; never the other direction). `git diff 9d55508 -- evaluating-my-agent.html | grep '^-[^-]'` shows only the old colophon line (`UX Research &amp; AI Research Operations`). R10's checks (a) to (f) pass for `evaluating-my-agent.html`, including `?from=ai-evaluations` turning both back links into `← Back to AI Evaluations`, and its `.colophon` reading `Nicholas Pings Rodriguez · Research`. `grep -c "\[Nick to" evaluating-my-agent.html` prints `0`. R4's identical-switcher check passes over `$PAGES $CASES` with the new member.
+- **Edge cases:** the merge must be a clean merge with no conflicts (the branch only adds files under `docs/` so far); if `main` has moved again by build time, merge the latest `origin/main` and re-run R17 against it; the case page keeps its own inline CSS and Fraunces font (only the switcher, back-link script and colophon change, like the others); its back link with no `?from=` still goes to `index.html`, which does not link back to it (expected until the homepage card).
+- **Resources:** `evaluating-my-agent.html` (merged from `main`, then R10 edits); `assets/js/back-link.js`; `assets/css/disc-nav.css`.
+
+### R21. The AI Evaluations page shows the new case study, the three new chips and the Tools section, and still no Impact strip.
+- **Source:** section 21 and its cited sources; O1, O4, O5.
+- **Acceptance:** JS check on ai-evaluations: section ids equal `["top","philosophy","practice","selected-work","work","methods","tools","debrief"]` and `.sec-code` texts equal `S-01` to `S-07`; `[...document.querySelectorAll('#selected-work a.case-card')].map(a => [a.querySelector('h3').textContent, a.getAttribute('href')])` equals the three 21.1 rows in order, and card 1's `p` text equals the 21.1 blurb exactly (starts `Independent project.`); the Evaluation cluster's `.n` is `7` and its chip names are the 5.6 four followed by `Model-graded rubrics`, `Tool-call trace review`, `Regression suites`, with the 21.2 descriptions verbatim; total `details.chip` is `25`; `#impact` is `null`; static-HTML tools list (curl and parse before the marquee duplicates it) equals `["Promptfoo","LangSmith","Python"]`. `#dMethods` reads `0 / 25` on load.
+- **Edge cases:** no chip, tool or number from the private `ai-evals-reps` repo that is not on the site (`grep -ciE "golden|pairwise|red-team|MT-Bench" ai-evaluations.html` prints `0`); with JS off the 3-card grid and 3-item tools list are readable; a 3-item marquee shows no visible gap at 1440px.
+- **Resources:** `ai-evaluations.html`; `assets/js/site.js` (no change needed beyond R15/R24).
+
+### R22. resume.html's masthead, lede and Experian bullets read for all three disciplines, with the real titles and dates unchanged.
+- **Source:** [Nick-R]; O7; section 19.1 audit; 19.3 copy and sources.
+- **Acceptance:** JS check on `resume.html`: `document.title === "Nicholas Pings Rodriguez · Resume"`; `.role` text equals `Senior Researcher · AI Evaluation, Research Operations & Consumer Research`; `.lede` text, whitespace-normalized, equals the 19.3 lede without brackets and `.lede .mark` equals `at every stage of the product life cycle`; `[...document.querySelectorAll('.job-title')].map(e => e.textContent)` equals `["Sr. User Experience Researcher","User Experience Researcher","Principal User Experience Researcher","Evaluating My Own Agent"]`; the first three `.job-when` and `.job-org` texts equal `main`'s; the Experian `li` texts, normalized, equal X1 to X5 in order and each starts with a `b.pt-k` whose text is, in order, `Consumer research.`, `Generative AI research.`, `AI evaluation.`, `Research operations.`, `Applied AI.`; the HP and Freelance `ul.pts` innerHTML equal `main`'s after whitespace normalization; the `.contact` block's innerHTML equals `main`'s.
+- **Edge cases:** no new em or en dashes (`grep -c "—" resume.html` prints `0` and `grep -o "&mdash;" resume.html | wc -l` prints `3`, the three unchanged date ranges); no bullet contains a number not in a cited source; "Senior Researcher" appears only in the headline (job titles keep "User Experience Researcher" for keyword searches); still one file (`ls resume*.html` prints only `resume.html`).
+- **Resources:** `resume.html`.
+
+### R23. resume.html gains the Independent block and discipline-legible Methods and Tools, still prints within two pages, and stays a single static file.
+- **Source:** [Nick-R]; O7; 19.2 and 19.3; [Probe A2, A3].
+- **Acceptance:** JS check: `[...document.querySelectorAll('.block-label')].map(e => e.textContent)` equals `["Experience","Independent","Education","Methods","Tools"]`; the Independent article's title, when and org text equal 19.3, its four `li` texts equal I1 to I4, and I4 holds `a[href="evaluating-my-agent.html"]`; Methods `h4` texts equal `["Generative","Evaluative","Quantitative","AI evaluation","Operations"]`, the first three `p` texts equal `main`'s and the last two equal 19.3; Tools `h4` texts equal `["Research & recruiting","Analysis","AI evaluation","Collaboration"]` and the tool names split on `·` form a set of 25 with no duplicates, equal to `main`'s 23 plus `Promptfoo` and `LangSmith`. `Page.printToPDF` (letter, `preferCSSPageSize: true`) of `resume.html` produces at most 2 pages; no `.job` or `.m-group` is split across the page break (the `break-inside:avoid` rule from 19.3 is present). At 390x844 and 320x568, `document.documentElement.scrollWidth <= innerWidth`. `grep -c "<script" resume.html` prints `0`. New CSS uses only existing tokens (no new hex colors: the R14 `comm` method applied to `resume.html`'s `<style>` against `main`'s prints nothing).
+- **Edge cases:** today's resume already prints to 2 pages at 100% scale [Probe A2]; this requirement keeps it at 2, it does not promise 1 (Flag A4); the Independent block is visibly labeled personal in its org line, never mixed into the Experian role; the `Case study` link prints as readable text (no URL hidden behind "click here").
+- **Resources:** `resume.html`.
+
+### R24. Each landing page speaks in its own voice through one shared script, with the same triggers and nothing stored.
+- **Source:** [Nick-S]; 20.3; R15 (local-only, counts from the DOM).
+- **Acceptance:** `grep -o 'data-voice="[a-z-]*"' <page>.html` prints exactly the page's own slug, once, on `<body>`, for each of `$PAGES`. `python3 docs/tools/voicecheck.py assets/js/site.js` prints `OK: 3 voices, 116 strings` and exits 0. JS check per page after load: `.observer-title` text equals the voice's `panelTitle`; the first log line equals `events.open`; `#debrief .sec-head .label` and `.debrief-note` texts equal `debriefLabel` and `debriefNote` (also with JS disabled, from the static HTML). After the session script: the observer title equals `panelTitleDone`, and the debrief lines equal the voice's `debrief` list resolved for that session (no chips or roles opened, under 2 minutes, all sections reached). Changing `data-voice` to `nonsense` on a copy of a page and loading it gives the consumer-research `panelTitle`. R15's no-storage grep and storage checks still pass.
+- **Edge cases:** a page without `#impact` or `#tools` never logs those section lines and raises no console error; repeated visibility changes log `events.return` each time, as today; `MAX_NOTES` (90) still caps the log; the debrief runs once; reduced motion and 390px behave as in R15 and R19.
+- **Resources:** `assets/js/site.js`; the 3 landing pages; `docs/tools/voicecheck.py`.
+
+### R25. The shipped copy is exactly the section 20.5 block, and no line judges the visitor.
+- **Source:** [Nick-S] "Need to keep that light hearted though. Don't want to seem like we are judging people for not clicking into things"; 20.1; Maestro's directions as recorded in [Card-A].
+- **Acceptance:** `python3 docs/tools/voicecheck.py` (PRD block) and `python3 docs/tools/voicecheck.py assets/js/site.js` both exit 0 (exact match, tone guard, no dashes, no "intro", key parity). Live, per page, run the session script twice: once opening nothing, once opening 5 chips and 1 role. Each log line equals a 20.5 string with its placeholders filled; in the "opened nothing" run, the methods and roles debrief lines are the `always` cases (for ai-evaluations: `Methods board: sorted itself on cue. PASS. Opening chips is optional.` and `Experience: headlines readable without expanding. PASS.`). Crit reads every zero-outcome line of all three voices against the 20.1 rules and records PASS or the offending line.
+- **Edge cases:** placeholders never show raw (`grep -c "{" ` on the collected log text is `0`); `{cards}` renders `One` on research-operations and `Three` on ai-evaluations; names with quotes (chip labels) render as text, never HTML (notes are built with `textContent`, as today; `grep -c innerHTML assets/js/site.js` prints `0`).
+- **Resources:** `assets/js/site.js`; `docs/portfolio-restructure-PRD.md` section 20.5; `docs/tools/voicecheck.py`.
+
+### R26. AI Evaluations counts rage clicks as the page's bugs, locally, and the other pages don't count them.
+- **Source:** Maestro's direction "Rage-click events: 0 (we're grading ourselves, not you)" [Card-A]; 20.2. Measured instead of hard-coded, so the scorecard is honest.
+- **Acceptance:** a rage-click burst is 3 or more clicks within 700ms, each within 30px of the first; one burst counts once. JS check on ai-evaluations: dispatching 3 `click` events at the same point within 300ms logs `events.rage` once and makes the debrief line `Rage-click events: 1. Those are page bugs, not user errors.`; a second burst logs nothing new and the debrief says `2`; with no bursts the line is `Rage-click events: 0. Grading myself here, not you.` On research-operations and consumer-research the same 3 clicks log nothing about rage.
+- **Edge cases:** double-clicking to select a word (2 clicks) is not a burst; clicks on links or `summary` count the same as anywhere else; the counter lives in a closure variable only, nothing stored (R15 greps still 0); touch taps count as clicks.
+- **Resources:** `assets/js/site.js`; `ai-evaluations.html`.
+
+### R27. Each landing page has its own 1200x630 link-preview image and Twitter card tags.
+- **Source:** O8 [Card-A]; [Nick] "that I can point job apps at"; section 22.
+- **Acceptance:** for each slug: `sips -g pixelWidth -g pixelHeight assets/og/<slug>.png` reports `1200` and `630`; `stat -f%z assets/og/<slug>.png` is at most `307200` (300 KB). JS check on `docs/tools/og-card.html?d=<slug>`: `document.body.getBoundingClientRect()` is 1200x630, the text contains `Nicholas Pings Rodriguez.`, `Research in`, the display name and `nickpings.com/<slug>`, `document.fonts.check('48px "Young Serif"')` is `true`, and every text element's box is at least 60px inside each edge. JS check on each landing page: the eight tags in section 22 exist with those exact values. The PNG's colors come only from the `:root` tokens (the template's CSS passes the R14 `comm` check against `index.html`). Crit opens each PNG and confirms it shows the right discipline.
+- **Edge cases:** the absolute `og:image` URL 404s until Nick merges to `main` (expected; locally the file check stands in); LinkedIn caches previews, so after the merge each URL is run once through LinkedIn's Post Inspector (manual step, Flag A5); an unknown `?d=` on the template shows the consumer-research card rather than a blank one; `og-card.html` is not linked from any page and carries `noindex`.
+- **Resources:** `docs/tools/og-card.html` (new), `assets/og/ai-evaluations.png`, `assets/og/research-operations.png`, `assets/og/consumer-research.png` (new); the 3 landing pages.
+
+### R28. BACKLOG.md records this addendum's follow-ups next to the section 16 rows.
+- **Source:** Nick's standing rule (follow-ups go to BACKLOG, not the PRD); sections 20.4, 21.4, 25.
+- **Acceptance:** `grep -ciE "index.html.*(session|observer|apparently)" BACKLOG.md`, `grep -ciE "impact.*(ai eval|evaluat)" BACKLOG.md` and `grep -ciE "resume.*(number|stat)" BACKLOG.md` each print at least `1`; every section 16 row is also present; no existing row is deleted (`git diff main -- BACKLOG.md | grep -c '^-[^-]'` prints `0`).
+- **Edge cases:** merge into the existing Open section, never overwrite; shipped rows untouched.
+- **Resources:** `BACKLOG.md`.
+
+## 24. Addendum: deployment, feasibility, risks
+
+### 24.1 Deployment and build
+
+Unchanged from section 11: **not Docker**, static GitHub Pages, no build step, preview with `python3 docs/tools/serve.py 8000`. The three OG PNGs are rendered once by the build card with the existing CDP harness and committed. Production is still a merge to `main` after Nick's explicit approval.
+
+### 24.2 Feasibility probes (spike method)
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| A1 | Given Nick's new case study, when I check the feature branch, then it is missing and mergeable. | VALIDATED | `git log --oneline da0d2b3..origin/main` shows only 9d55508 (adds `evaluating-my-agent.html`, 1 file); the feature branch's only commit adds files under `docs/`, so the merge cannot conflict. `grep -c "\[Nick to"` on the case = 0. |
+| A2 | Given today's `resume.html`, when printed to letter at 100%, then it fits on one page. | INVALIDATED | CDP `Page.printToPDF` (letter, preferCSSPageSize): 2 pages. Print-media sheet height 1150px against a 1056px page. R23 holds the line at 2 pages instead (Flag A4). |
+| A3 | Given the 19.3 changes applied to a scratch copy (not the repo), when printed and shown on a phone, then it stays at 2 pages with no overflow. | VALIDATED | Scratch prototype: `Page.printToPDF` 2 pages; at 390x844 `scrollWidth` 390 = `innerWidth`; Methods grid lands as Generative/Evaluative, Quantitative/AI evaluation, Operations full width; Tools as Research & recruiting full width, Analysis/AI evaluation, Collaboration full width. |
+| A4 | Given the 20.5 copy block, when checked mechanically, then every voice has the same keys, known placeholders, no dashes, no banned grading words, and no "intro". | VALIDATED | `python3 docs/tools/voicecheck.py` on the committed PRD: `OK: 3 voices, 116 strings`. |
+| A5 | Given `index.html`'s observer script, when the voice copy replaces its literals, then the triggers stay the same. | VALIDATED (by reading) | [index.html L736-860]: every note is a string literal passed to `note()` from a fixed trigger; 20.3 maps each literal to a key. No trigger is added except R26's click counter. |
+
+No AI/LLM component is built, so the AI three-dimension check does not apply.
+
+### 24.3 Risks
+
+- **Biggest risk: a joke that lands wrong on a recruiter.** The notes are the most personality-forward part of pages people open from job applications. Mitigation: the 20.1 rules, the mechanical guard, Crit's line-by-line read of every zero-outcome line, and Nick's own read of 20.5 before build.
+- **The AI Evaluations page now leads with personal work.** Labeled "Independent project" on the card, the case page and the resume, so it can't be mistaken for employer work. It is still the strongest eval evidence Nick has. If he prefers employer work first, swap cards 1 and 3 in 21.1 (Flag A1).
+- **"Senior Researcher" headline.** Broader than the real title. Mitigated by the real titles staying in Experience, unchanged.
+- **Copy drift between the PRD and `site.js`.** Mitigated by `voicecheck.py`, which fails on any difference.
+- **`index.html` keeps the old notes**, including the two lines this addendum softens, until the homepage card (R28 logs it).
+
+### 24.4 Non-goals for the addendum (in addition to section 13, as amended in 17.3)
+
+- Three resumes, resume variants, `?d=`-style resume switching, or JS on `resume.html`.
+- Changing any job title, employer, date, contact detail or education line on the resume.
+- Adding the `index.html` impact stats to the resume, or any number not tied to a role by a source.
+- Editing `index.html`'s observer lines (homepage card).
+- New session-notes triggers beyond R26's rage-click counter; a voice switcher the visitor can toggle; storing anything.
+- An Impact strip on AI Evaluations, or eval methods/tools that appear only in the private `ai-evals-reps` repo.
+- Preview images for case pages or the resume; favicons.
+
+**Authorized boundaries (addendum):** everything in section 13's list, plus: merge `origin/main` into `feature/portfolio-restructure`; edit `resume.html` per R22 and R23; R10 edits to `evaluating-my-agent.html`; create `docs/tools/og-card.html` and `assets/og/*.png`; run `docs/tools/voicecheck.py`.
+
+**Forbidden actions (addendum):** section 13's list as amended in 17.3. Still: never commit to, push to, or merge into `main`.
+
+## 25. Flags for Nick (addendum)
+
+1. **A1. Your new case study is on the AI Evaluations page, first.** You committed `evaluating-my-agent.html` this morning, which is exactly the O1/O4 trigger, so I put it on the page as card 1, labeled "Independent project", plus 3 chips and 3 tools it backs up. Say the word and I drop it back to "later", or move it below the two Experian cards.
+2. **A2. No Impact strip on AI Evaluations.** 11/14 and 2/2 are practice-run pass rates, not business impact. They stay on the case page and resume.
+3. **A3. The resume has almost no numbers.** The homepage stats (24+ products, 2.3K+ findings, 30+ teams, 1.5K+ voices) aren't tied to a role anywhere I can cite. If you tell me which role each belongs to, they'd strengthen X1 and X4.
+4. **A4. The resume already prints on 2 pages.** True today too, at 100% scale. The update keeps it at 2. Getting to 1 page would mean cutting content, which is a separate call.
+5. **A5. One manual step after merge:** run each of the three URLs through LinkedIn's Post Inspector once so LinkedIn picks up the new preview images.
+6. **A6. Read the 20.5 copy before build.** Especially the AI Evaluations finding line ("Once you start writing evals, you start grading everything. Including your own website.") and the Research Operations tools line ("Every one of these has sent me a renewal notice."). Edits go into 20.5, not the HTML.
+7. **Docker exception** unchanged: static GitHub Pages, no container.
+
+No ongoing cost, no new services, no new recurring steps beyond A5 (once).
+
+## 26. Follow-ups (BACKLOG rows the build card adds, R28)
+
+- Homepage card: bring `index.html`'s observer lines in line with section 20.4 (the softened consumer-research lines) when `index.html` moves onto `site.js`.
+- AI Evaluations Impact strip, once there are cited, role-attributed evaluation numbers (O5).
+- Resume: attribute the homepage stats to roles so they can go on the resume (Flag A3).
+- Resume: a one-page cut, if Nick wants one (Flag A4).
+- LinkedIn Post Inspector pass after merge (Flag A5).
