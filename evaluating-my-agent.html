@@ -249,7 +249,7 @@
             <li>A visual spec went through two real revision rounds on a design task. An independent review caught a delivered palette that didn't match the approved two-tone spec, by grepping the actual hex values out of the delivered files rather than trusting the write-up, and sent it back. The second pass was verified the same way, plus a live click-through of the finished interaction in a browser, before sign-off.</li>
             <li>A 19-requirement product spec for a site restructure was checked against the live site's actual code, not just the written document: real HTTP probes confirmed the proposed URL scheme behaved exactly as described before the spec ever reached me for a decision.</li>
           </ul>
-          <p>That discipline, independent verification against the artifact itself, is now being extended with the same promptfoo/LangSmith harness to the other specialist roles on the team, not just the one that routes the work.</p>
+          <p>I extended the same promptfoo/LangSmith harness across the other five specialist roles on the team (not just the one that routes work): 20 scenarios grounded in each role's actual operating rules and real incident history, run against fresh sessions and graded on extracted tool-call evidence, the same way as above. The result: zero genuine rule violations on independent evidence across all 20. The one real finding was a formatting tic, not a behavior problem, and it tracked model tier exactly: the faster model missed a house-style rule on every run, the stronger model missed it on at most one. The run also surfaced a flaw in my own test harness (a legitimate action got auto-flagged by an overly blunt assertion) and caused two real side effects on live systems, both independently confirmed cleaned up before I called it done, a reminder that evaluation work on a system with real tool access needs the same containment discipline as the system itself.</p>
         </div>
       </div>
 
@@ -289,6 +289,7 @@
             <div class="stat-item"><span class="stat-num">11/14</span><span class="stat-label">Pass rate on the first full regression pass, isolating one real formatting tic, not a substance problem</span></div>
             <div class="stat-item"><span class="stat-num">2/2</span><span class="stat-label">Routing scenarios confirmed fixed with real extracted tool-call evidence, not just a cleaner-sounding reply</span></div>
             <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">Raw secrets reached the trace, confirmed against a probe built specifically to slip past the existing redaction</span></div>
+            <div class="stat-item"><span class="stat-num">20/20</span><span class="stat-label">Scenarios across five other specialist roles cleared on real evidence, once style misses were separated from substance</span></div>
           </div>
           <p>The eval found and helped fix a real routing defect, confirmed with tool-call evidence rather than a feeling. It also surfaced one useful false lead along the way: a deterministic check once flagged the agent for "recommending" a platform it had actually correctly warned against, which became a concrete lesson about when a model-graded rubric earns its keep over a keyword match.</p>
         </div>
