@@ -170,15 +170,15 @@
     <a class="back label rise d1" href="index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
 
     <header class="case-head">
-      <p class="eyebrow label rise d2">AI evaluation practice &middot; Independent project</p>
+      <p class="eyebrow label rise d2">AI evaluation &amp; agent observability &middot; Independent project</p>
       <h1 class="title rise d2">Evaluating My Own Agent</h1>
-      <p class="dek rise d3">Pivoting into AI evaluation work, I needed real reps, not theory. So I turned the practice on the system I actually depend on: the AI agent that runs my daily workflow, orchestrates my other agents, and routes work for me.</p>
+      <p class="dek rise d3">I run my day-to-day work through a small team of specialist AI agents, one that plans, one that builds, one that reviews, and so on, orchestrated by an agent that routes the work between them. I apply structured AI evaluation methods, rubric scoring, tool-call trace analysis, and red-teaming, to that system itself: to find real defects in how it operates and prove, with evidence, when a fix actually holds.</p>
 
       <div class="meta rise d3">
         <div><span class="label">Role</span><span>Designed, built &amp; evaluated</span></div>
-        <div><span class="label">Project</span><span>Personal practice, pivot portfolio</span></div>
-        <div><span class="label">Subject</span><span>My own daily-driver agent</span></div>
-        <div><span class="label">Context</span><span>Independent, not employer work</span></div>
+        <div><span class="label">Project</span><span>Independent, ongoing</span></div>
+        <div><span class="label">Subject</span><span>My own multi-agent operations team</span></div>
+        <div><span class="label">Methods</span><span>Promptfoo, LangSmith, LLM-as-judge</span></div>
       </div>
     </header>
 
@@ -188,8 +188,8 @@
         <span class="section-num">01</span>
         <div>
           <h2>The problem</h2>
-          <p>I was moving from UX research toward AI evaluation, and I knew that reading about rubrics and LLM-as-judge wasn't the same as doing it. I needed a real subject with real failure modes, not a toy dataset.</p>
-          <p>I had one close at hand: my own agent setup had real, specific complaints behind it. Work sometimes went out that should have been routed to a specialist instead. A request once landed with the wrong team. An entire capability got forgotten as if it didn't exist. None of that was measured. It was just a feeling that something was "off."</p>
+          <p>I coordinate a small team of specialist AI agents that plan, build, and review real work for me. Like any team, it had specific, recurring failure modes: work occasionally went out that should have been routed to a specialist instead, a request once landed with the wrong team, a whole capability got treated as if it didn't exist.</p>
+          <p>None of that was measured. It was an impression, not a finding. I wanted the same standard of evidence I'd demand in any research readout: a reproducible method, a real dataset, and a result I could show my work on.</p>
         </div>
       </div>
 
@@ -206,11 +206,11 @@
         <span class="section-num">03</span>
         <div>
           <h2>Approach</h2>
-          <p>I built a practice repo grounded in real sources (MT-Bench, OpenAI's evals framework, Promptfoo's docs, published judge-reliability research) rather than guessing at method, and used it to run a sequence of increasingly real evaluations:</p>
+          <p>I layer three evaluation methods, each matched to what it's actually good at, grounded in published method (MT-Bench, OpenAI's evals framework, Promptfoo's and LangSmith's own documentation) rather than invented from scratch:</p>
           <ul>
             <li><strong>Black-box text grading</strong> with Promptfoo, wiring its exec provider to the actual CLI instead of a simulation, mixing deterministic checks with model-graded rubrics.</li>
-            <li><strong>Tool-call trace inspection</strong> once I hit the ceiling of text grading: parsing the agent's own session logs for the specific tool call it made, so the assertion was "did it call the right tool" rather than "did it sound right."</li>
-            <li><strong>Full trace review in LangSmith</strong> for the cases that needed a deeper look, built as an on-demand script rather than an always-on hook, so it only spends anything when I actually point it at a session.</li>
+            <li><strong>Tool-call trace inspection</strong> for anything text grading can't reach: parsing the agent's own session logs for the specific tool call it made, so the assertion is "did it call the right tool," not "did it sound right."</li>
+            <li><strong>Full trace review in LangSmith</strong> for the cases that need a deeper look, built as an on-demand script rather than an always-on hook, so it only spends anything when I actually point it at a session.</li>
           </ul>
         </div>
       </div>
@@ -230,6 +230,19 @@
 
       <div class="section">
         <span class="section-num">05</span>
+        <div>
+          <h2>Across the team</h2>
+          <p>The same evidence standard runs through how every specialist in the team operates day to day, not only the agent I evaluated directly. Two recent examples:</p>
+          <ul>
+            <li>A visual spec went through two real revision rounds on a design task. An independent review caught a delivered palette that didn't match the approved two-tone spec, by grepping the actual hex values out of the delivered files rather than trusting the write-up, and sent it back. The second pass was verified the same way, plus a live click-through of the finished interaction in a browser, before sign-off.</li>
+            <li>A 19-requirement product spec for a site restructure was checked against the live site's actual code, not just the written document: real HTTP probes confirmed the proposed URL scheme behaved exactly as described before the spec ever reached me for a decision.</li>
+          </ul>
+          <p>That discipline, independent verification against the artifact itself, is now being extended with the same promptfoo/LangSmith harness to the other specialist roles on the team, not just the one that routes the work.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">06</span>
         <div>
           <h2>How it works</h2>
           <div class="chain">
@@ -257,7 +270,7 @@
       </div>
 
       <div class="section">
-        <span class="section-num">06</span>
+        <span class="section-num">07</span>
         <div>
           <h2>Outcomes</h2>
           <div class="stats">
@@ -270,7 +283,7 @@
       </div>
 
       <div class="section">
-        <span class="section-num">07</span>
+        <span class="section-num">08</span>
         <div>
           <h2>What I learned</h2>
           <div class="pull">
