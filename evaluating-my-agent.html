@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Evaluating My Own Agent &middot; Case Study &middot; Nicholas Pings Rodriguez</title>
+<meta name="description" content="Using AI evaluation methods (promptfoo, LangSmith, LLM-as-judge) to improve and monitor the performance of my own personal AI agent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Fraunces:opsz,wght@9..144,300..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: only light;
+    --paper:#EAEEE4;
+    --card:#F8FAF4;
+    --ink:#16241C;
+    --ink-soft:#3B5245;
+    --muted:#6E8270;
+    --rule:#C8D3BE;
+    --pine:#2F5B44;
+    --moss:#7E9C60;
+    --leaf:#CFE2A6;
+    --pad:clamp(22px,6vw,72px);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden;}
+  html{background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));}
+  body{
+    background-color:transparent;color:var(--ink);
+    font-family:"EB Garamond",Garamond,Georgia,serif;
+    font-size:clamp(17px,1.05vw,19px);line-height:1.6;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+  }
+  .page{background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));}
+  a{color:inherit;}
+  h1,h2{overflow-wrap:break-word;}
+
+  .label{font-weight:600;font-size:.72em;letter-spacing:.18em;text-transform:uppercase;line-height:1.4;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 var(--pad);}
+
+  .rise{opacity:0;transform:translateY(12px);}
+  .loaded .rise{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.22,.7,.2,1);}
+  .loaded .d1{transition-delay:.04s;}
+  .loaded .d2{transition-delay:.12s;}
+  .loaded .d3{transition-delay:.22s;}
+  .loaded .d4{transition-delay:.32s;}
+
+  /* ---------- back link ---------- */
+  .back{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:clamp(22px,4vw,34px) 0 0;color:var(--muted);text-decoration:none;
+  }
+  .back:hover{color:var(--pine);}
+  .back .arrow{transition:transform .2s ease;}
+  .back:hover .arrow{transform:translateX(-3px);}
+
+  /* ---------- header ---------- */
+  .case-head{padding:clamp(20px,4vw,32px) 0 clamp(28px,4vw,40px);}
+  .eyebrow{color:var(--pine);margin:0 0 clamp(12px,2vw,18px);}
+  h1.title{
+    font-family:"Fraunces",Georgia,serif;font-weight:700;
+    font-size:clamp(32px,7vw,54px);line-height:1.08;letter-spacing:-.018em;margin:0;
+  }
+  .dek{
+    font-style:italic;color:var(--ink-soft);
+    font-size:clamp(18px,2.6vw,23px);line-height:1.45;
+    margin:clamp(16px,2.4vw,22px) 0 0;max-width:42ch;
+  }
+
+  /* ---------- meta strip ---------- */
+  .meta{
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+    background-color:var(--rule);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    margin-top:clamp(24px,4vw,36px);
+  }
+  .meta div{
+    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
+    padding:12px 14px;min-width:0;
+  }
+  .meta .label{color:var(--muted);display:block;margin-bottom:5px;}
+  .meta span:not(.label){font-size:.92em;color:var(--ink);}
+  @media(max-width:600px){.meta{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
+  /* ---------- body sections ---------- */
+  .sections{border-top:1px solid var(--rule);margin-top:clamp(32px,5vw,48px);}
+  .section{
+    display:grid;grid-template-columns:2.4em minmax(0,1fr);gap:clamp(10px,2vw,18px);
+    padding:clamp(24px,3.4vw,34px) 0;border-bottom:1px solid var(--rule);
+  }
+  .section-num{
+    font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:clamp(15px,1.8vw,18px);color:var(--moss);line-height:1.5;
+  }
+  .section h2{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;
+    font-size:clamp(18px,2.2vw,22px);letter-spacing:-.01em;margin:0 0 8px;line-height:1.25;
+  }
+  .section p{margin:0;color:var(--ink-soft);line-height:1.55;}
+  .section p + p{margin-top:12px;}
+  .section ul{margin:10px 0 0;padding-left:1.2em;color:var(--ink-soft);}
+  .section li{margin:0 0 6px;line-height:1.5;}
+
+  /* ---------- pull quote ---------- */
+  .pull{margin:16px 0;padding:4px 0 4px 16px;border-left:2px solid var(--moss);}
+  .pull p{
+    font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:500;
+    font-size:clamp(19px,2.6vw,25px);line-height:1.35;color:var(--ink);
+    margin:0;letter-spacing:-.008em;
+  }
+
+  /* ---------- system chain ---------- */
+  .chain{
+    display:flex;flex-wrap:wrap;align-items:stretch;gap:0;
+    margin-top:16px;
+  }
+  .chain-stop{
+    flex:1 1 0;min-width:150px;padding:14px 15px;
+    border:1px solid var(--rule);
+    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
+  }
+  .chain-arrow{
+    flex:none;width:30px;display:flex;align-items:center;justify-content:center;
+    color:var(--moss);font-size:1.05em;
+  }
+  .chain-name{
+    display:flex;align-items:center;gap:7px;
+    font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:.98em;color:var(--ink);
+  }
+  .chain-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex:none;}
+  .chain-stop.current .chain-dot{background:var(--pine);animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .chain-note{display:block;margin-top:5px;font-size:.82em;font-style:italic;color:var(--muted);line-height:1.4;}
+  @media(max-width:640px){
+    .chain{flex-direction:column;}
+    .chain-stop{flex:0 0 auto;min-width:0;}
+    .chain-arrow{width:auto;height:26px;transform:rotate(90deg);}
+  }
+
+  /* ---------- stat row ---------- */
+  .stats{display:flex;flex-wrap:wrap;gap:clamp(18px,3vw,30px);margin-top:16px;}
+  .stat-item{min-width:110px;}
+  .stat-num{display:block;font-family:"Fraunces",Georgia,serif;font-weight:700;font-size:clamp(26px,4vw,34px);color:var(--pine);line-height:1.1;}
+  .stat-label{display:block;font-size:.84em;color:var(--muted);margin-top:4px;line-height:1.35;}
+
+  /* ---------- footer ---------- */
+  .case-foot{padding:clamp(32px,5vw,52px) 0 clamp(40px,6vw,64px);}
+  .case-foot a{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--pine);text-decoration:none;font-weight:600;font-size:.9em;
+  }
+  .case-foot a:hover{text-decoration:underline;}
+  .colophon{margin-top:clamp(20px,3vw,28px);color:var(--muted);font-size:.84em;font-style:italic;}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms !important;}
+    .rise{opacity:1;transform:none;}
+    .chain-stop.current .chain-dot{animation:none;}
+  }
+  a:focus-visible{outline:2px solid var(--pine);outline-offset:3px;}
+</style>
+<noscript><style>.rise{opacity:1;transform:none;}</style></noscript>
+</head>
+<body>
+<div class="page">
+  <div class="wrap">
+
+    <a class="back label rise d1" href="index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
+
+    <header class="case-head">
+      <p class="eyebrow label rise d2">AI evaluation practice &middot; Independent project</p>
+      <h1 class="title rise d2">Evaluating My Own Agent</h1>
+      <p class="dek rise d3">Pivoting into AI evaluation work, I needed real reps, not theory. So I turned the practice on the system I actually depend on: the AI agent that runs my daily workflow, orchestrates my other agents, and routes work for me.</p>
+
+      <div class="meta rise d3">
+        <div><span class="label">Role</span><span>Designed, built &amp; evaluated</span></div>
+        <div><span class="label">Project</span><span>Personal practice, pivot portfolio</span></div>
+        <div><span class="label">Subject</span><span>My own daily-driver agent</span></div>
+        <div><span class="label">Context</span><span>Independent, not employer work</span></div>
+      </div>
+    </header>
+
+    <div class="sections">
+
+      <div class="section">
+        <span class="section-num">01</span>
+        <div>
+          <h2>The problem</h2>
+          <p>I was moving from UX research toward AI evaluation, and I knew that reading about rubrics and LLM-as-judge wasn't the same as doing it. I needed a real subject with real failure modes, not a toy dataset.</p>
+          <p>I had one close at hand: my own agent setup had real, specific complaints behind it. Work sometimes went out that should have been routed to a specialist instead. A request once landed with the wrong team. An entire capability got forgotten as if it didn't exist. None of that was measured. It was just a feeling that something was "off."</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">02</span>
+        <div>
+          <h2>Challenges</h2>
+          <p>Grading an agent's own words about its own behavior is a trap: an agent can write a perfectly reasonable-sounding reply while still calling the wrong tool underneath it, so judging the final text alone misses the actual defect.</p>
+          <p>A second trap was quota and cost. Full tracing on every exchange would be useful, but it is also the kind of always-on infrastructure that quietly becomes a recurring cost. I wanted evaluation and tracing I could reach for on demand, not a tap left running.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">03</span>
+        <div>
+          <h2>Approach</h2>
+          <p>I built a practice repo grounded in real sources (MT-Bench, OpenAI's evals framework, Promptfoo's docs, published judge-reliability research) rather than guessing at method, and used it to run a sequence of increasingly real evaluations:</p>
+          <ul>
+            <li><strong>Black-box text grading</strong> with Promptfoo, wiring its exec provider to the actual CLI instead of a simulation, mixing deterministic checks with model-graded rubrics.</li>
+            <li><strong>Tool-call trace inspection</strong> once I hit the ceiling of text grading: parsing the agent's own session logs for the specific tool call it made, so the assertion was "did it call the right tool" rather than "did it sound right."</li>
+            <li><strong>Full trace review in LangSmith</strong> for the cases that needed a deeper look, built as an on-demand script rather than an always-on hook, so it only spends anything when I actually point it at a session.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">04</span>
+        <div>
+          <h2>What I built</h2>
+          <p>Three linked pieces, each verified against real runs rather than taken on faith:</p>
+          <ul>
+            <li><strong>A regression suite</strong> covering the agent's own stated operating rules, run against fresh sessions so nothing carried over from conversation memory.</li>
+            <li><strong>A real bug fix</strong>, found and confirmed with this method: the agent's own routing rules had gone stale and were missing two live specialist teams. I evaluated the complaint into three concrete, testable scenarios, confirmed the defect with real extracted tool-call evidence, had it fixed, then reran the exact same suite as a before/after check.</li>
+            <li><strong>An on-demand tracing tool</strong> that pulls one specific session on request and loads it into LangSmith for deep inspection, with a final secret-scanning gate in front of anything sent out, built and verified through its own scope-build-verify pipeline with an independent red-team pass.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">05</span>
+        <div>
+          <h2>How it works</h2>
+          <div class="chain">
+            <div class="chain-stop">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Local session logs</span>
+              <span class="chain-note">Every exchange is already recorded locally, for free, by default</span>
+            </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
+            <div class="chain-stop">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Promptfoo eval</span>
+              <span class="chain-note">Deterministic + LLM-rubric grading against fresh runs</span>
+            </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
+            <div class="chain-stop current">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>On-demand trace</span>
+              <span class="chain-note">Secret-gated, sent to LangSmith only when flagged</span>
+            </div>
+            <div class="chain-arrow" aria-hidden="true">&rarr;</div>
+            <div class="chain-stop">
+              <span class="chain-name"><i class="chain-dot" aria-hidden="true"></i>Fix &amp; regression test</span>
+              <span class="chain-note">Same suite, rerun, to prove the fix actually held</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">06</span>
+        <div>
+          <h2>Outcomes</h2>
+          <div class="stats">
+            <div class="stat-item"><span class="stat-num">11/14</span><span class="stat-label">Pass rate on the first full regression pass, isolating one real formatting tic, not a substance problem</span></div>
+            <div class="stat-item"><span class="stat-num">2/2</span><span class="stat-label">Routing scenarios confirmed fixed with real extracted tool-call evidence, not just a cleaner-sounding reply</span></div>
+            <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">Raw secrets reached the trace, confirmed against a probe built specifically to slip past the existing redaction</span></div>
+          </div>
+          <p>The eval found and helped fix a real routing defect, confirmed with tool-call evidence rather than a feeling. It also surfaced one useful false lead along the way: a deterministic check once flagged the agent for "recommending" a platform it had actually correctly warned against, which became a concrete lesson about when a model-graded rubric earns its keep over a keyword match.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-num">07</span>
+        <div>
+          <h2>What I learned</h2>
+          <div class="pull">
+            <p>Grading the final answer only tells you whether it sounds right. You have to look at what the agent actually called to know whether it did the right thing.</p>
+          </div>
+          <p>The same discipline that makes a UX finding credible, defining the question before picking the method, and demanding evidence over impression, carries over directly into evaluating an AI system. The tools changed. The standard of proof didn't.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="case-foot">
+      <a href="index.html"><span class="arrow">&larr;</span> Back to portfolio</a>
+      <p class="colophon">Nicholas Pings Rodriguez &middot; UX Research &amp; AI Research Operations</p>
+    </footer>
+
+  </div>
+</div>
+<script>
+  document.body.classList.add('loaded');
+</script>
+</body>
+</html>
