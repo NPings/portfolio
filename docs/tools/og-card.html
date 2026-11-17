@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>OG card template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Fraunces:opsz,wght@9..144,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Young Serif is the name face on the preview card (PRD section 22); it is not in index.html's link. -->
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: only light;
+    --paper:#EAEEE4;
+    --ink:#16241C;
+    --ink-soft:#3B5245;
+    --muted:#6E8270;
+    --pine:#2F5B44;
+    --moss:#7E9C60;
+    --leaf:#CFE2A6;
+  }
+  *{box-sizing:border-box;}
+  html{background-color:var(--paper);}
+  body{
+    margin:0;width:1200px;height:630px;overflow:hidden;position:relative;
+    background-color:var(--paper);color:var(--ink);
+    font-family:"EB Garamond",Garamond,Georgia,serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .card{position:absolute;inset:0;padding:68px 76px;display:flex;flex-direction:column;}
+  .name{
+    font-family:"Young Serif",Georgia,serif;font-weight:400;
+    font-size:44px;line-height:1.05;letter-spacing:-.015em;margin:0;
+  }
+  .name .dot{color:var(--moss);}
+  .in{
+    margin:46px 0 0;font-weight:600;font-size:20px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--pine);
+  }
+  .disc{
+    font-family:"Fraunces",Georgia,serif;font-weight:700;
+    font-size:96px;line-height:1.02;letter-spacing:-.02em;margin:10px 0 0;
+  }
+  .thesis{
+    font-style:italic;font-size:36px;line-height:1.26;margin:28px 0 0;color:var(--ink-soft);max-width:980px;
+  }
+  .mark{
+    padding:0 .08em;
+    background-image:linear-gradient(var(--leaf),var(--leaf));
+    background-repeat:no-repeat;background-position:0 90%;background-size:100% 32%;
+  }
+  .url{
+    margin-top:auto;font-family:"IBM Plex Mono",monospace;font-size:22px;color:var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1 class="name">Nicholas Pings Rodriguez<span class="dot">.</span></h1>
+  <p class="in">Research in</p>
+  <p class="disc" id="disc">Consumer Research</p>
+  <p class="thesis" id="thesis">Turning <span class="mark">consumer behavior</span> into product decisions.</p>
+  <p class="url" id="url">nickpings.com/consumer-research</p>
+</div>
+<script>
+(function(){
+  /* ?d=<slug> picks the discipline; unknown or missing falls back to consumer-research.
+     Copy is PRD sections 3 and 5.1. */
+  var D = {
+    'ai-evaluations': ['AI Evaluations', 'Deciding <span class="mark">where a model is trusted</span> and where a person decides.'],
+    'research-operations': ['Research Operations', 'Research that <span class="mark">goes further</span> than the readout.'],
+    'consumer-research': ['Consumer Research', 'Turning <span class="mark">consumer behavior</span> into product decisions.']
+  };
+  var m = /[?&]d=([^&#]*)/.exec(location.search);
+  var slug = m && Object.prototype.hasOwnProperty.call(D, m[1]) ? m[1] : 'consumer-research';
+  document.getElementById('disc').textContent = D[slug][0];
+  /* the thesis strings above are fixed literals in this file, never taken from the URL */
+  document.getElementById('thesis').innerHTML = D[slug][1];
+  document.getElementById('url').textContent = 'nickpings.com/' + slug;
+})();
+</script>
+</body>
+</html>

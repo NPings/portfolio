@@ -32,6 +32,20 @@ Open / In progress / Shipped. Never delete shipped rows; merge, never overwrite.
 - Decide whether the fork scene gets a visible exit to the site ("straight to business"). (PRD addendum Flag A6.)
 - Intro experience becomes the first-launch page: first-visit detection (e.g. localStorage flag) routes new visitors to `intro.html`, returning visitors land straight on `index.html`. (Nick, 2026-11-12, follow-up to the intro-experience build.)
 - "Replay intro" CTA on `index.html`: hidden behind the logo, revealed on hover/tap, links to `intro.html`. (Nick, 2026-11-12, same follow-up.)
+- **Portfolio restructure follow-ups (PRD `docs/portfolio-restructure-PRD.md` section 16, card t_eb4fd595):**
+  - Homepage card: answer the six questions in PRD section 7 (how the bare domain routes to the three discipline pages, what happens to `index.html`, where `intro.html` fits, where "Back to portfolio" points by default, whether the switcher name becomes a link, whether `index.html` moves onto the shared CSS).
+  - AI evals case study from `ai-evals-reps` (Flag O1). Now written by Nick as `evaluating-my-agent.html` and on the AI Evaluations page (addendum A, R20/R21).
+  - Finish Research PMO Agent and Skill Kits (7 `[Nick to` markers each), then add them to Research Operations (and Skill Kits to AI Evaluations) by PRD amendment.
+  - Case study for the two-year research-ops rebuild (standards, onboarding, mentoring).
+  - Move `index.html` onto `assets/css/site.css` and `assets/js/site.js` (homepage card).
+  - Optional: per-discipline resumes (Flag O7), and the share image (Flag O8, now built as R27).
+- **Portfolio restructure addendum A follow-ups (PRD section 26, card t_48ff0069):**
+  - Homepage card: bring `index.html`'s session and observer lines in line with PRD section 20.4 (the softened consumer-research lines: no "presumably", "skipped" or "apparently") when `index.html` moves onto `site.js`.
+  - AI Evaluations Impact strip, once there are cited, role-attributed evaluation numbers (Flag O5, A2). Until then the Impact section stays off that page.
+  - Resume: attribute the homepage stats (24+, 2.3K+, 30+, 1.5K+) to roles so they can go on the resume (Flag A3). No number goes on without a source.
+  - Resume: a one-page cut, if Nick wants one (Flag A4). It prints at 2 pages today.
+  - LinkedIn Post Inspector pass for each of the three URLs after the merge to `main`, so the new preview images are picked up (Flag A5).
+  - Render the three OG PNGs (`assets/og/<slug>.png`, 1200x630, under 300 KB) from `docs/tools/og-card.html?d=<slug>` and commit them. The landing pages already point at them (R27).
 
 ## In progress
 - Intro experience (scroll-driven walkthrough: welcome → idle nudge → "Nice to meet you. I'm Nick." → red pill/blue pill choice). PRD approved (`docs/intro-experience-PRD.md`, Crit-passed), building on branch `feature/intro-experience`.

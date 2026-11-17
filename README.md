@@ -4,6 +4,10 @@ Personal UX research portfolio and resume. Static HTML, no build step.
 
 - `index.html` — portfolio site
 - `resume.html` — printable resume (open and use your browser's Print → Save as PDF)
+- Discipline landing pages, one per research direction (share these, no trailing slash):
+  - `nickpings.com/ai-evaluations` (`ai-evaluations.html`)
+  - `nickpings.com/research-operations` (`research-operations.html`)
+  - `nickpings.com/consumer-research` (`consumer-research.html`)
 
 ## Deploy
 
