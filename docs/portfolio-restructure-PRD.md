@@ -1257,7 +1257,7 @@ Harness as section 23. Build/deployment for **every** Addendum B requirement: **
 
 ### R31. resume.html keeps its headline and replaces its lede with the section 28 text, and still prints within two pages.
 - **Source:** [Card-B] location 3; 19.3; R22, R23; section 28.1.
-- **Acceptance:** JS check on `resume.html`: `.role` text equals `resume.headline` (unchanged from 19.3); `.lede` text, whitespace-normalized, equals `resume.lede` without brackets; `.lede .mark` text equals `at every stage of the product life cycle`; every other R22 and R23 check still passes, including `Page.printToPDF` (letter, `preferCSSPageSize: true`) producing at most 2 pages and `grep -c "—" resume.html` printing `0`.
+- **Acceptance:** JS check on `resume.html`: `.role` text equals `resume.headline` (unchanged from 19.3); `.lede` text, whitespace-normalized, equals `resume.lede` without brackets; `.lede .mark` text equals `at every stage of the product life cycle`; every other R22 and R23 check still passes (except R22's `Evaluating My Own Agent` job-title entry and R23's `Independent` block checks, since that block was removed from `resume.html` at 9079db5 on Nick's call), including `Page.printToPDF` (letter, `preferCSSPageSize: true`) producing at most 2 pages and `grep -c "—" resume.html` printing `0`.
 - **Edge cases:** the new lede is about 20 words longer than the 19.3 lede; if that pushes the print to 3 pages, the build shortens nothing on its own and stops for a PRD amendment (Flag B2), because the copy is fixed here; job titles, dates and bullets X1 to X5 are untouched; no new number appears ("eight years" is already on the resume).
 - **Resources:** `resume.html`.
 
