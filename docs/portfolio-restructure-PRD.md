@@ -525,7 +525,7 @@ Nick accepted Maestro's proposed default on every open question [Card-A]. The bu
 | O2 | Temporary link from `index.html` to the new pages? | No. Wait for the homepage card. | `index.html` stays byte-identical (R17). |
 | O3 | Slugs | Keep `ai-evaluations`, `research-operations`, `consumer-research`. Not `ux-research`. | Section 3 and ADR 0001 stand as written. |
 | O4 | More evaluation methods and tools? | Yes, once there is something concrete to cite. Don't invent. | The concrete source now exists on the site (17.2). R21 adds 3 chips and 3 tools, each traced to `evaluating-my-agent.html` or `resume.html`. Nothing from the private repo that is not on the site. |
-| O5 | AI evals impact numbers? | Same as O4: only real, cited numbers. | The Impact strip stays omitted on AI Evaluations. The case study's numbers are practice-run results, not impact, and stay on the case page and resume (Flag A2). |
+| O5 | AI evals impact numbers? | Same as O4: only real, cited numbers. | The Impact strip stays omitted on AI Evaluations. The case study's numbers are evaluation pass rates, not impact, and stay on the case page and resume (Flag A2). |
 | O6 | Fate of `intro.html` | Confirmed: live at `/intro`, unlinked from the discipline pages. | R18 stands. |
 | O7 | One resume or three? | One shared `resume.html`. | Still one file, but it now has to read credibly for all three disciplines (section 19, R22, R23). |
 | O8 | Link-preview image? | Yes. | R27: one preview image per landing page. |
