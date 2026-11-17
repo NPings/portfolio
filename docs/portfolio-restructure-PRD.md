@@ -10,6 +10,7 @@
 - **This card changed no existing file.** It adds only this PRD and the ADR under `docs/`.
 - **Addendum A (2026-11-17):** sections 17 to 26 and requirements R20 to R28 lock Nick's O1 to O9 decisions, make the one shared `resume.html` read for all three disciplines, and give each landing page its own session-notes voice (exact copy in 20.5). It also puts Nick's new `evaluating-my-agent.html` (on `main` at 3d25fb4) on the AI Evaluations page and adds link-preview images. Card t_48ff0069 (PRD addendum), build card t_2e68d7bf (assignee `design`). Where it changes R2, R4, R8 to R10, R12 to R17 or the section 13 non-goals, section 17.3 says how, and the addendum wins.
 - **Addendum B (2026-11-17):** sections 27 to 32 and requirements R29 to R32 fix the positioning story (consumer research is the root and ongoing; AI evaluation of consumer AI products and internal AI systems runs alongside it), give exact copy for the homepage disciplines intro, the three hero ledes and the resume masthead, and replace R6 (section 29). Card t_7e1550e9. Copy only; it follows the design prototype from card t_de460a73.
+- **Addendum C (2026-11-17):** sections 33 to 38 lock Nick's own rewritten copy (homepage intro, three homepage rows, resume headline and lede) verbatim, add three hero ledes written in his voice, restate R31 and add R33, and document four scoped `narrativecheck.py` waivers on his lines. The section 34 block supersedes section 28's. Card t_d1b547d2. Copy and spec only.
 
 ---
 
@@ -1315,3 +1316,213 @@ No cost, no infrastructure, no recurring manual step.
 - A case study on evaluating an internal AI system for reliability at scale, if Nick can share one (B1).
 - AI Evaluations meta description mentioning internal systems, if Nick wants it (B3).
 - Structural spec for the prototype's Philosophy/Practice removal and homepage section (B4).
+
+
+---
+
+# Addendum C: Nick's own copy, locked, and three hero ledes in his voice (card t_d1b547d2)
+
+Added 2026-11-17 by product. Builds on sections 1 to 32 and R1 to R32 above, on `feature/portfolio-restructure` at 111f994 (Addendum B, Crit-passed). Same harness and conventions as sections 10, 23 and 31. Sections 1 to 32 are not edited; where this addendum changes them, section 33.2 says exactly how, and the addendum wins. **Copy and spec only.** No site file changes on this card.
+
+Nick rewrote the narrative copy himself. Eight of the eleven lines are now his words and are **locked**: the build ships them byte for byte, and nobody (including me) copy-edits them. The other three, the discipline-page hero ledes, are mine, written to his instruction. They are approved-pending-Nick.
+
+## 33. Source and what this changes
+
+### 33.1 Source
+
+From card t_d1b547d2, which carries Nick's rewritten copy and his instructions. Citation shorthand added: **[Nick-C]** = Nick's rewritten lines as quoted in the card (reproduced exactly in the section 34 block; `narrativecheck.py` pins them by hash). **[Card-C]** = the card body. **[Probe C-n]** = a check I ran for this addendum, results in section 37.2.
+
+What the card says, in short:
+
+- Lock exactly as written: the homepage intro, the three homepage discipline row descriptions, a new resume headline, and a new resume lede. Those replace Addendum B's versions.
+- Switcher label `Research disciplines:` and footer lead-in `Same research, other angles:` stay unchanged ("confirmed fine by Nick").
+- Write the three hero ledes myself. Nick flagged them as placeholders: "rework with what I wrote above with a little more concrete detail."
+- Run four checks: pivot wording in his copy (and whether the checker over-fires), the resume field order versus the site's fixed order (R4), resume length versus the 2-page print limit (R23/R31), and both checkers.
+
+I confirmed the eight locked strings against the card body in the kanban database by exact substring match: all eight present, character for character [Probe C1].
+
+### 33.2 What this addendum changes in sections 1 to 32 (the addendum wins)
+
+| Base text | Change | Why |
+|---|---|---|
+| Section 28 `narrative` block | **Superseded** by the section 34 block. Section 28 stays in the doc as history. `narrativecheck.py` now reads the **last** `narrative` block in the file (each addendum appends its own; the latest wins). | [Card-C] |
+| 28.1 mapping table | Superseded by 34.1. | [Card-C] |
+| R6 (restated in 29), R29, R30, R32 | Wherever they say "section 28" or name a section 28 key, read "section 34". Their checks are otherwise unchanged. R6's `OK: 11 strings` prefix still holds (the new checker prints `OK: 11 strings (block 2 of 2), ...`). | R33 |
+| R31 | **Restated** in section 36: the headline now changes (it was "unchanged" in B), and the resume lede has no `.mark` span (B's lede highlighted "at every stage of the product life cycle"; Nick's text has no such phrase and adding a highlight would be my edit, not his). | [Nick-C]; Flag C5 |
+| 27.2 banned-word list and 28.2 device 2 | Still enforced on every line, **except** four scoped, documented waivers on Nick's locked lines (section 34.3). The regex itself is not loosened, so my three ledes and any future copy are checked exactly as before. | [Card-C] check 1 |
+| 28.2 device 3 ("every door names both") | Still true for the three hero ledes (checked). Waived for the homepage intro and the resume lede, which are Nick's words and name the practices by substance and example, not by the words "consumer" and "AI" (34.3, J3 and J4). | [Nick-C] |
+| Section 29 carrier 3 | B's homepage intro echoed the footer line with "Same researcher, three angles". Nick's intro doesn't. The footer line still carries the signal on its own (R5, R32 unchanged). | [Nick-C] |
+| R30 edge case "at most 6 lines at 390x844" | Unchanged. The new ledes measure 5 lines each at 390px [Probe C4]. | R30 |
+| Flags B2 and B5 | Superseded by Flags C2 and C3. Flags B1, B3 and B4 stand. | |
+
+Not changed: R4 (switcher order), R5 (footer), the eyebrows, theses and meta descriptions, the 20.5 session-notes voices, and everything structural that Flag B4 still owes.
+
+## 34. The copy (exact, the single source)
+
+Format as section 28: one `key: text` per line. No line in this block uses `.mark` brackets. In HTML the middot in `resume.headline` is written `&middot;` and the ampersand `&amp;`, as today; the build compares rendered text, not source. Lines marked **LOCKED** in 34.1 are Nick's and ship byte for byte.
+
+```narrative
+homepage.intro: I have a passion for rigorous research, challenging assumptions, and unearthing insights. I have designed, conducted, synthesized and reported on studies spanning the gamut of disciplines and methodologies. In academia, I helped design and launch national surveys on social issues. In my professional experience, I've spent years honing in on user problems and guiding businesses toward long term solutions. Now, I'm broadening to understand AI systems, how they serve their users, and how we measure their outputs.
+homepage.row.ai-evaluations: Testing AI products, systems, and workflows from a consumer and internal point of view. Understanding how probabilistic technology can be used to attain consistent results.
+homepage.row.research-operations: Revolutionizing how research gets done and where the insights go after. The reduced need for manual work in the days of AI presents us with opportunities to develop creative bespoke solutions to business and consumer problems.
+homepage.row.consumer-research: Deriving insight from grounded user problems and guiding products and solutions down the path to long term value for the user and the business.
+lede.ai-evaluations: I test AI products and agentic systems with the same rigor as any consumer study, digging past answers that sound right to unearth the inconsistencies underneath, like an agent that writes a perfectly reasonable reply while calling the wrong tool.
+lede.research-operations: I use AI to take the manual work out of research and build bespoke tools that keep insights working after the readout, like a knowledge base where stakeholders can question our consumer research in their own words.
+lede.consumer-research: I work from grounded user problems and the consumers who live with them, like finding that people won't go looking for help understanding their credit, so Experian's AI assistant had to show up right at the moment of confusion.
+resume.headline: Multi-Disciplinary Researcher · Consumer Research, AI Evaluations, & Research Operations
+resume.lede: Research has been my passion for my entire academic and professional career. Unearthing insights that drive real decisions is the core of my work. I've been fortunate enough to plan, design, execute, synthesize, and evangelize research in a wide span of industries and disciplines, utilizing varied methodologies to fit the needs of the research ask. From understanding the point where trust breaks down in an onboarding flow, to understanding the weaknesses and inconsistencies in agentic experiences, I've done it all. At the core of it all is a simple principle: deliver clear and transparent insights in order to inform important business decisions.
+switcher.label: Research disciplines:
+footer.cross: Same research, other angles:
+```
+
+### 34.1 Where each line goes, and what it replaces
+
+| Key | Location | Replaces (section 28) | Status | Sources |
+|---|---|---|---|---|
+| `homepage.intro` | `index.html`, `#disciplines p.disc-intro` (the new section from the prototype, replacing Selected work) | B's intro ("Consumer research is where my work started, and it's still at the center of it. ...") | **LOCKED**, Nick's text. 77 words, one `p`. | [Nick-C]; R29 |
+| `homepage.row.ai-evaluations` | `index.html`, AI Evaluations row's description `p` | B's row ("Testing AI products with the consumers who use them, ...") | **LOCKED**. Keeps the consumer and internal directions from B (and so Flag B1 still applies). | [Nick-C]; R29 |
+| `homepage.row.research-operations` | same, Research Operations row | B's row ("Research that goes further than the readout: ...") | **LOCKED**. | [Nick-C]; R29 |
+| `homepage.row.consumer-research` | same, Consumer Research row | B's row ("Eight years of mixed-methods research ...") | **LOCKED**. | [Nick-C]; R29 |
+| `lede.ai-evaluations` | `ai-evaluations.html`, `p.lede` right after `.thesis` | B's lede ("I test AI products with the consumers who use them, ...") | **New, mine**, approved-pending-Nick. Concrete detail: the agent that sounds right while calling the wrong tool (34.2). | [Nick-C] intro and resume lede; [case:evaluating-my-agent.html] section 02; R30 |
+| `lede.research-operations` | `research-operations.html`, `p.lede` | B's lede ("Alongside my own consumer research and AI evaluation work, ...") | **New, mine**. Concrete detail: stakeholders questioning the research in their own words (34.2). | [Nick-C] ops row; [case:research-knowledge-base.html] header and section 01; R30 |
+| `lede.consumer-research` | `consumer-research.html`, `p.lede` | B's lede ("I've done mixed-methods consumer research for eight years, ...") | **New, mine**. Concrete detail: help had to show up at the moment of confusion (34.2). | [Nick-C] consumer row; [case:experian-eva.html] header and section 04; R30 |
+| `resume.headline` | `resume.html`, `.role` | `Senior Researcher · AI Evaluation, Research Operations & Consumer Research` | **LOCKED**, new. Order and title change; see section 35 and Flag C1. "AI Evaluations" is now plural, matching the switcher label exactly. The real job titles below (`Sr. User Experience Researcher`, ...) are untouched. | [Nick-C]; R31 (restated) |
+| `resume.lede` | `resume.html`, `p.lede` | B's lede ("Eight years and counting of mixed-methods consumer research, ...") | **LOCKED**. 102 words (shipped 19.3 lede: 84; B: 88). No `.mark` span (Flag C5). Print still fits 2 pages on a scratch copy [Probe C3]. | [Nick-C]; R31 (restated) |
+| `switcher.label` | `nav.disc-nav .disc-label` on all 9 switcher pages | same | **LOCKED**, unchanged ("confirmed fine by Nick"). | [Card-C]; R32 |
+| `footer.cross` | `footer .foot-cross` lead-in on the 3 landing pages | same | **LOCKED**, unchanged. | [Card-C]; R32 |
+
+### 34.2 The three hero ledes: how they were written
+
+The brief: same person as the homepage intro, one page-specific concrete detail, not a restatement of the row. So each lede is one first-person sentence in Nick's register, reuses his own words where they fit, and ends on a "like ..." example taken from a case study that actually sits on that page. None repeats the page's thesis, and none repeats its homepage row.
+
+| Lede | Nick's words it reuses | Concrete detail, and where it's backed | Not a restatement because |
+|---|---|---|---|
+| AI Evaluations | "rigorous research", "unearthing" (intro); "weaknesses and inconsistencies in agentic experiences" (resume lede, cut to "inconsistencies" for length); "agentic" | "an agent that writes a perfectly reasonable reply while calling the wrong tool": `evaluating-my-agent.html` section 02, "an agent can write a perfectly reasonable-sounding reply while still calling the wrong tool underneath it". That case is first in this page's Selected work. | The row says what he tests (products, systems, workflows; consumer and internal). The lede says how he tests (looking past answers that sound right) and shows a real defect. "with the same rigor as any consumer study" keeps consumer research present tense on the AI page. |
+| Research Operations | "manual work", "in the days of AI", "bespoke" (ops row); "where the insights go after" becomes "keep insights working after the readout" | "a knowledge base where stakeholders can question our consumer research in their own words": `research-knowledge-base.html` header, "a knowledge base stakeholders can question in their own words". It's the page's only Selected work card. | The row is the thesis of ops ("revolutionizing how research gets done"). The lede names the tool that does it and who uses it. |
+| Consumer Research | "grounded user problems" (consumer row) | "people won't go looking for help understanding their credit, so Experian's AI assistant had to show up right at the moment of confusion": `experian-eva.html` header ("People don't go looking for it. It has to find them.") and section 04 ("placed directly at the moment of confusion"). First card on this page. | The row says insight leads to long-term value. The lede shows one finding that changed where a product puts help. Naming the AI assistant keeps the AI practice visible on the consumer page (28.2 device 3). |
+
+**Alternative considered for Consumer Research:** the onboarding-flow trust breakdown from Nick's resume lede, which the card suggested as a source. I used it as register, not as the example, for two reasons: no case study on `consumer-research.html` shows that finding, so a recruiter who clicks through can't find it; and the resume lede already uses it, so the same example would appear twice for anyone who reads both. If Nick prefers it, the swap is: "I work from grounded user problems and the consumers who live with them, like finding the exact point where trust breaks down in an onboarding flow, and I bring that same lens to the AI products they use." (It passes the checker: 38 words, names consumer and AI, no pivot wording.)
+
+**Length.** 40, 37 and 39 words. Measured with the prototype's `.lede` rule (17px, line-height 1.55, max-width 36em) injected after `.thesis` on the live pages in a browser, no file changed: 5 lines each at 390px, 6 to 7 at 320px, no horizontal overflow at either [Probe C4]. A first draft (44, 44 and 39 words) measured 6, 6 and 5 lines at 390px, right at R30's limit, so I cut "weaknesses and" and "and get a representative answer back".
+
+### 34.3 Checker results and the judgment calls (card checks 1 and 4)
+
+**Addendum B's checker, run unchanged on the new block** [Probe C2] (it would also refuse to run at all, because it requires exactly one `narrative` block; that's why it now reads the last one):
+
+```
+homepage.intro: pivot wording 'Now'
+homepage.intro: must name both consumer research and AI
+homepage.row.ai-evaluations: pivot wording 'used to'
+resume.lede: must name both consumer research and AI
+exit 1
+```
+
+All four hits are on Nick's locked lines. My three ledes pass every rule with no waiver. I did not delete or reword any of Nick's words to make the checker pass. Instead each hit got a judgment call, and the checker gained a narrow waiver for each one.
+
+**J1. "Now, I'm broadening to understand AI systems" (homepage intro, pivot list hit on `now`). Verdict: does not break constraint 2. Waived for that exact phrase only.** Read closely, the intro is a three-step arc: "In academia, ... In my professional experience, I've spent years honing in on user problems ... Now, I'm broadening to understand AI systems". Three things keep it from reading as "used to do consumer research":
+
+1. The verb is "broadening". To broaden is to widen what's already there, not to swap it out. Compare the phrasings 28.2 ruled out: "now focused on" and "moved into".
+2. The consumer research sentence is present perfect ("I've spent years honing in"), not simple past ("I spent years"). It runs up to today.
+3. The object is understanding AI systems "and how they serve their users", which is a user-research question, so the new practice is framed as research applied to a new subject.
+
+The residual risk is the arc itself: a skimmer could read academia, then industry, then AI as a timeline where each step ends the last one. "Broadening" carries the weight, and it carries it. The checker's `\bnow\b` rule exists to catch "now focused on"-style replacement wording; here it is over-firing on a time marker. The waiver exempts only the string `Now, I'm broadening`; the rest of that line, and every other line, still fails on a bare "now" (negative control 2 in 37.2 proves it).
+
+**J2. "can be used to attain consistent results" (AI Evaluations row, pivot list hit on `used to`). Verdict: false positive. Waived for that exact phrase only.** The rule targets the habitual past ("I used to do X"). Here "used" is a passive verb followed by "to attain": the technology is used in order to attain results. The line says nothing about Nick's history. The card didn't anticipate this one; I found it running the checker.
+
+**J3. Homepage intro doesn't contain the word "consumer". Verdict: acceptable, waived for this line from rule 3 only.** The consumer research practice is there in substance: "honing in on user problems and guiding businesses toward long term solutions" is a plain description of consumer/UX research. And the intro sits directly above the three rows, one of which is Consumer Research. The intro does name AI.
+
+**J4. Resume lede doesn't contain "consumer" or "AI". Verdict: acceptable, waived for this line from rule 3 only.** It names both by example: "the point where trust breaks down in an onboarding flow" (consumer research) and "the weaknesses and inconsistencies in agentic experiences" (AI evaluation), side by side in one sentence, neither framed as past. The headline directly above it names Consumer Research and AI Evaluations outright, so a recruiter scanning the masthead still gets both keywords.
+
+**How the waivers are built** (`docs/tools/narrativecheck.py`, the `EXCEPTIONS` table, each with its one-line reason):
+
+| Key | Rule | Scope |
+|---|---|---|
+| `homepage.intro` | pivot | the phrase `Now, I'm broadening` only |
+| `homepage.row.ai-evaluations` | pivot | the phrase `can be used to attain` only |
+| `homepage.intro` | both | this line, rule 3 only |
+| `resume.lede` | both | this line, rule 3 only |
+
+Three guards keep them honest: a waiver applies only while its line still matches Nick's locked text (new `LOCKED` table, sha256 prefix per line); a waiver that stops firing fails the run as "stale", so it can't outlive the text it was written for; and every waiver prints an `EXCEPTION ...` line with its reason on every run, so it's never silent. The `PIVOT`, `ORIGIN` and `BOTH` rules themselves are unchanged.
+
+**Final results on the committed PRD:**
+
+- `python3 docs/tools/narrativecheck.py`: exit 0, four `EXCEPTION` lines (J1 to J4), then `OK: 11 strings (block 2 of 2), 8 locked, 4 documented exceptions, longest run shared with the quote = 3 words`. The 3-word run is "consumer and internal" in Nick's AI Evaluations row, inside the 4-word limit.
+- `python3 docs/tools/voicecheck.py`: `OK: 2 voices, 77 strings`, exit 0. This addendum doesn't touch the 20.5 voices block.
+
+## 35. Resume field order versus the site's fixed order (card check 2)
+
+**What changed.** The old headline listed the three practices in the site's navigation order: AI Evaluation, Research Operations, Consumer Research. 28.1 confirmed it on that basis ("the site's fixed order (section 3)"). Nick's new headline puts Consumer Research first: Consumer Research, AI Evaluations, Research Operations. It also drops "Senior" for "Multi-Disciplinary" (Flag C4) and makes "AI Evaluations" plural, which now matches the switcher link text exactly.
+
+**Does R4 have to change too? No.** Nothing in R4, R22 or R31 ties the resume headline to the switcher order. R4's acceptance pins the order of three `a[href]` in `nav.disc-nav` on the 9 switcher pages, and R29 pins the homepage rows to the same order. The resume is a separate page with no switcher. B's "matches the nav" reasoning was a nicety, not a requirement.
+
+**Can they reasonably differ? Yes, and I'd keep them different.** They do different jobs. Nav order is wayfinding, and it should be fixed so a visitor's eye learns it. A resume headline is self-description, where order reads as emphasis, and Consumer Research first is the strongest possible statement of constraint 2 (he hasn't left it). Nick's own copy supports keeping the site order: he wrote the homepage row descriptions in nav order (AI Evaluations, Research Operations, Consumer Research), right alongside the reordered headline.
+
+**What changing R4 would cost, if Nick wants the site to match:** the switcher markup on all 9 pages, R4's acceptance, R29's row order on the homepage, the order of the two footer cross-links on each landing page (R5), and the prototype. It's a one-time edit, but it touches every page.
+
+**Decision: this addendum does not change R4.** Nick decides (Flag C1).
+
+## 36. Requirements
+
+Harness as section 23. Build/deployment for **every** Addendum C requirement: **not Docker**, same justified exception as sections 11, 24.1 and 31.1 (static GitHub Pages site, nothing to containerize). No service, container, dependency or recurring step is added.
+
+### R31 (restated, replaces Addendum B's R31). resume.html's headline and lede equal section 34, the lede has no highlight, and it still prints within two pages.
+- **Source:** [Nick-C] (headline and lede, locked); [Card-C] check 3; 19.3; R22, R23; section 34.1.
+- **Acceptance:** JS check on `resume.html`: `.role` text equals `resume.headline`; `grep -c 'class="role">Multi-Disciplinary Researcher &middot; Consumer Research, AI Evaluations, &amp; Research Operations</div>' resume.html` prints `1`; `.lede` text, whitespace-normalized, equals `resume.lede`; `document.querySelectorAll('.lede .mark').length === 0`; every other R22 and R23 check still passes, with the same two carve-outs as B's R31 (R22's `Evaluating My Own Agent` job-title entry and R23's `Independent` block checks, since that block was removed at 9079db5 on Nick's call); `Page.printToPDF` (letter, `preferCSSPageSize: true`) produces at most 2 pages; `grep -c "—" resume.html` prints `0`.
+- **Edge cases:** the lede is 102 words, 18 more than the shipped one; a scratch copy with both new lines prints 2 pages with the print sheet at 1705px of the 2112px two pages allow [Probe C3], but if the real build spills to 3 pages it does not trim Nick's words, it stops for a PRD amendment (Flag C2); "Multi-Disciplinary" uses a plain hyphen, so `grep -c "–" resume.html` (en dash) prints `0`; at 390x844 the headline wraps to 2 lines, the same as today, with `scrollWidth <= innerWidth` [Probe C3]; job titles, dates, bullets X1 to X5, `<title>` and Education are untouched; no new number appears.
+- **Resources:** `resume.html`.
+
+### R33. The section 34 block is the live copy, Nick's eight lines match his text exactly, and every checker waiver is documented and scoped.
+- **Source:** [Card-C] ("lock these exactly as Nick wrote them", check 1, check 4); section 34.3.
+- **Acceptance:** `python3 docs/tools/narrativecheck.py` exits 0 and its last line starts `OK: 11 strings (block 2 of 2), 8 locked, 4 documented exceptions`; it prints exactly 4 lines starting `EXCEPTION`, for the four key/rule pairs in the 34.3 table; `python3 docs/tools/voicecheck.py` prints `OK: 2 voices, 77 strings`. R6, R29, R30 and R32's text comparisons use the section 34 strings.
+- **Edge cases:** changing one word of a locked line makes the checker exit 1 with `differs from Nick's locked text`, and its waivers report as stale [Probe C2, control 1]; a bare "now" anywhere outside `Now, I'm broadening` still fails [control 2]; a hero lede that stops naming AI still fails rule 3 [control 3]; if Nick later edits his own copy, the block line and its `LOCKED` hash change in the same commit, and any waiver that no longer applies fails as stale until it is removed here and in the checker; a later addendum that appends its own `narrative` block becomes the live one automatically.
+- **Resources:** this PRD, `docs/tools/narrativecheck.py`, `docs/tools/voicecheck.py` (read).
+
+## 37. Deployment, feasibility, risks, non-goals
+
+### 37.1 Deployment and build
+
+Unchanged from sections 11, 24.1 and 31.1: not Docker, static GitHub Pages, no build step, preview with `python3 docs/tools/serve.py 8000`. Production is still a merge to `main` after Nick's explicit approval. This card changes only this PRD and `docs/tools/narrativecheck.py`.
+
+### 37.2 Feasibility probes (spike method)
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| C1 | Given the card body in `~/.hermes/kanban.db`, when each of the eight locked strings is searched for as an exact substring, then all eight are found. | VALIDATED | `sqlite3 ~/.hermes/kanban.db "select body from tasks where id='t_d1b547d2'"` then a Python `in` check per string: all eight `True`. Their sha256 prefixes are the `LOCKED` table in the checker. |
+| C2 | Given the section 34 block, when checked by B's checker and then by the updated one, then B's flags only Nick's lines and the updated one passes with four reasoned waivers, and still catches real problems. | VALIDATED | B's checker (from 111f994) on the block: the four errors quoted in 34.3, exit 1. Updated checker on a scratch copy of this PRD with the block appended: exit 0, `OK: 11 strings (block 2 of 2), 8 locked, 4 documented exceptions, ...`. Negative controls (scratch only): (1) "Now, I'm broadening" changed to "Now, I'm focused on": exit 1, `differs from Nick's locked text`, `pivot wording 'Now'`, two stale-waiver errors; (2) consumer lede changed to "I now work from": exit 1, `lede.consumer-research: pivot wording 'now'`; (3) "AI" removed from the consumer lede: exit 1, `must name both consumer research and AI (doesn't say 'AI')`. |
+| C3 | Given a scratch copy of `resume.html` with the new headline and lede, when printed to letter with `preferCSSPageSize`, then it is 2 pages, and at 390px nothing overflows. | VALIDATED (scratch; the build must re-prove it on the real file, R31) | Browser CDP `Page.printToPDF`: current resume 2 pages, scratch copy 2 pages. Print-media sheet height 1683px today, 1705px with the new lede (lede box 110px to 132px); two letter pages are 2112px. Headline 20px (one line) in print on both. At 390x844: `scrollWidth` 390 = `innerWidth`, headline 40px (two lines) on both. |
+| C4 | Given the three new ledes, when injected after `.thesis` on the live landing pages with the prototype's `.lede` rule, then each is at most 6 lines at 390x844 (R30) with no overflow. | VALIDATED | 5, 5 and 5 lines at 390px; 7, 6 and 6 at 320px; `scrollWidth <= innerWidth` at both widths. Browser-only injection, no file changed. |
+
+No AI/LLM component is built, so the AI three-dimension check does not apply. No platform choice is made, so no ADR.
+
+### 37.3 Risks
+
+- **Biggest risk: the story is now carried less literally.** In B, every door said "consumer research" and "AI" in so many words. Now two of the five story lines (the homepage intro and the resume lede) carry it by substance and example, under waivers. A fast recruiter scan still gets both from the resume headline and the homepage rows, and every hero lede names both, so the R6 signal holds where a visitor lands. But the checker is now doing judgment work through a waiver table, which is only as good as the reasons written in it.
+- **The intro's three-step arc** (academia, industry, now AI) could be skimmed as a timeline. "Broadening" is what keeps it additive (J1). Nick's read decides.
+- **Claim with no backing on the site:** "In academia, I helped design and launch national surveys on social issues" isn't shown on the resume or any case page (Education lists the B.A. in Sociology; Methods lists survey design). Flag C6.
+- **Copy drift.** Now guarded harder: the locked hashes fail any edit to Nick's lines, including a well-meant typo fix.
+- **The structural spec is still unwritten** (Flag B4 stands). PMO still can't cut build cards for the prototype from these addenda alone.
+
+### 37.4 Non-goals (in addition to sections 13, 24.4 and 31.4)
+
+- Any copy edit to Nick's eight locked lines, including spelling, hyphenation, capitalization, commas or the `&` in the headline. The build ships them byte for byte.
+- Changing the switcher or homepage row order (R4, R29) to match the resume headline, unless Nick picks that in Flag C1.
+- Adding a `.mark` highlight to the resume lede unless Nick names the phrase (Flag C5).
+- Changing eyebrows, theses, meta descriptions, OG images, the 20.5 voices or case-study copy.
+- Building any site file. This card is copy and spec only.
+
+**Authorized boundaries (this card):** append this addendum and a header line to `docs/portfolio-restructure-PRD.md`; update `docs/tools/narrativecheck.py` (read the last block, `LOCKED`, `EXCEPTIONS`); commit and push `feature/portfolio-restructure`.
+
+**Forbidden actions (this card):** any site file (`*.html`, `assets/`), `BACKLOG.md`, sections 1 to 32 of this PRD (other than the header line), and anything on `main`. Never commit to, push to, or merge into `main`.
+
+## 38. Flags for Nick (Addendum C)
+
+1. **C1. Resume order versus site order.** Your new headline leads with Consumer Research; the site switcher and homepage rows lead with AI Evaluations. I left the site order alone (R4 unchanged). I think they can differ: nav order is for finding your way, headline order is emphasis, and you wrote the homepage rows in the site order yourself. If you want them to match, say which order and I'll spec the change; it touches the switcher on all 9 pages, the homepage rows and the footer links.
+2. **C2. Resume length.** Your lede is 102 words, 18 more than today's. On a scratch copy it still prints on 2 pages with room to spare (1705px used of 2112px). The build re-checks it on the real file; if it ever spills, it stops and asks you rather than trimming your words.
+3. **C3. Read the three hero ledes.** They're mine, written in your voice from your intro, rows and resume lede, each with one concrete example from a case study on that page (34.2). If you'd rather the Consumer Research one use your onboarding-trust example, the swap line is in 34.2.
+4. **C4. "Senior" leaves the headline.** The new headline says "Multi-Disciplinary Researcher". Your Experian title below it still says "Sr. User Experience Researcher", so seniority still shows. Just confirming that's intended.
+5. **C5. No highlight in the resume lede.** Today's lede highlights "at every stage of the product life cycle". Your new lede has no highlighted phrase, so the build ships none. If you want one, name the phrase.
+6. **C6. The national surveys line.** The homepage intro mentions designing and launching national surveys in academia. Nothing else on the site or resume shows that work. Fine to leave as is; if it's something you'd list, it could go on the resume.
+
+No cost, no infrastructure, no recurring manual step.
+
+**Follow-ups (for BACKLOG.md when the build lands, not requirements):** none new. B's three follow-ups stand. If Nick picks a different order in C1 or a highlight in C5, those become amendments to this addendum, not backlog rows.
