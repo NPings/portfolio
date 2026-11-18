@@ -11,6 +11,7 @@
 - **Addendum A (2026-11-17):** sections 17 to 26 and requirements R20 to R28 lock Nick's O1 to O9 decisions, make the one shared `resume.html` read for all three disciplines, and give each landing page its own session-notes voice (exact copy in 20.5). It also puts Nick's new `evaluating-my-agent.html` (on `main` at 3d25fb4) on the AI Evaluations page and adds link-preview images. Card t_48ff0069 (PRD addendum), build card t_2e68d7bf (assignee `design`). Where it changes R2, R4, R8 to R10, R12 to R17 or the section 13 non-goals, section 17.3 says how, and the addendum wins.
 - **Addendum B (2026-11-17):** sections 27 to 32 and requirements R29 to R32 fix the positioning story (consumer research is the root and ongoing; AI evaluation of consumer AI products and internal AI systems runs alongside it), give exact copy for the homepage disciplines intro, the three hero ledes and the resume masthead, and replace R6 (section 29). Card t_7e1550e9. Copy only; it follows the design prototype from card t_de460a73.
 - **Addendum C (2026-11-17):** sections 33 to 38 lock Nick's own rewritten copy (homepage intro, three homepage rows, resume headline and lede) verbatim, add three hero ledes written in his voice, restate R31 and add R33, and document four scoped `narrativecheck.py` waivers on his lines. The section 34 block supersedes section 28's. Card t_d1b547d2. Copy and spec only.
+- **Addendum E (2026-11-17):** one-clause copy fix to `homepage.intro`: Nick asked for "rigorous research" to become "employing rigorous practices" in the homepage intro lede, and the `.disc-intro` CSS in `index.html` is changed to set the lede apart visually from the `.disc-card` rows. The section 43 block is the live copy; the existing `homepage.intro` waivers still apply. Card t_b8642ff3.
 
 ---
 
@@ -1622,3 +1623,27 @@ Harness as section 23. Build/deployment: **not Docker**, same justified exceptio
 - **Flag D1.** The new consumer lede names neither consumer research nor AI in words (waived); the AI practice is visible through the switcher and the footer cross-links, and on the homepage rows.
 - **Flag D2.** The resume lede is 102 words (see 36 and Flag C2); the host must verify two-page print, and if it spills, stop and amend rather than trim Nick's words.
 - **Flag D3.** Other pages that link to `#philosophy`/`#practice` on the landing pages, if any, would now dead-end; checked in the build, none found.
+
+---
+
+# Addendum E: one-clause copy fix to the homepage intro, and a visual break before the discipline rows (card t_b8642ff3)
+
+## 43. The copy (exact, the single source)
+
+This is a one-clause fix to the locked `homepage.intro` copy key, requested directly by Nick (card t_b8642ff3): "rigorous research" becomes "employing rigorous practices" in the opening sentence. Nothing else in the line changes. The `.disc-intro` rule in `index.html` is also restyled (larger, darker text, a bottom rule and more space) so the lede no longer reads as another row in the `.disc-card` list. Sections 1 to 42 are not edited; this block supersedes the section 40 block, which stays as history. `narrativecheck.py` reads the last `narrative` block in the file, so this one is live. Every key except `homepage.intro` is copied byte for byte from section 40, and the `homepage.intro` hash in `LOCKED` is updated to match.
+
+The existing scoped waivers on `homepage.intro` still apply and still fire on the new text, so none is stale and none changes: the "pivot" waiver for the exact phrase "Now, I'm broadening" (the line still contains it verbatim) and the "both" waiver for rule 3 (the line still does not say "consumer" by the literal word, so rule 3 still trips and the waiver still fires; the line mentions "AI systems" exactly as before). The waivers match on the line's own content, not its hash, and nothing they rely on changed.
+
+```narrative
+homepage.intro: I have a passion for employing rigorous practices, challenging assumptions, and unearthing insights. I have designed, conducted, synthesized and reported on studies spanning the gamut of disciplines and methodologies. In academia, I helped design and launch national surveys on social issues. In my professional experience, I've spent years honing in on user problems and guiding businesses toward long term solutions. Now, I'm broadening to understand AI systems, how they serve their users, and how we measure their outputs.
+homepage.row.ai-evaluations: Testing AI products, systems, and workflows from a consumer and internal point of view. Understanding how probabilistic technology can be used to attain consistent results.
+homepage.row.research-operations: Revolutionizing how research gets done and where the insights go after. The reduced need for manual work in the days of AI presents us with opportunities to develop creative bespoke solutions to business and consumer problems.
+homepage.row.consumer-research: Deriving insight from grounded user problems and guiding products and solutions down the path to long term value for the user and the business.
+lede.ai-evaluations: I test AI products and agentic systems with the same rigor as any consumer study, digging past answers that sound right to unearth the inconsistencies underneath, such as an agent that writes a perfectly reasonable reply while calling the wrong tool.
+lede.research-operations: I use AI to take the manual work out of research and build bespoke tools that keep insights working after the readout, such as a knowledge base where stakeholders can query our consumer research in their own words.
+lede.consumer-research: I execute research that grounds business decisions in evidence based insight straight from the mouth of the target user, such as identifying the usability pain points in reviewing the recent changes to your credit report and helping to streamline the experience to match user mental models.
+resume.headline: Multi-Disciplinary Researcher · Consumer Research, AI Evaluations, & Research Operations
+resume.lede: Research has been my passion for my entire academic and professional career. Unearthing insights that [drive real decisions] is the core of my work. I've been fortunate enough to plan, design, execute, synthesize, and evangelize research in a wide span of industries and disciplines, utilizing varied methodologies to fit the needs of the research ask. From understanding the point where trust breaks down in an onboarding flow, to understanding the weaknesses and inconsistencies in agentic experiences, I've done it all. At the core of it all is a simple principle: deliver clear and transparent insights in order to inform important business decisions.
+switcher.label: Research disciplines:
+footer.cross: Same research, other angles:
+```

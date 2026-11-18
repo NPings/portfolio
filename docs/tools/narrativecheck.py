@@ -45,7 +45,7 @@ BOTH = ["homepage.intro", "lede.ai-evaluations", "lede.research-operations", "le
 
 # Nick's own copy (card t_d1b547d2), locked verbatim: sha256 of the bracket-stripped text, first 16 hex.
 LOCKED = {
-    "homepage.intro": "d4136752c5dd3e98",
+    "homepage.intro": "884cde5bd27865f4",
     "homepage.row.ai-evaluations": "56c32e825369bd48",
     "homepage.row.research-operations": "156babccc2b3d9e2",
     "homepage.row.consumer-research": "2be1bfd009b65c64",
