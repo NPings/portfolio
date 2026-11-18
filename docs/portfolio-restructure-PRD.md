@@ -1877,3 +1877,25 @@ Harness as section 23 (`python3 docs/tools/serve.py 8000`, headless Chromium, DO
 **Follow-ups for BACKLOG.md (added by the build card, not requirements):**
 - One source for method chips and tool lists across `index.html` and the discipline pages, so the AI evaluation entries can't drift (fold into the existing "move `index.html` onto `site.css`/`site.js`" row).
 - Decide Flags F1, F2 and F4.
+
+---
+
+# Addendum G: discipline pages lose Experience; hero eyebrow uses the discipline names (build card for Addendum F + G)
+
+## 49. Source
+
+Straight from Nick, not a formal PRD cycle. His words: "Remove them, just leave case studies." This resolves Flag F1 (Experience comes off the three discipline pages too) and Flag F4 (the hero eyebrow).
+
+## 50. Requirements
+
+- **G1.** Delete `<section id="work" data-obs="Experience">` from `ai-evaluations.html`, `research-operations.html` and `consumer-research.html`. "Selected work" stays. Philosophy/Practice, Methods, Tools and Impact are untouched. Renumber each page's `.sec-code` values so they run consecutively with no gap. On the two pages that have a debrief grid (`research-operations`, `consumer-research`), remove the "Roles opened" `d-cell` and set the grid to three columns (inline `style` on `.debrief-grid`, because `site.css` is out of scope).
+- **G2.** `index.html` hero eyebrow becomes `Consumer Research &middot; AI Evaluations &middot; Research Operations`. Same tag, classes and separator. The `<meta name="description">` is untouched.
+
+**Acceptance.**
+- `grep -c 'id="work"\|data-obs="Experience"\|details.role\|data-role' <page>.html` prints 0 for each of the three pages.
+- Each page's sec-codes are consecutive; the two debrief grids hold exactly 3 `.d-cell`.
+- `narrativecheck.py` and `voicecheck.py` print OK.
+
+## 51. Known leftovers (out of scope: `site.css` / `site.js` are locked here)
+
+- `site.js` still contains the roles logic and the "Roles opened: …" debrief line, `site.css` still has the dead `details.role*`/`.roles` rules, and `site.js` voice strings mention Experience. On the three pages the roles logic is inert, but the full-scroll debrief will still print "Roles opened: none." Needs a follow-up card that edits `site.js` (and its voicecheck) and `site.css`.

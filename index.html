@@ -110,9 +110,9 @@
   @media(max-width:760px){.facets{grid-template-columns:1fr;}}
   .facet.facet-head{background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));}
   .facet-head .role-org{margin-bottom:8px;}
-
-  /* ================= roles ================= */
-  .roles{border-top:1px solid var(--rule);margin-bottom:clamp(30px,5vw,64px);}
+  .facets.flow{grid-template-columns:repeat(5,minmax(0,1fr));}
+  .facets.flow .role-org{font-size:clamp(20px,1.9vw,24px);}
+  @media(max-width:1000px){.facets.flow{grid-template-columns:1fr;}}
 
   /* ================= case studies ================= */
   .cases{border-top:1px solid var(--rule);margin-bottom:clamp(30px,5vw,64px);}
@@ -133,53 +133,11 @@
   .disc-card h3{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:0;line-height:1.15;}
   .disc-card:hover .case-arrow{transform:translateX(4px);color:var(--pine);}
   .disc-body p{margin:8px 0 0;color:var(--ink-soft);line-height:1.5;}
-  details.role{border-bottom:1px solid var(--rule);}
-  details.role summary{
-    list-style:none;cursor:pointer;display:grid;
-    grid-template-columns:auto minmax(0,1fr) auto;
-    align-items:center;gap:clamp(12px,2.4vw,22px);
-    padding:clamp(18px,2.4vw,26px) 0;
-  }
-  details.role summary::-webkit-details-marker{display:none;}
-  .logo{
-    width:clamp(40px,5vw,52px);height:clamp(40px,5vw,52px);flex:none;
-    border-radius:50%;border:1px solid var(--rule);
-    background-color:var(--card);background-image:linear-gradient(var(--card),var(--card));
-    display:flex;align-items:center;justify-content:center;
-    font-family:"Fraunces",Georgia,serif;font-size:clamp(17px,2vw,22px);
-    color:var(--pine);line-height:1;
-  }
-  .logo img{width:100%;height:100%;border-radius:50%;object-fit:contain;padding:8px;}
   .role-org{
     font-family:"Fraunces",Georgia,serif;font-weight:500;
     font-size:clamp(21px,2.8vw,32px);line-height:1.1;letter-spacing:-.015em;margin:0;
   }
-  .role-title{color:var(--ink-soft);margin:4px 0 0;font-style:italic;font-size:.94em;}
-  .role-when{color:var(--muted);text-align:right;white-space:nowrap;}
-  .chev{
-    display:block;width:11px;height:11px;margin:8px 0 0 auto;
-    border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);
-    transform:rotate(45deg);transition:transform .3s ease;
-  }
-  details.role[open] .chev{transform:rotate(-135deg);}
-  .role-body{padding:0 0 clamp(24px,3vw,32px);}
-  .role-body p{margin:0;color:var(--ink-soft);line-height:1.55;}
-  .role-body ul{margin:14px 0 0;padding:0;list-style:none;}
-  .role-body li{position:relative;padding-left:16px;margin-bottom:7px;color:var(--ink-soft);line-height:1.5;}
-  .role-body li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1.5px;background-color:var(--moss);}
-  details.role[open] .role-body{animation:fadeUp .45s ease both;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-  @media(max-width:640px){
-    details.role summary{grid-template-columns:auto minmax(0,1fr);position:relative;}
-    .role-when{grid-column:2;text-align:left;margin-top:2px;}
-    .chev{display:none;}
-    details.role summary::after{
-      content:"";position:absolute;right:0;top:50%;width:10px;height:10px;
-      border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);
-      transform:translateY(-70%) rotate(45deg);transition:transform .3s ease;
-    }
-    details.role[open] summary::after{transform:translateY(-30%) rotate(-135deg);}
-  }
 
   /* ================= methods board ================= */
   .sort{
@@ -188,7 +146,8 @@
   }
   .sort .sec-head .label{color:var(--leaf);}
   .sort .sec-code{color:#7E9179;}
-  .board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.5vw,20px);align-items:start;}
+  .board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,1.5vw,20px);align-items:start;}
+  @media(max-width:1100px){.board{grid-template-columns:repeat(3,minmax(0,1fr));}}
   @media(max-width:900px){.board{grid-template-columns:repeat(2,minmax(0,1fr));}}
 
   .cluster{min-width:0;}
@@ -266,10 +225,10 @@
   /* ================= debrief ================= */
   .debrief{border-top:1px solid var(--rule);padding-bottom:clamp(30px,4vw,52px);}
   .debrief-grid{
-    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;
     background-color:var(--rule);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
   }
-  @media(max-width:760px){.debrief-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media(max-width:760px){.debrief-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
   .d-cell{
     background-color:var(--paper);background-image:linear-gradient(var(--paper),var(--paper));
     padding:clamp(18px,2.4vw,28px) clamp(16px,2vw,24px);
@@ -359,7 +318,7 @@
     .rec-dot{animation:none;}
     .rise,.chip,.cluster-head{opacity:1;transform:none;}
     .mark{background-size:100% 32%;}
-    details.role[open] .role-body,.chip[open] .chip-desc{animation:none;}
+    .chip[open] .chip-desc{animation:none;}
     .observer-log li{animation:none;}
     .observer{transition:none;}
   }
@@ -376,7 +335,7 @@
 <div class="page">
 
 <header class="hero wrap" id="top">
-  <p class="eyebrow label rise d1">Mixed-methods research &middot; Research operations &middot; AI in research</p>
+  <p class="eyebrow label rise d1">Consumer Research &middot; AI Evaluations &middot; Research Operations</p>
   <h1 class="name rise d2">Nicholas Pings Rodriguez<span class="dot">.</span></h1>
   <p class="thesis rise d3"><span class="mark">Adaptive research</span> to support a consistently shifting landscape.</p>
   <div class="rise d4">
@@ -384,41 +343,29 @@
   </div>
 </header>
 
-<section class="band" id="philosophy" data-obs="Philosophy">
+<section class="band" id="approach" data-obs="Approach">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Philosophy</p><span class="sec-code mono">S-01</span></div>
-    <div class="facets">
+    <div class="sec-head"><p class="label">Approach</p><span class="sec-code mono">S-01</span></div>
+    <div class="facets flow">
       <div class="facet facet-head">
-        <h3 class="role-org">Find what matters</h3>
-        <p>Start from the decision on the table and choose the method that can answer it: qualitative, quantitative, or both.</p>
+        <h3 class="role-org">Start with the problem</h3>
+        <p>Anchor the work in the decision it has to inform, whether that's about a product, a model, or a process.</p>
       </div>
       <div class="facet facet-head">
-        <h3 class="role-org">Make it go further</h3>
-        <p>Build the operations, standards, and AI that carry findings past the readout and into the room where decisions get made.</p>
+        <h3 class="role-org">Define the measures</h3>
+        <p>Agree on what success looks like before collecting anything, from task completion to rubric scores to hours saved.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="band" id="practice" data-obs="Practice">
-  <div class="wrap">
-    <div class="sec-head"><p class="label">Practice</p><span class="sec-code mono">S-02</span></div>
-    <div class="facets">
-      <div class="facet">
-        <span class="label">Questions before methods</span>
-        <p>A study starts with the questions that the current open decisions depend on. Everything else branches from there.</p>
+      <div class="facet facet-head">
+        <h3 class="role-org">Distill insights</h3>
+        <p>Separate signal from noise across transcripts, survey data, and model outputs, and shape it into findings people can act on.</p>
       </div>
-      <div class="facet">
-        <span class="label">Cover the whole lifecycle</span>
-        <p>Strategy, discovery, launch, iteration, and the long maintenance tail after. Research belongs at every stage, and the methods adjust as needed.</p>
+      <div class="facet facet-head">
+        <h3 class="role-org">Spread the knowledge</h3>
+        <p>Carry findings past the readout and into the room where decisions get made, so anyone can ask about them in their own words.</p>
       </div>
-      <div class="facet">
-        <span class="label">Apply AI strategically and safely</span>
-        <p>Models help with execution, like screening, tagging, and first-pass synthesis. Direction and the important decisions stay with a person in the loop.</p>
-      </div>
-      <div class="facet">
-        <span class="label">Open access to findings</span>
-        <p>Researchers do the research. Stakeholders get flexible, unrestricted access to what we've found, and can ask about it in their own words, in the context of the problem they're trying to solve.</p>
+      <div class="facet facet-head">
+        <h3 class="role-org">Build durable solutions</h3>
+        <p>Turn one-off answers into standards, evals, and tools that keep working long after the study wraps.</p>
       </div>
     </div>
   </div>
@@ -426,7 +373,7 @@
 
 <section class="band" id="disciplines" data-obs="Research disciplines">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Research disciplines</p><span class="sec-code mono">S-03</span></div>
+    <div class="sec-head"><p class="label">Research disciplines</p><span class="sec-code mono">S-02</span></div>
     <p class="disc-intro">I have a passion for employing rigorous practices, challenging assumptions, and unearthing insights. I have designed, conducted, synthesized and reported on studies spanning the gamut of disciplines and methodologies. In academia, I helped design and launch national surveys on social issues. In my professional experience, I've spent years honing in on user problems and guiding businesses toward long term solutions. Now, I'm broadening to understand AI systems, how they serve their users, and how we measure their outputs.</p>
     <div class="cases">
       <a class="disc-card" href="consumer-research.html">
@@ -455,7 +402,7 @@
 </section>
 
 <section class="band impact" id="impact" data-obs="Impact">
-  <div class="wrap"><div class="sec-head"><p class="label">Impact</p><span class="sec-code mono">S-04</span></div></div>
+  <div class="wrap"><div class="sec-head"><p class="label">Impact</p><span class="sec-code mono">S-03</span></div></div>
   <div class="marquee">
     <div class="track track-impact">
       <div class="stat"><span class="stat-num">24+</span><span class="stat-label">Products launched</span></div>
@@ -466,73 +413,9 @@
   </div>
 </section>
 
-<section class="band" id="work" data-obs="Experience">
-  <div class="wrap">
-    <div class="sec-head"><p class="label">Experience</p><span class="sec-code mono">S-05</span></div>
-    <div class="roles">
-
-      <details class="role" data-role="Experian">
-        <summary>
-          <!-- swap the letter for <img src="experian.svg" alt="Experian"> when you have the asset -->
-          <span class="logo" aria-hidden="true">E</span>
-          <span>
-            <h3 class="role-org">Experian Consumer Services</h3>
-            <p class="role-title">Sr. User Experience Researcher</p>
-          </span>
-          <span class="role-when label">2021 &mdash; Present<span class="chev"></span></span>
-        </summary>
-        <div class="role-body">
-          <p>I research across the full consumer product portfolio, and across the full life of each product too, from strategic groundwork through launch, iteration, and long-term maintenance. The method changes depending on the stage.</p>
-          <ul>
-            <li>Rebuilt research operations over about two years: self-service access for stakeholders, research standards, onboarding, and mentoring.</li>
-            <li>Led research on integrating generative AI into the consumer experience; recommendations shaped Experian's educational tools.</li>
-            <li>Introduced AI-assisted screening, analysis, and synthesis, and set the standards for where a model is trusted and where a person decides.</li>
-            <li>Helped define Experian's internal Applied AI practices, and work closely with the Applied AI team on pilot projects: a research knowledge base, a PMO agent, and skill kits. Also built PII-stripping preprocessing tools and competitor monitoring.</li>
-            <li>Partner with design, engineering, and product teams, translating findings into roadmaps and design decisions.</li>
-          </ul>
-        </div>
-      </details>
-
-      <details class="role" data-role="HP">
-        <summary>
-          <!-- swap the letters for <img src="hp.svg" alt="HP Inc."> when you have the asset -->
-          <span class="logo" aria-hidden="true">H</span>
-          <span>
-            <h3 class="role-org">HP Inc.</h3>
-            <p class="role-title">UX Researcher, Contract &middot; Personal Systems Software</p>
-          </span>
-          <span class="role-when label">May &mdash; Nov 2021<span class="chev"></span></span>
-        </summary>
-        <div class="role-body">
-          <p>At HP I ran launch-aligned studies across Wolf Security, including VPN and antivirus protection, plus webcam utilities and HP Dev One. I also facilitated design thinking workshops with a cross-functional team spanning several business units.</p>
-        </div>
-      </details>
-
-      <details class="role" data-role="Freelance">
-        <summary>
-          <span class="logo" aria-hidden="true">F</span>
-          <span>
-            <h3 class="role-org">Freelance</h3>
-            <p class="role-title">Principal User Experience Researcher</p>
-          </span>
-          <span class="role-when label">2018 &mdash; 2021<span class="chev"></span></span>
-        </summary>
-        <div class="role-body">
-          <p>I scoped and ran full research programs for clients in travel, health and wellness, and personal organization, across various platforms.</p>
-          <ul>
-            <li>Usability studies, concept validation, comparative testing, and generative workshops.</li>
-            <li>Delivered executive readouts, personas, journey maps, NPS and statistical analysis, and prioritized recommendations.</li>
-          </ul>
-        </div>
-      </details>
-
-    </div>
-  </div>
-</section>
-
 <section class="sort" id="methods" data-obs="Methods">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Methods</p><span class="sec-code mono">S-06</span></div>
+    <div class="sec-head"><p class="label">Methods</p><span class="sec-code mono">S-04</span></div>
 
     <div class="board" id="board">
 
@@ -568,6 +451,16 @@
       </div>
 
       <div class="cluster">
+        <div class="cluster-head"><span class="label">AI evaluation</span><span class="n">6</span></div>
+        <details class="chip"><summary><span class="chip-name">LLM-as-a-judge</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">A model makes the call when it safely can, inside fixed human checkpoints, and a person steps in when it can't.</p></details>
+        <details class="chip"><summary><span class="chip-name">Model-graded &amp; deterministic rubrics</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Deterministic checks for what can be checked exactly, and a model-graded rubric for what can't.</p></details>
+        <details class="chip"><summary><span class="chip-name">Regression suites</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">The same eval rerun before and after a fix, to prove the fix held.</p></details>
+        <details class="chip"><summary><span class="chip-name">Tool-call trace review</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Grading what an agent actually called, not just whether its reply sounded right.</p></details>
+        <details class="chip"><summary><span class="chip-name">Human-in-the-loop review</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Researcher sign-off and manager approval before anything a model produced is released.</p></details>
+        <details class="chip"><summary><span class="chip-name">Model trust standards</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Written rules for where a model is trusted and where a person decides.</p></details>
+      </div>
+
+      <div class="cluster">
         <div class="cluster-head"><span class="label">Operations</span><span class="n">6</span></div>
         <details class="chip"><summary><span class="chip-name">AI-assisted synthesis</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Models handle transcription, tagging, and first-pass analysis under defined review standards.</p></details>
         <details class="chip"><summary><span class="chip-name">Research repositories</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">A searchable store of findings so prior work is reused rather than rediscovered.</p></details>
@@ -582,7 +475,7 @@
 </section>
 
 <section class="band tools" id="tools" data-obs="Tools">
-  <div class="wrap"><div class="sec-head"><p class="label">Tools</p><span class="sec-code mono">S-07</span></div></div>
+  <div class="wrap"><div class="sec-head"><p class="label">Tools</p><span class="sec-code mono">S-05</span></div></div>
   <div class="marquee">
     <div class="track">
       <span class="tool">Condens</span><span class="tool">Figma</span><span class="tool">Great Question</span>
@@ -592,18 +485,18 @@
       <span class="tool">Sprig</span><span class="tool">FigJam</span><span class="tool">Miro</span>
       <span class="tool">Tableau</span><span class="tool">SPSS</span><span class="tool">Ethnio</span>
       <span class="tool">Jira</span><span class="tool">UserZoom</span><span class="tool">TheyDo</span><span class="tool">LookBack</span>
+      <span class="tool">Promptfoo</span><span class="tool">LangSmith</span><span class="tool">Python</span>
     </div>
   </div>
 </section>
 
 <section class="band debrief" id="debrief" data-obs="Debrief">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Your session</p><span class="sec-code mono">S-08</span></div>
+    <div class="sec-head"><p class="label">Your session</p><span class="sec-code mono">S-06</span></div>
     <div class="debrief-grid">
       <div class="d-cell"><span class="d-num" id="dTime">0:00</span><span class="label">Time on page</span></div>
       <div class="d-cell"><span class="d-num" id="dDepth">0%</span><span class="label">Furthest scroll</span></div>
-      <div class="d-cell"><span class="d-num" id="dMethods">0 / 25</span><span class="label">Methods explored</span></div>
-      <div class="d-cell"><span class="d-num" id="dRoles">0 / 3</span><span class="label">Roles opened</span></div>
+      <div class="d-cell"><span class="d-num" id="dMethods">0 / 31</span><span class="label">Methods explored</span></div>
     </div>
     <p class="debrief-note">Every visit here is a small usability session. I observe it the way I'd observe any study, with the same respect for the participant. Everything above was measured in this tab alone, is stored nowhere, and disappears when you leave.</p>
   </div>
@@ -671,14 +564,6 @@
     t.style.animationDuration = (base * reps) + 's';
   });
 
-  /* ---------- roles: one open at a time ---------- */
-  var roles = document.querySelectorAll('details.role');
-  roles.forEach(function(d){
-    d.addEventListener('toggle', function(){
-      if (d.open) roles.forEach(function(o){ if (o !== d) o.open = false; });
-    });
-  });
-
   /* ================================================================
      THE OBSERVER — this page runs a small, fully local usability
      session on its reader. Nothing is stored; nothing leaves the tab.
@@ -735,11 +620,9 @@
         if (e.isIntersecting && name && !seen[name]){
           seen[name] = true;
           var lines = {
-            'Philosophy':'Participant reaches Philosophy. Reading pattern assumed F-shaped.',
-            'Practice':'Participant reaches Practice. Four principles, no pop quiz.',
+            'Approach':'Participant reaches Approach. Five steps, read in order.',
             'Selected Work':'Participant reaches the case studies. Three to choose from.',
             'Impact':'Impact numbers in view. Noticed, presumably.',
-            'Experience':'Participant reaches Experience. The rows are waiting for a first click.',
             'Methods':'Methods board in view. The cards sorted themselves.',
             'Tools':'Tools marquee observed. It doesn\'t stop. Neither does research.',
             'Debrief':'Participant reaches the debrief. Full scroll achieved.'
@@ -776,27 +659,10 @@
           methodSeen[label] = true;
           methodsOpened++;
           var dm = document.getElementById('dMethods');
-          if (dm) dm.textContent = methodsOpened + ' / 25';
+          if (dm) dm.textContent = methodsOpened + ' / ' + chips.length;
           if (methodsOpened === 1) note('First method opened: "' + label + '". Curiosity confirmed.');
           else if (methodsOpened === 5) note('Five methods explored. A thorough participant.');
-          else if (methodsOpened === 25) note('All 25 methods opened. Above and beyond.');
-        }
-      }
-    });
-  });
-
-  /* roles opened */
-  var rolesOpened = 0, roleSeen = {};
-  roles.forEach(function(d){
-    d.addEventListener('toggle', function(){
-      if (d.open){
-        var r = d.getAttribute('data-role');
-        if (r && !roleSeen[r]){
-          roleSeen[r] = true;
-          rolesOpened++;
-          var dr = document.getElementById('dRoles');
-          if (dr) dr.textContent = rolesOpened + ' / 3';
-          note('Participant expands ' + r + '. Task success.');
+          else if (methodsOpened === chips.length) note('All ' + chips.length + ' methods opened. Above and beyond.');
         }
       }
     });
@@ -829,7 +695,7 @@
   function runDebrief(){
     if (debriefed) return;
     debriefed = true;
-    var methods = listOf(methodSeen), rolesSeen = listOf(roleSeen);
+    var methods = listOf(methodSeen);
     var sectionsSeen = listOf(seen).length;
     var sectionTotal = document.querySelectorAll('[data-obs]').length;
     var mins = Math.floor((Date.now() - t0) / 60000);
@@ -838,14 +704,11 @@
       ['Duration: ' + stamp() + '. ' + (mins >= 2 ? 'A considered read. Coffee may have been involved.' : 'Brisk. The participant knows what they came for.'), 'note-key'],
       ['Coverage: ' + sectionsSeen + ' of ' + sectionTotal + ' sections reached. ' + (sectionsSeen >= sectionTotal ? 'Complete. No skipped tasks.' : 'A few were scrolled past. Noted without judgment.'), 'note-key'],
       [methods.length
-        ? 'Methods opened: ' + methods.length + ' of 25 (' + joinNames(methods, 3) + '). ' + (methods.length >= 5 ? 'A hands-on participant.' : 'Selective. Respect.')
+        ? 'Methods opened: ' + methods.length + ' of ' + chips.length + ' (' + joinNames(methods, 3) + '). ' + (methods.length >= 5 ? 'A hands-on participant.' : 'Selective. Respect.')
         : 'Methods opened: none. The board was admired from a respectful distance.', 'note-key'],
-      [rolesSeen.length
-        ? 'Roles expanded: ' + rolesSeen.length + ' of 3 (' + rolesSeen.join(', ') + '). The details were wanted.'
-        : 'Roles expanded: none. The headlines were enough, apparently.', 'note-key'],
       ['Pauses observed: ' + idleCount + '. ' + (idleCount ? 'Reflection, or a second tab. Both are valid.' : 'Momentum held the whole way.'), 'note-key'],
       ['Finding 1: The participant made it to the end. Content held attention, which is the whole point.'],
-      ['Finding 2: ' + (methods.length || rolesSeen.length ? 'The participant clicked things. Interest moved from passive to active.' : 'The participant read rather than clicked. A reader, not a clicker.')],
+      ['Finding 2: ' + (methods.length ? 'The participant clicked things. Interest moved from passive to active.' : 'The participant read rather than clicked. A reader, not a clicker.')],
       ['Recommendation: Get in touch. The details are just above this panel.'],
       ['Session closed. Thank you for participating. Nothing was recorded, and nothing leaves this tab.', 'note-head']
     ];
