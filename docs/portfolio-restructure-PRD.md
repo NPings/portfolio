@@ -694,7 +694,6 @@ Ship these strings exactly. Typographic note: `·` is U+00B7, quotes are straigh
       "method1": "First method opened: \"{label}\". Logged to the repository.",
       "method5": "Five methods opened. This participant would be great for the panel.",
       "methodAll": "All {mTotal} methods opened. Somebody get this participant an incentive.",
-      "role": "Participant opens {role}. Task completed, no facilitator needed.",
       "idle": "Participant pauses. Bio break, probably. The session will wait.",
       "return": "Participant is back. No need to reschedule."
     },
@@ -748,19 +747,6 @@ Ship these strings exactly. Typographic note: `·` is U+00B7, quotes are straigh
           [
             "always",
             "Methods opened: none. Observation-only is a valid study design."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "rolesAny",
-            "Roles opened: {rN} of {rTotal} ({rNames}). Follow-up questions welcome."
-          ],
-          [
-            "always",
-            "Roles opened: none. The summary was enough to go on."
           ]
         ]
       },
@@ -838,7 +824,6 @@ Ship these strings exactly. Typographic note: `·` is U+00B7, quotes are straigh
       "method1": "First method opened: \"{label}\". Curiosity confirmed.",
       "method5": "Five methods explored. A thorough participant.",
       "methodAll": "All {mTotal} methods opened. Above and beyond.",
-      "role": "Participant expands {role}. Task success.",
       "idle": "Participant pauses. Thinking, or getting coffee.",
       "return": "Participant returns. Welcome back."
     },
@@ -892,19 +877,6 @@ Ship these strings exactly. Typographic note: `·` is U+00B7, quotes are straigh
           [
             "always",
             "Methods opened: none. The board reads fine sorted, too."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "rolesAny",
-            "Roles expanded: {rN} of {rTotal} ({rNames}). The details were wanted."
-          ],
-          [
-            "always",
-            "Roles expanded: none. The headlines cover the basics."
           ]
         ]
       },

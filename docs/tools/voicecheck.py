@@ -15,11 +15,11 @@ PRD = "docs/portfolio-restructure-PRD.md"
 SLUGS = ["research-operations", "consumer-research"]
 SECTIONS = ["Philosophy", "Practice", "Selected Work", "Impact", "Experience", "Methods", "Tools", "Debrief"]
 EVENTS = ["open", "hero", "sections", "sectionFallback", "depth50", "method1", "method5",
-          "methodAll", "role", "idle", "return"]
+          "methodAll", "idle", "return"]
 OPTIONAL_EVENTS = {}
-CONDS = {"always", "long", "full", "methods5", "methodsAny", "rolesAny", "pausesAny", "clickedAny", "rageAny"}
-PLACEHOLDERS = {"cards", "name", "label", "role", "time", "seen", "total", "mN", "mNames", "mTotal",
-                "rN", "rNames", "rTotal", "pN", "rage"}
+CONDS = {"always", "long", "full", "methods5", "methodsAny", "pausesAny", "clickedAny", "rageAny"}
+PLACEHOLDERS = {"cards", "name", "label", "time", "seen", "total", "mN", "mNames", "mTotal",
+                "pN", "rage"}
 # Tone guard (R25): words that grade or doubt the visitor. "No judgment." is the one allowed use of "judg".
 BANNED = re.compile(r"apparently|presumably|didn't|did not|fail|skipp|ignor|lazy|should have|missed|"
                     r"bounce|admired from|only skim|judg|wrong|lost you|gave up", re.I)

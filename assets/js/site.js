@@ -1,6 +1,6 @@
 /* Shared behavior for the three discipline landing pages (R15, R24, R26).
    Everything is in memory for the life of the tab: nothing is stored or sent.
-   Every count (chips, roles, sections, cards) is read from the DOM. */
+   Every count (chips, sections, cards) is read from the DOM. */
 (function () {
   /* The per-discipline session-notes copy. Single source: docs/portfolio-restructure-PRD.md section 20.5.
      Check with: python3 docs/tools/voicecheck.py assets/js/site.js */
@@ -29,7 +29,6 @@ var VOICES = {
       "method1": "First method opened: \"{label}\". Logged to the repository.",
       "method5": "Five methods opened. This participant would be great for the panel.",
       "methodAll": "All {mTotal} methods opened. Somebody get this participant an incentive.",
-      "role": "Participant opens {role}. Task completed, no facilitator needed.",
       "idle": "Participant pauses. Bio break, probably. The session will wait.",
       "return": "Participant is back. No need to reschedule."
     },
@@ -83,19 +82,6 @@ var VOICES = {
           [
             "always",
             "Methods opened: none. Observation-only is a valid study design."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "rolesAny",
-            "Roles opened: {rN} of {rTotal} ({rNames}). Follow-up questions welcome."
-          ],
-          [
-            "always",
-            "Roles opened: none. The summary was enough to go on."
           ]
         ]
       },
@@ -173,7 +159,6 @@ var VOICES = {
       "method1": "First method opened: \"{label}\". Curiosity confirmed.",
       "method5": "Five methods explored. A thorough participant.",
       "methodAll": "All {mTotal} methods opened. Above and beyond.",
-      "role": "Participant expands {role}. Task success.",
       "idle": "Participant pauses. Thinking, or getting coffee.",
       "return": "Participant returns. Welcome back."
     },
@@ -227,19 +212,6 @@ var VOICES = {
           [
             "always",
             "Methods opened: none. The board reads fine sorted, too."
-          ]
-        ]
-      },
-      {
-        "cls": "note-key",
-        "cases": [
-          [
-            "rolesAny",
-            "Roles expanded: {rN} of {rTotal} ({rNames}). The details were wanted."
-          ],
-          [
-            "always",
-            "Roles expanded: none. The headlines cover the basics."
           ]
         ]
       },
@@ -358,16 +330,7 @@ var VOICES = {
     t.style.animationDuration = (base * reps) + 's';
   });
 
-  /* ---------- roles: one open at a time ---------- */
-  var roles = document.querySelectorAll('details.role');
-  var roleTotal = roles.length;
-  roles.forEach(function (d) {
-    d.addEventListener('toggle', function () {
-      if (d.open) roles.forEach(function (o) { if (o !== d) o.open = false; });
-    });
-  });
   setText('dMethods', '0 / ' + chipTotal);
-  setText('dRoles', '0 / ' + roleTotal);
 
   if (VOICE) {
   var EV = VOICE.events;
@@ -469,21 +432,6 @@ var VOICES = {
     });
   });
 
-  /* roles opened */
-  var roleSeen = {};
-  var rolesOpened = 0;
-  roles.forEach(function (d) {
-    d.addEventListener('toggle', function () {
-      if (!d.open) return;
-      var r = d.getAttribute('data-role');
-      if (!r || roleSeen[r]) return;
-      roleSeen[r] = true;
-      rolesOpened++;
-      setText('dRoles', rolesOpened + ' / ' + roleTotal);
-      note(fill(EV.role, { role: r }));
-    });
-  });
-
   /* rage clicks (R26): only voices that define a "rage" event count them.
      A burst is 3+ clicks within 700ms, each within 30px of the first; one burst counts once. */
   var rageCount = 0;
@@ -529,7 +477,7 @@ var VOICES = {
   function runDebrief() {
     if (debriefed) return;
     debriefed = true;
-    var methods = Object.keys(methodSeen), rolesSeen = Object.keys(roleSeen);
+    var methods = Object.keys(methodSeen);
     var sectionsSeen = Object.keys(seen).length;
     var sectionTotal = document.querySelectorAll('[data-obs]').length;
     var conds = {
@@ -538,15 +486,13 @@ var VOICES = {
       full: sectionsSeen >= sectionTotal,
       methodsAny: methods.length >= 1,
       methods5: methods.length >= 5,
-      rolesAny: rolesSeen.length >= 1,
       pausesAny: idleCount >= 1,
-      clickedAny: methods.length >= 1 || rolesSeen.length >= 1,
+      clickedAny: methods.length >= 1,
       rageAny: rageCount >= 1
     };
     var vars = {
       cards: cardWord, time: stamp(), seen: sectionsSeen, total: sectionTotal,
       mN: methods.length, mNames: joinNames(methods, 3), mTotal: chipTotal,
-      rN: rolesSeen.length, rNames: joinNames(rolesSeen, 3), rTotal: roleTotal,
       pN: idleCount, rage: rageCount
     };
     var lines = VOICE.debrief.map(function (item) {
