@@ -19,7 +19,6 @@ var VOICES = {
         "Practice": "Participant reaches Practice. Four principles, straight from the research playbook.",
         "Selected Work": "Participant reaches the case studies. {cards} to choose from. Scheduling is flexible.",
         "Impact": "Impact numbers in view. Coded, tagged, and filed in the repository.",
-        "Experience": "Participant reaches Experience. Rows open on request. No booking link required.",
         "Methods": "Methods board in view. Every card tagged and filed. Repository hygiene: excellent.",
         "Tools": "Tools marquee in view. Every one of these has sent me a renewal notice.",
         "Debrief": "Participant reaches the debrief. Session wrapped, right on schedule."
@@ -149,7 +148,6 @@ var VOICES = {
         "Practice": "Participant reaches Practice. Four principles, no pop quiz.",
         "Selected Work": "Participant reaches the case studies. {cards} to choose from.",
         "Impact": "Impact numbers in view. No need to catch them all.",
-        "Experience": "Participant reaches Experience. The rows open if you want the details.",
         "Methods": "Methods board in view. The cards sorted themselves.",
         "Tools": "Tools marquee observed. It doesn't stop. Neither does research.",
         "Debrief": "Participant reaches the debrief. Full scroll achieved."

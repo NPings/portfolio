@@ -13,7 +13,7 @@ import json, re, sys
 
 PRD = "docs/portfolio-restructure-PRD.md"
 SLUGS = ["research-operations", "consumer-research"]
-SECTIONS = ["Philosophy", "Practice", "Selected Work", "Impact", "Experience", "Methods", "Tools", "Debrief"]
+SECTIONS = ["Philosophy", "Practice", "Selected Work", "Impact", "Methods", "Tools", "Debrief"]
 EVENTS = ["open", "hero", "sections", "sectionFallback", "depth50", "method1", "method5",
           "methodAll", "idle", "return"]
 OPTIONAL_EVENTS = {}

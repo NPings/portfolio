@@ -684,7 +684,6 @@ Ship these strings exactly. Typographic note: `·` is U+00B7, quotes are straigh
         "Practice": "Participant reaches Practice. Four principles, straight from the research playbook.",
         "Selected Work": "Participant reaches the case studies. {cards} to choose from. Scheduling is flexible.",
         "Impact": "Impact numbers in view. Coded, tagged, and filed in the repository.",
-        "Experience": "Participant reaches Experience. Rows open on request. No booking link required.",
         "Methods": "Methods board in view. Every card tagged and filed. Repository hygiene: excellent.",
         "Tools": "Tools marquee in view. Every one of these has sent me a renewal notice.",
         "Debrief": "Participant reaches the debrief. Session wrapped, right on schedule."
@@ -814,7 +813,6 @@ Ship these strings exactly. Typographic note: `·` is U+00B7, quotes are straigh
         "Practice": "Participant reaches Practice. Four principles, no pop quiz.",
         "Selected Work": "Participant reaches the case studies. {cards} to choose from.",
         "Impact": "Impact numbers in view. No need to catch them all.",
-        "Experience": "Participant reaches Experience. The rows open if you want the details.",
         "Methods": "Methods board in view. The cards sorted themselves.",
         "Tools": "Tools marquee observed. It doesn't stop. Neither does research.",
         "Debrief": "Participant reaches the debrief. Full scroll achieved."
@@ -1868,6 +1866,6 @@ Straight from Nick, not a formal PRD cycle. His words: "Remove them, just leave 
 - Each page's sec-codes are consecutive; the two debrief grids hold exactly 3 `.d-cell`.
 - `narrativecheck.py` and `voicecheck.py` print OK.
 
-## 51. Known leftovers (out of scope: `site.css` / `site.js` are locked here)
+## 51. Known leftovers (resolved)
 
-- `site.js` still contains the roles logic and the "Roles opened: …" debrief line, `site.css` still has the dead `details.role*`/`.roles` rules, and `site.js` voice strings mention Experience. On the three pages the roles logic is inert, but the full-scroll debrief will still print "Roles opened: none." Needs a follow-up card that edits `site.js` (and its voicecheck) and `site.css`.
+- The roles logic, the "Roles opened: ..." debrief line, the dead `details.role*`/`.roles` CSS rules, and the `site.js`/PRD §20.5 "Experience" voice strings were all cleaned up in Addendum G's build (card t_ca684c5f): `site.js`, `site.css`, `docs/tools/voicecheck.py`, and this PRD's §20.5 JSON are all in sync with the three discipline pages now.
