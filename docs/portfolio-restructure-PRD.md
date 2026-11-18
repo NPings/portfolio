@@ -1869,3 +1869,9 @@ Straight from Nick, not a formal PRD cycle. His words: "Remove them, just leave 
 ## 51. Known leftovers (resolved)
 
 - The roles logic, the "Roles opened: ..." debrief line, the dead `details.role*`/`.roles` CSS rules, and the `site.js`/PRD §20.5 "Experience" voice strings were all cleaned up in Addendum G's build (card t_ca684c5f): `site.js`, `site.css`, `docs/tools/voicecheck.py`, and this PRD's §20.5 JSON are all in sync with the three discipline pages now.
+
+---
+
+# Addendum H: AI Evaluations hero thesis copy fix
+
+2026-11-17. The `ai-evaluations.html` hero thesis (`.thesis`) changes from "Deciding where a model is trusted and where a person decides." to "Using deterministic logic to enhance probabilistic technology." The old line read like a Research Operations tagline (process and decision-rights framing) rather than an AI Evaluations one. The `.mark` highlight moves to "deterministic logic". The `.lede`, the eyebrow and every other line on the page are untouched.
