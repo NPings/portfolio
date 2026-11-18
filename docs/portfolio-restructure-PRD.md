@@ -12,6 +12,7 @@
 - **Addendum B (2026-11-17):** sections 27 to 32 and requirements R29 to R32 fix the positioning story (consumer research is the root and ongoing; AI evaluation of consumer AI products and internal AI systems runs alongside it), give exact copy for the homepage disciplines intro, the three hero ledes and the resume masthead, and replace R6 (section 29). Card t_7e1550e9. Copy only; it follows the design prototype from card t_de460a73.
 - **Addendum C (2026-11-17):** sections 33 to 38 lock Nick's own rewritten copy (homepage intro, three homepage rows, resume headline and lede) verbatim, add three hero ledes written in his voice, restate R31 and add R33, and document four scoped `narrativecheck.py` waivers on his lines. The section 34 block supersedes section 28's. Card t_d1b547d2. Copy and spec only.
 - **Addendum E (2026-11-17):** one-clause copy fix to `homepage.intro`: Nick asked for "rigorous research" to become "employing rigorous practices" in the homepage intro lede, and the `.disc-intro` CSS in `index.html` is changed to set the lede apart visually from the `.disc-card` rows. The section 43 block is the live copy; the existing `homepage.intro` waivers still apply. Card t_b8642ff3.
+- **Addendum F (2026-11-17):** sections 44 to 48 and requirements R38 to R42, `index.html` only: remove Experience (and the debrief/observer wiring tied to it), add an "AI evaluation" Methods cluster and three AI evaluation tools ported from `resume.html`, and replace Philosophy and Practice with one "Approach" section (Nick's five locked labels, exact sentences in 45.1). Card t_f25ad602. Copy and spec only.
 
 ---
 
@@ -1647,3 +1648,232 @@ resume.lede: Research has been my passion for my entire academic and professiona
 switcher.label: Research disciplines:
 footer.cross: Same research, other angles:
 ```
+
+---
+
+# Addendum F: index.html loses Experience, gains AI evaluation methods and tools, and folds Philosophy and Practice into "Approach" (card t_f25ad602)
+
+Added 2026-11-17 by product. Builds on sections 1 to 43 and R1 to R37 above, on `feature/portfolio-restructure` at 1a69701 (Addendum E). Same harness and conventions as sections 10, 23, 31, 36 and 41. Sections 1 to 43 are not edited; where this addendum changes them, section 44.2 says how, and the addendum wins. **Copy and spec only.** No site file changes on this card; a follow-up build card applies it. Only `index.html` changes in that build. The three discipline pages, `resume.html` and the case studies are untouched.
+
+## 44. Source and what this changes
+
+### 44.1 Source
+
+**[Nick-F]** = the three instructions on card t_f25ad602, straight from Nick:
+
+1. Remove the Experience section from `index.html` entirely. It lives on `resume.html` already, and that's sufficient.
+2. Add AI evaluation methods and tools to the `index.html` Methods and Tools sections, reusing the entries already written for `resume.html` (Addendum A, R20 to R28), not new wording. Keep every existing entry.
+3. Replace Philosophy and Practice on `index.html` with one section, "Approach", generalized across all three disciplines, in Philosophy's visual scheme, with five locked labels in this order: "Start with the problem", "Define the measures", "Distill insights", "Spread the knowledge", "Build durable solutions". One short supporting sentence each, same length and register as Philosophy's.
+
+**[Probe F]** = what I read on `feature/portfolio-restructure` at 1a69701 for this addendum: `index.html` lines 98 to 183 (facet and role CSS), 186 to 282 (board, debrief CSS), 387 to 598 (sections), 636 to 870 (inline script); `resume.html` lines 229 to 275 (Methods and Tools blocks); `ai-evaluations.html` lines 147 to 205 (its Evaluation cluster and Tools marquee); and a repo-wide grep for references to the affected sections (44.3).
+
+### 44.2 What this addendum changes in sections 1 to 43 (the addendum wins)
+
+| Base text | Change |
+|---|---|
+| R36 last sentence ("Philosophy, Practice, Experience, Impact, Methods, Tools and Debrief are untouched") | Superseded for `index.html`: Philosophy, Practice and Experience go, Approach arrives, Methods, Tools and Debrief change as R38 to R41 say. Impact is still untouched. |
+| R36 `.sec-head` code S-03 on `#disciplines` | Becomes S-02 (codes renumbered, R42). |
+| Section 39.2 row "Index keeps its own Philosophy and Practice sections, unchanged" and section 42 non-goal "No change to the Philosophy or Practice sections of `index.html`" | Reversed by [Nick-F] item 3. |
+| Landing pages (`consumer-research.html`, `ai-evaluations.html`, `research-operations.html`) | **No change.** They keep their own Experience, Methods and Tools sections. See Flag F1. |
+
+### 44.3 Experience removal: what it is, and whether it's clean
+
+**The section:** `index.html` line 469, `<section class="band" id="work" data-obs="Experience">`, sec-code S-05, holding `div.roles` with three `details.role` rows (`data-role` Experian, HP, Freelance). It runs to line 531.
+
+**External references: none.** [Probe F]:
+
+- `grep -rn '#work' --include=*.html --include=*.css --include=*.js --include=*.py .` (PRD excluded) prints nothing. No page links to `index.html#work`, and `index.html` has no nav or in-page link to `#work`.
+- No `<a href="...#...">` on any page points at an anchor on another page (`grep -rn 'href="[^"]*#' --include=*.html . | grep -v 'href="#'` prints nothing).
+- `assets/js/site.js` and `docs/tools/voicecheck.py` mention roles and "Experience", but only for the three landing pages; `index.html` does not load `site.js` (its script is inline, line 636). They are unaffected.
+- `intro.html` links to `index.html` only as a page, not to `#work`.
+
+**Internal couplings on `index.html`: four, and they must go in the same change.** Deleting only the `<section>` would leave a broken debrief, so the removal is clean only with these:
+
+1. **Debrief cell.** Line 606, `<div class="d-cell">…id="dRoles">0 / 3…Roles opened</div>`. It would sit at "0 / 3" forever. Remove the cell.
+2. **Roles script.** Lines 674 to 680 ("roles: one open at a time") and 788 to 803 ("roles opened"). With no `details.role` these do nothing, but they are dead code; remove both blocks.
+3. **Observer copy.** Line 742, the `'Experience'` entry in the section-lines map, can never fire; remove it. In `runDebrief()`, line 832 declares `rolesSeen`, lines 843 to 845 emit "Roles expanded: … of 3", and line 848 (Finding 2) tests `rolesSeen.length`. Remove the "Roles expanded" line, drop `rolesSeen` from the declaration, and make Finding 2 test `methods.length` only (its two sentences are unchanged).
+4. **Dead CSS.** Lines 114 to 115 (`.roles`) and 136 to 183 (`details.role*`, `.logo*`, `.role-title`, `.role-when`, `.chev`, `.role-body*`, and the `@media(max-width:640px)` block, which only styles roles) are used by nothing else. Remove them, and drop `details.role[open] .role-body,` from the reduced-motion rule at line 362. **Keep** `.role-org` (lines 153 to 156, Approach's headings use it, R39) and **keep** `@keyframes fadeUp` (line 171, `.chip-desc` uses it at line 234).
+
+With those four, nothing on the page or the site references the removed section.
+
+## 45. The copy and markup (exact, the single source)
+
+### 45.1 Approach (replaces Philosophy and Practice)
+
+The five labels are Nick's, locked verbatim and in this order. The sentences are mine, written to Philosophy's length and register: Philosophy's two entries are one sentence each, 19 and 20 words. These are one sentence each, 16 to 23 words, plain, no em or en dashes, and each names something true of consumer research, AI evaluation and research operations alike (a product, a model or a process; task completion, rubric scores or hours saved; transcripts, survey data or model outputs). "Carry findings past the readout and into the room where decisions get made" reuses Philosophy's own wording, so the old section's voice carries over.
+
+```approach
+Start with the problem: Anchor the work in the decision it has to inform, whether that's about a product, a model, or a process.
+Define the measures: Agree on what success looks like before collecting anything, from task completion to rubric scores to hours saved.
+Distill insights: Separate signal from noise across transcripts, survey data, and model outputs, and shape it into findings people can act on.
+Spread the knowledge: Carry findings past the readout and into the room where decisions get made, so anyone can ask about them in their own words.
+Build durable solutions: Turn one-off answers into standards, evals, and tools that keep working long after the study wraps.
+```
+
+Markup: Philosophy's scheme exactly (`.facets` > `.facet.facet-head` > `h3.role-org` + `p`), with one added class on the container so five cells read as one left-to-right flow:
+
+```html
+<section class="band" id="approach" data-obs="Approach">
+  <div class="wrap">
+    <div class="sec-head"><p class="label">Approach</p><span class="sec-code mono">S-01</span></div>
+    <div class="facets flow">
+      <div class="facet facet-head">
+        <h3 class="role-org">Start with the problem</h3>
+        <p>Anchor the work in the decision it has to inform, whether that's about a product, a model, or a process.</p>
+      </div>
+      <div class="facet facet-head">
+        <h3 class="role-org">Define the measures</h3>
+        <p>Agree on what success looks like before collecting anything, from task completion to rubric scores to hours saved.</p>
+      </div>
+      <div class="facet facet-head">
+        <h3 class="role-org">Distill insights</h3>
+        <p>Separate signal from noise across transcripts, survey data, and model outputs, and shape it into findings people can act on.</p>
+      </div>
+      <div class="facet facet-head">
+        <h3 class="role-org">Spread the knowledge</h3>
+        <p>Carry findings past the readout and into the room where decisions get made, so anyone can ask about them in their own words.</p>
+      </div>
+      <div class="facet facet-head">
+        <h3 class="role-org">Build durable solutions</h3>
+        <p>Turn one-off answers into standards, evals, and tools that keep working long after the study wraps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+CSS, added right after the existing `.facet-head .role-org` rule (line 112). Without it, five cells in Philosophy's 2-column grid leave an empty sixth cell showing the rule colour:
+
+```css
+.facets.flow{grid-template-columns:repeat(5,minmax(0,1fr));}
+.facets.flow .role-org{font-size:clamp(20px,1.9vw,24px);}
+@media(max-width:1000px){.facets.flow{grid-template-columns:1fr;}}
+```
+
+The heading size step-down is because `.role-org` is up to 32px, sized for Philosophy's two half-width cells; at a fifth of 1140px "Build durable solutions" would break across three lines. Everything else (card fill, 1px rule gaps, padding, paragraph style) is Philosophy's, unchanged.
+
+Observer line: in the inline script's section-lines map, replace the `'Philosophy'` and `'Practice'` entries with one entry:
+
+```js
+'Approach':'Participant reaches Approach. Five steps, read in order.',
+```
+
+### 45.2 Methods: the AI evaluation cluster
+
+**Source.** `resume.html` lines 244 to 247, the "AI evaluation" Methods group from Addendum A: *LLM-as-a-judge · Model-graded & deterministic rubrics · Regression suites · Tool-call trace review · Human-in-the-loop review · Model trust standards.* Those six names are ported verbatim, in the resume's order. The resume has names only, but an `index.html` chip needs a one-line description, so each description is taken **verbatim from the matching chip already shipped on `ai-evaluations.html`** (lines 155 to 161, the "Evaluation" cluster). Nothing is new wording.
+
+The cluster label is the resume's, "AI evaluation", not the AI Evaluations page's "Evaluation", because on `index.html` it sits beside a cluster called "Evaluative" and the two would read as the same thing.
+
+The AI Evaluations page's seventh chip, "Evaluating AI with users", is not in the resume's group and is not ported (Flag F2).
+
+Placement: a new fifth cluster between Quantitative and Operations, which is the resume's group order (Generative, Evaluative, Quantitative, AI evaluation, Operations). The four existing clusters and all 25 chips stay exactly as they are.
+
+```html
+      <div class="cluster">
+        <div class="cluster-head"><span class="label">AI evaluation</span><span class="n">6</span></div>
+        <details class="chip"><summary><span class="chip-name">LLM-as-a-judge</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">A model makes the call when it safely can, inside fixed human checkpoints, and a person steps in when it can't.</p></details>
+        <details class="chip"><summary><span class="chip-name">Model-graded &amp; deterministic rubrics</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Deterministic checks for what can be checked exactly, and a model-graded rubric for what can't.</p></details>
+        <details class="chip"><summary><span class="chip-name">Regression suites</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">The same eval rerun before and after a fix, to prove the fix held.</p></details>
+        <details class="chip"><summary><span class="chip-name">Tool-call trace review</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Grading what an agent actually called, not just whether its reply sounded right.</p></details>
+        <details class="chip"><summary><span class="chip-name">Human-in-the-loop review</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Researcher sign-off and manager approval before anything a model produced is released.</p></details>
+        <details class="chip"><summary><span class="chip-name">Model trust standards</span><span class="chip-caret" aria-hidden="true"></span></summary><p class="chip-desc">Written rules for where a model is trusted and where a person decides.</p></details>
+      </div>
+```
+
+| Chip name (from `resume.html`) | Description source on `ai-evaluations.html` |
+|---|---|
+| LLM-as-a-judge | "LLM-as-a-judge" chip, line 155 |
+| Model-graded &amp; deterministic rubrics | "Model-graded rubrics" chip, line 159 (its text already covers both deterministic and model-graded checks) |
+| Regression suites | "Regression suites" chip, line 161 |
+| Tool-call trace review | "Tool-call trace review" chip, line 160 |
+| Human-in-the-loop review | "Human-in-the-loop review" chip, line 156 |
+| Model trust standards | "Model trust standards" chip, line 157 |
+
+**Board layout.** The board is a 4-column grid (line 191); a fifth cluster would wrap alone onto a second row. Change the rules at lines 191 to 192 to:
+
+```css
+.board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,1.5vw,20px);align-items:start;}
+@media(max-width:1100px){.board{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:900px){.board{grid-template-columns:repeat(2,minmax(0,1fr));}}
+```
+
+**Methods total, now 31.** The 25 total is hard-coded in four lines of `index.html`: line 605 (`0 / 25`), line 779 (`' / 25'`), line 782 (`=== 25` and "All 25 methods opened."), and line 841 (`' of 25 ('`). Replace every one with the live count `chips.length` (the script already holds `var chips = document.querySelectorAll('.chip')`), and set the static HTML to `0 / 31` for no-JS readers. The "All N methods opened" note then reads "All 31 methods opened. Above and beyond." via `chips.length`. No other observer wording changes.
+
+### 45.3 Tools: the AI evaluation tools
+
+**Source.** `resume.html` lines 266 to 269, Tools group "AI evaluation": *Promptfoo · LangSmith*. Also *Python*, from the resume's "Analysis" group (line 264); it is the third tool on the AI Evaluations page's own marquee (`ai-evaluations.html` line 202, "Promptfoo, LangSmith, Python") and is missing from `index.html` today. All three are tool names already on the site; none is new.
+
+`index.html`'s Tools section is one ungrouped marquee of `span.tool` (lines 584 to 597), so the resume's four groups are not carried over as groups, only as entries, keeping the marquee format. Add one line after the last existing line (the one ending in `LookBack`), so 22 tools become 25:
+
+```html
+      <span class="tool">Promptfoo</span><span class="tool">LangSmith</span><span class="tool">Python</span>
+```
+
+All 22 existing tools stay.
+
+## 46. Requirements
+
+Harness as section 23 (`python3 docs/tools/serve.py 8000`, headless Chromium, DOM queries). Build/deployment for every Addendum F requirement: **not Docker**, same justified exception as sections 11, 24.1, 31.1, 37.1 and 41 (static GitHub Pages site, no build step, nothing to containerize). Production is still a merge to `main` after Nick's explicit approval. No service, dependency, cost or recurring manual step is added.
+
+### R38. index.html has no Experience section and no leftover role wiring.
+- **Source:** [Nick-F] item 1; couplings from [Probe F], section 44.3.
+- **Acceptance:** on `index.html`: `grep -c 'id="work"\|data-obs="Experience"\|details.role\|data-role\|dRoles\|rolesSeen\|roleSeen\|Roles expanded\|class="roles"\|\.logo\|role-body\|role-when\|role-title\|\.chev' index.html` prints `0`; `grep -c '\.role-org{' index.html` prints `1` and `grep -c '@keyframes fadeUp' index.html` prints `1`; `document.querySelectorAll('.debrief-grid .d-cell').length === 3` (time, scroll, methods). Scrolling to the bottom runs the debrief with no console error, and its notes contain no "Roles" line.
+- **Edge cases:** debrief grid with 3 cells: change `.debrief-grid` to `repeat(3,minmax(0,1fr))` and its `@media(max-width:760px)` rule to `repeat(3,minmax(0,1fr))` too, so no cell sits alone on a row; at 390x844 all three cells share one `offsetTop` and `document.documentElement.scrollWidth <= 390`. A visitor with JS off sees no Experience content and no "Roles opened" cell. Finding 2 still prints "The participant clicked things…" when at least one method was opened and "The participant read rather than clicked…" when none was.
+- **Resources:** `index.html` only.
+
+### R39. One "Approach" section replaces Philosophy and Practice, in Philosophy's scheme, with the section 45.1 copy.
+- **Source:** [Nick-F] item 3 (labels and order, locked); sentences: product, section 45.1.
+- **Acceptance:** `grep -c 'id="philosophy"\|id="practice"\|data-obs="Philosophy"\|data-obs="Practice"' index.html` prints `0`. The first `section` after `header.hero` is `section#approach[data-obs="Approach"]`, followed directly by `section#disciplines`. Its `.sec-head .label` is `Approach`. It holds exactly five `.facets.flow > .facet.facet-head`, each with one `h3.role-org` and one `p`; reading them in DOM order, each `h3` text equals the label and each `p` text equals the sentence of the matching line of the section 45.1 `approach` block. No `.facet` without `.facet-head` remains on `index.html` (Practice's style is gone). The section-lines map has an `'Approach'` key with the 45.1 text and no `'Philosophy'` or `'Practice'` key.
+- **Edge cases:** at 1440x900 all five facets share one `offsetTop` and no `h3.role-org` inside `.flow` wraps to more than 2 lines (`getClientRects` / line-height check); at 1000px and at 390x844 they stack in one column in label order; no empty grid cell (the `.facets.flow` child count is 5 and the grid has 5 or 1 columns); `document.documentElement.scrollWidth` equals the viewport width at 390. Text contains no em or en dash (`grep -c '—\|–\|&mdash;\|&ndash;'` over the new section's lines prints 0).
+- **Resources:** `index.html` only.
+
+### R40. Methods has a fifth "AI evaluation" cluster with the section 45.2 chips, and every methods count follows the real chip total.
+- **Source:** [Nick-F] item 2; names from `resume.html` lines 244 to 247, descriptions from `ai-evaluations.html` lines 155 to 161 (section 45.2).
+- **Acceptance:** `#board` has 5 `.cluster`, in label order Generative, Evaluative, Quantitative, AI evaluation, Operations. The AI evaluation cluster's `.n` is `6` and its six `.chip` names and `.chip-desc` texts equal the section 45.2 HTML block in order. The other four clusters are byte-identical to 1a69701 (diff the four blocks). `document.querySelectorAll('.chip').length === 31`. `grep -n "/ 25\|of 25\|=== 25\|All 25" index.html` prints nothing. Opening one chip makes `#dMethods` read `1 / 31`.
+- **Edge cases:** at 1440 the five clusters share one `offsetTop`; at 1024 they lay out 3 + 2; at 390 they lay out 2 + 2 + 1; no horizontal overflow at any of these. Opening all 31 chips fires the "All 31 methods opened" note once. Reduced motion: the new chips render unscattered and visible like the others (they use the same `.chip` rules). The no-JS fallback shows `0 / 31`.
+- **Resources:** `index.html` only.
+
+### R41. The Tools marquee adds Promptfoo, LangSmith and Python and keeps every existing tool.
+- **Source:** [Nick-F] item 2; `resume.html` lines 264 and 268, `ai-evaluations.html` line 202 (section 45.3).
+- **Acceptance:** in the static HTML (before the marquee script repeats it), `#tools .track` has 25 `span.tool`; the 22 names present at 1a69701 are all still there; `Promptfoo`, `LangSmith` and `Python` each appear exactly once. Checked by `grep -o '<span class="tool">[^<]*</span>' index.html | sort | uniq -c`.
+- **Edge cases:** the marquee still loops with no visible gap at 1440 and 390 (the script sizes it from `scrollWidth`, so a longer set needs no code change); hover still pauses it.
+- **Resources:** `index.html` only.
+
+### R42. Section codes run S-01 to S-06 in page order, and nothing outside index.html changes.
+- **Source:** assumption (the codes are a visual sequence; removing three sections and adding one leaves gaps otherwise).
+- **Acceptance:** the `.sec-code` texts on `index.html`, in DOM order, are Approach S-01, Research disciplines S-02, Impact S-03, Methods S-04, Tools S-05, Your session S-06. `git diff --name-only 1a69701..HEAD` on the build commit lists `index.html` plus, at most, `BACKLOG.md` and this PRD. `python3 docs/tools/narrativecheck.py` and `python3 docs/tools/voicecheck.py assets/js/site.js` still print OK (neither reads `index.html`; this proves the build didn't touch their inputs).
+- **Edge cases:** the `'Selected Work'` key left in the section-lines map since Addendum D is dead but harmless; leave it (non-goal).
+- **Resources:** `index.html`; read-only: `docs/tools/narrativecheck.py`, `docs/tools/voicecheck.py`.
+
+## 47. Feasibility, risks, non-goals
+
+**Feasibility (spike method).**
+
+| # | Given / When / Then | Verdict | Evidence |
+|---|---|---|---|
+| F1 | Given Experience is removed, when the page runs, then nothing else breaks. | VALIDATED | [Probe F] grep: no external `#work` reference; the four internal couplings are listed in 44.3 and folded into R38. |
+| F2 | Given resume.html's AI evaluation entries, when ported to index chips, then no new wording is needed. | VALIDATED | All six names have a shipped chip description on `ai-evaluations.html` (table in 45.2). |
+| F3 | Given five facets and a five-cluster board, when rendered at 1440/1024/390, then nothing orphans or overflows. | PARTIAL | Not rendered on this card (copy only). The CSS in 45.1 and 45.2 is sized from the existing rules (1140px wrap, 1px rule-gap grid); R39 and R40's edge cases make the build prove it. |
+
+**Risks.**
+- Five facets across 1140px is about 220px a cell; the sentences run 5 to 6 lines there. If Nick finds the row too dense, the fallback is the existing 2-column grid with the fifth cell spanning both columns (`.facets.flow .facet:last-child{grid-column:1/-1}`), a CSS-only change.
+- `index.html` grows two AI evaluation lists that duplicate `ai-evaluations.html`'s; if one is later edited, they drift. Logged as a follow-up (moving `index.html` onto shared assets is already in BACKLOG).
+
+**Non-goals (do not build).**
+- No change to the three discipline pages (their Experience, Methods, Tools, Philosophy/Practice removal from Addendum D), `resume.html`, any case study, `site.css` or `site.js`.
+- No change to Impact, Research disciplines copy, the hero, the footer or the debrief note text.
+- No new Operations entries from the resume (Participant recruitment, Onboarding & mentorship); [Nick-F] asked for AI evaluation only.
+- Don't port "Evaluating AI with users" (Flag F2) or regroup the Tools marquee into the resume's four groups.
+- Don't edit the locked `narrative` block or `LOCKED` hashes; the Approach copy lives in its own `approach` block and no checker reads it.
+
+## 48. Flags for Nick (Addendum F) and follow-ups
+
+- **Flag F1.** Experience comes off the homepage only. The three discipline pages still have their own Experience sections. If "it lives on resume.html, that's sufficient" applies to them too, that's a separate card.
+- **Flag F2.** The AI Evaluations page has a seventh AI method, "Evaluating AI with users" (testing a generative AI assistant with real people). It isn't in the resume's AI evaluation group, so I didn't port it. It's the most cross-discipline item of the set; say if you want it on the homepage too, and on the resume.
+- **Flag F3.** The five Approach sentences are mine, not yours (section 45.1). The labels are yours, locked. Edit any sentence freely before the build.
+- **Flag F4.** The hero eyebrow still reads "Mixed-methods research · Research operations · AI in research", which doesn't match the Consumer Research / AI Evaluations / Research Operations naming. Out of scope here; flagging it because the rest of the homepage now generalizes.
+- No infrastructure, cost or manual step is added.
+
+**Follow-ups for BACKLOG.md (added by the build card, not requirements):**
+- One source for method chips and tool lists across `index.html` and the discipline pages, so the AI evaluation entries can't drift (fold into the existing "move `index.html` onto `site.css`/`site.js`" row).
+- Decide Flags F1, F2 and F4.
