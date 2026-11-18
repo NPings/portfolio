@@ -1672,7 +1672,7 @@ With those four, nothing on the page or the site references the removed section.
 The five labels are Nick's, locked verbatim and in this order. The sentences are mine, written to Philosophy's length and register: Philosophy's two entries are one sentence each, 19 and 20 words. These are one sentence each, 16 to 23 words, plain, no em or en dashes, and each names something true of consumer research, AI evaluation and research operations alike (a product, a model or a process; task completion, rubric scores or hours saved; transcripts, survey data or model outputs). "Carry findings past the readout and into the room where decisions get made" reuses Philosophy's own wording, so the old section's voice carries over.
 
 ```approach
-Start with the problem: Anchor the work in the decision it has to inform, whether that's about a product, a model, or a process.
+Start with the problem: Anchor the work in the decision it has to inform, whether it's for a user facing product or an internal agentic workflow.
 Define the measures: Agree on what success looks like before collecting anything, from task completion to rubric scores to hours saved.
 Distill insights: Separate signal from noise across transcripts, survey data, and model outputs, and shape it into findings people can act on.
 Spread the knowledge: Carry findings past the readout and into the room where decisions get made, so anyone can ask about them in their own words.
@@ -1688,7 +1688,7 @@ Markup: Philosophy's scheme exactly (`.facets` > `.facet.facet-head` > `h3.role-
     <div class="facets flow">
       <div class="facet facet-head">
         <h3 class="role-org">Start with the problem</h3>
-        <p>Anchor the work in the decision it has to inform, whether that's about a product, a model, or a process.</p>
+        <p>Anchor the work in the decision it has to inform, whether it's for a user facing product or an internal agentic workflow.</p>
       </div>
       <div class="facet facet-head">
         <h3 class="role-org">Define the measures</h3>
@@ -1880,3 +1880,9 @@ Straight from Nick, not a formal PRD cycle. His words: "Remove them, just leave 
 # Addendum I: remove the "small usability session" debrief blurb
 
 2026-11-17 (card t_f659e432). Nick: "I don't like this blurb under the session notes section. Feels preachy. Kill it." Removed the `.debrief-note` paragraph "Every visit here is a small usability session..." from `index.html`, `consumer-research.html`, and the `consumer-research` voice's `debriefNote` key in `assets/js/site.js` and this PRD's §20.5 JSON block (no replacement text). `docs/tools/voicecheck.py`'s `strings()` now treats `debriefNote` as optional so it still passes with the key absent from one voice; the `research-operations` voice's own distinct `debriefNote` is untouched. No layout gap: the removed paragraph carried its own top margin only, and `.debrief`'s existing bottom padding already closes the section cleanly, confirmed live in a browser on both pages.
+
+---
+
+# Addendum J: Approach section first-entry sentence
+
+2026-11-17. On `index.html`, the Approach section's first entry ("Start with the problem") changes its sentence from "Anchor the work in the decision it has to inform, whether that's about a product, a model, or a process." to "Anchor the work in the decision it has to inform, whether it's for a user facing product or an internal agentic workflow." The heading, the other four entries and their labels are untouched. The `approach` block and markup example in the Approach section above are synced to the new sentence.
