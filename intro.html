@@ -1870,6 +1870,7 @@
   var byId = function(id){ return document.getElementById(id); };
   var L = byId('research'), board = byId('board'), threads = byId('threads'), title = byId('research-title'), status = byId('board-status');
   var clusters = board.querySelector('.clusters'), act2 = byId('where'), forkScene = act2.querySelector('.fork-scene');
+  var boardIntro = board.querySelector('.board-intro');   // finishes its board-title-in run after .board-head's (staggered later); end() must wait for this one, not the first to fire
   var prong = act2.querySelector('.prong[data-prong="research"]');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var STACK = window.matchMedia('(max-width:699px) and (min-height:501px)');
@@ -1967,7 +1968,7 @@
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip(); });
   L.addEventListener('animationend', function(e){
     if(e.target === L && e.animationName === 'research-wipe' && st === 'entering') title.focus({preventScroll:true});
-    if(e.animationName === 'board-title-in') end();
+    if(e.animationName === 'board-title-in' && e.target === boardIntro) end();   // boardIntro is staggered 300ms after board-head, so it's always the last of the pair to finish
   });
   reduce.addEventListener('change', function(){ if(reduce.matches && st === 'entering'){ skipped = true; end(); } });
   Array.prototype.forEach.call(clusters.querySelectorAll('.cluster'), function(a){
