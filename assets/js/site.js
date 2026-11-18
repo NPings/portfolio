@@ -139,7 +139,6 @@ var VOICES = {
     "panelTitle": "Participant #1 · Session Notes",
     "panelTitleDone": "Participant #1 · Session Debrief",
     "debriefLabel": "Your session",
-    "debriefNote": "Every visit here is a small usability session. I observe it the way I'd observe any study, with the same respect for the participant. Everything above was measured in this tab alone, is stored nowhere, and disappears when you leave.",
     "events": {
       "open": "Session begins. One participant, unmoderated.",
       "hero": "Participant reads the hero. Or skims it. No judgment.",

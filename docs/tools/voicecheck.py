@@ -36,7 +36,9 @@ def load_prd():
 
 
 def strings(v):
-    out = [v["panelTitle"], v["panelTitleDone"], v["debriefLabel"], v["debriefNote"]]
+    out = [v["panelTitle"], v["panelTitleDone"], v["debriefLabel"]]
+    if "debriefNote" in v:
+        out.append(v["debriefNote"])
     for k, s in v["events"].items():
         out += list(s.values()) if k == "sections" else [s]
     for item in v["debrief"]:

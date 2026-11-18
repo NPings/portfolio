@@ -804,7 +804,6 @@ Ship these strings exactly. Typographic note: `·` is U+00B7, quotes are straigh
     "panelTitle": "Participant #1 · Session Notes",
     "panelTitleDone": "Participant #1 · Session Debrief",
     "debriefLabel": "Your session",
-    "debriefNote": "Every visit here is a small usability session. I observe it the way I'd observe any study, with the same respect for the participant. Everything above was measured in this tab alone, is stored nowhere, and disappears when you leave.",
     "events": {
       "open": "Session begins. One participant, unmoderated.",
       "hero": "Participant reads the hero. Or skims it. No judgment.",
@@ -1875,3 +1874,9 @@ Straight from Nick, not a formal PRD cycle. His words: "Remove them, just leave 
 # Addendum H: AI Evaluations hero thesis copy fix
 
 2026-11-17. The `ai-evaluations.html` hero thesis (`.thesis`) changes from "Deciding where a model is trusted and where a person decides." to "Using deterministic logic to enhance probabilistic technology." The old line read like a Research Operations tagline (process and decision-rights framing) rather than an AI Evaluations one. The `.mark` highlight moves to "deterministic logic". The `.lede`, the eyebrow and every other line on the page are untouched.
+
+---
+
+# Addendum I: remove the "small usability session" debrief blurb
+
+2026-11-17 (card t_f659e432). Nick: "I don't like this blurb under the session notes section. Feels preachy. Kill it." Removed the `.debrief-note` paragraph "Every visit here is a small usability session..." from `index.html`, `consumer-research.html`, and the `consumer-research` voice's `debriefNote` key in `assets/js/site.js` and this PRD's §20.5 JSON block (no replacement text). `docs/tools/voicecheck.py`'s `strings()` now treats `debriefNote` as optional so it still passes with the key absent from one voice; the `research-operations` voice's own distinct `debriefNote` is untouched. No layout gap: the removed paragraph carried its own top margin only, and `.debrief`'s existing bottom padding already closes the section cleanly, confirmed live in a browser on both pages.
