@@ -46,6 +46,9 @@
     font-style:italic;font-size:clamp(22px,5.6vw,42px);line-height:1.26;
     margin:clamp(20px,4vw,38px) 0 0;color:var(--ink-soft);
   }
+  .lede{
+    font-size:17px;line-height:1.55;max-width:36em;margin:clamp(16px,2.6vw,24px) 0 0;color:var(--ink-soft);
+  }
   .mark{
     display:inline;padding:0 .08em;
     background-image:linear-gradient(var(--leaf),var(--leaf));

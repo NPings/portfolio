@@ -128,6 +128,11 @@
   .case-arrow{flex:none;color:var(--moss);font-size:1.1em;transition:transform .25s ease;}
   .case-card:hover .case-arrow{transform:translateX(4px);color:var(--pine);}
   .case-card p{margin:8px 0 0;color:var(--ink-soft);line-height:1.5;}
+  .disc-intro{margin:0 0 clamp(20px,3vw,32px);max-width:40em;color:var(--ink-soft);line-height:1.55;}
+  .disc-card{display:block;text-decoration:none;color:inherit;padding:clamp(20px,2.8vw,28px) 0;border-bottom:1px solid var(--rule);}
+  .disc-card h3{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:0;line-height:1.15;}
+  .disc-card:hover .case-arrow{transform:translateX(4px);color:var(--pine);}
+  .disc-body p{margin:8px 0 0;color:var(--ink-soft);line-height:1.5;}
   details.role{border-bottom:1px solid var(--rule);}
   details.role summary{
     list-style:none;cursor:pointer;display:grid;
@@ -419,46 +424,31 @@
   </div>
 </section>
 
-<section class="band" id="selected-work" data-obs="Selected Work">
+<section class="band" id="disciplines" data-obs="Research disciplines">
   <div class="wrap">
-    <div class="sec-head"><p class="label">Selected work</p><span class="sec-code mono">S-03</span></div>
+    <div class="sec-head"><p class="label">Research disciplines</p><span class="sec-code mono">S-03</span></div>
+    <p class="disc-intro">I have a passion for rigorous research, challenging assumptions, and unearthing insights. I have designed, conducted, synthesized and reported on studies spanning the gamut of disciplines and methodologies. In academia, I helped design and launch national surveys on social issues. In my professional experience, I've spent years honing in on user problems and guiding businesses toward long term solutions. Now, I'm broadening to understand AI systems, how they serve their users, and how we measure their outputs.</p>
     <div class="cases">
-      <a class="case-card" href="research-knowledge-base.html">
+      <a class="disc-card" href="consumer-research.html">
         <div class="case-card-top">
-          <h3>Research Knowledge Base</h3>
+          <h3>Consumer Research</h3>
           <span class="case-arrow" aria-hidden="true">&rarr;</span>
         </div>
-        <p>Stakeholders don't chase down findings any more than users read instructions. Three systems later, a knowledge base lets them ask research their own questions, in their own words.</p>
+        <div class="disc-body"><p>Deriving insight from grounded user problems and guiding products and solutions down the path to long term value for the user and the business.</p></div>
       </a>
-      <a class="case-card" href="experian-eva.html">
+      <a class="disc-card" href="ai-evaluations.html">
         <div class="case-card-top">
-          <h3>Experian Virtual Assistant</h3>
+          <h3>AI Evaluations</h3>
           <span class="case-arrow" aria-hidden="true">&rarr;</span>
         </div>
-        <p>Multi-round research, generative through evaluative, landed on one finding that reshaped where help shows up in the product: people don't go looking for it. It has to find them.</p>
+        <div class="disc-body"><p>Testing AI products, systems, and workflows from a consumer and internal point of view. Understanding how probabilistic technology can be used to attain consistent results.</p></div>
       </a>
-      <!-- Hidden until their case studies are complete. Remove the comment markers to show them.
-      <a class="case-card" href="skill-kits.html">
+      <a class="disc-card" href="research-operations.html">
         <div class="case-card-top">
-          <h3>Skill Kits</h3>
+          <h3>Research Operations</h3>
           <span class="case-arrow" aria-hidden="true">&rarr;</span>
         </div>
-        <p>How do you help non-technical teammates build new AI capabilities on their own, and safely, without building the skills for them?</p>
-      </a>
-      <a class="case-card" href="research-pmo-agent.html">
-        <div class="case-card-top">
-          <h3>Research PMO Agent</h3>
-          <span class="case-arrow" aria-hidden="true">&rarr;</span>
-        </div>
-        <p>How do you coordinate a multidisciplinary research team around common tasks, and keep each other informed on progress?</p>
-      </a>
-      -->
-      <a class="case-card" href="hp-wolf-security.html">
-        <div class="case-card-top">
-          <h3>HP Wolf Security</h3>
-          <span class="case-arrow" aria-hidden="true">&rarr;</span>
-        </div>
-        <p>A diary study on an unreleased build found self-managed security asked too much of the average user, and reshaped the product around built-in IT support instead.</p>
+        <div class="disc-body"><p>Revolutionizing how research gets done and where the insights go after. The reduced need for manual work in the days of AI presents us with opportunities to develop creative bespoke solutions to business and consumer problems.</p></div>
       </a>
     </div>
   </div>

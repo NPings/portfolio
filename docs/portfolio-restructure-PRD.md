@@ -1526,3 +1526,99 @@ No AI/LLM component is built, so the AI three-dimension check does not apply. No
 No cost, no infrastructure, no recurring manual step.
 
 **Follow-ups (for BACKLOG.md when the build lands, not requirements):** none new. B's three follow-ups stand. If Nick picks a different order in C1 or a highlight in C5, those become amendments to this addendum, not backlog rows.
+
+---
+
+# Addendum D: the real build: homepage disciplines section, Philosophy/Practice removed from the landing pages, new discipline order (card t_e737b388)
+
+Added by product. Builds on sections 1 to 38 and R1 to R33 above, on `feature/portfolio-restructure` at 4767b54 (Addendum C). Same harness and conventions as sections 10, 23, 31 and 36. Unlike Addendum C, **this addendum changes site files.** It builds the real site: it removes Philosophy and Practice from the three discipline pages, adds the homepage "Research disciplines" section (replacing the old Selected Work case list on `index.html`), and changes the site-wide discipline order to **Consumer Research, AI Evaluations, Research Operations** (it was AI Evaluations first). Nick approved these structural changes and some copy tweaks on top of Addendum C.
+
+## 39. Source and what this changes
+
+### 39.1 Source
+
+From card t_e737b388 and Nick's approval. **[Nick-D]** = the copy and structure as given on that card. The section 40 block holds the exact strings; `narrativecheck.py` reads it as the live block (it is now the last `narrative` block in the file).
+
+### 39.2 What this addendum changes in sections 1 to 38 (the addendum wins)
+
+| Base text | Change |
+|---|---|
+| Section 34 `narrative` block | **Superseded** by the section 40 block. Section 34 stays as history. |
+| R4 (switcher order), R29 (homepage row order), R5 (footer cross-link order) | Order is now Consumer Research, AI Evaluations, Research Operations everywhere. Section 35 and Flag C1 are resolved in favour of changing the site order to match Nick's resume headline. |
+| Landing-page structure (Philosophy, Practice sections) | **Removed** from `ai-evaluations.html`, `research-operations.html`, `consumer-research.html`. Selected work is now the first section after the hero. Index keeps its own Philosophy and Practice sections, unchanged. |
+| 34.1 `lede.*` | The three ledes are rewritten or lightly edited (section 40). |
+| R31 | The resume lede now carries a highlight on "drive real decisions" (a `.mark` span). This reverses C5's "no highlight". The headline is unchanged from Addendum C. |
+| Section 38, Flag C1 and C5 | Resolved by this addendum. |
+
+## 40. The copy (exact, the single source)
+
+Format as section 28: one `key: text` per line, same eleven keys in the same order. Brackets `[like this]` mark the `.mark` span in the HTML and are stripped before the checker's text comparison and hashing. The middot in `resume.headline` is `&middot;` and the ampersand `&amp;` in HTML.
+
+```narrative
+homepage.intro: I have a passion for rigorous research, challenging assumptions, and unearthing insights. I have designed, conducted, synthesized and reported on studies spanning the gamut of disciplines and methodologies. In academia, I helped design and launch national surveys on social issues. In my professional experience, I've spent years honing in on user problems and guiding businesses toward long term solutions. Now, I'm broadening to understand AI systems, how they serve their users, and how we measure their outputs.
+homepage.row.ai-evaluations: Testing AI products, systems, and workflows from a consumer and internal point of view. Understanding how probabilistic technology can be used to attain consistent results.
+homepage.row.research-operations: Revolutionizing how research gets done and where the insights go after. The reduced need for manual work in the days of AI presents us with opportunities to develop creative bespoke solutions to business and consumer problems.
+homepage.row.consumer-research: Deriving insight from grounded user problems and guiding products and solutions down the path to long term value for the user and the business.
+lede.ai-evaluations: I test AI products and agentic systems with the same rigor as any consumer study, digging past answers that sound right to unearth the inconsistencies underneath, such as an agent that writes a perfectly reasonable reply while calling the wrong tool.
+lede.research-operations: I use AI to take the manual work out of research and build bespoke tools that keep insights working after the readout, such as a knowledge base where stakeholders can query our consumer research in their own words.
+lede.consumer-research: I execute research that grounds business decisions in evidence based insight straight from the mouth of the target user, such as identifying the usability pain points in reviewing the recent changes to your credit report and helping to streamline the experience to match user mental models.
+resume.headline: Multi-Disciplinary Researcher · Consumer Research, AI Evaluations, & Research Operations
+resume.lede: Research has been my passion for my entire academic and professional career. Unearthing insights that [drive real decisions] is the core of my work. I've been fortunate enough to plan, design, execute, synthesize, and evangelize research in a wide span of industries and disciplines, utilizing varied methodologies to fit the needs of the research ask. From understanding the point where trust breaks down in an onboarding flow, to understanding the weaknesses and inconsistencies in agentic experiences, I've done it all. At the core of it all is a simple principle: deliver clear and transparent insights in order to inform important business decisions.
+switcher.label: Research disciplines:
+footer.cross: Same research, other angles:
+```
+
+**What changed since the section 34 block:**
+
+| Key | Change |
+|---|---|
+| `homepage.intro`, `homepage.row.*`, `resume.headline`, `switcher.label`, `footer.cross` | Unchanged, confirmed. |
+| `lede.consumer-research` | **Changed, completely rewritten.** The Experian "help at the moment of confusion" sentence is replaced by the credit report usability sentence. |
+| `lede.ai-evaluations` | **Changed:** "like" became "such as". Nothing else. |
+| `lede.research-operations` | **Changed:** "like" became "such as", and "question" became "query". Nothing else. |
+| `resume.lede` | Same words as section 34, **now with the bracket** around "drive real decisions" (section 34's block omitted it; C5). The checker strips brackets before hashing, so the locked hash is unchanged. |
+
+### 40.1 Where each line goes
+
+| Key | Location |
+|---|---|
+| `homepage.intro` | `index.html`, `#disciplines p.disc-intro` |
+| `homepage.row.<slug>` | `index.html`, `#disciplines a.disc-card .disc-body > p`, one per discipline |
+| `lede.<slug>` | `<slug>.html`, new `<p class="lede">` immediately after `p.thesis` inside `header.hero` |
+| `resume.headline` | `resume.html`, `.role` |
+| `resume.lede` | `resume.html`, `p.lede`, with `<span class="mark">drive real decisions</span>` |
+| `switcher.label`, `footer.cross` | unchanged |
+
+## 41. Requirements
+
+Harness as section 23. Build/deployment: **not Docker**, same justified exception as sections 11, 24.1, 31.1 and 37.1 (static GitHub Pages site, no build step). Production is still a merge to `main` after Nick's explicit approval.
+
+### R34. Discipline order is Consumer Research, AI Evaluations, Research Operations on every switcher and on the homepage.
+- **Acceptance:** on each of the 9 pages carrying `.disc-links` (`ai-evaluations.html`, `research-operations.html`, `consumer-research.html`, `experian-eva.html`, `hp-wolf-security.html`, `research-knowledge-base.html`, `research-pmo-agent.html`, `skill-kits.html`, `evaluating-my-agent.html`; confirmed by `grep -l disc-links *.html`; `index.html` has no switcher), the three `a[href]` inside `.disc-links` are `consumer-research.html`, `ai-evaluations.html`, `research-operations.html` in that order. Each link keeps its own target, and `aria-current="page"` stays on exactly the links that had it. The homepage `#disciplines` rows are in the same order.
+
+### R35. The three landing pages start with Selected work after the hero, and each hero has its lede.
+- **Acceptance:** `grep -c 'id="philosophy"\|id="practice"'` prints 0 on each of the three pages; the first `section` after `header.hero` is `#selected-work`; `header.hero > p.lede` follows `p.thesis` and its text equals `lede.<slug>`.
+- **Edge cases:** the lede uses a plain `p.lede` with no `rise` animation classes; its style is in `assets/css/site.css` (17px, line-height 1.55, max-width 36em, same as the prototype rule probed in C4). Re-check at most 6 lines at 390x844 on the host.
+
+### R36. index.html replaces Selected work with a Research disciplines section; nothing else on the homepage changes.
+- **Acceptance:** no `.case-card` remains on `index.html` (the commented-out Skill Kits and PMO cards go with the section); `section#disciplines` holds `.sec-head` (label `Research disciplines`, code S-03), `p.disc-intro` equal to `homepage.intro`, and three `a.disc-card` in order Consumer Research, AI Evaluations, Research Operations with hrefs `consumer-research.html`, `ai-evaluations.html`, `research-operations.html`; each has `.case-card-top` with an `h3` and the arrow, and `a.querySelector('.disc-body > p').textContent` equals `homepage.row.<slug>`. Philosophy, Practice, Experience, Impact, Methods, Tools and Debrief are untouched.
+
+### R31 (restated again). resume.html's headline and lede equal section 40, "drive real decisions" is the only highlight, and it prints within two pages.
+- **Acceptance:** as section 36's R31, except `.lede .mark` has exactly one element with text `drive real decisions`, using the existing `.mark` rule unchanged.
+
+### R37. The section 40 block is the live copy and `narrativecheck.py` prints OK.
+- **Acceptance:** `python3 docs/tools/narrativecheck.py` exits 0 with the waivers in 41.1.
+
+### 41.1 Checker changes and waivers
+
+- Addendum C's waivers on `homepage.intro` (pivot, "Now, I'm broadening"), `homepage.row.ai-evaluations` (pivot, "can be used to attain") and the two `both` waivers (`homepage.intro`, `resume.lede`) still fire on unchanged text, so none is stale.
+- `lede.ai-evaluations` and `lede.research-operations` ("such as", "query") trip no rule and need no waiver; both name consumer and AI.
+- `lede.consumer-research` trips rule 3: it names neither "consumer" nor "AI" (it is a consumer research example, a credit report usability finding). It gets a scoped `both` waiver, rule 3 only. Because a waiver only applies while a line matches its locked hash, this line is added to `LOCKED` (it is Nick's rewrite). The other two ledes stay unlocked, as in Addendum C.
+- `resume.lede`'s hash does not change (brackets are stripped before hashing).
+
+## 42. Non-goals, flags
+
+- No change to the Philosophy or Practice sections of `index.html`, the Selected work cards on the landing pages, theses, eyebrows, meta descriptions or the case studies.
+- **Flag D1.** The new consumer lede names neither consumer research nor AI in words (waived); the AI practice is visible through the switcher and the footer cross-links, and on the homepage rows.
+- **Flag D2.** The resume lede is 102 words (see 36 and Flag C2); the host must verify two-page print, and if it spills, stop and amend rather than trim Nick's words.
+- **Flag D3.** Other pages that link to `#philosophy`/`#practice` on the landing pages, if any, would now dead-end; checked in the build, none found.

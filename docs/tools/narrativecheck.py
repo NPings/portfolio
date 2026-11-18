@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the positioning copy (PRD Addendum B section 28, as superseded by Addendum C section 34).
+"""Check the positioning copy (PRD Addendum B section 28, as superseded by Addendum C section 34 and Addendum D section 40).
 
 Usage, from the repo root:
   python3 docs/tools/narrativecheck.py
@@ -49,6 +49,7 @@ LOCKED = {
     "homepage.row.ai-evaluations": "56c32e825369bd48",
     "homepage.row.research-operations": "156babccc2b3d9e2",
     "homepage.row.consumer-research": "2be1bfd009b65c64",
+    "lede.consumer-research": "b0bd71e9155a1704",
     "resume.headline": "6fa09d6096c47cad",
     "resume.lede": "7a33bbdd13836432",
     "switcher.label": "4d9e046e7bf09e85",
@@ -66,6 +67,10 @@ EXCEPTIONS = {
     ("homepage.intro", "both"): (None,
         "consumer research is named in substance ('user problems', 'guiding businesses toward long term "
         "solutions'), not by the word, and the Consumer Research row sits directly below it."),
+    ("lede.consumer-research", "both"): (None,
+        "a consumer research example (usability pain points in reviewing a credit report, matching user "
+        "mental models) that never uses the word 'consumer' or 'AI'; the switcher and footer cross-links "
+        "to the AI Evaluations page carry the AI practice (PRD Addendum D, Flag D1)."),
     ("resume.lede", "both"): (None,
         "names both by example ('trust breaks down in an onboarding flow', 'agentic experiences'), and "
         "the resume headline directly above it names Consumer Research and AI Evaluations outright."),
