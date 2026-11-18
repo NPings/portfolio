@@ -827,6 +827,11 @@
     color:var(--ink);text-wrap:balance;
   }
   #research-title:focus{outline:none;}
+  .board-intro{
+    margin:clamp(14px,2.4svh,20px) auto 0;max-width:620px;
+    font-family:"EB Garamond",Garamond,Georgia,serif;font-size:clamp(16px,1.6vw,19px);line-height:1.5;
+    color:var(--ink-soft);text-wrap:pretty;
+  }
   .clusters{
     width:100%;max-width:1056px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
     gap:clamp(24px,3.4vw,48px);margin:clamp(28px,5svh,56px) 0 0;
@@ -881,6 +886,7 @@
     .act-research.is-entering .threads path{stroke-dasharray:1 2;stroke-dashoffset:1;stroke-linecap:butt;   /* "1 2" + butt: no stray sliver of the next dash at either end of the undrawn path */
                               animation:thread-draw 400ms cubic-bezier(.35,.1,.25,1) var(--td) both;}
     .act-research.is-entering .board-head{animation:board-title-in 400ms cubic-bezier(.22,.7,.2,1) 3700ms both;}
+    .act-research.is-entering .board-intro{animation:board-title-in 400ms cubic-bezier(.22,.7,.2,1) 4000ms both;}
   }
   @keyframes research-wipe{from{transform:translateX(calc(-100% - 48px));}to{transform:none;}}
   @keyframes note-drift{from{translate:var(--dx) var(--dy);rotate:var(--dr);opacity:0;}to{translate:0 0;rotate:0deg;opacity:1;}}
@@ -1126,6 +1132,7 @@
     <div class="board-head">
       <span class="board-meta" aria-hidden="true">Synthesis · 12 notes · 3 themes</span>
       <h2 id="research-title" tabindex="-1">Research, sorted<span class="dot">.</span></h2>
+      <p class="board-intro">I have a passion for employing rigorous practices, challenging assumptions, and unearthing insights, from national surveys in academia to years spent on user problems in industry. Now, I'm broadening to understand AI systems, how they serve their users, and how we measure their outputs.</p>
     </div>
     <div class="clusters" role="group" aria-labelledby="research-title">
       <a class="cluster" data-theme="education" href="#research-education" aria-describedby="board-soon">
