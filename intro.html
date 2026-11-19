@@ -828,10 +828,16 @@
   }
   #research-title:focus{outline:none;}
   .board-intro{
-    margin:clamp(14px,2.4svh,20px) auto 0;max-width:620px;
-    font-family:"EB Garamond",Garamond,Georgia,serif;font-size:clamp(16px,1.6vw,19px);line-height:1.5;
+    position:relative;margin:clamp(20px,3.2svh,28px) auto 0;max-width:640px;
+    padding:18px 24px 20px;background-color:var(--card);
+    box-shadow:inset 0 0 0 1px rgba(22,36,28,.08), 0 1px 1px rgba(22,36,28,.10), 0 10px 20px -14px rgba(22,36,28,.45);
+    rotate:-0.6deg;text-align:left;
+    font-family:"EB Garamond",Garamond,Georgia,serif;font-size:clamp(15px,1.5vw,18px);line-height:1.55;
     color:var(--ink-soft);text-wrap:pretty;
   }
+  .board-intro::before{content:"";position:absolute;left:50%;top:-6px;width:12px;height:12px;margin-left:-6px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, rgba(248,250,244,.65) 0 1.5px, transparent 2.5px), var(--rec);
+    box-shadow:0 1px 2px rgba(22,36,28,.45);}
   .clusters{
     width:100%;max-width:1056px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
     gap:clamp(24px,3.4vw,48px);margin:clamp(28px,5svh,56px) 0 0;
@@ -886,7 +892,7 @@
     .act-research.is-entering .threads path{stroke-dasharray:1 2;stroke-dashoffset:1;stroke-linecap:butt;   /* "1 2" + butt: no stray sliver of the next dash at either end of the undrawn path */
                               animation:thread-draw 400ms cubic-bezier(.35,.1,.25,1) var(--td) both;}
     .act-research.is-entering .board-head{animation:board-title-in 400ms cubic-bezier(.22,.7,.2,1) 3700ms both;}
-    .act-research.is-entering .board-intro{animation:board-title-in 400ms cubic-bezier(.22,.7,.2,1) 4000ms both;}
+    .act-research.is-entering .board-intro{animation:index-card-in 450ms cubic-bezier(.22,.7,.2,1) 4000ms both;}
   }
   @keyframes research-wipe{from{transform:translateX(calc(-100% - 48px));}to{transform:none;}}
   @keyframes note-drift{from{translate:var(--dx) var(--dy);rotate:var(--dr);opacity:0;}to{translate:0 0;rotate:0deg;opacity:1;}}
@@ -894,6 +900,7 @@
   @keyframes head-stick{from{opacity:0;scale:1.08;translate:0 -6px;}to{opacity:1;scale:1;translate:0 0;}}
   @keyframes thread-draw{to{stroke-dashoffset:0;}}
   @keyframes board-title-in{from{opacity:0;translate:0 8px;}to{opacity:1;translate:0 0;}}
+  @keyframes index-card-in{from{opacity:0;rotate:-5deg;scale:.94;translate:0 10px;}to{opacity:1;rotate:-0.6deg;scale:1;translate:0 0;}}
   /* responsive (36.2): stack below 700px wide, unless the screen is short */
   @media (max-width:699px) and (min-height:501px){
     .clusters{grid-template-columns:minmax(0,1fr);gap:18px;max-width:480px;}
@@ -1132,7 +1139,7 @@
     <div class="board-head">
       <span class="board-meta" aria-hidden="true">Synthesis · 12 notes · 3 themes</span>
       <h2 id="research-title" tabindex="-1">Research, sorted<span class="dot">.</span></h2>
-      <p class="board-intro">I have a passion for employing rigorous practices, challenging assumptions, and unearthing insights, from national surveys in academia to years spent on user problems in industry. Now, I'm broadening to understand AI systems, how they serve their users, and how we measure their outputs.</p>
+      <p class="board-intro">I have a passion for employing rigorous practices, challenging assumptions, and unearthing insights. I have designed, conducted, synthesized and reported on studies spanning the gamut of disciplines and methodologies. In academia, I helped design and launch national surveys on social issues. In my professional experience, I've spent years honing in on user problems and guiding businesses toward long term solutions. Now, I'm broadening to understand AI systems, how they serve their users, and how we measure their outputs.</p>
     </div>
     <div class="clusters" role="group" aria-labelledby="research-title">
       <a class="cluster" data-theme="education" href="#research-education" aria-describedby="board-soon">
@@ -1870,7 +1877,7 @@
   var byId = function(id){ return document.getElementById(id); };
   var L = byId('research'), board = byId('board'), threads = byId('threads'), title = byId('research-title'), status = byId('board-status');
   var clusters = board.querySelector('.clusters'), act2 = byId('where'), forkScene = act2.querySelector('.fork-scene');
-  var boardIntro = board.querySelector('.board-intro');   // finishes its board-title-in run after .board-head's (staggered later); end() must wait for this one, not the first to fire
+  var boardIntro = board.querySelector('.board-intro');   // finishes its own index-card-in entrance after .board-head's board-title-in (staggered later); end() must wait for this one, not the first to fire
   var prong = act2.querySelector('.prong[data-prong="research"]');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var STACK = window.matchMedia('(max-width:699px) and (min-height:501px)');
@@ -1968,7 +1975,7 @@
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip(); });
   L.addEventListener('animationend', function(e){
     if(e.target === L && e.animationName === 'research-wipe' && st === 'entering') title.focus({preventScroll:true});
-    if(e.animationName === 'board-title-in' && e.target === boardIntro) end();   // boardIntro is staggered 300ms after board-head, so it's always the last of the pair to finish
+    if(e.animationName === 'index-card-in' && e.target === boardIntro) end();   // boardIntro is staggered 300ms after board-head (and runs 50ms longer), so it's always the last of the pair to finish
   });
   reduce.addEventListener('change', function(){ if(reduce.matches && st === 'entering'){ skipped = true; end(); } });
   Array.prototype.forEach.call(clusters.querySelectorAll('.cluster'), function(a){
